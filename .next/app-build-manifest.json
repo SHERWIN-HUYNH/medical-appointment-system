@@ -21,7 +21,13 @@
     "/patients/[userId]/new-appointment/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
+      "static/css/app/patients/[userId]/new-appointment/page.css",
       "static/chunks/app/patients/[userId]/new-appointment/page.js"
+    ],
+    "/patients/[userId]/new-appointment/success/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/patients/[userId]/new-appointment/success/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
