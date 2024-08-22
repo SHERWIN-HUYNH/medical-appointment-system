@@ -12,6 +12,7 @@ import { useState } from "react"
 import SubmitButton from "../SubmitButton"
 import { UserFormValidation } from "@/lib/validation"
 import { useRouter } from "next/navigation"
+import { createUser } from "@/lib/action/patient.actions"
 
 export enum FormFieldType {
   INPUT = 'input',
@@ -89,7 +90,7 @@ const PatientForm = () => {
           placeholder="(555) 123-4567"
         />
 
-<SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
+      <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
     </form>
   </Form>
   )
