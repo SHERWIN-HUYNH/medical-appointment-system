@@ -1,5 +1,5 @@
 {
-  "/patients/[userId]/register/page": "app/patients/[userId]/register/page.js",
-  "/patients/[userId]/new-appointment/page": "app/patients/[userId]/new-appointment/page.js",
-  "/page": "app/page.js"
+  "/page": "app/page.js",
+  "/patients/[userId]/new-appointment/success/page": "app/patients/[userId]/new-appointment/success/page.js",
+  "/patients/[userId]/new-appointment/page": "app/patients/[userId]/new-appointment/page.js"
 }
