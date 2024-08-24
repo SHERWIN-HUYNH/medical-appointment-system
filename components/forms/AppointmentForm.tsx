@@ -35,10 +35,8 @@ export const AppointmentForm = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
+  console.log('appointment type',type)
   const AppointmentFormValidation = getAppointmentSchema(type);
-  console.log('USERID',userId)
-  console.log('PATIENTID',patientId)
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
@@ -57,7 +55,6 @@ export const AppointmentForm = ({
   ) => {
     setIsLoading(true);
    
-
     let status;
     switch (type) {
       case "schedule":
@@ -69,7 +66,7 @@ export const AppointmentForm = ({
       default:
         status = "pending";
     }
-    
+    console.log('SHOW PATIENTID',patientId)
     try {
       if (type === "create" && patientId) {
         const appointment = {
@@ -81,15 +78,18 @@ export const AppointmentForm = ({
           status: status as Status,
           note: values.note,
         };
+        console.log('NEW APPOINTMENT', appointment)
         const newAppointment = await createAppointment(appointment);
-
+        
         if (newAppointment) {
+          console.log('NEW APPOINTMENT', newAppointment)
           form.reset();
           router.push(
             `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
           );
         }
       } else {
+        console.log('UPDATE WORKING' )
         const appointmentToUpdate = {
           userId,
           appointmentId: appointment?.$id!,

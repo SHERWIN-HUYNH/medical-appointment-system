@@ -18,7 +18,7 @@ export const createAppointment = async (
   appointment: CreateAppointmentParams
 ) => {
   try {
-    console.log('APPOINTMENT', appointment)
+    console.log('CREATE APPOINTMENT', appointment)
     const newAppointment = await databases.createDocument(
       DATABASE_ID!,
       APPOINTMENT_COLLECTION_ID!,
@@ -131,9 +131,9 @@ export const updateAppointment = async ({
       DATABASE_ID!,
       APPOINTMENT_COLLECTION_ID!,
       appointmentId,
-      appointment
+      appointment,
     );
-
+    console.log('UPDATED APPOINTMENT', updatedAppointment)
     if (!updatedAppointment) throw Error;
 
     const smsMessage = `Greetings from CarePulse. ${type === "schedule" ? `Your appointment is confirmed for ${formatDateTime(appointment.schedule!, timeZone).dateTime} with Dr. ${appointment.primaryPhysician}` : `We regret to inform that your appointment for ${formatDateTime(appointment.schedule!, timeZone).dateTime} is cancelled. Reason:  ${appointment.cancellationReason}`}.`;
