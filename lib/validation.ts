@@ -1,5 +1,8 @@
 import { z } from "zod";
-
+export const UserLogin = z.object({
+  username: z.string(),
+  password: z.string(),
+})
 export const UserFormValidation = z.object({
   name: z
     .string()
@@ -10,7 +13,17 @@ export const UserFormValidation = z.object({
     .string()
     .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
 });
-
+export const RegisterFormValidation = z.object({
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must be at most 50 characters"),
+  email: z.string().email("Invalid email address"),
+  phoneNumber: z
+    .string()
+    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+  // password: z.string().min(8, "Password must be at least 8 characters"),
+});
 export const PatientFormValidation = z.object({
   name: z
     .string()

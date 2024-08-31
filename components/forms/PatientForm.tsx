@@ -1,27 +1,20 @@
-"use client"
- 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
+"use client";
 
-import { Input } from "@/components/ui/input"
-import { Form } from "../ui/form"
-import CustomFormField from "../CustomFormField"
-import { useState } from "react"
-import SubmitButton from "../SubmitButton"
-import { UserFormValidation } from "@/lib/validation"
-import { useRouter } from "next/navigation"
-import { createUser } from "@/lib/action/patient.actions"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Form } from "@/components/ui/form";
+import { UserFormValidation } from "@/lib/validation";
+import { signIn } from "next-auth/react";
+import "react-phone-number-input/style.css";
+import CustomFormField, { FormFieldType } from "../CustomFormField";
+import SubmitButton from "../SubmitButton";
+import { createUser } from "@/lib/action/patient.actions";
+import { toast } from "sonner";
 
-export enum FormFieldType {
-  INPUT = 'input',
-  TEXTAREA='textarea',
-  PHONE_INPUT='phoneInput',
-  CHECKBOX='checkbox',
-  DATE_PICKER='datePicker',
-}
-const PatientForm = () => {
+export const PatientForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,41 +28,52 @@ const PatientForm = () => {
   });
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
+
     try {
       const user = {
         name: values.name,
         email: values.email,
         phone: values.phone,
       };
-      
-      const newUser = await createUser(user);
-      if (newUser) {
-        console.log('create user success')
-        router.push(`/patients/${newUser.$id}/register`);
-      }
-      console.log('create not success')
+      console.log('user: ', user);
+      const res = await signIn("credentials", {
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+				redirect: false,
+			});
+      if (res?.error) {
+				throw new Error(res.error);
+			}
+      toast.success("Login successfully!");
     } catch (error) {
+      if (error instanceof Error) {
+				toast.error(error.message);
+			}
       console.log(error);
     }
 
     setIsLoading(false);
   };
+
   return (
     <Form {...form}>
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
-      <section className="mb-12 space-y-4 ">
-        <h1>Hi there </h1>
-        <p className=" text-dark-700">Schedule your first appointment</p>
-      </section>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
+        <section className="mb-12 space-y-4">
+          <h1 className="header">Hi there 👋</h1>
+          <p className="text-dark-700">Get started with appointments.</p>
+        </section>
 
-      <CustomFormField 
-      fieldType={FormFieldType.INPUT}
-       control={form.control}
-       name="name"
-       label="Full name"
-       placeholder="John Doe"/>
+        <CustomFormField
+          fieldType={FormFieldType.INPUT}
+          control={form.control}
+          name="name"
+          label="Full name"
+          placeholder="John Doe"
+          iconSrc="/assets/icons/user.svg"
+          iconAlt="user"
+        />
 
-       
         <CustomFormField
           fieldType={FormFieldType.INPUT}
           control={form.control}
@@ -80,7 +84,6 @@ const PatientForm = () => {
           iconAlt="email"
         />
 
-        
         <CustomFormField
           fieldType={FormFieldType.PHONE_INPUT}
           control={form.control}
@@ -89,10 +92,8 @@ const PatientForm = () => {
           placeholder="(555) 123-4567"
         />
 
-      <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
-    </form>
-  </Form>
-  )
-}
-
-export default PatientForm
+        <SubmitButton isLoading={isLoading}>Get Started </SubmitButton>
+      </form>
+    </Form>
+  );
+};

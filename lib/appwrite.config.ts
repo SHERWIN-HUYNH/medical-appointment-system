@@ -7,6 +7,7 @@ export const {
     PATIENT_COLLECTION_ID,
     APPOINTMENT_COLLECTION_ID,
     NEXT_PUBLIC_BUCKET_ID :BUCKET,
+    DATABASE_URL
 } = process.env;
 
 const client = new sdk.Client();

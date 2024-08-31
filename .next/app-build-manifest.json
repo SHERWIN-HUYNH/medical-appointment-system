@@ -5,11 +5,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/global-error.js"
     ],
-    "/page": [
+    "/register/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/page.css",
-      "static/chunks/app/page.js"
+      "static/css/app/register/page.css",
+      "static/chunks/app/register/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -17,22 +17,16 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/patients/[userId]/register/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/patients/[userId]/register/page.css",
-      "static/chunks/app/patients/[userId]/register/page.js"
+      "static/chunks/app/page.js"
     ],
-    "/patients/[userId]/new-appointment/page": [
+    "/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/patients/[userId]/new-appointment/page.css",
-      "static/chunks/app/patients/[userId]/new-appointment/page.js"
-    ],
-    "/patients/[userId]/new-appointment/success/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/patients/[userId]/new-appointment/success/page.js"
+      "static/css/app/login/page.css",
+      "static/chunks/app/login/page.js"
     ]
   }
 }
