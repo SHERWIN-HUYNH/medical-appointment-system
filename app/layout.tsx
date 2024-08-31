@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ReactQueryClientProvider } from "@/providers/ReactQueryClientProvider";
+import { Toaster } from "sonner";
+import Providers from "@/providers/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,6 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+   
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider
@@ -23,9 +27,17 @@ export default function RootLayout({
             defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
-          >
+          ><Providers>
             {children}
+            <Toaster
+              richColors
+							position="top-right"
+							closeButton
+							duration={5000}
+						/>
+          </Providers>
           </ThemeProvider></body>
     </html>
+    
   );
 }

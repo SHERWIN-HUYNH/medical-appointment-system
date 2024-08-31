@@ -17,6 +17,9 @@ import { Input } from "./ui/input";
 import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
 import { Textarea } from "./ui/textarea";
 import { date } from "zod";
+import React, { useState } from "react";
+import { Button } from "./ui/button";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 export enum FormFieldType {
   INPUT = "input",
@@ -26,6 +29,7 @@ export enum FormFieldType {
   DATE_PICKER = "datePicker",
   SELECT = "select",
   SKELETON = "skeleton",
+  PASSWORD = "password",
 }
 
 interface CustomProps {
@@ -41,6 +45,7 @@ interface CustomProps {
   children?: React.ReactNode;
   renderSkeleton?: (field: any) => React.ReactNode;
   fieldType: FormFieldType;
+  currentPassword?:string
 }
 
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
@@ -79,7 +84,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
       );
     case FormFieldType.PHONE_INPUT:
       return (
-        <FormControl>
+        <FormControl className="bg-white">
           <PhoneInput
             defaultCountry="US"
             placeholder={props.placeholder}
@@ -145,6 +150,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
       );
     case FormFieldType.SKELETON:
       return props.renderSkeleton ? props.renderSkeleton(field) : null;
+   
     default:
       return null;
   }
@@ -152,7 +158,6 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
 
 const CustomFormField = (props: CustomProps) => {
   const { control, name, label } = props;
-
   return (
     <FormField
       control={control}
@@ -160,7 +165,7 @@ const CustomFormField = (props: CustomProps) => {
       render={({ field }) => (
         <FormItem className="flex-1">
           {props.fieldType !== FormFieldType.CHECKBOX && label && (
-            <FormLabel className="shad-input-label">{label}</FormLabel>
+              <FormLabel className="shad-input-label ">{label}</FormLabel>
           )}
           <RenderInput field={field} props={props} />
 
