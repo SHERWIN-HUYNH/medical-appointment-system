@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const { fontFamily } = require("tailwindcss/defaultTheme");
+const flowbite = require("flowbite-react/tailwind");
 
 const config = {
   darkMode: ["class"],
@@ -9,6 +10,7 @@ const config = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
+    flowbite.content(),
   ],
   prefix: "",
   theme: {
@@ -45,6 +47,9 @@ const config = {
           600: "#76828D",
           700: "#ABB8C4",
         },
+        black: {
+          800: "#2D2D2Ds"
+        }
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
@@ -75,7 +80,7 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require('@tailwindcss/forms'), flowbite.plugin()],
 } satisfies Config;
 
 export default config;

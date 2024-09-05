@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 /* ========================================== TAILWIND STYLES */
+body {
+  min-height: 100vh;
+}
+
 @layer base {
   /* Remove scrollbar */
   .remove-scrollbar::-webkit-scrollbar {

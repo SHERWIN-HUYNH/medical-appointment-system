@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ReactQueryClientProvider } from "@/providers/ReactQueryClientProvider";
 import { Toaster } from "sonner";
 import Providers from "@/providers/Providers";
+import Navbar from "@/components/Frontend/Navbar";
+import MegaMenu from "@/components/Frontend/MegaMenu";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,25 +21,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-   
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          ><Providers>
-            {children}
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Providers>
+            <div className="bg-white">
+              <Navbar />
+              <div className="container">
+                <div className="bg-white mx-auto py-4 fixed top-20 w-full left-0 z-50 right-0 border-t border-gray-400/30">
+                  <MegaMenu />
+                </div>
+              </div>
+              <main>{children}</main>
+            </div>
             <Toaster
               richColors
-							position="top-right"
-							closeButton
-							duration={5000}
-						/>
+              position="top-right"
+              closeButton
+              duration={5000}
+            />
           </Providers>
-          </ThemeProvider></body>
+        </ThemeProvider>
+      </body>
     </html>
-    
   );
 }

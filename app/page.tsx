@@ -1,43 +1,21 @@
-'use client'
-import Image from "next/image";
-import Link from "next/link";
-import { PasskeyModal } from "@/components/PasskeyModal";
-import prisma from '../lib/prisma';
-import { PatientForm } from "@/components/forms/PatientForm";
-import postgres from 'postgres';
-import {  DATABASE_URL } from "@/lib/appwrite.config";
-import { signOut, useSession } from "next-auth/react";
-import { useState } from "react";
+import React from "react";
+import Hero from "@/components/Frontend/Hero";
+import Brands from "@/components/Frontend/Brands";
+import TabbedSection from "@/components/Frontend/TabbedSection";
+import DoctorsList from "@/components/DoctorsList";
 
-const Home = () => {
-  const {data:session} = useSession()
-  console.log('SESSION',session)
-  const [posts, setPosts] = useState();
-
-const fetchPost = async () => {
-  const res = await fetch("http://localhost:3000/appointment", {
-    method: "GET",
-    headers: {
-      authorization: `bearer ${session?.user.accessToken}`,
-    },
-  });
-
-  const response = await res.json();
-  setPosts(response);
-};
-console.log(posts)
+export default function Home() {
   return (
-    <div >
-      <h1 >HOME PAGE {posts}</h1>
-      <button onClick={() => signOut()}>
-        Sign out
-      </button>
-      <button onClick={fetchPost}>
-        POST RESPONSE
-      </button>
-
-    </div>
+    <section className="">
+      <Hero />
+      <Brands />
+      <TabbedSection />
+      <DoctorsList />
+      <DoctorsList
+        className="bg-slate-50 py-8 lg:py-24"
+        title="In-person doctor visit"
+        isInPerson={true}
+      />
+    </section>
   );
-};
-
-export default Home;
+}
