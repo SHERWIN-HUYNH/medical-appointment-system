@@ -11,7 +11,6 @@ import { useState } from "react";
 
 const Home = () => {
   const {data:session} = useSession()
-  console.log('SESSION',session)
   const [posts, setPosts] = useState();
 
 const fetchPost = async () => {

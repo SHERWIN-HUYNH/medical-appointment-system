@@ -1,5 +1,3 @@
-// schema.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,12 +7,107 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Payment {
+  id              Int   @id @default(autoincrement())
+  createdAt       DateTime
+  amount          Int
+  patientId       Int
+  appointmentId   Int
+  paymentMethod   String
+  note            String
+  status          PaymentStatus @default(PENDING)
+  patient         Patient @relation(fields: [patientId], references: [id])
+  appointment     Appointment @relation(fields: [appointmentId], references: [id])
+}
+
+model Faculty {
+  id   Int  @id @default(autoincrement())
+  name String
+  doctors Doctor[]
+}
+
+model Doctor {
+  id            Int   @id @default(autoincrement())
+  name          String
+  academicTitle String
+  facultyId     Int  @unique
+  userId        Int  @unique
+  faculty       Faculty @relation(fields: [facultyId], references: [id])
+  user          User    @relation(fields: [userId], references: [id])
+  appointments  Appointment[]
+}
 
 model User {
-  id            String       @default(cuid()) @id
-  name          String
-  email         String       @unique
-  phoneNumber   String
-  password      String
-  @@map(name: "users")
+  id          Int   @id @default(autoincrement())
+  email       String   @unique
+  password    String
+  name        String
+  phoneNumber String   @unique
+  doctors     Doctor?
+  patients    Patient?
+}
+
+model Patient {
+  id                      Int   @id @default(autoincrement())
+  name                    String
+  email                   String
+  phone                   String
+  privacyConsent          String
+  gender                  Gender   @default(MALE)
+  birthDate               DateTime?
+  address                 String?
+  occupation              String?
+  emergencyContactName    String
+  emergencyContactNumber  String
+  insuranceProvider       String
+  insurancePolicyNumber   String
+  allergies               String
+  currentMedication       String
+  pastMedicalHistory      String
+  identificationType      String
+  identificationNumber    String
+  identificationDocumentId String
+  primaryPhysician        String
+  identificationDocumentUrl String
+  treatmentConsent        String
+  disclosureConsent       String
+  userId                  Int @unique
+  user                    User @relation(fields: [userId], references: [id])
+  appointments            Appointment[]
+  payments                Payment[]
+}
+
+model Appointment {
+  id                 Int    @id @default(autoincrement())
+  schedule           DateTime
+  reason             String
+  primaryPhysician   String
+  status             AppointmentStatus @default(PENDING)
+  cancellationReason String?
+  note               String?
+  patientId          Int
+  doctorId           Int
+  patient            Patient   @relation(fields: [patientId], references: [id])
+  doctor             Doctor    @relation(fields: [doctorId], references: [id])
+  payments           Payment[]
+}
+
+enum PaymentStatus {
+  COMPLETED
+  FAILED
+  PENDING
+  REFUNDED
+  CANCELLED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  PENDING
+  CANCELLED
 }
