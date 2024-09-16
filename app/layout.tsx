@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ReactQueryClientProvider } from "@/providers/ReactQueryClientProvider";
 import { Toaster } from "sonner";
 import Providers from "@/providers/Providers";
+import Header from "@/app/homepage/Header";
+import Footer from "@/app/homepage/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +21,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-   
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider
@@ -36,8 +37,8 @@ export default function RootLayout({
 							duration={5000}
 						/>
           </Providers>
-          </ThemeProvider></body>
+        </ThemeProvider>
+      </body>
     </html>
-    
   );
 }
