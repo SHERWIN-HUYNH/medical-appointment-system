@@ -24,23 +24,18 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Providers>
-            <div className="">
-              <Header />
-              <main>{children}</main>
-              <Footer />
-              <Toaster
-                richColors
-                position="top-right"
-                closeButton
-                duration={5000}
-              />
-            </div>
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          ><Providers>
+            {children}
+            <Toaster
+              richColors
+							position="top-right"
+							closeButton
+							duration={5000}
+						/>
           </Providers>
         </ThemeProvider>
       </body>

@@ -20,6 +20,7 @@ export const RegisterForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("")
+  console.log('ENV', process.env.DATABASE_URL)
   const form = useForm<z.infer<typeof RegisterFormValidation>>({
     resolver: zodResolver(RegisterFormValidation),
     defaultValues: {

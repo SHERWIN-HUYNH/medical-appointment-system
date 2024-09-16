@@ -29,7 +29,7 @@
 @layer utilities {
   /* ===== UTILITIES */
   .sidebar {
-    @apply remove-scrollbar w-full max-w-72 flex-col overflow-auto bg-black-800 px-7 py-10;
+    @apply remove-scrollbar w-full max-w-72 flex-col overflow-auto bg-black px-7 py-10;
   }
 
   .left-sidebar {
@@ -49,7 +49,7 @@
   }
 
   .header {
-    @apply text-32-bold md:text-36-bold;
+    @apply text-[#00b5f1] text-32-bold md:text-36-bold;
   }
 
   .sub-header {
@@ -57,7 +57,7 @@
   }
 
   .container {
-    @apply relative flex-1 overflow-y-auto px-[5%];
+    @apply relative bg-[#f1eff2] flex-1 overflow-y-auto px-[5%];
   }
 
   .sub-container {
@@ -69,7 +69,7 @@
   }
 
   .copyright {
-    @apply text-14-regular justify-items-end text-center text-dark-600 xl:text-left;
+    @apply text-14-regular justify-items-end text-center text-[#495057] xl:text-left;
   }
 
   /* ==== SUCCESS */
@@ -83,7 +83,7 @@
 
   /* ===== ADMIN */
   .admin-header {
-    @apply sticky top-3 z-20 mx-3 flex items-center justify-between rounded-2xl bg-dark-200 px-[5%] py-5 shadow-lg xl:px-12;
+    @apply sticky top-3 z-20 mx-3 flex items-center justify-between rounded-2xl bg-gradient-to-tr from-[#00b5f1] to-[#00e0ff]  px-[5%] py-5 shadow-lg xl:px-12;
   }
 
   .admin-main {
@@ -96,7 +96,7 @@
 
   /* ==== FORM */
   .radio-group {
-    @apply flex h-full flex-1 items-center gap-2 rounded-md border border-dashed border-dark-500 bg-dark-400 p-3;
+    @apply flex h-full flex-1 items-center gap-2 rounded-md border border-dashed border-dark-500  p-3;
   }
 
   .checkbox-label {
@@ -109,12 +109,12 @@
   }
 
   .file-upload_label {
-    @apply flex flex-col justify-center gap-2 text-center text-dark-600;
+    @apply flex flex-col justify-center gap-2 text-center text-[#495057];
   }
 
   /* ==== Stat Card */
   .stat-card {
-    @apply flex flex-1 flex-col gap-6 rounded-2xl bg-cover p-6 shadow-lg;
+    @apply flex flex-1 flex-col gap-6 rounded-2xl bg-cover   bg-gradient-to-tr from-[#00b5f1] to-[#00e0ff] p-6 shadow-lg;
   }
 
   /* ==== Status Badge */
@@ -124,7 +124,7 @@
 
   /* Data Table */
   .data-table {
-    @apply z-10 w-full overflow-hidden rounded-lg border border-dark-400 shadow-lg;
+    @apply z-10 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] w-full overflow-hidden rounded-lg border-none ;
   }
 
   .table-actions {
@@ -183,7 +183,7 @@
 
   /* =====  SHADCN OVERRIDES */
   .shad-primary-btn {
-    @apply bg-green-500 text-white !important;
+    @apply bg-primary text-white !important;
   }
 
   .shad-danger-btn {
@@ -199,15 +199,15 @@
   }
 
   .shad-input {
-    @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
+    @apply  placeholder:text-[#495057] border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
   }
 
   .shad-input-icon {
-    @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
+    @apply  placeholder:text-[#495057] border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
   }
 
   .shad-textArea {
-    @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
+    @apply  placeholder:text-[#495057] border-dark-500 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
   }
 
   .shad-combobox-item {
@@ -219,15 +219,15 @@
   }
 
   .shad-select-trigger {
-    @apply bg-dark-400  placeholder:text-dark-600 border-dark-500 h-11 focus:ring-0 focus:ring-offset-0 !important;
+    @apply   placeholder:text-[#495057] border-dark-500 h-11 focus:ring-0 focus:ring-offset-0 !important;
   }
 
   .shad-select-content {
-    @apply bg-dark-400 border-dark-500 !important;
+    @apply  border-dark-500 !important;
   }
 
   .shad-dialog {
-    @apply bg-dark-400 border-dark-500 !important;
+    @apply  border-dark-500 !important;
   }
 
   .shad-dialog button {
@@ -243,11 +243,11 @@
   }
 
   .shad-table-row-header {
-    @apply border-b border-dark-400 text-light-200 hover:bg-transparent !important;
+    @apply border-none bg-gradient-to-tr from-[#00b5f1] to-[#00e0ff] text-light-200 hover:bg-transparent !important;
   }
 
   .shad-table-row {
-    @apply border-b border-dark-400 text-light-200 !important;
+    @apply border-b border-dark-400  !important;
   }
 
   .shad-otp {
@@ -259,7 +259,7 @@
   }
 
   .shad-alert-dialog {
-    @apply space-y-5 bg-dark-400 border-dark-500 outline-none !important;
+    @apply space-y-5  border-dark-500 outline-none !important;
   }
 
   .shad-sheet-content button {
@@ -268,12 +268,12 @@
 
   /* =====  REACT PHONE NUMBER INPUT OVERRIDES */
   .input-phone {
-    @apply mt-2 h-11 rounded-md px-3 text-sm border bg-dark-400 placeholder:text-dark-600 border-dark-500 !important;
+    @apply mt-2 h-11 rounded-md px-3 text-sm border  placeholder:text-[#495057] border-dark-500 !important;
   }
 
   /* =====  REACT DATE PICKER OVERRIDES */
   .date-picker {
-    @apply overflow-hidden border-transparent w-full placeholder:text-dark-600  h-11 text-14-medium rounded-md px-3 outline-none !important;
+    @apply overflow-hidden border-transparent w-full placeholder:text-[#495057]  h-11 text-14-medium rounded-md px-3 outline-none !important;
   }
 }
 
@@ -340,7 +340,6 @@
 .PhoneInputInput {
   outline: none;
   margin-left: 4px;
-  background: #1a1d21;
   font-size: 14px;
   font-weight: 500;
 }
