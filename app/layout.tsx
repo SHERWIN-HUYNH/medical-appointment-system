@@ -29,7 +29,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           ><Providers>
+            <Header/>
             {children}
+            <Footer/>
             <Toaster
               richColors
 							position="top-right"
