@@ -7,18 +7,19 @@ const prisma = new PrismaClient();
 async function main() {
   // Hash password (if needed)
   const hashedPassword = await bcrypt.hash('your_password_here', 10);
-
-  // Create a new user
+  // Create roles
+  //Create permissions
+  //Assign roles to users
   const user = await prisma.user.create({
     data: {
-      name: 'Chi Trung',
-      email: 'trung@example.com',
-      password: hashedPassword, // Assuming password is hashed
-      phoneNumber: '+1234567890', // Optional, modify based on your schema
-    },
-  });
-
-  console.log('User created:', user);
+      name: 'TrungHuynh',
+      email: '1234@example.com',
+      password: hashedPassword,
+      phone: '12345678901',
+      roleId: 2
+  }})
+  // Create a new user
+  console.log('USER',user)
 }
 
 // Execute the main function and catch any errors
