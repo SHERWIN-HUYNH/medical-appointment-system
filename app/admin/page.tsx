@@ -1,7 +1,9 @@
+'use client'
 import { StatCard } from "@/components/StatCard";
 import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/DataTable";
 import { getRecentAppointmentList } from "@/lib/action/appointment.actions";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 

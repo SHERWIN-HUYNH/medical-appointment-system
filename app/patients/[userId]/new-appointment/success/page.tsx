@@ -7,6 +7,7 @@ import { Doctors } from "@/constants";
 import { formatDateTime } from "@/lib/utils";
 import { getAppointment } from "@/lib/action/appointment.actions";
 import { getUser } from "@/lib/action/patient.actions";
+import { useSession } from "next-auth/react";
 
 const RequestSuccess = async ({
   searchParams,
@@ -14,7 +15,6 @@ const RequestSuccess = async ({
 }: SearchParamProps) => {
   const appointmentId = (searchParams?.appointmentId as string) || "";
   const appointment = await getAppointment(appointmentId);
-
   const doctor = Doctors.find(
     (doctor) => doctor.name === appointment.primaryPhysician
   );

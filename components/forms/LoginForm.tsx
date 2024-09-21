@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import { UserFormValidation, UserLogin } from "@/lib/validation";
-import { signIn } from "next-auth/react";
 import "react-phone-number-input/style.css";
 import CustomFormField, { FormFieldType } from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
@@ -15,46 +14,36 @@ import { createUser } from "@/lib/action/patient.actions";
 import { toast } from "sonner";
 import { PasswordInput } from "../PasswordInput";
 import { Label } from "../ui/label";
+import { signIn } from "next-auth/react";
 
 export const LoginForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("")
-	const [password, setPassword] = useState("")
 	const [passwordConfirmation, setPasswordConfirmation] = useState("")
 
   const form = useForm<z.infer<typeof UserLogin>>({
     resolver: zodResolver(UserLogin),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
   const onSubmit = async (values: z.infer<typeof UserLogin>) => {
     setIsLoading(true);
-
-    try {
-      const user = {
-        name: values.username,
-        password: currentPassword,
-      };
-      console.log('user: ', user);
-      const res = await signIn("credentials", {
-        name: values.username,
-        password: currentPassword,
-		    redirect: false,
-			});
-      if (res?.error) {
-				throw new Error(res.error);
-			}
-      toast.success("Login successfully!");
-    } catch (error) {
-      if (error instanceof Error) {
-				toast.error(error.message);
-			}
-      console.log(error);
+    console.log('VALUES  + PASSWORDS',values,currentPassword)
+    const res = await signIn("credentials", {
+      email: values.email,
+      password: currentPassword,
+      redirect: false,
+    })
+    if(res?.error){
+      toast.error(res.error)
     }
-
+    if (res?.ok) {
+      toast.success("Login successfully");
+      router.push("/");
+    }
     setIsLoading(false);
   };
 
@@ -69,9 +58,9 @@ export const LoginForm = () => {
         <CustomFormField
           fieldType={FormFieldType.INPUT}
           control={form.control}
-          name="username"
-          label="User name"
-          placeholder="John Doe"
+          name="email"
+          label="Email"
+          placeholder="JohnDoe@gmail.com"
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
         />
@@ -85,7 +74,7 @@ export const LoginForm = () => {
             />
         </div>
         
-        <SubmitButton isLoading={isLoading}>Log In</SubmitButton>
+        <SubmitButton isLoading={isLoading} >Log In</SubmitButton>
       </form>
     </Form>
   );
