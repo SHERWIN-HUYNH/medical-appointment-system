@@ -34,10 +34,10 @@ export default function RootLayout({
             defaultTheme="light"
             enableSystem
             disableTransitionOnChange
-          >
-             <Providers>
-             
+          ><Providers>
+            <Header/>
             {children}
+            <Footer/>
             
             </Providers>
             <Toaster
