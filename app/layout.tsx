@@ -39,6 +39,7 @@ export default function RootLayout({
             <Header />
             {children}
             <Footer />
+
             <Toaster
               richColors
               position="top-right"
