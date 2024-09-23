@@ -1,12 +1,28 @@
 import NextAuth from "next-auth/next";
+
 declare module "next-auth" {
-    interface Session {
-      user: {
+    interface User {
         id: string,
         name:string,
         email:string,
-        phoneNumber:string
-        accessToken: string
-      };
+    }
+    interface Session {
+      user: User &{
+        id: string,
+        name:string,
+        email:string,
+      }
+      token: {
+        id: string,
+        name:string,
+        email:string,
+      }
     }
   }
+
+import { NextRequest, NextResponse } from "next/server"
+
+export type NextAuthSession ={
+    req:NextRequest,
+    res:NextResponse
+}

@@ -8,7 +8,7 @@ export const POST = async (request: Request) => {
 	try {
 		const body = await request.json();
 
-		const { name,email, password,phoneNumber } = RegisterSchema.parse(body);
+		const { name,email, password,phone } = RegisterSchema.parse(body);
 
 		const user = await UserRepository.getUserByEmail(email);
 		if (user) {
@@ -20,7 +20,7 @@ export const POST = async (request: Request) => {
 			name,
 			email,
 			password: hashedPassword,
-			phoneNumber
+			phone
 		});
 
 		return createdResponse({

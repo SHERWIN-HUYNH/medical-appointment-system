@@ -2,6 +2,7 @@ import { comparePassword } from "@/helpers/hash";
 import { signJwtAccessToken } from "@/lib/jwt";
 import prisma from "@/lib/prisma";
 import * as bcrypt from "bcrypt";
+import { useSession } from "next-auth/react";
 
 interface RequestBody {
   username: string;
@@ -10,6 +11,7 @@ interface RequestBody {
 export async function POST(request: Request) {
   const body: RequestBody = await request.json();
 
+  console.log('DATABASE LOG IN')
   const user = await prisma.user.findFirst({
     where: {
       email: body.username,

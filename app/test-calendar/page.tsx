@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
 import ReactDatePicker from "react-datepicker";
+import Test from '../../components/Test';
 
 const Calendar = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -27,6 +28,7 @@ const Calendar = () => {
   return (
     <div>   
       <h1>DATE HERE</h1> 
+      <Test/>
       <ReactDatePicker
               
               onChange={handleDateChange}
