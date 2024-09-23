@@ -1,6 +1,4 @@
 import Image from "next/image";
-import React from "react";
-import { Button } from "../../components/ui/button";
 import Link from "next/link";
 
 function Header() {
@@ -55,10 +53,8 @@ function Header() {
 
           <div className="flex items-center gap-4">
             <div className="sm:flex sm:gap-4">
-
               <Link
                 className="block rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#56c2e6] dark:hover:bg-[#56c2e6]"
-
                 href="/login"
               >
                 Login
@@ -66,7 +62,7 @@ function Header() {
 
               <Link
                 className="hidden rounded-md px-5 py-2.5 text-sm font-medium bg-white hover:bg-slate-100 text-primary transition hover:text-[#56c2e6] sm:block dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
-                href="#"
+                href="/register"
               >
                 Register
               </Link>
