@@ -89,7 +89,7 @@ function DoctorList() {
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7 mt-5">
         {displayedDoctors.map((doctor, index) => (
           <div
-            className="border-[1px] rounded-lg p-3 cursor-pointer hover:border-teal-600 hover:shadow-sm hover:scale-105 transition-all ease-in-out"
+            className="border-[1px] rounded-lg p-3 cursor-pointer border-slate-600 hover:shadow-sm hover:scale-105 transition-all ease-in-out"
             key={index}
           >
             <Image
@@ -100,17 +100,15 @@ function DoctorList() {
               className="h-[250px] w-full object-cover rounded-lg"
             />
             <div className="mt-3 items-baseline flex flex-col gap-1">
-              <h2 className="text-[15px] bg-blue-100 p-1 rounded-full px-2 text-teal-700">
+              <h2 className="text-[15px] bg-primary p-1 rounded-full px-2 text-white">
                 {doctor.category}
               </h2>
               <h2 className="font-bold">{doctor.name}</h2>
-              <h2 className="text-teal-500 text-sm">
-                {doctor.year_of_experience}
-              </h2>
+              <h2 className="text-sm">{doctor.year_of_experience}</h2>
               <h2 className="text-gray-100 text-sm">{doctor.address}</h2>
               <h2
-                className="p-2 px-3 border-[1px] border-teal-400 text-teal-400 rounded-full 
-                w-full text-center text-[14px] mt-2 cursor-pointer hover:bg-teal-500 hover:text-white"
+                className="p-2 px-3 border-[1px] border-primary text-primary rounded-full 
+                w-full text-center text-[14px] mt-2 cursor-pointer hover:bg-primary hover:text-white"
               >
                 Book Now
               </h2>
@@ -118,9 +116,9 @@ function DoctorList() {
           </div>
         ))}
       </div>
-      <div className="flex justify-center mt-5">
+      <div className="flex justify-center mt-10">
         <Button
-          className="bg-teal-500 hover:bg-teal-700"
+          className="bg-primary hover:bg-[#56c2e6] text-white"
           onClick={() => setShowAll(!showAll)}
         >
           {showAll ? "Show Less" : "See More"}

@@ -19,39 +19,39 @@ function CategorySearch() {
   const categoryList: Category[] = [
     {
       name: "Dentist",
-      icon: <FaTooth className="text-teal-600 h-6 w-6 " />,
+      icon: <FaTooth className="text-white h-6 w-6 " />,
     },
     {
       name: "Cardiologist",
-      icon: <FaHeartbeat className="text-teal-600 h-6 w-6" />,
+      icon: <FaHeartbeat className="text-white h-6 w-6" />,
     },
     {
       name: "Orthopedic",
-      icon: <GiBrokenBone className="text-teal-600 h-6 w-6" />,
+      icon: <GiBrokenBone className="text-white h-6 w-6" />,
     },
     {
       name: "Neologist",
-      icon: <Brain className="text-teal-600 h-6 w-6" />,
+      icon: <Brain className="text-white h-6 w-6" />,
     },
     {
       name: "Otology",
-      icon: <Ear className="text-teal-600 h-6 w-6" />,
+      icon: <Ear className="text-white h-6 w-6" />,
     },
     {
       name: "General Doctor",
-      icon: <FaUserDoctor className="text-teal-600 h-6 w-6" />,
+      icon: <FaUserDoctor className="text-white h-6 w-6" />,
     },
     {
       name: "Surgeon",
-      icon: <FaUserDoctor className="text-teal-600 h-6 w-6" />,
+      icon: <FaUserDoctor className="text-white h-6 w-6" />,
     },
     {
       name: "Psychotropic",
-      icon: <GiBrain className="text-teal-600 h-6 w-6" />,
+      icon: <GiBrain className="text-white h-6 w-6" />,
     },
     {
       name: "Eye Specialist",
-      icon: <FaEye className="text-teal-600 h-6 w-6" />,
+      icon: <FaEye className="text-white h-6 w-6" />,
     },
   ];
 
@@ -75,13 +75,16 @@ function CategorySearch() {
   return (
     <div className="mb-10 items-center px-5 flex flex-col gap-2">
       <h2 className="font-bold text-4xl tracking-wide">
-        Search <span className="text-teal-400">Doctors</span>
+        Search <span className="text-primary">Doctors</span>
       </h2>
       <h2 className="text-xl">Search your Doctor and Book Appointment</h2>
 
       <div className="flex w-full mt-3 max-w-sm items-center space-x-2">
         <Input type="text" placeholder="Search..." />
-        <Button className="bg-teal-600 hover:bg-teal-400" type="submit">
+        <Button
+          className="text-white bg-primary hover:bg-[#56c2e6]"
+          type="submit"
+        >
           <Search className="h-4 w-4 mr-2" />
           Search
         </Button>
@@ -90,15 +93,15 @@ function CategorySearch() {
       <div className="grid grid-cols-3 mt-5 md:grid-cols-4 lg:grid-cols-6">
         {displayCategories.map((item, index) => (
           <div key={index}>
-            <div className="flex flex-col text-center items-center p-5 bg-teal-500 dark:bg-dark-600 m-2 rounded-lg cursor-pointer hover:scale-105 transition-all ease-in-out gap-2">
-              <div className="bg-gray-100 p-4 rounded-3xl">{item.icon}</div>
-              <p className="text-teal-200 text-sm mt-2">{item.name}</p>
+            <div className="flex flex-col text-center items-center p-5 bg-white border-2 border-slate-400 m-2 rounded-lg cursor-pointer hover:scale-105 transition-all ease-in-out gap-2">
+              <div className="p-4 rounded-3xl bg-primary">{item.icon}</div>
+              <p className="text-blue-900 text-sm mt-2">{item.name}</p>
             </div>
           </div>
         ))}
       </div>
       <Button
-        className="bg-teal-500 hover:bg-teal-700 mt-3"
+        className="bg-primary hover:bg-[#56c2e6] text-white mt-3"
         onClick={toggleShowAllCategories}
       >
         {showAllCategories ? "Show Less" : "See More"}

@@ -29,7 +29,7 @@ function Hero() {
               repellat.
             </p>
 
-            <Button className="mt-10 bg-teal-600 hover:bg-teal-400">
+            <Button className="mt-10 bg-primary hover:bg-[#56c2e6] text-white">
               Explore Now
             </Button>
           </div>

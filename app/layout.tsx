@@ -30,23 +30,24 @@ export default function RootLayout({
       <body className={inter.className}>
        
         <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          ><Providers>
-            <Header/>
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Providers>
+            <Header />
             {children}
-            <Footer/>
-            
-            </Providers>
+            <Footer />
+
             <Toaster
               richColors
-							position="top-right"
-							closeButton
-							duration={5000}
-						/>
-         
+              position="top-right"
+              closeButton
+              duration={5000}
+            />
+          </Providers>
+
         </ThemeProvider>
 
       </body>
