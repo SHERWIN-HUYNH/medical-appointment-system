@@ -4,7 +4,7 @@ import Image from "next/image";
 import ReactDatePicker from "react-datepicker";
 import { Control } from "react-hook-form";
 import PhoneInput from "react-phone-number-input";
-import 'react-phone-number-input/style.css'
+import "react-phone-number-input/style.css";
 import { Checkbox } from "./ui/checkbox";
 import {
   FormControl,
@@ -45,7 +45,7 @@ interface CustomProps {
   children?: React.ReactNode;
   renderSkeleton?: (field: any) => React.ReactNode;
   fieldType: FormFieldType;
-  currentPassword?:string
+  currentPassword?: string;
 }
 
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
@@ -113,7 +113,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
       );
     case FormFieldType.DATE_PICKER:
       return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+        <div className="flex rounded-md border border-dark-500 bg-white">
           <Image
             src="/assets/icons/calendar.svg"
             height={24}
@@ -125,7 +125,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             <ReactDatePicker
               showTimeSelect={props.showTimeSelect ?? false}
               selected={field.value}
-              onChange={date => field.onChange(date)}
+              onChange={(date) => field.onChange(date)}
               timeInputLabel="Time:"
               dateFormat={props.dateFormat ?? "MM/dd/yyyy"}
               wrapperClassName="date-picker"
@@ -150,7 +150,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
       );
     case FormFieldType.SKELETON:
       return props.renderSkeleton ? props.renderSkeleton(field) : null;
-   
+
     default:
       return null;
   }
@@ -165,7 +165,7 @@ const CustomFormField = (props: CustomProps) => {
       render={({ field }) => (
         <FormItem className="flex-1">
           {props.fieldType !== FormFieldType.CHECKBOX && label && (
-              <FormLabel className="shad-input-label ">{label}</FormLabel>
+            <FormLabel className="shad-input-label ">{label}</FormLabel>
           )}
           <RenderInput field={field} props={props} />
 
