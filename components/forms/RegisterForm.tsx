@@ -26,7 +26,7 @@ export const RegisterForm = () => {
     defaultValues: {
       name: "",
       email: "",
-      phoneNumber:''
+      phone:''
     },
   });
   const onSubmit = async (values: z.infer<typeof RegisterFormValidation>) => {
@@ -43,7 +43,7 @@ export const RegisterForm = () => {
                 email: values.email,
                 password: currentPassword,
                 name: values.name,
-                phoneNumber: values.phoneNumber,
+                phone: values.phone,
             }),
         });
         console.log("RES", res)
@@ -97,7 +97,7 @@ export const RegisterForm = () => {
         <CustomFormField
           fieldType={FormFieldType.PHONE_INPUT}
           control={form.control}
-          name="phoneNumber"
+          name="phone"
           label="Phone number"
           placeholder="(555) 123-4567"
         />
