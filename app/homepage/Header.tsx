@@ -1,7 +1,5 @@
 'use client'
 import Image from "next/image";
-import React from "react";
-import { Button } from "../../components/ui/button";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import clsx from "clsx";
@@ -62,10 +60,8 @@ function Header() {
             'hidden': session
           })}>
             <div className="sm:flex sm:gap-4">
-
               <Link
                 className="block rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#56c2e6] dark:hover:bg-[#56c2e6]"
-
                 href="/login"
               >
                 Login

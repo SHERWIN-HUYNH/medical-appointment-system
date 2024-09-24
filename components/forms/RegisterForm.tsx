@@ -19,8 +19,8 @@ import { PasswordInput } from "../PasswordInput";
 export const RegisterForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState("")
-  console.log('ENV', process.env.DATABASE_URL)
+  const [currentPassword, setCurrentPassword] = useState("");
+  console.log("ENV", process.env.DATABASE_URL);
   const form = useForm<z.infer<typeof RegisterFormValidation>>({
     resolver: zodResolver(RegisterFormValidation),
     defaultValues: {
@@ -30,7 +30,7 @@ export const RegisterForm = () => {
     },
   });
   const onSubmit = async (values: z.infer<typeof RegisterFormValidation>) => {
-    console.log("IS LOADING",isLoading)
+    console.log("IS LOADING", isLoading);
     setIsLoading(true);
     try {
         console.log("VALUES FROM REGISTER", values)
@@ -49,23 +49,24 @@ export const RegisterForm = () => {
         console.log("RES", res)
         const responseData = await res.json();
 
-        if (!res.ok) {
-            console.log('RESPOND DATA',responseData.error);
-            throw new Error(responseData.error);
-        }
 
-        toast.success("Registered successfully");
-        router.push("/login");
+      if (!res.ok) {
+        console.log("RESPOND DATA", responseData.error);
+        throw new Error(responseData.error);
+      }
+
+      toast.success("Registered successfully");
+      router.push("/login");
     } catch (error) {
-        if (error instanceof Error) {
-          console.log('ERROR HAPPEN');
-            toast.error(error.message);
-        }
+      if (error instanceof Error) {
+        console.log("ERROR HAPPEN");
+        toast.error(error.message);
+      }
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
   };
-  
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
@@ -102,7 +103,9 @@ export const RegisterForm = () => {
           placeholder="(555) 123-4567"
         />
         <div className="space-y-2 flex-1 mt-2">
-          <Label htmlFor="password" className="shad-input-label ">Password</Label>
+          <Label htmlFor="password" className="shad-input-label ">
+            Password
+          </Label>
           <PasswordInput
             id="password"
             value={currentPassword}
