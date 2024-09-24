@@ -26,28 +26,29 @@ export const RegisterForm = () => {
     defaultValues: {
       name: "",
       email: "",
-      phone: "",
+      phone:''
     },
   });
   const onSubmit = async (values: z.infer<typeof RegisterFormValidation>) => {
     console.log("IS LOADING", isLoading);
     setIsLoading(true);
     try {
-      console.log("VALUES FROM REGISTER", values);
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: values.email,
-          password: currentPassword,
-          name: values.name,
-          phone: values.phone,
-        }),
-      });
-      console.log("RES", res);
-      const responseData = await res.json();
+        console.log("VALUES FROM REGISTER", values)
+        const res = await fetch("/api/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: values.email,
+                password: currentPassword,
+                name: values.name,
+                phone: values.phone,
+            }),
+        });
+        console.log("RES", res)
+        const responseData = await res.json();
+
 
       if (!res.ok) {
         console.log("RESPOND DATA", responseData.error);
@@ -97,7 +98,7 @@ export const RegisterForm = () => {
         <CustomFormField
           fieldType={FormFieldType.PHONE_INPUT}
           control={form.control}
-          name="phoneNumber"
+          name="phone"
           label="Phone number"
           placeholder="(555) 123-4567"
         />
