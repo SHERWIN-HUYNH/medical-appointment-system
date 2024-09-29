@@ -66,7 +66,7 @@ function Header() {
 
               <Link
                 className="hidden rounded-md px-5 py-2.5 text-sm font-medium bg-white hover:bg-slate-100 text-primary transition hover:text-[#56c2e6] sm:block dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
-                href="#"
+                href="/register"
               >
                 Register
               </Link>
