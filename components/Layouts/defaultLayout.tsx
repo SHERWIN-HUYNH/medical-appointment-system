@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import React, { useState } from 'react'
 import Header from '../Header/page';
 import Sidebar from '../SideBar/page';

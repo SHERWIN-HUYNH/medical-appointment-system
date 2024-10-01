@@ -1,10 +1,13 @@
+
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React from "react";
 
 function Footer() {
+
   return (
-    <footer className="bg-white">
-      <hr className="w-2/3 border-slate-400 mx-auto"></hr>
+    <footer className="bg-white w-full center items-center flex-col">
+      
       <div className="mx-auto max-w-screen-xl px-4 pb-6 pt-16 sm:px-6 lg:px-8 lg:pt-24">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div>
@@ -252,16 +255,11 @@ function Footer() {
 
                 <li>
                   <a
-                    className="group flex justify-center gap-1.5 ltr:sm:justify-start rtl:sm:justify-end"
+                    className=""
                     href="#"
                   >
                     <span className="text-gray-700 transition group-hover:text-gray-700/75">
                       Live Chat
-                    </span>
-
-                    <span className="relative flex size-2">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75"></span>
-                      <span className="relative inline-flex size-2 rounded-full bg-teal-500"></span>
                     </span>
                   </a>
                 </li>

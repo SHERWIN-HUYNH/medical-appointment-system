@@ -8,6 +8,7 @@ import Providers from "@/providers/Providers";
 import Header from "@/app/homepage/Header";
 import Footer from "@/app/homepage/Footer";
 import { SessionProvider } from "next-auth/react";
+import { useRouter } from "next/router";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,6 +25,7 @@ export default function RootLayout({
   children: React.ReactNode,
   params:any
 }>) {
+  
   return (
    
     <html lang="en">
@@ -36,10 +38,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Providers>
-            <Header />
+           
             {children}
-            <Footer />
-
             <Toaster
               richColors
               position="top-right"
