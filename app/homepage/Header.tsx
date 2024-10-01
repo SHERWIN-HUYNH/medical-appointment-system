@@ -28,7 +28,6 @@ function Header() {
     },
   ];
   const {data:session} = useSession()
-  console.log('SESSION',session)
   return (
     <header className="bg-blue-100 dark:bg-gray-900 fixed top-0 left-0 w-full z-50">
       <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">

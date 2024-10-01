@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
@@ -8,147 +9,116 @@ datasource db {
 }
 
 model User {
-  id      Int    @id @default(autoincrement())
+  id      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email   String @unique
   name    String
   password String
   phone    String @unique
-  profile Profile[]
+  roleName UserRole @default(USER)
+  profile Profile[] 
   bill    Bill[]
   comments      Comment[]
-  roleId  Int    // Foreign key to Role
-  role    Role   @relation(fields: [roleId], references: [id])
-}
-
-model Role {
-  id          Int          @id @default(autoincrement())
-  name        String       @unique  // Role name, e.g. "Admin", "Doctor"
-  users       User[]       // Quan hệ 1-nhiều với User
-  permissions RolePermission[]  // Quan hệ nhiều-nhiều với Permission qua bảng RolePermission
-}
-
-model Permission {
-  id          Int          @id @default(autoincrement())
-  name        String       @unique  // Permission name, e.g. "READ_PATIENT_DATA", "WRITE_REPORT"
-  roles       RolePermission[]  // Quan hệ nhiều-nhiều với Role qua bảng RolePermission
-}
-
-model RolePermission {
-  roleId      Int
-  permissionId Int
-  role        Role       @relation(fields: [roleId], references: [id])
-  permission  Permission @relation(fields: [permissionId], references: [id])
-
-  @@id([roleId, permissionId])  // Composite primary key
 }
 
 model Profile {
-  id                      Int   @id @default(autoincrement())
+  id                      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name                    String
   email                   String
   phone                   String
-  privacyConsent          String
   gender                  Gender   @default(MALE)
-  birthDate               DateTime?
-  address                 String?
-  occupation              String?
-  emergencyContactName    String
-  emergencyContactNumber  String
-  insuranceProvider       String
-  insurancePolicyNumber   String
   allergies               String
-  currentMedication       String
   pastMedicalHistory      String
   identificationType      String
   identificationNumber    String
-  identificationDocumentId String
-  primaryPhysician        String
   identificationDocumentUrl String
-  treatmentConsent        String
-  disclosureConsent       String
-  userId                  Int @unique
+  userId                  String   @db.Uuid
   user                    User @relation(fields: [userId], references: [id])
   appointments            Appointment[]
 }
 
 model Faculty {
-  id   Int  @id @default(autoincrement())
+  id   String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name String
+  description String
   doctors Doctor[]
 }
-
+model Service{
+  id String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name String 
+  price Float
+  description String
+  appointment Appointment[]
+}
 model Doctor {
-  id            Int   @id @default(autoincrement())
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String
   academicTitle String
   faculty       Faculty @relation(fields: [facultyId], references: [id])
-  facultyId     Int
-  appointments  Appointment[]
+  facultyId     String @db.Uuid
   comments      Comment[]
-  schedules Schedule[] 
+  doctorSchedule DoctorSchedule[]
+
 }
 
 model Comment {
-  id        Int       @id @default(autoincrement())
+  id        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   content   String
   rating    Int       // Giá trị rating (1-5 chẳng hạn)
-  createdAt       DateTime  @default(now())
-  doctorId  Int
+  createdAt DateTime  @default(now())
+  doctorId  String     @db.Uuid
   doctor    Doctor     @relation(fields: [doctorId], references: [id])
-  userId    Int
+  userId    String     @db.Uuid
   user      User       @relation(fields: [userId], references: [id])
 }
 
 model Appointment {
-  id                 Int    @id @default(autoincrement())
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   date               DateTime
   timeSlots          String
   reason             String
-  status             AppointmentStatus @default(PENDING)
+  status             AppointmentStatus @default(SCHEDULED)
   cancellationReason String?
   note               String?
   profile            Profile   @relation(fields: [profileId], references: [id])
-  profileId          Int
-  doctor             Doctor    @relation(fields: [doctorId], references: [id])
-  doctorId           Int
+  profileId          String    @db.Uuid
+  serviceId          String    @db.Uuid
+  Service            Service  @relation(fields: [serviceId],references:[id])
   payments           Bill?
+  doctorScheduleId   String @unique @db.Uuid
+  doctorSchedule     DoctorSchedule @relation(fields: [doctorScheduleId],references:[id])
 }
 
 model Bill {
-  id              Int   @id @default(autoincrement())
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt       DateTime  @default(now())
-  amount          Int
+  updatedAt       DateTime  @default(now())
+  amount          Float
   paymentMethod   String
   note            String
   status          BillStatus @default(PENDING)
   user            User @relation(fields: [userId], references: [id])
   appointment     Appointment @relation(fields: [appointmentId], references: [id])
-  userId       	  Int
-  appointmentId   Int @unique
+  userId       	  String     @db.Uuid
+  appointmentId   String @unique @db.Uuid
 }
 model Schedule {
-  id          Int         @id @default(autoincrement())
-  doctorId    Int
-  date        DateTime     
+  id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  date        DateTime
+  timeSlot    String     
   isAvailable Boolean      
-  timeSlots   SheduleTimeSlot[]   
+  doctorSchedule DoctorSchedule[]  
+}
 
-  doctor      Doctor       @relation(fields: [doctorId], references: [id], onDelete: Cascade)
-  @@unique([doctorId, date]) 
+model DoctorSchedule{
+  id String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  doctorId String  @db.Uuid
+  doctor Doctor  @relation(fields: [doctorId], references: [id])
+  scheduleId String @db.Uuid
+  schedule Schedule @relation(fields: [scheduleId], references: [id])
+  appointment Appointment?
+  @@unique([doctorId, scheduleId])
 }
-model TimeSlot {
-  id          Int        @id @default(autoincrement())
-  timeSlots   String     
-  isAvailable Boolean    
-  schedule   SheduleTimeSlot[]   
-}
-model SheduleTimeSlot{
-  scheduleId Int 
-  timeSlotsId Int
-  schedule    Schedule   @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
-  timeSlots   TimeSlot   @relation(fields: [timeSlotsId], references: [id], onDelete: Cascade)
-  @@id([scheduleId, timeSlotsId])
-}
+
 enum BillStatus {
   COMPLETED
   FAILED
@@ -167,4 +137,9 @@ enum AppointmentStatus {
   SCHEDULED
   PENDING
   CANCELLED
+}
+
+enum UserRole{
+  USER 
+  ADMIN
 }

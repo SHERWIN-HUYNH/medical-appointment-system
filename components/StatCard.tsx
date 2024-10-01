@@ -11,8 +11,8 @@ type StatCardProps = {
 export const StatCard = ({ count = 0, label, icon, type }: StatCardProps) => {
   return (
     <div
-      className={clsx("stat-card", {
-        "bg-appointments": type === "appointments",
+      className={clsx("stat-card bg-[#00b5f1]", {
+        "bg-appointments ": type === "appointments",
         "bg-pending": type === "pending",
         "bg-cancelled": type === "cancelled",
       })}
@@ -28,7 +28,7 @@ export const StatCard = ({ count = 0, label, icon, type }: StatCardProps) => {
         <h2 className="text-32-bold text-white">{count}</h2>
       </div>
 
-      <p className="text-14-regular">{label}</p>
+      <p className=" text-[#000000d9] font-medium text-lg">{label}</p>
     </div>
   );
 };
