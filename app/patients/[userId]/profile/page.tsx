@@ -27,11 +27,10 @@ const Profile = () => {
 
   return (
     <div className="mt-[50px] flex justify-start p-10">
-      <div className="grid grid-cols-4 gap-12 lg:grid-cols-3 lg:gap-16 p-4 "> 
-      
+      <div className="grid grid-cols-4 gap-12 lg:grid-cols-3 lg:gap-16 p-4 ">
         <div className="rounded-lg flex flex-col items-center ml-30 p-4 w-80">
           <Button className="justify-start border-slate-300 bg-white w-full gap-2 items-center p-3 rounded-lg border-2">
-            <RiEmpathizeFill className="text-blue-400"/>
+            <RiEmpathizeFill className="text-blue-400" />
             Thêm hồ sơ khám bệnh
           </Button>
           <hr className="w-full border-t-2 border-blue-300 mt-4" />
@@ -40,7 +39,7 @@ const Profile = () => {
               <li key={item.id} className="mt-2 w-full">
                 <Button
                   className="w-full gap-2 flex items-center justify-start p-3 bg-white "
-                  onClick={() => setSelectedOption(item.id)} 
+                  onClick={() => setSelectedOption(item.id)}
                 >
                   <span>{item.icon}</span>
                   {item.name}

@@ -48,6 +48,15 @@
     @apply bg-black-900 bg-light-rays bg-cover bg-no-repeat;
   }
 
+  .button {
+    @apply rounded-full py-2 px-10 bg-slate-200 font-semibold border-2 border-transparent transition-all ease-linear duration-300 shadow-none hover:border-blue-500 hover:shadow-lg hover:translate-y-[-2px];
+  }
+
+
+  .button-selected {
+    @apply bg-gradient-to-r from-cyan-500 to-blue-400 text-white shadow-lg;
+  }
+
   .header {
     @apply text-[#00b5f1] text-32-bold md:text-36-bold;
   }

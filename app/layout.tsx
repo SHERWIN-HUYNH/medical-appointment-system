@@ -9,7 +9,6 @@ import Header from "@/app/homepage/Header";
 import Footer from "@/app/homepage/Footer";
 import { SessionProvider } from "next-auth/react";
 
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,16 +18,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  params: { session, ...params},
+  params: { session, ...params },
 }: Readonly<{
-  children: React.ReactNode,
-  params:any
+  children: React.ReactNode;
+  params: any;
 }>) {
   return (
-   
     <html lang="en">
       <body className={inter.className}>
-       
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -47,11 +44,8 @@ export default function RootLayout({
               duration={5000}
             />
           </Providers>
-
         </ThemeProvider>
-
       </body>
     </html>
-  
   );
 }
