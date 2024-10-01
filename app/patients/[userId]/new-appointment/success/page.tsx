@@ -7,7 +7,6 @@ import { Doctors } from "@/constants";
 import { formatDateTime } from "@/lib/utils";
 import { getAppointment } from "@/lib/action/appointment.actions";
 import { getUser } from "@/lib/action/patient.actions";
-import { useSession } from "next-auth/react";
 
 const RequestSuccess = async ({
   searchParams,

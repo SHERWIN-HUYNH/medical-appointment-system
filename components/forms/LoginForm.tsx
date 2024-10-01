@@ -31,7 +31,6 @@ export const LoginForm = () => {
   });
   const onSubmit = async (values: z.infer<typeof UserLogin>) => {
     setIsLoading(true);
-    console.log('VALUES  + PASSWORDS',values,currentPassword)
     const res = await signIn("credentials", {
       email: values.email,
       password: currentPassword,

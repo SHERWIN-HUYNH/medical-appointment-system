@@ -14,13 +14,14 @@ export const POST = async (request: Request) => {
 		if (user) {
 			return conflictResponse("User already exists.");
 		}
-
+		const roleId = 2
 		const hashedPassword = await hashPassword(password);
 		await UserRepository.insert({
 			name,
 			email,
 			password: hashedPassword,
-			phone
+			phone,
+			roleId
 		});
 
 		return createdResponse({

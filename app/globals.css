@@ -27,6 +27,21 @@
 }
 
 @layer utilities {
+  .blue-header{
+    @apply font-bold text-xl px-3 py-4 text-white text-center rounded-t-lg bg-gradient-to-r from-[#00b5f1] to-[#00e0ff];
+  }
+  .center{
+    @apply flex justify-center;
+  }
+  .timeSlot{
+    @apply py-6 px-2 text-[#818181] bg-[#f5f5f5] min-w-36 font-medium text-xl rounded-md hover:bg-[#f5f5f5]
+  }
+  .activeTimeSlot{
+    @apply py-6 px-2 border border-solid text-[#003553] border-[#00e0ff] hover:bg-gradient-to-r hover:from-[#00b5f1] hover:to-[#00e0ff] hover:border-transparent bg-white min-w-36 font-medium text-xl
+  }
+  .text-16-normal{
+    @apply text-base font-normal text-[#003553] ;
+  }
   /* ===== UTILITIES */
   .sidebar {
     @apply remove-scrollbar w-full max-w-72 flex-col overflow-auto bg-black px-7 py-10;
@@ -123,7 +138,7 @@
 
   /* ==== Stat Card */
   .stat-card {
-    @apply flex flex-1 flex-col gap-6 rounded-2xl bg-cover   bg-gradient-to-tr from-[#00b5f1] to-[#00e0ff] p-6 shadow-lg;
+    @apply flex flex-1 flex-col gap-6 rounded-2xl bg-cover p-6 shadow-lg;
   }
 
   /* ==== Status Badge */
@@ -355,4 +370,58 @@
 
 .PhoneInputInput::placeholder {
   color: #1a1d21;
+}
+
+.fc-header-toolbar {
+  display: inline-block;
+  padding: 4px 4px;
+  
+  @apply space-x-8;
+}
+
+.fc-day {
+@apply m-8;
+}
+
+.fc-scrollgrid-sync-table {
+@apply w-full;
+}
+
+.fc-view {
+@apply w-full h-full lg:h-3/4 xl:h-2/3 bg-white;
+}
+
+.fc-h-event {
+@apply bg-primary border border-primary ;
+
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+@apply bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-black;
+}
+
+.fc .fc-button{
+@apply bg-primary hover:bg-primary/50  ;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+@apply bg-gradient-to-r from-[#00b5f1] to-[#00e0ff];
+}
+
+.fc .fc-button-primary:disabled {
+@apply bg-primary;
+}
+.fc-v-event {
+@apply bg-primary border border-primary ;
+
+}
+
+.fc{
+  @apply min-h-[800px] w-[825px] !important;
+}
+.fc .fc-scrollgrid-sync-table {
+  @apply overflow-auto !important;
+}
+.fc .fc-scrollgrid {
+  @apply h-[700px];
 }
