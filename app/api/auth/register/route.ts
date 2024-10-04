@@ -2,6 +2,7 @@ import { hashPassword } from "@/helpers/hash";
 import { conflictResponse, createdResponse, internalServerErrorResponse } from "@/helpers/response";
 import { UserRepository } from "@/repositories/user";
 import { RegisterSchema } from "@/validation/register";
+import { UserRole } from "@prisma/client";
 
 
 export const POST = async (request: Request) => {
@@ -14,14 +15,13 @@ export const POST = async (request: Request) => {
 		if (user) {
 			return conflictResponse("User already exists.");
 		}
-		const roleId = 2
 		const hashedPassword = await hashPassword(password);
 		await UserRepository.insert({
 			name,
 			email,
 			password: hashedPassword,
 			phone,
-			roleId
+			roleName: UserRole.USER
 		});
 
 		return createdResponse({
