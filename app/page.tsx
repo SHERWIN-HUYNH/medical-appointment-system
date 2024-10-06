@@ -4,7 +4,6 @@ import DoctorList from "@/app/homepage/DoctorList";
 import Footer from "./homepage/Footer";
 import Header from "./homepage/Header";
 
-
 export default function Home() {
   return (
     <div className="">
