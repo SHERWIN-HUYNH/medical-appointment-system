@@ -11,12 +11,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 interface DropDownProps {
   username: string;
   className?: string;
 }
 const DropDown = ({ username, className }: DropDownProps) => {
+  const { data: session } = useSession();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -31,9 +34,10 @@ const DropDown = ({ username, className }: DropDownProps) => {
         <DropdownMenuSeparator className="bg-slate-300" />
         <DropdownMenuGroup>
           <DropdownMenuItem className="hover:bg-slate-200 cursor-pointer">
+            <Link href={`/patients/${session?.user.id}/profile`} className="flex">
             <BookPlus className="mr-2 h-4 w-4" />
-
-            <span>Hồ sơ bệnh nhân</span>
+            <span>Hồ sơ bệnh nhân</span> 
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="hover:bg-slate-200 cursor-pointer">
             <CreditCard className="mr-2 h-4 w-4" />

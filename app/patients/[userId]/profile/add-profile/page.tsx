@@ -1,10 +1,11 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
+import { profile } from "console";
 import { Eraser, UserRoundPlus } from "lucide-react";
+import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 
-const Add_Profile = () => {
+const Add_Profile =  () => {
   const initialFormData = {
     name: "",
     email: "",
@@ -19,7 +20,6 @@ const Add_Profile = () => {
 
   const [formData, setFormData] = useState(initialFormData);
   const [errorMessage, setErrorMessage] = useState("");
-
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -43,21 +43,35 @@ const Add_Profile = () => {
   };
 
   const isValidIdNumber = (idNumber: string) => {
-    const idPattern = /^[0-9]{9,12}$/; // Ví dụ: 9 đến 12 chữ số
+    const idPattern = /^[0-9]{9,12}$/; 
     return idPattern.test(idNumber);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); 
 
     if (!isValidIdNumber(formData.idNumber)) {
       setErrorMessage("Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.");
-      return; // Dừng việc gửi dữ liệu
+      return; 
     }
-
-    // Nếu hợp lệ, bạn có thể thêm logic gửi dữ liệu ở đây
-    console.log(formData);
-    setErrorMessage(""); // Xóa thông báo lỗi nếu gửi thành công
+    // CALL API
+    if(formData){
+      const response = await fetch('/api/profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action:"create",
+          profile:formData
+        }),
+      });
+      console.log(response);
+    }
+    
+ 
+    
+    setErrorMessage(""); 
   };
 
   return (

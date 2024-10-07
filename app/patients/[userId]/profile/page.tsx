@@ -62,7 +62,7 @@ const Profile = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full max-w-5xl">
           {/* Left Side (Buttons) */}
           <div className="rounded-lg flex flex-col items-center p-4 w-full lg:w-auto">
-            <Link href="/patients/333/profile/add-profile">
+            <Link href={`/patients/${session?.user.id}/profile/add-profile`}>
               <Button className="justify-start border-slate-300 bg-white hover:bg-sky-200 w-full gap-2 items-center p-3 rounded-lg border-2">
                 <RiEmpathizeFill className="text-blue-400" />
                 Thêm hồ sơ khám bệnh
