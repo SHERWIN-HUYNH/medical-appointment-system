@@ -7,6 +7,7 @@ import { FaBookMedical, FaNewspaper } from "react-icons/fa";
 import { MapPinHouse, PencilLine, Smartphone, Trash2, UserRoundPen } from "lucide-react";
 import Link from "next/link";
 
+
 interface Profile {
   id: number; // or string
   name: string;
