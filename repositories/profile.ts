@@ -1,9 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import { Profile } from '@/types/interface';
+import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient();
 
 export class ProfileService {
-  static async getListProfileByUserId(userId: number) {
+  static async getListProfileByUserId(userId: string) {
     try {
       const profiles = await prisma.profile.findMany({
         where: {
@@ -19,7 +20,7 @@ export class ProfileService {
     }
   }
 
-  static async getProfileById(id: number) {
+  static async getProfileById(id: string) {
     try {
       const profile = await prisma.profile.findUnique({ 
         where: {
@@ -35,31 +36,48 @@ export class ProfileService {
     }
   }
 
-  static async createProfile(profileData: {
-    id: number; 
-    name: string;
-    birthday: Date; // Hoặc string tùy theo định dạng bạn sử dụng
-    gender: 'MALE' | 'FEMALE' | 'OTHER';
-    email: string;
-    identificationType: string;
-    identificationNumber: string;
-    identificationDocumentUrl: string; // Hoặc URL kiểu string
-    pastMedicalHistory : string; // Hoặc một kiểu dữ liệu khác nếu cần
-    userId: number;
-  }) {
+
+  static async createProfile({profileData,userId}:{profileData:Profile,userId:string}) {
     try {
       const newProfile = await prisma.profile.create({
         data: {
-          id: profileData.id,
           name: profileData.name,
           birthDate: profileData.birthday,
           gender: profileData.gender,
+          phone:profileData.phone,
           email: profileData.email,
           identificationType: profileData.identificationType,
           identificationNumber: profileData.identificationNumber,
           identificationDocumentUrl: profileData.identificationDocumentUrl,
           pastMedicalHistory : profileData.pastMedicalHistory ,
-          userId: profileData.userId,
+          userId: userId,
+        },
+      });
+      return newProfile; 
+    } catch (error) {
+      console.error("Lỗi khi thêm hồ sơ bệnh nhân: ", error);
+      throw error;
+    } finally {
+      await prisma.$disconnect(); 
+    }
+  }
+  static async updateProfile({profileData,userId}:{profileData:Profile,userId:string}) {
+    try {
+      const newProfile = await prisma.profile.update({
+        where: {
+          id: profileData.id,
+        },
+        data: {
+          name: profileData.name,
+          birthDate: profileData.birthday,
+          gender: profileData.gender,
+          phone:profileData.phone,
+          email: profileData.email,
+          identificationType: profileData.identificationType,
+          identificationNumber: profileData.identificationNumber,
+          identificationDocumentUrl: profileData.identificationDocumentUrl,
+          pastMedicalHistory : profileData.pastMedicalHistory ,
+          userId: userId,
         },
       });
       return newProfile; 
