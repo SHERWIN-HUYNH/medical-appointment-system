@@ -1,18 +1,18 @@
 "use client";
-import React from 'react'
-import ClickOutside from '../ClickOutside'
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import SidebarItem from './SidebarItem';
-import useLocalStorage from '@/hooks/useLocalStorage';
+import React from "react";
+import ClickOutside from "../ClickOutside";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import SidebarItem from "./SidebarItem";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 interface SidebarProps {
-    sidebarOpen: boolean;
-    setSidebarOpen: (arg: boolean) => void;
-  }
+  sidebarOpen: boolean;
+  setSidebarOpen: (arg: boolean) => void;
+}
 const menuGroups = [
-    {
+  {
     name: "MENU",
     menuItems: [
       {
@@ -50,6 +50,25 @@ const menuGroups = [
       {
         icon: (
           <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            id="medicalequipment"
+          >
+            <path
+              d="M19 8a2.993 2.993 0 0 0-1 5.816V15.5a4.5 4.5 0 0 1-9 0v-1.02l3.124-2.498A4.976 4.976 0 0 0 14 8.078V3a1 1 0 0 0-1-1h-2a1 1 0 0 0 0 2h1v4.078a2.986 2.986 0 0 1-1.125 2.342L8 12.72l-2.874-2.3A2.985 2.985 0 0 1 4 8.078V4h1a1 1 0 0 0 0-2H3a1 1 0 0 0-1 1v5.078a4.975 4.975 0 0 0 1.876 3.904L7 14.48v1.02a6.5 6.5 0 0 0 13 0v-1.684A2.993 2.993 0 0 0 19 8Zm0 4a1 1 0 1 1 1-1 1.001 1.001 0 0 1-1 1Z"
+              fill="#ffffff"
+              className="color000000 svgShape"
+            ></path>
+          </svg>
+        ),
+        label: "Faculty",
+        route: "/test-faculty",
+      },
+      {
+        icon: (
+          <svg
             className="fill-current"
             width="18"
             height="18"
@@ -67,61 +86,60 @@ const menuGroups = [
         route: "/calendar",
       },
     ],
-    },
-    {
-        name: "OTHERS",
-        menuItems: [
-          {
-            icon: (
-              <svg
-                className="fill-current"
-                width="18"
-                height="19"
-                viewBox="0 0 18 19"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g clipPath="url(#clip0_130_9801)">
-                  <path
-                    d="M10.8563 0.55835C10.5188 0.55835 10.2095 0.8396 10.2095 1.20522V6.83022C10.2095 7.16773 10.4907 7.4771 10.8563 7.4771H16.8751C17.0438 7.4771 17.2126 7.39272 17.3251 7.28022C17.4376 7.1396 17.4938 6.97085 17.4938 6.8021C17.2688 3.28647 14.3438 0.55835 10.8563 0.55835ZM11.4751 6.15522V1.8521C13.8095 2.13335 15.6938 3.8771 16.1438 6.18335H11.4751V6.15522Z"
-                    fill=""
-                  />
-                  <path
-                    d="M15.3845 8.7427H9.1126V2.69582C9.1126 2.35832 8.83135 2.07707 8.49385 2.07707C8.40947 2.07707 8.3251 2.07707 8.24072 2.07707C3.96572 2.04895 0.506348 5.53645 0.506348 9.81145C0.506348 14.0864 3.99385 17.5739 8.26885 17.5739C12.5438 17.5739 16.0313 14.0864 16.0313 9.81145C16.0313 9.6427 16.0313 9.47395 16.0032 9.33332C16.0032 8.99582 15.722 8.7427 15.3845 8.7427ZM8.26885 16.3083C4.66885 16.3083 1.77197 13.4114 1.77197 9.81145C1.77197 6.3802 4.47197 3.53957 7.8751 3.3427V9.36145C7.8751 9.69895 8.15635 10.0083 8.52197 10.0083H14.7938C14.6813 13.4958 11.7845 16.3083 8.26885 16.3083Z"
-                    fill=""
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_130_9801">
-                    <rect
-                      width="18"
-                      height="18"
-                      fill="white"
-                      transform="translate(0 0.052124)"
-                    />
-                  </clipPath>
-                </defs>
-              </svg>
-            ),
-            label: "Chart",
-            route: "/chart",
-          },
-        ],
-    }
-]
+  },
+  {
+    name: "OTHERS",
+    menuItems: [
+      {
+        icon: (
+          <svg
+            className="fill-current"
+            width="18"
+            height="19"
+            viewBox="0 0 18 19"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clipPath="url(#clip0_130_9801)">
+              <path
+                d="M10.8563 0.55835C10.5188 0.55835 10.2095 0.8396 10.2095 1.20522V6.83022C10.2095 7.16773 10.4907 7.4771 10.8563 7.4771H16.8751C17.0438 7.4771 17.2126 7.39272 17.3251 7.28022C17.4376 7.1396 17.4938 6.97085 17.4938 6.8021C17.2688 3.28647 14.3438 0.55835 10.8563 0.55835ZM11.4751 6.15522V1.8521C13.8095 2.13335 15.6938 3.8771 16.1438 6.18335H11.4751V6.15522Z"
+                fill=""
+              />
+              <path
+                d="M15.3845 8.7427H9.1126V2.69582C9.1126 2.35832 8.83135 2.07707 8.49385 2.07707C8.40947 2.07707 8.3251 2.07707 8.24072 2.07707C3.96572 2.04895 0.506348 5.53645 0.506348 9.81145C0.506348 14.0864 3.99385 17.5739 8.26885 17.5739C12.5438 17.5739 16.0313 14.0864 16.0313 9.81145C16.0313 9.6427 16.0313 9.47395 16.0032 9.33332C16.0032 8.99582 15.722 8.7427 15.3845 8.7427ZM8.26885 16.3083C4.66885 16.3083 1.77197 13.4114 1.77197 9.81145C1.77197 6.3802 4.47197 3.53957 7.8751 3.3427V9.36145C7.8751 9.69895 8.15635 10.0083 8.52197 10.0083H14.7938C14.6813 13.4958 11.7845 16.3083 8.26885 16.3083Z"
+                fill=""
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_130_9801">
+                <rect
+                  width="18"
+                  height="18"
+                  fill="white"
+                  transform="translate(0 0.052124)"
+                />
+              </clipPath>
+            </defs>
+          </svg>
+        ),
+        label: "Chart",
+        route: "/chart",
+      },
+    ],
+  },
+];
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
-    const pathname = usePathname();
-    const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard"); 
+  const pathname = usePathname();
+  const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
   return (
-    <ClickOutside onClick={() => setSidebarOpen(false)} >
-        <aside
+    <ClickOutside onClick={() => setSidebarOpen(false)}>
+      <aside
         className={`fixed left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-        
       >
-         {/* <!-- SIDEBAR HEADER --> */}
-         <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+        {/* <!-- SIDEBAR HEADER --> */}
+        <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
           <Link href="/">
             <Image
               width={176}
@@ -180,7 +198,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         </div>
       </aside>
     </ClickOutside>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
