@@ -19,8 +19,7 @@ interface DropDownProps {
   className?: string;
 }
 const DropDown = ({ username, className }: DropDownProps) => {
-  const { data: session, status } = useSession();
-  const userId = session?.user?.id;
+  const { data: session } = useSession();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -34,12 +33,15 @@ const DropDown = ({ username, className }: DropDownProps) => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-slate-300" />
         <DropdownMenuGroup>
-          <Link href={`/patients/${userId}/profile`}>
-            <DropdownMenuItem className="hover:bg-slate-200 cursor-pointer">
+          <DropdownMenuItem className="hover:bg-slate-200 cursor-pointer">
+            <Link
+              href={`/patients/${session?.user.id}/profile`}
+              className="flex"
+            >
               <BookPlus className="mr-2 h-4 w-4" />
               <span>Hồ sơ bệnh nhân</span>
-            </DropdownMenuItem>
-          </Link>
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuItem className="hover:bg-slate-200 cursor-pointer">
             <CreditCard className="mr-2 h-4 w-4" />
             <span>Phiếu khám bệnh</span>
