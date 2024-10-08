@@ -11,8 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 
 interface DropDownProps {
   username: string;
@@ -34,9 +34,12 @@ const DropDown = ({ username, className }: DropDownProps) => {
         <DropdownMenuSeparator className="bg-slate-300" />
         <DropdownMenuGroup>
           <DropdownMenuItem className="hover:bg-slate-200 cursor-pointer">
-            <Link href={`/patients/${session?.user.id}/profile`} className="flex">
-            <BookPlus className="mr-2 h-4 w-4" />
-            <span>Hồ sơ bệnh nhân</span> 
+            <Link
+              href={`/patients/${session?.user.id}/profile`}
+              className="flex"
+            >
+              <BookPlus className="mr-2 h-4 w-4" />
+              <span>Hồ sơ bệnh nhân</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="hover:bg-slate-200 cursor-pointer">
@@ -51,7 +54,17 @@ const DropDown = ({ username, className }: DropDownProps) => {
         <DropdownMenuSeparator className="bg-slate-300" />
         <DropdownMenuItem className="hover:bg-slate-200 cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
+          <Button
+            className="bg-white"
+            onClick={() =>
+              signOut({
+                redirect: true,
+                callbackUrl: `/login`,
+              })
+            }
+          >
+            Sign out
+          </Button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
