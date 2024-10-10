@@ -7,7 +7,6 @@ import DropDown from "./DropDown";
 
 function Header() {
   const { data: session } = useSession();
-  console.log(session); // Kiểm tra giá trị của session
   const Menu = [
     {
       id: 1,

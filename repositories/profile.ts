@@ -49,7 +49,7 @@ export class ProfileService {
           identificationType: profileData.identificationType,
           identificationNumber: profileData.identificationNumber,
           identificationDocumentUrl: profileData.identificationDocumentUrl,
-          pastMedicalHistory : profileData.pastMedicalHistory ,
+          pastMedicalHistory : profileData.pastMedicalHistory,
           userId: userId,
         },
       });

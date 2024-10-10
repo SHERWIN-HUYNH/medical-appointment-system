@@ -11,15 +11,16 @@ const Add_Profile =  () => {
     email: "",
     phone: "",
     gender: "",
-    idType: "",
-    idNumber: "",
-    documentLink: "",
-    medicalHistory: "",
+    identificationType: "",
+    identificationNumber: "",
+    identificationDocumentUrl: "",
+    pastMedicalHistory: "",
     birthDate: "", 
   };
 
   const [formData, setFormData] = useState(initialFormData);
   const [errorMessage, setErrorMessage] = useState("");
+  const { data: session } = useSession();
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -42,21 +43,20 @@ const Add_Profile =  () => {
     setErrorMessage(""); // Xóa thông báo lỗi
   };
 
-  const isValidIdNumber = (idNumber: string) => {
+  const isValidIdNumber = (identificationNumber: string) => {
     const idPattern = /^[0-9]{9,12}$/; 
-    return idPattern.test(idNumber);
+    return idPattern.test(identificationNumber);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); 
 
-    if (!isValidIdNumber(formData.idNumber)) {
+    if (!isValidIdNumber(formData.identificationNumber)) {
       setErrorMessage("Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.");
-      return; 
     }
     // CALL API
     if(formData){
-      const response = await fetch('/api/profile', {
+      const response = await fetch(`/api/profile/${session?.user?.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -167,7 +167,7 @@ const Add_Profile =  () => {
             <label className="block mb-1 text-left">Loại giấy định danh</label>
             <select
               name="idType"
-              value={formData.idType}
+              value={formData.identificationType}
               onChange={handleChange}
               required
               className="w-full p-1 border border-slate-300 rounded text-sm"
@@ -184,7 +184,7 @@ const Add_Profile =  () => {
             <input
               type="text"
               name="idNumber"
-              value={formData.idNumber}
+              value={formData.identificationNumber}
               onChange={handleChange}
               required
               className="w-full p-1 border border-slate-300 rounded text-sm"
@@ -201,7 +201,7 @@ const Add_Profile =  () => {
             <input
               type="text"
               name="documentLink"
-              value={formData.documentLink}
+              value={formData.identificationDocumentUrl}
               onChange={handleChange}
               className="w-full p-1 border border-slate-300 rounded text-sm"
               placeholder="Nhập đường dẫn"
@@ -212,8 +212,8 @@ const Add_Profile =  () => {
           <div className="rounded-lg bg-slate-100 p-2 lg:col-span-2">
             <label className="block mb-1 text-left">Lịch sử bệnh án</label>
             <textarea
-              name="medicalHistory"
-              value={formData.medicalHistory}
+              name="pastMedicalHistory"
+              value={formData.pastMedicalHistory}
               onChange={handleChange}
               className="w-full p-1 border border-slate-300 rounded text-sm"
               placeholder="Nhập lịch sử bệnh án"
