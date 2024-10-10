@@ -36,11 +36,12 @@ const columns = [
   },
 ];
 const ListFaculty = () => {
-  const [currentPage, setCurrentPage] = useState(1); // State for current page
-  const itemsPerPage = 5; // Define how many items you want per page
-  const totalPages = Math.ceil(facultyData.length / itemsPerPage); // Calculate total pages
+  // Phân trang
+  const [currentPage, setCurrentPage] = useState(1); 
+  const itemsPerPage = 5; 
+  const totalPages = Math.ceil(facultyData.length / itemsPerPage); 
 
-  // Slice the data to get only the items for the current page
+
   const displayedData = facultyData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -61,7 +62,7 @@ const ListFaculty = () => {
         <td className="hidden md:table-cell">{item.description}</td>
         <td>
           <div className="flex items-center gap-2">
-            <Link href={`/test-faculty/${item.id}`}>
+            <Link href={`/test-faculty/${item.id}/edit-faculty`}>
               <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-blue-300">
                 <Pencil size={28} strokeWidth={3} color="white" />
               </Button>
@@ -84,9 +85,11 @@ const ListFaculty = () => {
           <TableSearch />
         </div>
         <div className="flex items-center gap-4 self-end">
-          <Button className="flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-blue-400 text-white">
-            Thêm chuyên khoa
-          </Button>
+          <Link href="/test-faculty/add-faculty">
+            <Button className="flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-blue-400 text-white">
+              Thêm chuyên khoa
+            </Button>
+          </Link>
         </div>
       </div>
       {/* LIST */}

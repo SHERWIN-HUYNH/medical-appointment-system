@@ -11,22 +11,27 @@ function Header() {
   const Menu = [
     {
       id: 1,
-      name: "Home",
+      name: "Trang chủ",
       path: "/",
     },
     {
       id: 2,
-      name: "About",
+      name: "Giới thiệu",
       path: "/",
     },
     {
       id: 3,
-      name: "Explore",
+      name: "Dịch vụ",
       path: "/explore",
     },
     {
       id: 4,
-      name: "Contact Us",
+      name: "Chuyên khoa",
+      path: "/",
+    },
+    {
+      id: 5,
+      name: "Đội ngũ bác sĩ",
       path: "/",
     },
   ];

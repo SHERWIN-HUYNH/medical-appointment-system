@@ -19,8 +19,8 @@ import { signIn } from "next-auth/react";
 export const LoginForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState("")
-	const [passwordConfirmation, setPasswordConfirmation] = useState("")
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
   const form = useForm<z.infer<typeof UserLogin>>({
     resolver: zodResolver(UserLogin),
@@ -35,9 +35,9 @@ export const LoginForm = () => {
       email: values.email,
       password: currentPassword,
       redirect: false,
-    })
-    if(res?.error){
-      toast.error(res.error)
+    });
+    if (res?.error) {
+      toast.error(res.error);
     }
     if (res?.ok) {
       toast.success("Login successfully");
@@ -50,8 +50,10 @@ export const LoginForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
         <section className="mb-12 space-y-4">
-          <h1 className="header">Hi there 👋</h1>
-          <p className="text-dark-700">Get started with appointments.</p>
+          <h1 className="header">Xin chào 👋</h1>
+          <p className="text-dark-700">
+            Bước đầu của sức khỏe tốt hơn – Đặt lịch hẹn ngay hôm nay!
+          </p>
         </section>
 
         <CustomFormField
@@ -59,21 +61,23 @@ export const LoginForm = () => {
           control={form.control}
           name="email"
           label="Email"
-          placeholder="JohnDoe@gmail.com"
+          placeholder="ngothiduyencute@gmail.com"
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
         />
         <div className="space-y-2 flex-1 mt-2">
-            <Label htmlFor="current_password" className="shad-input-label ">Current Password</Label>
-            <PasswordInput
-              id="current_password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              autoComplete="current-password"
-            />
+          <Label htmlFor="current_password" className="shad-input-label ">
+            Mật khẩu
+          </Label>
+          <PasswordInput
+            id="current_password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            autoComplete="current-password"
+          />
         </div>
-        
-        <SubmitButton isLoading={isLoading} >Log In</SubmitButton>
+
+        <SubmitButton isLoading={isLoading}>Đăng nhập</SubmitButton>
       </form>
     </Form>
   );
