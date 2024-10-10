@@ -14,14 +14,14 @@ import { createUser } from "@/lib/action/patient.actions";
 import { toast } from "sonner";
 import { PasswordInput } from "../PasswordInput";
 import { Label } from "../ui/label";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 export const LoginForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("")
 	const [passwordConfirmation, setPasswordConfirmation] = useState("")
-
+  const {data: session} = useSession();
   const form = useForm<z.infer<typeof UserLogin>>({
     resolver: zodResolver(UserLogin),
     defaultValues: {
@@ -41,11 +41,16 @@ export const LoginForm = () => {
     }
     if (res?.ok) {
       toast.success("Login successfully");
-      router.push("/");
+      if(session?.user.roleName === "USER"){
+        router.push("/");
+      }
+      if(session?.user.roleName === "ADMIN"){
+      
+      router.push("/test-admin");
     }
     setIsLoading(false);
   };
-
+  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
