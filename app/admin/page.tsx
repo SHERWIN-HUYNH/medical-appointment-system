@@ -1,4 +1,3 @@
-
 import { StatCard } from "@/components/StatCard";
 import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/DataTable";
@@ -8,8 +7,8 @@ import Link from "next/link";
 
 const AdminPage = async () => {
   const appointments = await getRecentAppointmentList();
-  if(!appointments) return <div>Something went wrong</div>;
-  console.log(appointments.scheduledCount)
+  if (!appointments) return <div>Something went wrong</div>;
+  console.log(appointments.scheduledCount);
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">
       <header className="admin-header">
@@ -23,7 +22,9 @@ const AdminPage = async () => {
           />
         </Link>
 
-        <p className="text-16-semibold dark:text-red text-white">Admin Dashboard</p>
+        <p className="text-16-semibold dark:text-red text-white">
+          Admin Dashboard
+        </p>
       </header>
 
       <main className="admin-main">
