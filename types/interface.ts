@@ -11,3 +11,9 @@ export interface Profile {
     identificationDocumentUrl: string; // Hoặc URL kiểu string
     pastMedicalHistory : string; // Hoặc một kiểu dữ liệu khác nếu cần
   }
+  export interface UserRole {
+    id: string;
+    name: string;
+    email: string;
+    roleName: string;
+  }

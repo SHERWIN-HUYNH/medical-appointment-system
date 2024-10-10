@@ -2,11 +2,11 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
- 
+  const { data: session } = useSession();
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
       <Link
@@ -15,10 +15,10 @@ const DropdownUser = () => {
         href="#"
       >
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+          <span className="block text-md font-medium text-black dark:text-white">
+            {session?.user?.name}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          
         </span>
 
         <span className="h-12 w-12 rounded-full">
@@ -79,7 +79,7 @@ const DropdownUser = () => {
                     fill=""
                   />
                 </svg>
-                My Profile
+                Thông tin của tôi
               </Link>
             </li>
             <li>
@@ -100,7 +100,7 @@ const DropdownUser = () => {
                     fill=""
                   />
                 </svg>
-                My Contacts
+                Liên hệ
               </Link>
             </li>
             <li>
@@ -125,7 +125,7 @@ const DropdownUser = () => {
                     fill=""
                   />
                 </svg>
-                Account Settings
+                Cài đặt tài khoản
               </Link>
             </li>
           </ul>
@@ -151,7 +151,7 @@ const DropdownUser = () => {
                 fill=""
               />
             </svg>
-            Log Out
+            Đăng xuất
           </button>
         </div>
       )}
