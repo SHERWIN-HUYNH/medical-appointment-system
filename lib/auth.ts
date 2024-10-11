@@ -38,6 +38,7 @@ export const authOptions:NextAuthOptions = {
           id: `${user.id}`,
           name: user.name,
           email: user.email,
+          roleName: user.roleName,
         }
       },
     }),
@@ -45,12 +46,15 @@ export const authOptions:NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user, trigger, session }) {
+
      if(user){
+
       return {
         ...token,
         id: user.id,
         name: user.name,
         email: user.email,
+        roleName:user.roleName
       }
      }
      return token
@@ -64,6 +68,7 @@ export const authOptions:NextAuthOptions = {
           id: token.id,
           name: token.name,
           email: token.email,
+          roleName: token.roleName
         },
       }
     },

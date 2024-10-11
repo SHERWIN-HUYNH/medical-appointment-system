@@ -35,7 +35,6 @@ const Add_Profile = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const { data: session } = useSession();
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -176,7 +175,6 @@ const Add_Profile = () => {
                 placeholder="Nhập số điện thoại"
               />
             </div>
-
             <div className="rounded-lg bg-slate-100 p-1">
               <Label className="block mb-1 text-left">Giới tính</Label>
               <Select

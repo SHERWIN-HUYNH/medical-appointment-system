@@ -5,17 +5,20 @@ declare module "next-auth" {
         id: string,
         name:string,
         email:string,
+        roleName:string
     }
     interface Session {
       user: User &{
         id: string,
         name:string,
         email:string,
+        roleName:string
       }
       token: {
         id: string,
         name:string,
         email:string,
+        roleName:string
       }
     }
   }
