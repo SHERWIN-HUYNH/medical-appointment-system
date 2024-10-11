@@ -191,7 +191,7 @@ const Profile = () => {
                       <div className="mt-2 flex flex-1 justify-end gap-2">
                         <div>
                           <Button
-                            className="bg-slate-50 text-pink-400 hover:bg-pink-400 hover:text-white text-xs"
+                            className="bg-slate-50 text-pink-400 hover:bg-pink-400 hover:text-white text-sm"
                             onClick={() => {
                               setProfileToDelete(profile.id);
                               setIsModalOpen(true);
@@ -205,7 +205,7 @@ const Profile = () => {
                           <Link
                             href={`/patients/${profile.id}/profile/edit-profile`}
                           >
-                            <Button className="bg-slate-50 text-primary hover:bg-primary hover:text-white text-xs">
+                            <Button className="bg-slate-50 text-primary hover:bg-primary hover:text-white text-sm">
                               <span>
                                 <PencilLine className="w-4 h-4 inline mr-1" />
                               </span>
