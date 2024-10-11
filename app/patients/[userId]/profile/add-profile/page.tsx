@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Eraser, UserRoundPlus } from "lucide-react";
 import React, { useState } from "react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -14,24 +15,26 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // Import SelectContent, SelectItem
+} from "@/components/ui/select";
 
-const Add_Profile =  () => {
+const Add_Profile = () => {
   const initialFormData = {
     name: "",
     email: "",
     phone: "",
     gender: "",
-    idType: "",
-    idNumber: "",
-    documentLink: "",
-    medicalHistory: "",
+    identificationType: "",
+    identificationNumber: "",
+    identificationDocumentUrl: "",
+    pastMedicalHistory: "",
     birthDate: "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const { data: session } = useSession();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -42,7 +45,7 @@ const Add_Profile =  () => {
       [name]: value,
     });
 
-    if (name === "idNumber" && isValidIdNumber(value)) {
+    if (name === "identificationNumber" && isValidIdentificationNumber(value)) {
       setErrorMessage("");
     }
   };
@@ -50,6 +53,10 @@ const Add_Profile =  () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
+      setFormData({
+        ...formData,
+        identificationDocumentUrl: URL.createObjectURL(e.target.files[0]),
+      });
     }
   };
 
@@ -57,23 +64,24 @@ const Add_Profile =  () => {
     setFormData(initialFormData);
     setSelectedFile(null);
     setErrorMessage("");
+    setSuccessMessage("");
   };
 
-  const isValidIdNumber = (idNumber: string) => {
+  const isValidIdentificationNumber = (identificationNumber: string) => {
     const idPattern = /^[0-9]{9,12}$/;
-    return idPattern.test(idNumber);
+    return idPattern.test(identificationNumber);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!isValidIdNumber(formData.idNumber)) {
+    if (!isValidIdentificationNumber(formData.identificationNumber)) {
       setErrorMessage("Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.");
       return;
     }
 
-    //call API
-    const response = await fetch("/api/profile", {
+    // CALL API
+    const response = await fetch(`/api/profile/${session?.user?.id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -84,8 +92,14 @@ const Add_Profile =  () => {
       }),
     });
 
-    console.log(response);
-    setErrorMessage("");
+    if (response.ok) {
+      const data = await response.json(); 
+      setSuccessMessage("Thêm hồ sơ thành công!");
+      handleReset();
+    } else {
+      const errorText = await response.text(); 
+      setErrorMessage(errorText || "Thêm hồ sơ thất bại, vui lòng thử lại.");
+    }
   };
 
   return (
@@ -172,16 +186,16 @@ const Add_Profile =  () => {
                 required
               >
                 <SelectTrigger
-                  className="w-full p-1 border-slate-300 bg-white rounded text-sm "
+                  className="w-full p-1 border-slate-300 bg-white rounded text-sm"
                   style={{ height: "30px", fontSize: "14px" }}
                 >
                   <SelectValue placeholder="Chọn giới tính" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-white">
-                  <SelectItem className="hover:text-primary" value="male">
+                  <SelectItem className="hover:text-primary" value="MALE">
                     Nam
                   </SelectItem>
-                  <SelectItem className="hover:text-primary" value="female">
+                  <SelectItem className="hover:text-primary" value="FEMALE">
                     Nữ
                   </SelectItem>
                 </SelectContent>
@@ -194,7 +208,7 @@ const Add_Profile =  () => {
               </Label>
               <Select
                 onValueChange={(value) =>
-                  setFormData({ ...formData, idType: value })
+                  setFormData({ ...formData, identificationType: value })
                 }
                 required
               >
@@ -205,13 +219,13 @@ const Add_Profile =  () => {
                   <SelectValue placeholder="Chọn loại giấy" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-white">
-                  <SelectItem className="hover:text-primary" value="cccd">
+                  <SelectItem className="hover:text-primary" value="CCCD">
                     Căn cước công dân
                   </SelectItem>
-                  <SelectItem className="hover:text-primary" value="cmnd">
+                  <SelectItem className="hover:text-primary" value="CMND">
                     Chứng minh nhân dân
                   </SelectItem>
-                  <SelectItem className="hover:text-primary" value="passport">
+                  <SelectItem className="hover:text-primary" value="PASSPORT">
                     Hộ chiếu
                   </SelectItem>
                 </SelectContent>
@@ -222,8 +236,8 @@ const Add_Profile =  () => {
               <Label className="block mb-1 text-left">Số giấy định danh</Label>
               <Input
                 type="text"
-                name="idNumber"
-                value={formData.idNumber}
+                name="identificationNumber"
+                value={formData.identificationNumber}
                 onChange={handleChange}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
@@ -240,11 +254,11 @@ const Add_Profile =  () => {
             <div className="rounded-lg bg-slate-100 p-1">
               <Label className="block mb-1 text-left">Lịch sử bệnh án</Label>
               <Textarea
-                name="medicalHistory"
-                value={formData.medicalHistory}
+                name="pastMedicalHistory"
+                value={formData.pastMedicalHistory}
                 onChange={handleChange}
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: "100px", fontSize: "14px" }}
                 placeholder="Nhập lịch sử bệnh án"
               />
             </div>
@@ -263,7 +277,7 @@ const Add_Profile =  () => {
                   <Image
                     src={URL.createObjectURL(selectedFile)}
                     alt="Document Preview"
-                    className="w-full  object-contain"
+                    className="w-full object-contain"
                     width={100}
                     height={100}
                   />
@@ -289,6 +303,11 @@ const Add_Profile =  () => {
               </Button>
             </div>
           </form>
+          {successMessage && (
+            <div className="mt-50 flex ">
+              <div className="text-green-500 font-bold">{successMessage}</div>
+            </div>
+          )}
         </div>
       </div>
       <Footer />
