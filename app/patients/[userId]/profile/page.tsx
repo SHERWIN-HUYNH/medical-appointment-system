@@ -5,7 +5,7 @@ import { RiEmpathizeFill, RiMoneyDollarCircleLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { FaBookMedical, FaNewspaper } from "react-icons/fa";
 import {
-  MapPinHouse,
+  Cake,
   PencilLine,
   Smartphone,
   Trash2,
@@ -16,35 +16,89 @@ import Header from "@/app/homepage/Header";
 import MedicalRecord from "./MedicalRecord";
 import Footer from "@/app/homepage/Footer";
 import PaymentHistory from "./PaymentHistory";
+import Modal from "@/components/Modal"; // Import Modal component
+
 
 interface Profile {
-  id: number; // or string
+  id: number;
   name: string;
   phone: string;
-  address: string;
+  birthDate: Date;
 }
 
 const Profile = () => {
   const [selectedOption, setSelectedOption] = useState(1);
   const [profiles, setProfiles] = useState<Profile[]>([]);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [profileToDelete, setProfileToDelete] = useState<number | null>(null);
 
-  // Chỉ fetch dữ liệu khi session đã sẵn sàng và có user.id
   useEffect(() => {
     const fetchProfiles = async () => {
-      if (status === "authenticated" && session?.user?.id) {
-        try {
-          const response = await fetch(`/api/profile/${session.user.id}`);
-          const data = await response.json();
-          setProfiles(data); // Cập nhật state với danh sách hồ sơ
-        } catch (error) {
-          console.error("Lỗi khi lấy dữ liệu hồ sơ:", error);
+      try {
+        const response = await fetch(`/api/profile/${session?.user?.id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ action: "findMany" }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Lỗi khi lấy dữ liệu hồ sơ");
         }
+
+        const data = await response.json();
+        setProfiles(data.profiles);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu hồ sơ:", error);
       }
     };
 
     fetchProfiles();
-  }, [status, session]);
+  }, [session]);
+
+  // Hàm xóa hồ sơ
+  const handleDeleteProfile = async () => {
+    if (profileToDelete === null) return;
+
+    try {
+      const response = await fetch(`/api/profile/${session?.user?.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: "delete",
+          profile: { id: profileToDelete },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Lỗi khi xóa hồ sơ");
+      }
+
+      setProfiles(profiles.filter((profile) => profile.id !== profileToDelete));
+      setNotification({
+        message: "Hồ sơ đã được xóa thành công.",
+        type: "success",
+      });
+    } catch (error) {
+      console.error("Lỗi khi xóa hồ sơ:", error);
+      setNotification({
+        message: "Xóa hồ sơ không thành công.",
+        type: "error",
+      });
+    } finally {
+      setIsModalOpen(false);
+      setProfileToDelete(null);
+      setTimeout(() => setNotification(null), 3000);
+    }
+  };
 
   const Buttons = [
     { id: 1, name: "Hồ sơ bệnh nhân", icon: <FaBookMedical /> },
@@ -87,7 +141,6 @@ const Profile = () => {
             </ul>
           </div>
 
-          {/* Right Side (Content) */}
           <div className="rounded-lg lg:col-span-2 p-4 bg-white w-full">
             {selectedOption === 1 && (
               <div>
@@ -100,45 +153,61 @@ const Profile = () => {
                   profiles.map((profile) => (
                     <div
                       key={profile.id}
-                      className="bg-gray-50 p-4 text-sm rounded-lg shadow-md transition-all ease-in-out duration-100 cursor-pointer mb-4"
+                      className="bg-slate-50 p-4 text-sm rounded-lg shadow-md transition-all ease-in-out duration-100 cursor-pointer mb-4"
                     >
-                      <div className="max-h grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
-                        <div className="max-h rounded-lg bg-gray-200">
-                          <p className="text-blue-400 mt-2 text-md flex items-center gap-2">
-                            <UserRoundPen className="w-4 h-4" />
-                            <span className="uppercase">{profile.name}</span>
+                      <div className="max-h flex flex-col gap-4 lg:flex-row lg:gap-8">
+                        <div className="max-h rounded-lg bg-gray-200 flex-1">
+                          <p className="text-primary mt-2 text-lg flex items-center gap-2">
+                            <UserRoundPen className="w-5 h-5" />
+                            <span className="text-lg uppercase">
+                              {profile.name}
+                            </span>
                           </p>
                           <br />
-                          <p className="mt-2 text-md flex items-center gap-2">
-                            <Smartphone className="w-4 h-4" />
+                          <p className="mt-2 text-lg flex items-center gap-2">
+                            <Smartphone className="w-5 h-5" />
                             <span>Số điện thoại</span>
                           </p>
-                          <p className="mt-2 text-md flex items-center gap-2">
-                            <MapPinHouse className="w-4 h-4" />
-                            <span>Địa chỉ</span>
+                          <p className="mt-2 text-lg flex items-center gap-2">
+                            <Cake className="w-5 h-5" />
+                            <span>Ngày sinh</span>
                           </p>
                         </div>
-                        <div className="max-h rounded-lg bg-gray-200 lg:col-span-2">
-                          <div className="mt-2 flex justify-end">
-                            <Button className="bg-white text-green-400 hover:bg-green-400 hover:text-white text-xs">
+
+                        <div className="max-h rounded-lg bg-gray-200 flex-1">
+                          <div className="mt-4 flex justify-end">
+                            <Button className="bg-slate-50 text-green-400 hover:bg-green-400 hover:text-white text-sm px-4 py-2">
                               Xem chi tiết
                             </Button>
                           </div>
-                          <p className="mt-2">{profile.phone}</p>
-                          <p className="mt-2">{profile.address}</p>
+                          <p className="mt-2 text-lg">{profile.phone}</p>
+                          <p className="mt-2 text-lg">
+                            {profile.birthDate
+                              ? new Date(profile.birthDate).toLocaleDateString()
+                              : "N/A"}
+                          </p>
                         </div>
                       </div>
+
                       <hr className="mt-2" />
                       <div className="mt-2 flex flex-1 justify-end gap-2">
                         <div>
-                          <Button className="bg-white text-pink-400 hover:bg-pink-400 hover:text-white text-xs">
+                          <Button
+                            className="bg-slate-50 text-pink-400 hover:bg-pink-400 hover:text-white text-sm"
+                            onClick={() => {
+                              setProfileToDelete(profile.id);
+                              setIsModalOpen(true);
+                            }}
+                          >
                             <span>
                               <Trash2 className="w-4 h-4 inline mr-1" />
                             </span>
                             Xóa hồ sơ
                           </Button>
-                          <Link href="/patients/333/profile/edit-profile">
-                            <Button className="bg-white text-blue-400 hover:bg-blue-400 hover:text-white text-xs">
+                          <Link
+                            href={`/patients/${profile.id}/profile/edit-profile`}
+                          >
+                            <Button className="bg-slate-50 text-primary hover:bg-primary hover:text-white text-sm">
                               <span>
                                 <PencilLine className="w-4 h-4 inline mr-1" />
                               </span>
@@ -183,6 +252,14 @@ const Profile = () => {
         </div>
       </div>
       <Footer />
+
+      {/* Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleDeleteProfile}
+        message="Bạn có chắc chắn muốn xóa hồ sơ này không?"
+      />
     </div>
   );
 };
