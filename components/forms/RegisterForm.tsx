@@ -26,29 +26,28 @@ export const RegisterForm = () => {
     defaultValues: {
       name: "",
       email: "",
-      phone:''
+      phone: "",
     },
   });
   const onSubmit = async (values: z.infer<typeof RegisterFormValidation>) => {
     console.log("IS LOADING", isLoading);
     setIsLoading(true);
     try {
-        console.log("VALUES FROM REGISTER", values)
-        const res = await fetch("/api/auth/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: values.email,
-                password: currentPassword,
-                name: values.name,
-                phone: values.phone,
-            }),
-        });
-        console.log("RES", res)
-        const responseData = await res.json();
-
+      console.log("VALUES FROM REGISTER", values);
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: currentPassword,
+          name: values.name,
+          phone: values.phone,
+        }),
+      });
+      console.log("RES", res);
+      const responseData = await res.json();
 
       if (!res.ok) {
         console.log("RESPOND DATA", responseData.error);
@@ -71,16 +70,18 @@ export const RegisterForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
         <section className="mb-12 space-y-4">
-          <h1 className="header">Hi there 👋</h1>
-          <p className="text-dark-700">Get started with appointments.</p>
+          <h1 className="header">Xin chào 👋</h1>
+          <p className="text-dark-700">
+            Bước đầu của sức khỏe tốt hơn – Đặt lịch hẹn ngay hôm nay!
+          </p>
         </section>
 
         <CustomFormField
           fieldType={FormFieldType.INPUT}
           control={form.control}
           name="name"
-          label="Full name"
-          placeholder="John Doe"
+          label="Họ và tên"
+          placeholder="Ngô Thị Duyên"
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
         />
@@ -90,7 +91,7 @@ export const RegisterForm = () => {
           control={form.control}
           name="email"
           label="Email"
-          placeholder="johndoe@gmail.com"
+          placeholder="ngothiduyencute@gmail.com"
           iconSrc="/assets/icons/email.svg"
           iconAlt="email"
         />
@@ -99,12 +100,12 @@ export const RegisterForm = () => {
           fieldType={FormFieldType.PHONE_INPUT}
           control={form.control}
           name="phone"
-          label="Phone number"
+          label="Số điện thoại"
           placeholder="(555) 123-4567"
         />
         <div className="space-y-2 flex-1 mt-2">
           <Label htmlFor="password" className="shad-input-label ">
-            Password
+            Mật khẩu
           </Label>
           <PasswordInput
             id="password"
@@ -113,7 +114,7 @@ export const RegisterForm = () => {
             autoComplete="password"
           />
         </div>
-        <SubmitButton isLoading={isLoading}>Get Started </SubmitButton>
+        <SubmitButton isLoading={isLoading}>Đăng ký tài khoản </SubmitButton>
       </form>
     </Form>
   );

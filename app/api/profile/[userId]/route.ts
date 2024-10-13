@@ -73,5 +73,61 @@ export async function POST(req: Request, context: any) {
       status: 404,
     }))
     
-  }
+    if (action === "findMany") {
+      const profiles = await ProfileService.getListProfileByUserId(userId);
+
+      if (!profiles || profiles.length === 0) {
+        return new Response(
+          JSON.stringify({
+            message: "NOT FOUND PROFILE",
+            status: 404,
+          })
+        );
+      }
+
+      return new Response(
+        JSON.stringify({
+          message: "GET PROFILE SUCCESSFULLY",
+          status: 200,
+          profiles,
+        })
+      );
+    }
+
+    if (action === "delete") {
+      try {
+        const checkProfile = await ProfileService.getProfileById(profileId);
+        if (!checkProfile) {
+          return new Response(
+            JSON.stringify({
+              message: "NOT FOUND PROFILE",
+              status: 404,
+            }),
+            { status: 404 }
+          );
+        }
+        await ProfileService.deleteProfile({profileData: profile});
+        return new Response(
+          JSON.stringify({
+            message: "Profile deleted successfully",
+            status: 200,
+          }),
+          { status: 200 }
+        );
+    
+      } catch (error: any) {
+        console.error("Error deleting profile:", error.message || error);
+        return new Response(
+          JSON.stringify({
+            message: "Failed to delete profile",
+            error: error.message || error,
+            status: 500,
+          }),
+          { status: 500 }
+        );
+      }
+    }
+    
+    
+}
   
