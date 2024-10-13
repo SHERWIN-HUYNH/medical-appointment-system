@@ -18,19 +18,17 @@ function Hero() {
           </div>
 
           <div className="lg:py-24">
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              Find & Book Appointment with your Fav Doctors
+            <h2 className="text-3xl font-bold sm:text-4xl text-primary">
+              Đặt lịch khám dễ dàng, an tâm chăm sóc sức khỏe 
             </h2>
 
             <p className="mt-4 text-gray-600">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut qui
-              hic atque tenetur quis eius quos ea neque sunt, accusantium soluta
-              minus veniam tempora deserunt? Molestiae eius quidem quam
-              repellat.
+              Giải pháp đặt lịch hẹn – Tiết kiệm thời gian, tối ưu trải nghiệm
+              chăm sóc sức khỏe
             </p>
 
             <Button className="mt-10 bg-primary hover:bg-[#56c2e6] text-white">
-              Explore Now
+              Khám phá
             </Button>
           </div>
         </div>

@@ -15,7 +15,10 @@ import Link from "next/link";
 import Header from "@/app/homepage/Header";
 import MedicalRecord from "./MedicalRecord";
 import Footer from "@/app/homepage/Footer";
+import PaymentHistory from "./PaymentHistory";
 import Modal from "@/components/Modal"; // Import Modal component
+
+
 
 interface Profile {
   id: number;
@@ -242,7 +245,8 @@ const Profile = () => {
                 </h2>
                 <hr className="w-full border-t-2 border-blue-300 mt-4" />
                 <br />
-                <p>Hiển thị lịch sử thanh toán viện phí tại đây...</p>
+                {/* <p>Hiển thị lịch sử thanh toán viện phí tại đây...</p> */}
+                <PaymentHistory/>
               </div>
             )}
           </div>

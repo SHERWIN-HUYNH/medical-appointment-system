@@ -1,4 +1,5 @@
 "use client";
+import Payment from "@/app/payment/page";
 import { Button } from "@/components/ui/button";
 import { Eraser, UserRoundPlus } from "lucide-react";
 import React, { useState } from "react";
