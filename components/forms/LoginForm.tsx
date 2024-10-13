@@ -40,6 +40,7 @@ export const LoginForm = () => {
       toast.error(res.error)
     }
     if (res?.ok) {
+      setIsLoading(false);
       toast.success("Login successfully");
       if(session?.user.roleName === "USER"){
         router.push("/");
@@ -47,9 +48,12 @@ export const LoginForm = () => {
       if(session?.user.roleName === "ADMIN"){
       
       router.push("/test-admin");
+
     }
-    setIsLoading(false);
-  };
+  }else{
+    console.log('ERRPR SESSION', session)
+  }
+  
   }
   return (
     <Form {...form}>

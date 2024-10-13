@@ -4,28 +4,29 @@ import DefaultLayout from "@/components/Layouts/defaultLayout";
 import { Metadata } from "next";
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
-import { DayCellContentArg, EventSourceInput } from "@fullcalendar/core/index.js";
+import { DateSelectArg, DayCellContentArg, EventSourceInput } from "@fullcalendar/core/index.js";
 import { Dialog } from "@radix-ui/react-dialog";
 import interactionPlugin, { DateClickArg, Draggable, DropArg } from '@fullcalendar/interaction'
-import { CheckIcon, Divide } from "lucide-react";
+import { CheckIcon, Divide, Slash } from "lucide-react";
 import { useState, useEffect, Fragment } from "react";
 import timeGridPlugin from '@fullcalendar/timegrid'
 import clsx from "clsx";
 import { log } from "console";
 import { RiH1 } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
-import Footer from "../homepage/Footer";
-import Header from "../homepage/Header";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+
+
 
 interface Event {
-  title: string;
-  start: Date | string;
-  allDay: boolean;
-  id: number;
+  id: string
+  start: Date
+  end: Date
+  allDay?: boolean
 }
 
 
-const CalendarPage = () => {
+const WorkingSchedulePage = () => {
   const [events, setEvents] = useState([
     { title: 'event 1', id: '1' },
     { title: 'event 2', id: '2' },
@@ -37,6 +38,8 @@ const CalendarPage = () => {
   const [allEvents, setAllEvents] = useState<Event[]>([])
   const [visibleRange, setVisibleRange] = useState({ start: '', end: '' })
   const [clickedDate,setClickedDate] = useState<string | null>(null)
+  const [selectedDates, setSelectedDates] = useState<Date[]>([]); // Track selected dates
+  const [formattedSelectedDates, setFormattedSelectedDates] = useState<string[]>([]);
   useEffect(() => {
     const today = new Date();
     const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -50,37 +53,88 @@ const CalendarPage = () => {
   const handleDateClassNames = (renderProps: any): string[] => {
     const today = new Date();
     const date = renderProps.date; 
+    if (selectedDates.some(d => d.getTime() === date.getTime())) {
+      return ["text-gray-500"]; // Đổi màu chữ thành xám cho các ngày đã chọn
+    }
+  
     if (date < today) {
-      return [ "text-[#cfd9df]"]; 
+      return ["text-[#cfd9df]"]; // Style cho các ngày đã qua
     }
     return []; 
   };
 
   const handleDateClick = (info: any) => {
+
     const today = new Date();
-    const clickedDate = info.date; 
-    
-    if (clickedDate > today) {
+    const clickedDate = info.date;
+
+    if (clickedDate >= today) {
+      // Toggle selection
+      const isAlreadySelected = selectedDates.some(d => d.getTime() === clickedDate.getTime());
       const formattedDate = `${clickedDate.getDate()}/${clickedDate.getMonth() + 1}/${clickedDate.getFullYear()}`;
       console.log('CLICKED',formattedDate);
       setClickedDate(formattedDate); 
       setShowTimeSlots(true);
+
+      if (isAlreadySelected) {
+        // Remove the clicked date from the selectedDates array
+        setSelectedDates(prev => prev.filter(d => d.getTime() !== clickedDate.getTime()));
+        setAllEvents(prev => prev.filter(event => event.start?.getTime() !== clickedDate.getTime()));
+      } else {
+        // Add the clicked date to selectedDates array and create an event
+        setSelectedDates(prev => [...prev, clickedDate]);
+
+        const newEvent = {
+          id: clickedDate.toISOString(),
+          start: clickedDate,
+          end: clickedDate, // Single day event
+
+        };
+        setAllEvents(prev => [...prev, newEvent]);
+      }
     }
   };
-  console.log('TIME SLOT', showTimeSlots)
+  const allSelectedDates: Date[] = [];
+  const handleDateSelect = (selectInfo: DateSelectArg) => {
+    const { start, end } = selectInfo;
+    
+    let currentDate = new Date(start);
+
+    while (currentDate < end) {
+      const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
+      setFormattedSelectedDates(prev => [...prev, formattedDate]);
+      allSelectedDates.push(new Date(currentDate)); // Thêm ngày vào mảng
+      currentDate.setDate(currentDate.getDate() + 1); // Tăng ngày lên 1
+    }
+
+    // Tạo một sự kiện mới cho khoảng thời gian đã chọn
+    const newEvent: Event = {
+      id: `${start.toISOString()}-${end.toISOString()}`,
+      start: start,
+      end: end,
+      allDay: true,
+    };
+
+  // Thêm sự kiện vào trạng thái allEvents
+  setAllEvents(prev => [...prev, newEvent]);
+
+  // Cập nhật selectedDates với tất cả các ngày đã chọn
+  setSelectedDates(prev => [...prev, ...allSelectedDates]);
+  console.log('ALL DATES CLICKED',formattedSelectedDates)
+  };
+  
   return (
-    <div className="bg-[#e8f2f7] w-full h-min flex flex-col items-center justify-center mt-16">
-      <Header/>
-      <section className=" flex  space-x-7  max-w-screen-xl px-4 pb-6 mt-8">
+    <DefaultLayout>
+    <div className="bg-[#e8f2f7] w-full h-min flex flex-col items-center justify-center ">
+       
+      <section className=" flex space-x-7  max-w-screen-xl px-4 pb-6 mt-8">
         <div className=" w-67 rounded-lg bg-white h-max">
-            <h1 className="blue-header w-full">Thông tin cơ sở y tế</h1>
+            <h1 className="blue-header w-full">Thông tin bác sĩ</h1>
             <ul className="px-3 py-4 flex flex-col gap-3">
               <li className="text-16-normal flex ">
               <div className=" mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-hospital"><path d="M12 6v4"/><path d="M14 14h-4"/><path d="M14 18h-4"/><path d="M14 8h-4"/><path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"/><path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"/></svg></div>
                 <div className="flex justify-center flex-col">
                   <p>Bệnh viện Đại học Y Dược TP.HCM</p>
-                  <p className=" text-[#858585]">
-                Cơ sở 201 Nguyễn Chí Thanh, Phường 12, Quận 5, TP. Hồ Chí Minh</p>
                 </div>
                
               </li>
@@ -101,6 +155,14 @@ const CalendarPage = () => {
                
               </li>
               <li className="text-16-normal flex ">
+              <div className=" mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-stethoscope"><path d="M11 2v2"/><path d="M5 2v2"/><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/></svg></div>
+                <div className="flex justify-center flex-col">
+                  <p>Học hàm/Học vị: PGS</p>
+                  
+                </div>
+               
+              </li>
+              <li className="text-16-normal flex ">
               <div className=" mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-house-plus"><path d="M13.22 2.416a2 2 0 0 0-2.511.057l-7 5.999A2 2 0 0 0 3 10v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7.354"/><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M15 6h6"/><path d="M18 3v6"/></svg></div>
                 <div className="flex justify-center flex-col">
                   <p>Dịch vụ: Khám dịch vụ</p>
@@ -108,20 +170,23 @@ const CalendarPage = () => {
                 </div>
                
               </li>
-             {clickedDate && 
-             <li className="text-16-normal flex ">
-              <div className=" mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-house-plus"><path d="M13.22 2.416a2 2 0 0 0-2.511.057l-7 5.999A2 2 0 0 0 3 10v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7.354"/><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M15 6h6"/><path d="M18 3v6"/></svg></div>
-                <div className="flex justify-center flex-col">
-                  <p>Ngày khám: {clickedDate}</p>
-                </div>
-              </li>}
               
+              {formattedSelectedDates.length > 0 ? (
+                <li>Ngày làm việc:
+                { formattedSelectedDates.map((date, index) => (
+                    <span key={index}>
+                      {date}, {/* Convert Date object to a readable string */}
+                    </span>
+                  ))}
+                </li>
+              ): ''}
             </ul>
         </div>
-        <main className="bg-white flex flex-col min-w-[825px] h-min justify-between overflow-hidden"> 
-          <h1 className="blue-header w-full">Vui lòng chọn ngày khám</h1>
+        <main className="bg-white flex flex-col min-w-[825px] max-w-[865px] h-min justify-between overflow-hidden"> 
+          <h1 className="blue-header w-full">Vui lòng chọn khung giờ làm việc</h1>
           <div className=" p-5 rounded-2xl">
-            {!showTimeSlots ?<div className={clsx("w-full",{
+            {!showTimeSlots ?
+            <div className={clsx("w-full",{
            })}>
               <FullCalendar
                 plugins={[
@@ -138,6 +203,7 @@ const CalendarPage = () => {
                 }}
                 visibleRange={visibleRange}
                 events={allEvents as EventSourceInput}
+                
                 dayCellClassNames={handleDateClassNames}
                 nowIndicator={true}
                 editable={true}
@@ -145,9 +211,10 @@ const CalendarPage = () => {
                 selectable={true}
                 selectMirror={true}
                 dateClick={handleDateClick}
+                select={handleDateSelect}
                 
               />
-            </div> :<div className={clsx('center flex-col items-start', {})}>
+            </div> :<div className={clsx('center w-full flex-col items-start', {})}>
                 <div>
                   <h1 className=" text-[#000000d9] font-bold text-lg">
                     Buổi sáng
@@ -178,18 +245,13 @@ Nếu không chọn được khung giờ phù hợp, bạn có thể đặt khá
                   </p>
                 </div>
               </div>}
-           
-            
-              
-            
           
           </div>
         </main >
       </section>
-      <Footer/>
     </div>
-   
+    </DefaultLayout>
   );
 };
 
-export default CalendarPage;
+export default WorkingSchedulePage;

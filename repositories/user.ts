@@ -22,4 +22,8 @@ export class UserRepository {
 			},
 		});
 	}
+
+	static async getUserByUserId(userId: string) {
+		return await prisma.user.findFirst({ where: { id: userId } });
+	}
 }

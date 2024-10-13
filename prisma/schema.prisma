@@ -95,12 +95,18 @@ model Bill {
   updatedAt       DateTime  @default(now())
   amount          Float
   paymentMethod   String
-  note            String
+  note            String?
   status          BillStatus @default(PENDING)
   user            User @relation(fields: [userId], references: [id])
   appointment     Appointment @relation(fields: [appointmentId], references: [id])
   userId       	  String     @db.Uuid
   appointmentId   String @unique @db.Uuid
+}
+model StripeCustomer{
+  id String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId String
+  stripeCustomerId String @unique
+  createdAt DateTime @default(now())
 }
 model Schedule {
   id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid

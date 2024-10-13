@@ -7,6 +7,7 @@ import { Doctors } from "@/constants";
 import { formatDateTime } from "@/lib/utils";
 import { getAppointment } from "@/lib/action/appointment.actions";
 import { getUser } from "@/lib/action/patient.actions";
+import { User } from "lucide-react";
 
 const RequestSuccess = async ({
   searchParams,
@@ -18,18 +19,17 @@ const RequestSuccess = async ({
     (doctor) => doctor.name === appointment.primaryPhysician
   );
   const user = await getUser(userId);
-  Sentry.metrics.set('user_view_newAppointment-success',user.name)
 
   return (
-    <div className=" flex h-screen max-h-screen px-[5%]">
-      <div className="success-img">
-        <Link href="/">
+    <div className=" flex h-screen max-h-screen px-[5%] bg-[#4158D0] bg-[linear-gradient(43deg,#4158D0_0%,#C850C0_46%,#FFCC70_100%)]">
+      <div className="success-img max-w-[800px] bg-white">
+        <Link href="/" className="bg-primary w-[600px] rounded-full p-3 flex items-center justify-center">
           <Image
             src="/assets/icons/logo-full.svg"
             height={1000}
             width={1000}
             alt="logo"
-            className="h-10 w-fit"
+            className="h-10 w-fit block"
           />
         </Link>
 
@@ -50,14 +50,15 @@ const RequestSuccess = async ({
         <section className="request-details">
           <p>Requested appointment details: </p>
           <div className="flex items-center gap-3">
-            <Image
+            {/* <Image
               src={doctor?.image!}
               alt="doctor"
               width={100}
               height={100}
               className="size-6"
-            />
-            <p className="whitespace-nowrap">Dr. {doctor?.name}</p>
+            /> */}
+            <User />
+            <p className="whitespace-nowrap">Dr.Nguyen Minh Chau</p>
           </div>
           <div className="flex gap-2">
             <Image
@@ -66,13 +67,14 @@ const RequestSuccess = async ({
               width={24}
               alt="calendar"
             />
-            <p> {formatDateTime(appointment.schedule).dateTime}</p>
+            {/* <p> {formatDateTime(appointment.schedule).dateTime}</p> */}
+            <p>11/10/2024 12:00-12:30 PM</p>
           </div>
         </section>
 
         <Button variant="outline" className="shad-primary-btn" asChild>
           <Link href={`/patients/${userId}/new-appointment`}>
-            New Appointment
+            Quay lại Trang chủ
           </Link>
         </Button>
 

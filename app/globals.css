@@ -395,7 +395,9 @@
 @apply bg-primary border border-primary ;
 
 }
-
+.gradient-color{
+@apply bg-gradient-to-r from-[#00b5f1] to-[#00e0ff];
+}
 .fc .fc-daygrid-day.fc-day-today {
 @apply bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-black;
 }

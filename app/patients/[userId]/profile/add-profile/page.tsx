@@ -1,4 +1,5 @@
 "use client";
+import Payment from "@/app/payment/page";
 import { Button } from "@/components/ui/button";
 import { profile } from "console";
 import { Eraser, UserRoundPlus } from "lucide-react";
@@ -239,6 +240,7 @@ const Add_Profile =  () => {
           </div>
         </form>
       </div>
+    
     </div>
   );
 };

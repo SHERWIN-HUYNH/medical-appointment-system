@@ -1,8 +1,10 @@
+declare type Gender = "MALE" | "FEMALE" | "OTHER";
+declare type Status = "PENDING" | "SCHEDULED" | "CANCELLED";
 export interface Profile {
     id: string; 
     name: string;
     birthday: Date; // Hoặc string tùy theo định dạng bạn sử dụng
-    gender: 'MALE' | 'FEMALE' | 'OTHER';
+    gender: Gender;
     email: string;
     phone: string;
     allergies ?:string;
@@ -16,4 +18,16 @@ export interface Profile {
     name: string;
     email: string;
     roleName: string;
+  }
+
+  export interface Appointment {
+    date: Date;
+    timeSlots: string;  
+    profileId: string;  
+    doctorScheduleId: string;  
+    serviceId: string;  
+    reason: string;  
+    note: string;  
+    status: Status;  
+    cancellationReason: string;  
   }
