@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Brain, Ear, Search } from "lucide-react";
-import { FaEye, FaHeartbeat, FaTooth } from "react-icons/fa";
+import { FaAllergies, FaAppleAlt, FaBaby, FaChild, FaEye, FaFlask, FaHeartbeat, FaLeaf, FaRibbon, FaStethoscope, FaTooth, FaVial, FaVirus, FaWater, FaWheelchair, FaXRay } from "react-icons/fa";
 import { FaUserDoctor } from "react-icons/fa6";
-import { GiBrain, GiBrokenBone } from "react-icons/gi";
+import { GiBrain, GiBrokenBone, GiMuscleUp } from "react-icons/gi";
 
 // Định nghĩa type Category
 type Category = {
@@ -18,44 +18,99 @@ function CategorySearch() {
   // Danh sách các category với type Category
   const categoryList: Category[] = [
     {
-      name: "Dentist",
-      icon: <FaTooth className="text-white h-6 w-6 " />,
+      name: "Nha khoa",
+      icon: <FaTooth className="text-white h-6 w-6" />,
     },
     {
-      name: "Cardiologist",
+      name: "Tim mạch",
       icon: <FaHeartbeat className="text-white h-6 w-6" />,
     },
     {
-      name: "Orthopedic",
+      name: "Chỉnh hình",
       icon: <GiBrokenBone className="text-white h-6 w-6" />,
     },
     {
-      name: "Neologist",
+      name: "Thần kinh",
       icon: <Brain className="text-white h-6 w-6" />,
     },
     {
-      name: "Otology",
+      name: "Thính học",
       icon: <Ear className="text-white h-6 w-6" />,
     },
     {
-      name: "General Doctor",
+      name: "Bác sĩ đa khoa",
       icon: <FaUserDoctor className="text-white h-6 w-6" />,
     },
     {
-      name: "Surgeon",
+      name: "Phẫu thuật",
       icon: <FaUserDoctor className="text-white h-6 w-6" />,
     },
     {
-      name: "Psychotropic",
+      name: "Tâm thần",
       icon: <GiBrain className="text-white h-6 w-6" />,
     },
     {
-      name: "Eye Specialist",
+      name: "Chuyên khoa mắt",
       icon: <FaEye className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Sản khoa",
+      icon: <FaBaby className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Nội tiết",
+      icon: <FaFlask className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Dinh dưỡng",
+      icon: <FaAppleAlt className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Nhi khoa",
+      icon: <FaChild className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Ung bướu",
+      icon: <FaRibbon className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Dị ứng - Miễn dịch",
+      icon: <FaAllergies className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Chẩn đoán hình ảnh",
+      icon: <FaXRay className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Huyết học",
+      icon: <FaVial className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Phục hồi chức năng",
+      icon: <FaWheelchair className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Y học cổ truyền",
+      icon: <FaLeaf className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Nhiễm khuẩn",
+      icon: <FaVirus className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Tiêu hóa",
+      icon: <FaStethoscope className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Thận - Niệu",
+      icon: <FaWater className="text-white h-6 w-6" />,
+    },
+    {
+      name: "Cơ xương khớp",
+      icon: <GiMuscleUp className="text-white h-6 w-6" />,
     },
   ];
 
-  // Xử lý button SeeMore
   // State để quản lý hiển thị danh sách category
   const [showAllCategories, setShowAllCategories] = useState<boolean>(false);
 
@@ -67,7 +122,7 @@ function CategorySearch() {
   // Hiển thị danh sách các category dựa vào trạng thái showAllCategories
   let displayCategories;
   if (showAllCategories) {
-    displayCategories = categoryList;
+    displayCategories = categoryList.slice(0, 12);
   } else {
     displayCategories = categoryList.slice(0, 6);
   }
@@ -75,12 +130,12 @@ function CategorySearch() {
   return (
     <div className="mb-10 items-center px-5 flex flex-col gap-2">
       <h2 className="font-bold text-4xl tracking-wide">
-        Search <span className="text-primary">Doctors</span>
+        Tìm kiếm <span className="text-primary">Bác sĩ</span>
       </h2>
-      <h2 className="text-xl">Search your Doctor and Book Appointment</h2>
+      <h2 className="text-xl">Tìm kiếm bác sĩ của bạn vào bắt đầu đặt lịch hẹn</h2>
 
       <div className="flex w-full mt-3 max-w-sm items-center space-x-2">
-        <Input type="text" placeholder="Search..." />
+        <Input type="text" placeholder="Search..." className="border-slate-400"/>
         <Button
           className="text-white bg-primary hover:bg-[#56c2e6]"
           type="submit"
@@ -104,7 +159,7 @@ function CategorySearch() {
         className="bg-primary hover:bg-[#56c2e6] text-white mt-3"
         onClick={toggleShowAllCategories}
       >
-        {showAllCategories ? "Show Less" : "See More"}
+        {showAllCategories ? "Thu gọn" : "Xem thêm"}
       </Button>
     </div>
   );
