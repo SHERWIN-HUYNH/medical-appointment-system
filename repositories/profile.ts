@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient();
 
-export class ProfileService {
+export class ProfileRespository {
   static async getListProfileByUserId(userId: string) {
     try {
       const profiles = await prisma.profile.findMany({

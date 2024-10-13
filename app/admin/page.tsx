@@ -10,7 +10,7 @@ const AdminPage = async () => {
   if (!appointments) return <div>Something went wrong</div>;
   console.log(appointments.scheduledCount);
   return (
-    <div className="mx-auto flex max-w-7xl flex-col space-y-14">
+    <div className="mx-auto flex max-w-7xl flex-col space-y-14 p-4 md:p-6 2xl:p-10">
       <header className="admin-header">
         <Link href="/" className="cursor-pointer">
           <Image
