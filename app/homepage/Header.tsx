@@ -82,10 +82,7 @@ function Header() {
               ) : (
                 // Hiển thị tên người dùng nếu đã đăng nhập
                 <div className="flex items-center space-x-4">
-                  <DropDown
-                    username={session.user?.name}
-                    className="flex items-center space-x-2 rounded-3xl border px-4 py-2 text-primary border-primary hover:bg-primary hover:text-white cursor-pointer transition-all ease-in-out duration-100 overflow-y-auto"
-                  />
+                  <DropDown />
                 </div>
               )}
             </div>

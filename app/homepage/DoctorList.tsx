@@ -19,7 +19,7 @@ function DoctorList() {
   const doctorList: Doctor[] = [
     {
       name: "Mary",
-      category: "Dentist",
+      category: "Nha sĩ",
       image: "/assets/doctor/dt1.jpg",
       address:
         "425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh",
@@ -28,7 +28,7 @@ function DoctorList() {
     },
     {
       name: "Mary",
-      category: "Dentist",
+      category: "Nha sĩ",
       image: "/assets/doctor/dt2.jpg",
       address:
         "425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh",
@@ -37,7 +37,7 @@ function DoctorList() {
     },
     {
       name: "Mary",
-      category: "Dentist",
+      category: "Nha sĩ",
       image: "/assets/doctor/dt3.jpg",
       address:
         "425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh",
@@ -46,7 +46,7 @@ function DoctorList() {
     },
     {
       name: "Mary",
-      category: "Dentist",
+      category: "Nha sĩ",
       image: "/assets/doctor/dt4.jpg",
       address:
         "425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh",
@@ -55,7 +55,7 @@ function DoctorList() {
     },
     {
       name: "Mary",
-      category: "Dentist",
+      category: "Nha sĩ",
       image: "/assets/doctor/dt5.jpg",
       address:
         "425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh",
@@ -64,7 +64,7 @@ function DoctorList() {
     },
     {
       name: "Mary",
-      category: "Dentist",
+      category: "Nha sĩ",
       image: "/assets/doctor/dt10.jpg",
       address:
         "425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh",
@@ -110,7 +110,7 @@ function DoctorList() {
                 className="p-2 px-3 border-[1px] border-primary text-primary rounded-full 
                 w-full text-center text-[14px] mt-2 cursor-pointer hover:bg-primary hover:text-white"
               >
-                Book Now
+                Đặt ngay
               </h2>
             </div>
           </div>
@@ -121,7 +121,7 @@ function DoctorList() {
           className="bg-primary hover:bg-[#56c2e6] text-white"
           onClick={() => setShowAll(!showAll)}
         >
-          {showAll ? "Show Less" : "See More"}
+          {showAll ? "Thu gọn" : "Xêm thêm"}
         </Button>
       </div>
     </div>
