@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { InfoIcon, TrashIcon, X } from "lucide-react";
+import { FilePen, InfoIcon, TrashIcon, X } from "lucide-react";
 import React, { useState } from "react";
 // Define types for the status and medical record
 type Status = {
@@ -195,7 +195,7 @@ const MedicalRecord = () => {
               </div>
               <div className="flex flex-col gap-1">
                 <p className="font-bold text-xl">{record.patientName}</p>
-                <hr className="border-t border-dashed border-gray-300 w-2/3 my-2" />
+                <hr className="border-t border-dashed border-gray-300 w-full my-2" />
                 <div className="flex flex-1 gap-6 font-semi text-slate-700 my-1">
                   <span>Chuyên Khoa:</span>
                   <p>{record.department}</p>
@@ -216,6 +216,14 @@ const MedicalRecord = () => {
                     onClick={() => handleCancelRecord(record)}
                   >
                     <TrashIcon className="mr-1" /> Hủy phiếu khám
+                  </Button>
+                )}
+                {record.statusId === 2 && (
+                  <Button
+                    className="text-yellow-500 flex items-center bg-white hover:bg-slate-50"
+                    onClick={() => handleCancelRecord(record)}
+                  >
+                    <FilePen className="mr-1" /> Đánh giá
                   </Button>
                 )}
                 <Button
