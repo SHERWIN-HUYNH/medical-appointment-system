@@ -8,7 +8,6 @@ import Providers from "@/providers/Providers";
 import Header from "@/app/homepage/Header";
 import Footer from "@/app/homepage/Footer";
 import { SessionProvider } from "next-auth/react";
-import { useRouter } from "next/router";
 
 const inter = Inter({ subsets: ["latin"] });
 

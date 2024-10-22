@@ -23,6 +23,11 @@ export const columns: ColumnDef<Appointment>[] = [
       const appointment = row.original;
       return <p className="text-14-medium ">{appointment.patient.name}</p>;
     },
+    filterFn: (row, columnId, filterValue) => {
+      // Access the patient's name for filtering
+      const patientName = (row.getValue(columnId) as any)?.name;
+      return patientName?.toLowerCase().includes(filterValue.toLowerCase());
+    },
   },
   {
     accessorKey: "status",

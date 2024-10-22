@@ -96,7 +96,7 @@ const ListService = () => {
     );
   };
   return (
-    <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0">
+    <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0 h-screen">
       {/* TOP */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold text-primary">All Service</h1>
