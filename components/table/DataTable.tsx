@@ -62,7 +62,7 @@ export function DataTable<TData, TValue>({
       <div className="table-header flex items-center justify-between mb-3">
         <div className="">
         <Input
-          placeholder="Filter name..."
+          placeholder="Tìm theo tên bệnh nhân..."
           value={table.getColumn("patient")?.getFilterValue() as string}
           onChange={(event) =>
             table.getColumn("patient")?.setFilterValue(event.target.value)

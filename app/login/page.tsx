@@ -7,10 +7,8 @@ import { PatientForm } from "@/components/forms/PatientForm";
 import { LoginForm } from "@/components/forms/LoginForm";
 
 const Home =async ({ searchParams }: SearchParamProps) => {
-  const isAdmin = searchParams?.admin === "true";
   return (
     <div className="flex h-screen max-h-screen bg-[#f1eff2]">
-      {isAdmin && <PasskeyModal />}
 
       <section className="remove-scrollbar container my-auto ">
         <div className="sub-container max-w-[496px]">

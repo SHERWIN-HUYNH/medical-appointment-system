@@ -26,7 +26,7 @@ export const AppointmentModal = ({
   patientId: string;
   userId: string;
   appointment?: Appointment;
-  type: "schedule" | "cancel";
+  type: "schedule" | "cancel" | 'Chi tiết'|'Hủy';
   title: string;
   description: string;
 }) => {
@@ -36,17 +36,18 @@ export const AppointmentModal = ({
       <DialogTrigger asChild>
         <Button
           variant="ghost"
-          className={`capitalize ${type === "schedule" && "text-green-500"}`}
+          className={`capitalize ${type === "Chi tiết" && "text-green-500"}`}
+          //disabled={appointment?.status === "cancelled" || appointment?.status === "scheduled"}
         >
           {type}
         </Button>
       </DialogTrigger>
       <DialogContent className="shad-dialog sm:max-w-md">
         <DialogHeader className="mb-4 space-y-3">
-          <DialogTitle className="capitalize">{type} Appointment</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="capitalize">Hủy lịch hẹn</DialogTitle>
+          {/* <DialogDescription>
             Please fill in the following details to {type} appointment
-          </DialogDescription>
+          </DialogDescription> */}
         </DialogHeader>
 
         <AppointmentForm

@@ -33,4 +33,6 @@ export class AppointmentRepository {
             await prisma.$disconnect();
         }
     }
+
+    
 }
