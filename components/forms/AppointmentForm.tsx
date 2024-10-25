@@ -29,7 +29,7 @@ export const AppointmentForm = ({
 }: {
   userId: string;
   patientId: string;
-  type: "create" | "schedule" | "cancel";
+  type: "create" | "schedule" | "cancel" |"Chi tiết"|'Hủy';
   appointment?: Appointment;
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
@@ -146,7 +146,7 @@ export const AppointmentForm = ({
               fieldType={FormFieldType.SELECT}
               control={form.control}
               name="primaryPhysician"
-              label="Doctor"
+              label="Bác sĩ"
               placeholder="Select a doctor"
             >
               {Doctors.map((doctor, i) => (
@@ -169,7 +169,7 @@ export const AppointmentForm = ({
               fieldType={FormFieldType.DATE_PICKER}
               control={form.control}
               name="schedule"
-              label="Expected appointment date"
+              label="Ngày khám"
               showTimeSelect
               dateFormat="MM/dd/yyyy  -  h:mm aa"
             />
@@ -178,22 +178,30 @@ export const AppointmentForm = ({
               className={`flex flex-col gap-6  ${type === "create" && "xl:flex-row"}`}
             >
               <CustomFormField
-                fieldType={FormFieldType.TEXTAREA}
+                fieldType={FormFieldType.INPUT}
                 control={form.control}
                 name="reason"
-                label="Appointment reason"
+                label="Lí do khám bệnh"
                 placeholder="Annual montly check-up"
                 disabled={type === "schedule"}
               />
-
+              <CustomFormField
+                fieldType={FormFieldType.INPUT}
+                control={form.control}
+                name="medicalHistory"
+                label="Tiền sử bệnh án"
+                placeholder="Prefer afternoon appointments, if possible"
+                disabled={type === "schedule"}
+              />
               <CustomFormField
                 fieldType={FormFieldType.TEXTAREA}
                 control={form.control}
                 name="note"
-                label="Comments/notes"
+                label="Ghi chú"
                 placeholder="Prefer afternoon appointments, if possible"
                 disabled={type === "schedule"}
               />
+              
             </div>
           </>
         )}
@@ -203,8 +211,8 @@ export const AppointmentForm = ({
             fieldType={FormFieldType.TEXTAREA}
             control={form.control}
             name="cancellationReason"
-            label="Reason for cancellation"
-            placeholder="Urgent meeting came up"
+            label="Lí do hủy hẹn"
+            placeholder="Họp đột xuất"
           />
         )}
 
@@ -212,7 +220,8 @@ export const AppointmentForm = ({
           isLoading={isLoading}
           className={`${type === "cancel" ? "shad-danger-btn" : "shad-primary-btn"} w-full`}
         >
-          {buttonLabel}
+        {/* //  {buttonLabel} */}
+        Xác nhận
         </SubmitButton>
       </form>
     </Form>

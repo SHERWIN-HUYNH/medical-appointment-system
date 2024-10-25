@@ -119,6 +119,14 @@ export const CancelAppointmentSchema = z.object({
     .max(500, "Reason must be at most 500 characters"),
 });
 
+export const createService = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters").max(50, "Name must be at most 50 characters"),
+  description: z.string().max(500, "Description must be at most 500 characters"),
+  price: z
+    .string()
+    .refine((price) => /^\d{1,10}(\.\d{1,2})?$/.test(price), "Invalid price"),
+  faculty: z.string().refine((value) => value !== "", { message: "Please select a faculty" }),
+});
 export function getAppointmentSchema(type: string) {
   switch (type) {
     case "create":

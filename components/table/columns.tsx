@@ -89,7 +89,7 @@ export const columns: ColumnDef<Appointment>[] = [
             patientId={appointment.patient.$id}
             userId={appointment.userId}
             appointment={appointment}
-            type="schedule"
+            type="Chi tiết"
             title="Schedule Appointment"
             description="Please confirm the following details to schedule."
           />
@@ -98,6 +98,7 @@ export const columns: ColumnDef<Appointment>[] = [
             userId={appointment.userId}
             appointment={appointment}
             type="cancel"
+
             title="Cancel Appointment"
             description="Are you sure you want to cancel your appointment?"
           />
