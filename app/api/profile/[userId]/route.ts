@@ -41,8 +41,7 @@ export async function PUT(req: Request, context: any)  {
       
 }
     
-export async function GET(req: Request, context: any){
-  const {profileValues} : { profileValues: Profile} = await req.json();
+export async function GET(context: any){
   const {userId} = context.params
   const profiles = await ProfileRespository.getListProfileByUserId(userId);
 

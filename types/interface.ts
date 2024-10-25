@@ -31,3 +31,9 @@ export interface Profile {
     status: Status;  
     cancellationReason: string;  
   }
+
+export interface Faculty{
+    id:string,
+    name: string;
+    description: string;
+}
