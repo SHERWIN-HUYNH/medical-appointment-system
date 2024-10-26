@@ -1,45 +1,52 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { ProfileRespository } from '@/repositories/profile'; 
-import { Profile } from '@/types/interface';
-import { profile } from 'console';
-import { use } from 'react';
+import type { NextApiRequest, NextApiResponse } from "next";
+import { ProfileRespository } from "@/repositories/profile";
+import { Profile } from "@/types/interface";
+
 export async function POST(req: Request, context: any) {
-    const {action,profile} : {action: string, profile: Profile} = await req.json();
-    const {userId} = context.params
-    if(!userId){
+  try {
+    const { action, profile }: { action: string; profile: Profile } =
+      await req.json();
+    const { userId } = context.params;
+
+    if (!userId) {
       return new Response(
         JSON.stringify({
           message: "NOT AUTHENTICATED",
-          status: 404,
-        })
-      )
+          status: 401,
+        }),
+        { status: 401 }
+      );
     }
+
     const profileId = profile?.id;
-    
-    // if(action == "create"){
+
+    // Handle create profile
+    if (action === "create") {
       const newProfile = await ProfileRespository.createProfile({
         profileData: profile,
-        userId
+        userId,
       });
-    
+
       if (newProfile) {
         return new Response(
           JSON.stringify({
             message: "CREATE PROFILE SUCCESSFULLY",
             status: 200,
-          })
-        )
-      } else{
+          }),
+          { status: 200 }
+        );
+      } else {
         return new Response(
           JSON.stringify({
             message: "CREATE PROFILE FAILED",
             status: 400,
-          })
-        )
+          }),
+          { status: 400 }
+        );
       }
-    // } 
+    }
     // if (action == "update") {
-      
+
     //   const checkprofile = await ProfileRespository.getListProfileByUserId(profileId);
     //   if(!checkprofile){
     //     return new Response(
@@ -68,20 +75,22 @@ export async function POST(req: Request, context: any) {
     //   }
     // }
 
-    return new Response(JSON.stringify({
-      message: "NOT FOUND ACTION",
-      status: 404,
-    }))
-    
+    // return new Response(JSON.stringify({
+    //   message: "NOT FOUND ACTION",
+    //   status: 404,
+    // }))
+
+    // Handle findMany
     if (action === "findMany") {
-      const profiles = await ProfileService.getListProfileByUserId(userId);
+      const profiles = await ProfileRespository.getListProfileByUserId(userId);
 
       if (!profiles || profiles.length === 0) {
         return new Response(
           JSON.stringify({
             message: "NOT FOUND PROFILE",
             status: 404,
-          })
+          }),
+          { status: 404 }
         );
       }
 
@@ -90,44 +99,52 @@ export async function POST(req: Request, context: any) {
           message: "GET PROFILE SUCCESSFULLY",
           status: 200,
           profiles,
-        })
+        }),
+        { status: 200 }
       );
     }
 
+    // Handle delete profile
     if (action === "delete") {
-      try {
-        const checkProfile = await ProfileService.getProfileById(profileId);
-        if (!checkProfile) {
-          return new Response(
-            JSON.stringify({
-              message: "NOT FOUND PROFILE",
-              status: 404,
-            }),
-            { status: 404 }
-          );
-        }
-        await ProfileService.deleteProfile({profileData: profile});
+      const checkProfile = await ProfileRespository.getProfileById(profileId);
+
+      if (!checkProfile) {
         return new Response(
           JSON.stringify({
-            message: "Profile deleted successfully",
-            status: 200,
+            message: "NOT FOUND PROFILE",
+            status: 404,
           }),
-          { status: 200 }
-        );
-    
-      } catch (error: any) {
-        console.error("Error deleting profile:", error.message || error);
-        return new Response(
-          JSON.stringify({
-            message: "Failed to delete profile",
-            error: error.message || error,
-            status: 500,
-          }),
-          { status: 500 }
+          { status: 404 }
         );
       }
+
+      await ProfileRespository.deleteProfile({ profileData: profile });
+      return new Response(
+        JSON.stringify({
+          message: "Profile deleted successfully",
+          status: 200,
+        }),
+        { status: 200 }
+      );
     }
-    
-    
+
+    // Handle unknown actions
+    return new Response(
+      JSON.stringify({
+        message: "NOT FOUND ACTION",
+        status: 400,
+      }),
+      { status: 400 }
+    );
+  } catch (error: any) {
+    console.error("Error in profile handling:", error.message || error);
+    return new Response(
+      JSON.stringify({
+        message: "Internal Server Error",
+        status: 500,
+        error: error.message || error,
+      }),
+      { status: 500 }
+    );
+  }
 }
-  
