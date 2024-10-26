@@ -1,11 +1,10 @@
-"use client";
+"use client"
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 import ModalDelete from "@/components/ModalDelete";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { Button } from "@/components/ui/button";
-import { facultyData } from "@/lib/data";
-import { doctorData as initialDoctorData } from "@/lib/data";
 import {
   ArrowDownNarrowWide,
   Pencil,
@@ -14,7 +13,8 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import { facultyData } from "@/lib/data";
+import { doctorData as initialDoctorData } from "@/lib/data";
 
 type Doctor = {
   id: number;
@@ -49,6 +49,10 @@ const ListDoctor = () => {
   const [fadeOut, setFadeOut] = useState(false);
   const [selectedFaculties, setSelectedFaculties] = useState<number[]>([]);
   const [showFilter, setShowFilter] = useState(false);
+  const [showSort, setShowSort] = useState(false);
+  const [sortOption, setSortOption] = useState("")
+  const [searchTerm, setSearchTerm] = useState("");
+
 
   const showMessage = (msg: string) => {
     setMessage(msg);
@@ -66,7 +70,6 @@ const ListDoctor = () => {
       setDoctorData(updatedDoctorData);
       setDoctorToDelete(null);
       setShowModal(false);
-      // Gọi hàm showMessage sau khi xóa thành công
       showMessage(`Bác sĩ ${doctorToDelete.name} đã xóa thành công!`);
     }
   };
@@ -77,20 +80,17 @@ const ListDoctor = () => {
     } else {
       setSelectedFaculties([...selectedFaculties, facultyId]);
     }
-    setCurrentPage(1); // Reset trang về một nếu thay đổi bộ lọc
+    setCurrentPage(1);
   };
 
-  // Lọc bác sĩ dựa trên id chuyên khoa
-  const filteredDoctorData = doctorData.filter((doctor) =>
-    selectedFaculties.length === 0
-      ? true
-      : selectedFaculties.includes(doctor.facultyId)
-  );
+  const filteredDoctorData = doctorData.filter((doctor) => {
+    const matchesFaculty = selectedFaculties.length === 0 || selectedFaculties.includes(doctor.facultyId);
+    const matchesSearchTerm = doctor.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesFaculty && matchesSearchTerm;
+  });
 
-  // Tính tổng số trang dựa trên dữ liệu đã lọc
   const totalPages = Math.ceil(filteredDoctorData.length / itemsPerPage);
 
-  // In dữ liệu dựa trên tổng số trang và dữ liệu lọc
   const displayedData = filteredDoctorData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -101,6 +101,36 @@ const ListDoctor = () => {
     return faculty ? faculty.name : "NULL";
   };
 
+  // Xử lý sắp xếp
+  const handleSortOptionChange = (option: string) => {
+    setSortOption(option);
+    let sortedData = [...doctorData];
+  
+    const sortByName = (a: Doctor, b: Doctor) => {
+      // Tách tên và họ
+      const [firstNameA, lastNameA] = a.name.split(' ').slice(-1);
+      const [firstNameB, lastNameB] = b.name.split(' ').slice(-1);
+  
+      // So sánh tên trước
+      if (firstNameA !== firstNameB) {
+        return firstNameA.localeCompare(firstNameB);
+      }
+  
+      // Nếu tên giống nhau, so sánh họ
+      return lastNameA.localeCompare(lastNameB);
+    };
+  
+    if (option === "A-Z") {
+      sortedData = sortedData.sort((a, b) => sortByName(a, b));
+    } else if (option === "Z-A") {
+      sortedData = sortedData.sort((a, b) => sortByName(b, a));
+    } else if (option === "ID") {
+      sortedData = sortedData.sort((a, b) => a.id - b.id);
+    }
+  
+    setDoctorData(sortedData);
+  };
+  
   const renderRow = (item: Doctor) => (
     <tr
       key={item.id}
@@ -160,7 +190,8 @@ const ListDoctor = () => {
           Quản lý bác sĩ
         </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-          <TableSearch />
+        <TableSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
         </div>
         <div className="flex items-center gap-4 self-end">
           <Link href="/test-doctor/add-doctor">
@@ -174,7 +205,10 @@ const ListDoctor = () => {
           >
             <SlidersHorizontal className="w-4 h-4" />
           </Button>
-          <Button className="flex items-center justify-center rounded-full bg-gradient-to-r from-blue-300 to-cyan-300 text-white">
+          <Button
+            className="flex items-center justify-center rounded-full bg-gradient-to-r from-blue-300 to-cyan-300 text-white"
+            onClick={() => setShowSort(!showSort)}
+          >
             <ArrowDownNarrowWide className="w-4 h-4" />
           </Button>
         </div>
@@ -218,6 +252,50 @@ const ListDoctor = () => {
         </div>
       )}
 
+      {/* Sort Menu */}
+      {showSort && (
+        <div
+          className="absolute right-0 mt-4 w-60 p-4 border rounded-lg shadow-lg bg-white border-slate-200"
+          style={{ maxHeight: "300px", zIndex: 10 }}
+        >
+          <h3 className="font-semibold text-primary">Sắp xếp:</h3>
+          <div className="flex flex-col mt-2">
+            <label className="flex items-center">
+            <input
+                type="radio"
+                name="sortOption"
+                value="ID"
+                checked={sortOption === "ID"}
+                onChange={() => handleSortOptionChange("ID")}
+                className="mr-2"
+              />
+              ID
+            </label>
+            <label className="flex items-center mt-2">
+            <input
+                type="radio"
+                name="sortOption"
+                value="A-Z"
+                checked={sortOption === "A-Z"}
+                onChange={() => handleSortOptionChange("A-Z")}
+                className="mr-2"
+              />
+              Tên (A-Z)
+            </label>
+            <label className="flex items-center mt-2">
+            <input
+                type="radio"
+                name="sortOption"
+                value="Z-A"
+                checked={sortOption === "Z-A"}
+                onChange={() => handleSortOptionChange("Z-A")}
+                className="mr-2"
+              />
+              Tên (Z-A)
+            </label>
+          </div>
+        </div>
+      )}
       {/* LIST */}
       <div className="overflow-x-auto">
         <Table columns={columns} data={displayedData} renderRow={renderRow} />
