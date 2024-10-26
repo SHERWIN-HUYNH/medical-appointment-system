@@ -87,7 +87,6 @@ const Add_Profile = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        action: "create",
         profile: formData,
       }),
     });

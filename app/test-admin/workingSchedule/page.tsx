@@ -14,7 +14,7 @@ import clsx from "clsx";
 import { log } from "console";
 import { RiH1 } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 
 
 
@@ -122,11 +122,11 @@ const WorkingSchedulePage = () => {
   setSelectedDates(prev => [...prev, ...allSelectedDates]);
   console.log('ALL DATES CLICKED',formattedSelectedDates)
   };
-  
+  const breadcrumbList = [['Doctor','/test-admin/doctor'],['DoctorSchedule','/#']]
   return (
     <DefaultLayout>
-    <div className="bg-[#e8f2f7] w-full h-min flex flex-col items-center justify-center ">
-       
+    <div className="bg-[#e8f2f7] w-full h-min flex flex-col justify-center ">
+    <Breadcrumb pageName={breadcrumbList} />
       <section className=" flex space-x-7  max-w-screen-xl px-4 pb-6 mt-8">
         <div className=" w-67 rounded-lg bg-white h-max">
             <h1 className="blue-header w-full">Thông tin bác sĩ</h1>

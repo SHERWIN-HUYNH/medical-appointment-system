@@ -4,7 +4,7 @@ import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { Button } from "@/components/ui/button";
 import { facultyData, serviceData } from "@/lib/data";
-import { Pencil, Trash2 } from "lucide-react";
+import { ArrowDownNarrowWide, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 
@@ -69,17 +69,17 @@ const ListService = () => {
     return (
       <tr
         key={item.id}
-        className="h-15 border-b border-slate-200 even:bg-slate-50 text-sm hover:bg-blue-50"
+        className="h-15 border-b text-left border-slate-200 even:bg-slate-50 text-sm hover:bg-blue-50"
       >
         <td>
-          <div className="flex flex-col items-center p-2">
+          <div className="text-left p-2">
             <h3 className="font-semi">{item.id}</h3>
           </div>
         </td>
-        <td className="hidden md:table-cell text-center">{item.name}</td>
-        <td className="hidden md:table-cell text-center">{item.price}</td>
-        <td className="hidden md:table-cell text-center">{getFacultyName(item.facultyId)}</td>
-        <td className="hidden md:table-cell text-center">{item.description}</td>
+        <td className="hidden md:table-cell text-left">{item.name}</td>
+        <td className="hidden md:table-cell text-left">{item.price}</td>
+        <td className="hidden md:table-cell text-left">{getFacultyName(item.facultyId)}</td>
+        <td className="hidden md:table-cell text-left">{item.description}</td>
         <td>
           <div className="flex items-center gap-2">
             <Link href={`/test-faculty/${item.id}/edit-faculty`}>
@@ -96,7 +96,7 @@ const ListService = () => {
     );
   };
   return (
-    <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0">
+    <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0 h-screen">
       {/* TOP */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold text-primary">All Service</h1>
@@ -104,18 +104,19 @@ const ListService = () => {
           <TableSearch />
         </div>
         <div className="flex items-center gap-4 self-end">
-          <Link href="/test-faculty/add-faculty">
+          <Link href="/test-service/add-service">
             <Button className="flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-blue-400 text-white">
               Thêm dịch vụ
             </Button>
           </Link>
+          <Button className="flex items-center justify-center rounded-full bg-gradient-to-r from-blue-300 to-cyan-300 text-white">
+            <ArrowDownNarrowWide className="w-4 h-4" />
+          </Button>
         </div>
       </div>
-      {/* LIST */}
       <div className="">
         <Table columns={columns} renderRow={renderRow} data={displayedData} />
       </div>
-      {/* PAGINATION */}
       <div className="">
         <Pagination
           currentPage={currentPage}

@@ -23,6 +23,11 @@ export const columns: ColumnDef<Appointment>[] = [
       const appointment = row.original;
       return <p className="text-14-medium ">{appointment.patient.name}</p>;
     },
+    filterFn: (row, columnId, filterValue) => {
+      // Access the patient's name for filtering
+      const patientName = (row.getValue(columnId) as any)?.name;
+      return patientName?.toLowerCase().includes(filterValue.toLowerCase());
+    },
   },
   {
     accessorKey: "status",
@@ -84,7 +89,7 @@ export const columns: ColumnDef<Appointment>[] = [
             patientId={appointment.patient.$id}
             userId={appointment.userId}
             appointment={appointment}
-            type="schedule"
+            type="Chi tiết"
             title="Schedule Appointment"
             description="Please confirm the following details to schedule."
           />
@@ -93,6 +98,7 @@ export const columns: ColumnDef<Appointment>[] = [
             userId={appointment.userId}
             appointment={appointment}
             type="cancel"
+
             title="Cancel Appointment"
             description="Are you sure you want to cancel your appointment?"
           />

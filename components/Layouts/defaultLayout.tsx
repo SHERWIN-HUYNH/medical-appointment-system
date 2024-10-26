@@ -12,7 +12,7 @@ const DefaultLayout = ({
   return (
     <div>
          {/* <!-- ===== Page Wrapper Start ===== --> */}
-      <div className="flex">
+      <div className="flex overflow-y-hidden">
         {/* <!-- ===== Sidebar Start ===== --> */}
         <Sidebar  sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         {/* <!-- ===== Sidebar End ===== --> */}

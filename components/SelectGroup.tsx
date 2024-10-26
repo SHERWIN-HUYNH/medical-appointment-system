@@ -28,8 +28,8 @@ const SelectGroup: React.FC<SelectGroupProps> = ({ label, options }) => {
   };
 
   return (
-    <div className="mb-1">
-      <label className="mb-2.5 block text-black dark:text-white text-sm font-semibold">{label}</label>
+    <div className="mb-1 h-10">
+      <label className="mb-2.5 block text-md font-semibold text-primary">{label}</label>
       <div className="relative z-20 bg-transparent dark:bg-form-input">
         <select
           value={selectedOption}
@@ -43,7 +43,7 @@ const SelectGroup: React.FC<SelectGroupProps> = ({ label, options }) => {
             disabled
             className="text-slate-500 dark:text-bodydark"
           >
-            Chọn một <span className="lowercase">{label}</span>
+            Chọn <span className="lowercase">{label}</span>
           </option>
           {options.map((option) => (
             <option

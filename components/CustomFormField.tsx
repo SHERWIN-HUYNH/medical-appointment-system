@@ -30,6 +30,7 @@ export enum FormFieldType {
   SELECT = "select",
   SKELETON = "skeleton",
   PASSWORD = "password",
+  
 }
 
 interface CustomProps {
@@ -150,7 +151,6 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
       );
     case FormFieldType.SKELETON:
       return props.renderSkeleton ? props.renderSkeleton(field) : null;
-
     default:
       return null;
   }

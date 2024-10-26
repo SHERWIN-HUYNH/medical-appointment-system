@@ -8,7 +8,7 @@ import Link from "next/link";
 const AdminPage = async () => {
   const appointments = await getRecentAppointmentList();
   if (!appointments) return <div>Something went wrong</div>;
-  console.log(appointments.scheduledCount);
+  console.log('DATA APPOINTMENT',appointments);
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14 p-4 md:p-6 2xl:p-10">
       <header className="admin-header">

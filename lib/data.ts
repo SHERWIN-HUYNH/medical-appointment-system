@@ -20,6 +20,11 @@ export const facultyData = [
   { id: 19, name: "Chăm sóc sức khỏe", description: "Chuyên về quản lý sức khỏe tổng quát." },
   { id: 20, name: "Dinh dưỡng", description: "Chuyên khoa về chế độ ăn uống và dinh dưỡng." },
 ];
+export const faculty2 = [
+  { name: "Tim mạch", description: "Chuyên khoa về tim và hệ tuần hoàn."},
+  { name: "Thần kinh", description: "Tập trung vào các rối loại của hệ thần kinh."},
+  { name: "Chấn thương đnh hình", description: "Điều trị các vấn đề về hệ cơ xương."},
+]
 
 export const serviceData = [
   { id: 1, name: "Khám tim mạch", price: 500000, facultyId: 1, description: "Dịch vụ khám và chẩn đoán các vấn đề về tim." },
