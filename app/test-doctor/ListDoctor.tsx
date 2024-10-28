@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import ModalDelete from "@/components/ModalDelete";
@@ -50,9 +50,8 @@ const ListDoctor = () => {
   const [selectedFaculties, setSelectedFaculties] = useState<number[]>([]);
   const [showFilter, setShowFilter] = useState(false);
   const [showSort, setShowSort] = useState(false);
-  const [sortOption, setSortOption] = useState("")
+  const [sortOption, setSortOption] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-
 
   const showMessage = (msg: string) => {
     setMessage(msg);
@@ -84,8 +83,12 @@ const ListDoctor = () => {
   };
 
   const filteredDoctorData = doctorData.filter((doctor) => {
-    const matchesFaculty = selectedFaculties.length === 0 || selectedFaculties.includes(doctor.facultyId);
-    const matchesSearchTerm = doctor.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFaculty =
+      selectedFaculties.length === 0 ||
+      selectedFaculties.includes(doctor.facultyId);
+    const matchesSearchTerm = doctor.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
     return matchesFaculty && matchesSearchTerm;
   });
 
@@ -105,21 +108,21 @@ const ListDoctor = () => {
   const handleSortOptionChange = (option: string) => {
     setSortOption(option);
     let sortedData = [...doctorData];
-  
+
     const sortByName = (a: Doctor, b: Doctor) => {
       // Tách tên và họ
-      const [firstNameA, lastNameA] = a.name.split(' ').slice(-1);
-      const [firstNameB, lastNameB] = b.name.split(' ').slice(-1);
-  
+      const [firstNameA, lastNameA] = a.name.split(" ").slice(-1);
+      const [firstNameB, lastNameB] = b.name.split(" ").slice(-1);
+
       // So sánh tên trước
       if (firstNameA !== firstNameB) {
         return firstNameA.localeCompare(firstNameB);
       }
-  
+
       // Nếu tên giống nhau, so sánh họ
       return lastNameA.localeCompare(lastNameB);
     };
-  
+
     if (option === "A-Z") {
       sortedData = sortedData.sort((a, b) => sortByName(a, b));
     } else if (option === "Z-A") {
@@ -127,10 +130,10 @@ const ListDoctor = () => {
     } else if (option === "ID") {
       sortedData = sortedData.sort((a, b) => a.id - b.id);
     }
-  
+
     setDoctorData(sortedData);
   };
-  
+
   const renderRow = (item: Doctor) => (
     <tr
       key={item.id}
@@ -190,8 +193,7 @@ const ListDoctor = () => {
           Quản lý bác sĩ
         </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-        <TableSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
+          <TableSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </div>
         <div className="flex items-center gap-4 self-end">
           <Link href="/test-doctor/add-doctor">
@@ -261,7 +263,7 @@ const ListDoctor = () => {
           <h3 className="font-semibold text-primary">Sắp xếp:</h3>
           <div className="flex flex-col mt-2">
             <label className="flex items-center">
-            <input
+              <input
                 type="radio"
                 name="sortOption"
                 value="ID"
@@ -272,7 +274,7 @@ const ListDoctor = () => {
               ID
             </label>
             <label className="flex items-center mt-2">
-            <input
+              <input
                 type="radio"
                 name="sortOption"
                 value="A-Z"
@@ -283,7 +285,7 @@ const ListDoctor = () => {
               Tên (A-Z)
             </label>
             <label className="flex items-center mt-2">
-            <input
+              <input
                 type="radio"
                 name="sortOption"
                 value="Z-A"

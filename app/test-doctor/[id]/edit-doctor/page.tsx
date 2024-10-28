@@ -50,7 +50,7 @@ const EditDoctor = () => {
                 />
               </div>
             </div>
-            <div className="mb-3 flex flex-col gap-6 xl:flex-row">
+            <div className="mb-12 flex flex-col gap-6 xl:flex-row">
               <div className="w-full xl:w-1/2">
                 <SelectGroup label="Học hàm/học vị" options={academicTitles} />
               </div>

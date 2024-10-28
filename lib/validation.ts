@@ -89,6 +89,15 @@ export const PatientFormValidation = z.object({
     }).optional(),
 });
 
+export const FacultyFormValidation = z.object({
+  name: z
+    .string()
+    .min(2, "Faculty must be at least 2 characters")
+    .max(50, "Faculty must be at most 50 characters"),
+  description: z
+    .string()
+    .min(1, "Description can't be empty").max(500, "Description must be at most 500 characters"),
+});
 export const CreateAppointmentSchema = z.object({
   primaryPhysician: z.string().min(2, "Select at least one doctor"),
   schedule: z.coerce.date(),
@@ -127,6 +136,7 @@ export const createService = z.object({
     .refine((price) => /^\d{1,10}(\.\d{1,2})?$/.test(price), "Invalid price"),
   faculty: z.string().refine((value) => value !== "", { message: "Please select a faculty" }),
 });
+
 export function getAppointmentSchema(type: string) {
   switch (type) {
     case "create":

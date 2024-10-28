@@ -1,10 +1,11 @@
+"use client";
+
 import DefaultLayout from "@/components/Layouts/defaultLayout";
 import SelectGroup from "@/components/SelectGroup";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { academicTitles, facultyData } from "@/lib/data";
-
 import React from "react";
 
 const AddDoctor = () => {
@@ -16,7 +17,8 @@ const AddDoctor = () => {
             Thêm bác sĩ
           </h3>
         </div>
-        <form action="#">
+
+        <form>
           <div className="p-6.5">
             <div className="mb-3 flex flex-col gap-6 xl:flex-row">
               <div className="w-full xl:w-1/2">
@@ -41,12 +43,19 @@ const AddDoctor = () => {
                 </div>
               </div>
             </div>
-            <div className="mb-3 flex flex-col gap-6 xl:flex-row">
+            <div className="mb-16 flex flex-col gap-6 xl:flex-row">
               <div className="w-full xl:w-1/2">
-                <SelectGroup label="học hàm/học vị" options={academicTitles} />
+                <div className="mb-12">
+                  <SelectGroup
+                    label="Học hàm/học vị"
+                    options={academicTitles}
+                  />
+                </div>
               </div>
               <div className="w-full xl:w-1/2">
-                <SelectGroup label="chuyên khoa" options={facultyData} />
+                <div className="mb-12">
+                  <SelectGroup label="Chuyên khoa" options={facultyData} />
+                </div>
               </div>
             </div>
 
@@ -58,11 +67,14 @@ const AddDoctor = () => {
                 rows={5}
                 placeholder="Nhập mô tả"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              ></Textarea>
+              />
             </div>
 
             <div className="flex justify-end">
-              <button className="w-24 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+              <button
+                type="submit"
+                className="w-24 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
+              >
                 Thêm
               </button>
             </div>
