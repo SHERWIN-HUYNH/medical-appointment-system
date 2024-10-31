@@ -137,18 +137,7 @@ const ListEvaluate = () => {
         </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
         <TableSearch onSearch={handleSearch} />
-          <select
-            className="p-2 border rounded-xl border-primary"
-            value={selectedDoctor || ""}
-            onChange={(e) => setSelectedDoctor(e.target.value || null)}
-          >
-            <option value="">Bác sĩ</option>
-            {Array.from(new Set(evaluateData.map((item) => item.doctor))).map((doctor) => (
-              <option key={doctor} value={doctor}>
-                {doctor}
-              </option>
-            ))}
-          </select>
+          
           <select
             className="p-2 border rounded-xl border-primary"
             value={selectedRating || ""}
