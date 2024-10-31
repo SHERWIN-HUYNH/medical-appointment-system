@@ -13,8 +13,7 @@ export class FacultyRepository {
                 data: {
                     name: facultyData.name,
                     description: facultyData.description,
-                }
-                
+                }               
             });
             return newFaculty;
         } catch (error) {
@@ -42,6 +41,9 @@ export class FacultyRepository {
                     id: facultyId,
                 },
             });
+            if (!faculty) {
+                throw new Error(`Faculty with ID ${facultyId} not found.`);
+              }
             return faculty;
         } catch (error) {
             console.error('Error retrieving faculty:', error);

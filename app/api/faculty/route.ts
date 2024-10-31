@@ -1,6 +1,7 @@
 import { badRequestResponse, notFoundResponse, successResponse } from "@/helpers/response";
 import prisma from "@/lib/prisma";
 import { FacultyRepository } from "@/repositories/faculty";
+import { ServiceRepository } from "@/repositories/service";
 import { Faculty } from "@/types/interface";
 
 export async function GET() {
@@ -12,16 +13,21 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-    const  faculty:Faculty = await req.json();
-    if(!faculty){
-        return badRequestResponse("MISSING FACULTY");
+    const faculty = await req.json(); 
+
+    if (!faculty) {
+        return badRequestResponse("MISSING SERVICE DATA");
     }
-    const newFaculty = await FacultyRepository.createFaculty(faculty);
-    if(!newFaculty){
-        return badRequestResponse("FAIL TO CREATE FACULTY");
+
+    const newService = await FacultyRepository.createFaculty(faculty);
+
+    if (!newService) {
+        return badRequestResponse("FAIL TO CREATE SERVICE");
     }
-    return successResponse(newFaculty);
+
+    return successResponse(newService);
 }
+
 export async function PUT(req: Request) {
     const { faculty } = await req.json();
     const facultyData = await FacultyRepository.getFacultyById(faculty.id);

@@ -37,3 +37,11 @@ export interface Faculty{
     name: string;
     description: string;
 }
+
+export interface Service{
+    id:string,
+    name: string;
+    price: number;
+    facultyId: string;
+    description: string;
+}
