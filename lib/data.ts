@@ -76,10 +76,10 @@ export const doctorData = [
   { id: 24, name: "Phạm Thị X", academicTitle: "Tiến sĩ", facultyId: 4, isActive: true, image: "dt1.jpg", description: "Bác sĩ da liễu." },
   { id: 25, name: "Nguyễn Văn Y", academicTitle: "Bác sĩ", facultyId: 5, isActive: true, image: "dt1.jpg", description: "Chuyên khoa nhi." },
   { id: 26, name: "Trần Văn Z", academicTitle: "Thạc sĩ", facultyId: 6, isActive: true, image: "dt1.jpg", description: "Chuyên về nội tiết." },
-  { id: 27, name: "Lê Thị AA", academicTitle: "Tiến sĩ", facultyId: 7, isActive: true, image: "dt1.jpg", description: "Chuyên về hô hấp." },
-  { id: 28, name: "Phạm Văn BB", academicTitle: "Bác sĩ", facultyId: 8, isActive: true, image: "dt1.jpg", description: "Bác sĩ tâm thần." },
-  { id: 29, name: "Nguyễn Thị CC", academicTitle: "Thạc sĩ", facultyId: 9, isActive: true, image: "dt1.jpg", description: "Chuyên khoa tiêu hóa." },
-  { id: 30, name: "Trần Văn DD", academicTitle: "Tiến sĩ", facultyId: 10, isActive: true, image: "dt1.jpg", description: "Chuyên về phụ khoa." },
+  { id: 27, name: "Lê Thị Duyên", academicTitle: "Tiến sĩ", facultyId: 7, isActive: true, image: "dt1.jpg", description: "Chuyên về hô hấp." },
+  { id: 28, name: "Phạm Văn Bình", academicTitle: "Bác sĩ", facultyId: 8, isActive: true, image: "dt1.jpg", description: "Bác sĩ tâm thần." },
+  { id: 29, name: "Nguyễn Thị Huyền", academicTitle: "Thạc sĩ", facultyId: 9, isActive: true, image: "dt1.jpg", description: "Chuyên khoa tiêu hóa." },
+  { id: 30, name: "Trần Văn Đức", academicTitle: "Tiến sĩ", facultyId: 10, isActive: true, image: "dt1.jpg", description: "Chuyên về phụ khoa." },
 ];
 
 

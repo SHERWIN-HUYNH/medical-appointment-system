@@ -41,32 +41,36 @@ export async function PUT(req: Request, context: any)  {
       
 }
     
-export async function GET(context: any){
-  const {userId} = context.params
-  const profiles = await ProfileRespository.getListProfileByUserId(userId);
-
-      if (!profiles || profiles.length === 0) {
-        return notFoundResponse("NOT FOUND PROFILE");
-      }
-      return successResponse(profiles);
-    
-}
-export async function DELETE(req: Request, context: any){
-  const {profileValues} : { profileValues: Profile} = await req.json();
-  const {userId} = context.params
-    try {
-      const checkProfile = await ProfileRespository.getProfileById(profileValues.id);
-      if (!checkProfile) {
-        return notFoundResponse("NOT FOUND PROFILE");
-      }
-      await ProfileRespository.deleteProfile({profileData: profileValues});
-      return successResponse("DELETE PROFILE SUCCESSFULLY");
-  
-    } catch (error: any) {
-      console.error("Error deleting profile:", error.message || error);
-      return internalServerErrorResponse("FAIL TO DELETE PROFILE");
+export async function GET(request: Request, context: { params: { userId: string } }) {
+  const { userId } = context.params;
+  try {
+    const profiles = await ProfileRespository.getListProfileByUserId(userId);
+    if (!profiles || profiles.length === 0) {
+      return notFoundResponse("NOT FOUND PROFILE");
     }
-} 
+    return successResponse(profiles); 
+  } catch (error: any) {
+    console.error("Error fetching profiles:", error.message || error);
+    return internalServerErrorResponse("FAIL TO GET LIST PROFILE")
+  }
+}
+export async function DELETE(req: Request, context: any) {
+  const { profileValues }: { profileValues: Profile } = await req.json();
+  const { userId } = context.params;
+
+  try {
+    const checkProfile = await ProfileRespository.getProfileById(profileValues.id);
+    if (!checkProfile) {
+      return notFoundResponse("NOT FOUND PROFILE");
+    }
+    await ProfileRespository.deleteProfile({ profileData: profileValues });
+    return successResponse("DELETE PROFILE SUCCESSFULLY");
+  } catch (error: any) {
+    console.error("Error deleting profile:", error.message || error);
+    return internalServerErrorResponse("FAIL TO DELETE PROFILE");
+  }
+}
+
     
     
 

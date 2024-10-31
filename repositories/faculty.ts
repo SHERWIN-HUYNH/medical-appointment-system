@@ -22,18 +22,22 @@ export class FacultyRepository {
         } finally {
             await prisma.$disconnect();
         }
+        const newFaculty = await prisma.faculty.create({
+            data: {
+                name: facultyData.name,
+                description: facultyData.description,
+            }
+        });
+        await prisma.$disconnect();
+        return newFaculty;
     }
+
     static async getFaculties() {
-        try {
-            const faculties = await prisma.faculty.findMany();
-            return faculties;
-        } catch (error) {
-            console.error('Error retrieving appointments:', error);
-            throw error;
-        } finally {
-            await prisma.$disconnect();
-        }
+        const faculties = await prisma.faculty.findMany();
+        await prisma.$disconnect();
+        return faculties;
     }
+
     static async getFacultyById(facultyId: string) {
         try {
             const faculty = await prisma.faculty.findUnique({
@@ -51,40 +55,30 @@ export class FacultyRepository {
         } finally {
             await prisma.$disconnect();
         }
+
     }
+
     static async updateFaculty(facultyData: Faculty, id: string) {
-        try {
-            const updatedFaculty = await prisma.faculty.update({
-                where: {
-                    id: id,
-                },
-                data: {
-                    name: facultyData.name,
-                    description: facultyData.description,
-                },
-            });
-            return updatedFaculty;
-        } catch (error) {
-            console.error('Error updating faculty:', error);
-            throw error;
-        } finally {
-            await prisma.$disconnect();
-        }
+        const updatedFaculty = await prisma.faculty.update({
+            where: {
+                id: id,
+            },
+            data: {
+                name: facultyData.name,
+                description: facultyData.description,
+            },
+        });
+        await prisma.$disconnect();
+        return updatedFaculty;
     }
 
     static async deleteFaculty(facultyData: Faculty) {
-        try {
-            const deletedFaculty = await prisma.faculty.delete({
-                where: {
-                    id: facultyData.id,
-                },
-            });
-            return deletedFaculty;
-        } catch (error) {
-            console.error('Error deleting faculty:', error);
-            throw error;
-        } finally {
-            await prisma.$disconnect();
-        }
+        const deletedFaculty = await prisma.faculty.delete({
+            where: {
+                id: facultyData.id,
+            },
+        });
+        await prisma.$disconnect();
+        return deletedFaculty;
     }
 }
