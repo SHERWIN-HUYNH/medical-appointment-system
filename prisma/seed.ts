@@ -5,12 +5,13 @@ import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Hash password (if needed)
-  const hashedPassword = await bcrypt.hash('your_password_here', 10);
-  // Create roles
-  //Create permissions
-  //Assign roles to users
- 
+  const appointment = await prisma.appointment.findMany({
+    where:{
+      serviceId:"e914e7ab-e249-476f-b524-6ee51c219f79",
+      status:"PENDING"
+    }
+  })
+ console.log('APPOINTMENT',appointment)
 }
 
 // Execute the main function and catch any errors
