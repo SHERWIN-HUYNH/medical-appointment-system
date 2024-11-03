@@ -24,12 +24,9 @@ const Profile = () => {
   const [selectedOption, setSelectedOption] = useState(1);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const { data: session } = useSession();
-  const [notification, setNotification] = useState<{
-    message: string;
-    type: "success" | "error";
-  } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profileToDelete, setProfileToDelete] = useState<number | null>(null);
+  const[profileToShow, setProfileToShow] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -76,23 +73,39 @@ const Profile = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Lỗi khi xóa hồ sơ");
+        toast.error("Lỗi khi xóa hồ sơ");
       }
 
       setProfiles((prevProfiles) => prevProfiles.filter((profile) => profile.id !== profileToDelete));
       toast.success("Xóa hồ sơ thành công");
     } catch (error) {
-      console.error("Lỗi khi xóa hồ sơ:", error);
-      setNotification({
-        message: "Xóa hồ sơ không thành công.",
-        type: "error",
-      });
+      toast.error("Lỗi khi xóa hồ sơ");
     } finally {
       setIsModalOpen(false);
-      setProfileToDelete(null);
-      setTimeout(() => setNotification(null), 3000);
+      setProfileToDelete(null);     
     }
   };
+  const handleShowProfile =async () => {
+    if (profileToShow === null) return;
+    try {
+      const response = await fetch(`/api/profile/${session?.user?.id}`, {
+        method: "GET2",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          profileValues: { id: profileToShow },
+        }),
+        
+      });}
+      catch (error) {
+        toast.error("Lỗi khi lấy hồ sơ");
+      } finally {
+        setIsModalOpen(false);
+        setProfileToShow(null);     
+      }
+    
+  }
 
   const Buttons = [
     { id: 1, name: "Hồ sơ bệnh nhân", icon: <FaBookMedical /> },

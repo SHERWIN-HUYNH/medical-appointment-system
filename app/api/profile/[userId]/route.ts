@@ -54,9 +54,8 @@ export async function GET(request: Request, context: { params: { userId: string 
     return internalServerErrorResponse("FAIL TO GET LIST PROFILE")
   }
 }
-export async function DELETE(req: Request, context: any) {
+export async function DELETE(req: Request) {
   const { profileValues }: { profileValues: Profile } = await req.json();
-  const { userId } = context.params;
 
   try {
     const checkProfile = await ProfileRespository.getProfileById(profileValues.id);
@@ -71,7 +70,16 @@ export async function DELETE(req: Request, context: any) {
   }
 }
 
-    
+export async function GET2(req: Request) {
+  const { profileValues }: { profileValues: Profile } = await req.json();
+  try {
+    const profile = await ProfileRespository.getProfileById(profileValues.id);
+    return successResponse(profile); 
+  } catch (error: any) {
+    console.error("Error fetching profile:", error.message || error);
+    return internalServerErrorResponse("FAIL TO GET PROFILE")
+  }
+}    
     
 
   
