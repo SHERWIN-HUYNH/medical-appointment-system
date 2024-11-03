@@ -2,7 +2,7 @@
 import ModalDelete from "@/components/ModalDelete";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
-import TableSearch from "@/components/TableSearch";
+import TableSearch from "@/components/table/TableSearch";
 import { Button } from "@/components/ui/button";
 import { Trash2, Star as StarSolid } from "lucide-react";
 import React, { useState } from "react";
@@ -37,7 +37,6 @@ const columns = [
 const ListEvaluate = () => {
   const [evaluateData, setEvaluateData] = useState<Evaluate[]>(initialEvaluateData);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedDoctor, setSelectedDoctor] = useState<string | null>(null);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [searchMessage, setSearchMessage] = useState<string>("");
   const itemsPerPage = 7;
@@ -68,12 +67,9 @@ const ListEvaluate = () => {
 
   const totalPages = Math.ceil(evaluateData.length / itemsPerPage);
 
-  const filteredData = evaluateData.filter((item) => {
-    return (
-      (!selectedDoctor || item.doctor === selectedDoctor) &&
-      (!selectedRating || item.rating === selectedRating)
-    );
-  });
+  const filteredData = evaluateData.filter((item) =>
+    (!selectedRating || item.rating === selectedRating)
+  );
 
   const displayedData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
@@ -81,16 +77,23 @@ const ListEvaluate = () => {
   );
 
   const handleSearch = (searchTerm: string) => {
-    const results = evaluateData.filter((item) =>
-      item.username.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    if (results.length === 0) {
-      setSearchMessage("Không tìm thấy đánh giá phù hợp.");
-    } else {
+    if (!searchTerm) {
+      setEvaluateData(initialEvaluateData);
       setSearchMessage("");
+    } else {
+      const results = initialEvaluateData.filter((item) =>
+        item.username.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      if (results.length === 0) {
+        setSearchMessage("");
+      } else {
+        setSearchMessage("");
+      }
+
+      setEvaluateData(results);
+      setCurrentPage(1); 
     }
-    setEvaluateData(results);
-    setCurrentPage(1); // Reset về trang đầu tiên khi có kết quả mới
   };
 
   const renderStars = (rating: number) => (
@@ -136,7 +139,7 @@ const ListEvaluate = () => {
           Quản lý đánh giá
         </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-        <TableSearch onSearch={handleSearch} />
+          <TableSearch onSearch={handleSearch} />
           
           <select
             className="p-2 border rounded-xl border-primary"
@@ -157,11 +160,16 @@ const ListEvaluate = () => {
         <div className="mt-4 text-center text-red-500">{searchMessage}</div>
       )}
 
-      <div className="overflow-x-auto">
-        <Table columns={columns} data={displayedData} renderRow={renderRow} />
-      </div>
-
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+      {filteredData.length > 0 ? (
+        <>
+          <div className="overflow-x-auto">
+            <Table columns={columns} data={displayedData} renderRow={renderRow} />
+          </div>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        </>
+      ) : (
+        <div className="mt-4 text-center text-slate-500">Không tìm thấy đánh giá nào phù hợp.</div>
+      )}
 
       {showModal && (
         <ModalDelete

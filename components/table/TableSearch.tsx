@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 
 type TableSearchProps = {
@@ -5,28 +6,30 @@ type TableSearchProps = {
 };
 
 const TableSearch: React.FC<TableSearchProps> = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleSearch = () => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     onSearch(searchTerm);
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
       <input
         type="text"
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="p-2 border rounded-md"
-        placeholder="Tìm kiếm tên người dùng"
+        onChange={handleSearchChange}
+        placeholder="Search..."
+        className="p-2 border rounded-xl border-primary"
       />
-      <button
-        onClick={handleSearch}
-        className="px-4 py-2 bg-primary text-white rounded-md"
-      >
-        Tìm kiếm
+      <button type="submit" className="btn-primary">
+        Search
       </button>
-    </div>
+    </form>
   );
 };
 
