@@ -10,7 +10,6 @@ import { UserFormValidation, UserLogin } from "@/lib/validation";
 import "react-phone-number-input/style.css";
 import CustomFormField, { FormFieldType } from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
-import { createUser } from "@/lib/action/patient.actions";
 import { toast } from "sonner";
 import { PasswordInput } from "../PasswordInput";
 import { Label } from "../ui/label";
