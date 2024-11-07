@@ -1,3 +1,4 @@
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ProfileRespository } from '@/repositories/profile'; 
 import { Profile } from '@/types/interface';
@@ -9,13 +10,15 @@ export async function POST(req: Request, context: any) {
     if(!userId){
       return unauthorizedResponse("UNAUTHENTICATED")
     }
+
     const profileId = profile?.id;
     const newProfile = await ProfileRespository.createProfile({
         profileData: profile,
-        userId
+        userId,
       });
-    
+
       if (newProfile) {
+
         return successResponse("CREATE PROFILE SUCCESSFULLY")
       } else{
         return badRequestResponse("FAIL TO CREATE PROFILE")
@@ -70,7 +73,3 @@ export async function DELETE(req: Request, context: any) {
   }
 }
 
-    
-    
-
-  
