@@ -50,7 +50,7 @@ const ListFaculty = () => {
   useEffect(() => {
     const fetchFaculties = async () => {
       setLoading(true);
-      const response = await fetch("/api/faculty");
+      const response = await fetch(`api/faculty`);
       
       if (response.ok) {
         const data = await response.json();
@@ -103,7 +103,7 @@ const ListFaculty = () => {
   const confirmDelete = async () => {
     if (!facultyToDelete) return;
 
-    const response = await fetch("/api/faculty", {
+    const response = await fetch(`/api/faculty`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ faculty: facultyToDelete }),

@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
@@ -33,7 +34,7 @@ model Profile {
   identificationNumber    String
   identificationDocumentUrl String
   userId                  String   @db.Uuid
-  user                    User @relation(fields: [userId], references: [id])
+  user                    User @relation(fields: [userId], references: [id],onDelete: Cascade)
   appointments            Appointment[]
 }
 
@@ -42,19 +43,25 @@ model Faculty {
   name String
   description String
   doctors Doctor[]
+  services Service[]
 }
 model Service{
   id String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name String 
   price Float
   description String
+  facultyId String  @db.Uuid
+  faculty Faculty @relation(fields: [facultyId], references: [id],onDelete: Cascade)
   appointment Appointment[]
 }
 model Doctor {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String
   academicTitle String
-  faculty       Faculty @relation(fields: [facultyId], references: [id])
+  image         String
+  isActive      Boolean
+  description   String
+  faculty       Faculty @relation(fields: [facultyId], references: [id],onDelete: Cascade)
   facultyId     String @db.Uuid
   comments      Comment[]
   doctorSchedule DoctorSchedule[]
@@ -67,7 +74,7 @@ model Comment {
   rating    Int       // Giá trị rating (1-5 chẳng hạn)
   createdAt DateTime  @default(now())
   doctorId  String     @db.Uuid
-  doctor    Doctor     @relation(fields: [doctorId], references: [id])
+  doctor    Doctor     @relation(fields: [doctorId], references: [id], onDelete: Cascade)
   userId    String     @db.Uuid
   user      User       @relation(fields: [userId], references: [id])
 }
@@ -98,7 +105,7 @@ model Bill {
   note            String?
   status          BillStatus @default(PENDING)
   user            User @relation(fields: [userId], references: [id])
-  appointment     Appointment @relation(fields: [appointmentId], references: [id])
+  appointment     Appointment @relation(fields: [appointmentId], references: [id],onDelete: Cascade)
   userId       	  String     @db.Uuid
   appointmentId   String @unique @db.Uuid
 }
@@ -110,9 +117,8 @@ model StripeCustomer{
 }
 model Schedule {
   id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  date        DateTime
+  date        String
   timeSlot    String     
-  isAvailable Boolean      
   doctorSchedule DoctorSchedule[]  
 }
 
@@ -123,7 +129,7 @@ model DoctorSchedule{
   scheduleId String @db.Uuid
   schedule Schedule @relation(fields: [scheduleId], references: [id])
   appointment Appointment?
-  @@unique([doctorId, scheduleId])
+  isAvailable Boolean   
 }
 
 enum BillStatus {

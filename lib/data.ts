@@ -1,31 +1,3 @@
-export const facultyData = [
-  { id: 1, name: "Tim mạch", description: "Chuyên khoa về tim và hệ tuần hoàn." },
-  { id: 2, name: "Thần kinh", description: "Tập trung vào các rối loạn của hệ thần kinh." },
-  { id: 3, name: "Chấn thương chỉnh hình", description: "Điều trị các vấn đề về hệ cơ xương." },
-  { id: 4, name: "Da liễu", description: "Chuyên khoa về các bệnh lý liên quan đến da." },
-  { id: 5, name: "Nhi khoa", description: "Chuyên về chăm sóc sức khỏe cho trẻ em." },
-  { id: 6, name: "Nội tiết", description: "Chuyên khoa về hormone và các rối loạn nội tiết." },
-  { id: 7, name: "Hô hấp", description: "Chuyên khoa điều trị các bệnh về phổi và hô hấp." },
-  { id: 8, name: "Tâm thần", description: "Chăm sóc sức khỏe tâm thần và các rối loạn tâm lý." },
-  { id: 9, name: "Tiêu hóa", description: "Điều trị các vấn đề liên quan đến hệ tiêu hóa." },
-  { id: 10, name: "Phụ khoa", description: "Chuyên khoa về sức khỏe phụ nữ và các vấn đề sinh sản." },
-  { id: 11, name: "Mắt", description: "Chăm sóc và điều trị các bệnh về mắt." },
-  { id: 12, name: "Răng hàm mặt", description: "Chuyên về sức khỏe răng miệng và phẫu thuật hàm mặt." },
-  { id: 13, name: "Ngoại khoa", description: "Chuyên về phẫu thuật và điều trị ngoại khoa." },
-  { id: 14, name: "Y học cổ truyền", description: "Chuyên khoa về các phương pháp điều trị cổ truyền." },
-  { id: 15, name: "Xét nghiệm", description: "Phân tích và đánh giá các chỉ số sức khỏe." },
-  { id: 16, name: "Chấn thương", description: "Chuyên khoa về điều trị chấn thương thể chất." },
-  { id: 17, name: "Huyết học", description: "Nghiên cứu và điều trị các bệnh lý về máu." },
-  { id: 18, name: "Tâm lý học", description: "Nghiên cứu và điều trị các vấn đề tâm lý." },
-  { id: 19, name: "Chăm sóc sức khỏe", description: "Chuyên về quản lý sức khỏe tổng quát." },
-  { id: 20, name: "Dinh dưỡng", description: "Chuyên khoa về chế độ ăn uống và dinh dưỡng." },
-];
-export const faculty2 = [
-  { name: "Tim mạch", description: "Chuyên khoa về tim và hệ tuần hoàn."},
-  { name: "Thần kinh", description: "Tập trung vào các rối loại của hệ thần kinh."},
-  { name: "Chấn thương đnh hình", description: "Điều trị các vấn đề về hệ cơ xương."},
-]
-
 export const serviceData = [
   { id: 1, name: "Khám tim mạch", price: 500000, facultyId: 1, description: "Dịch vụ khám và chẩn đoán các vấn đề về tim." },
   { id: 2, name: "Tư vấn thần kinh", price: 450000, facultyId: 2, description: "Chẩn đoán và tư vấn các vấn đề liên quan đến hệ thần kinh." },
@@ -49,49 +21,15 @@ export const serviceData = [
   { id: 20, name: "Tư vấn dinh dưỡng", price: 450000, facultyId: 20, description: "Đánh giá chế độ ăn uống và tư vấn dinh dưỡng." }
 ];
 
-export const doctorData = [
-  { id: 1, name: "Nguyễn Văn A", academicTitle: "Thạc sĩ", facultyId: 1, isActive: true, image: "dt1.jpg", description: "Bác sĩ chuyên về tim mạch." },
-  { id: 2, name: "Trần Thị B", academicTitle: "Tiến sĩ", facultyId: 2, isActive: true, image: "dt1.jpg", description: "Chuyên khoa thần kinh." },
-  { id: 3, name: "Lê Văn C", academicTitle: "Bác sĩ", facultyId: 3, isActive: true, image: "dt1.jpg", description: "Chuyên về chấn thương chỉnh hình." },
-  { id: 4, name: "Phạm Thị D", academicTitle: "Thạc sĩ", facultyId: 4, isActive: true, image: "dt1.jpg", description: "Bác sĩ da liễu." },
-  { id: 5, name: "Nguyễn Văn E", academicTitle: "Bác sĩ", facultyId: 5, isActive: true, image: "dt1.jpg", description: "Chuyên khoa nhi." },
-  { id: 6, name: "Trần Văn F", academicTitle: "Tiến sĩ", facultyId: 6, isActive: true, image: "dt1.jpg", description: "Chuyên về nội tiết." },
-  { id: 7, name: "Lê Thị G", academicTitle: "Bác sĩ", facultyId: 7, isActive: true, image: "dt1.jpg", description: "Chuyên về hô hấp." },
-  { id: 8, name: "Phạm Văn H", academicTitle: "Thạc sĩ", facultyId: 8, isActive: true, image: "dt1.jpg", description: "Bác sĩ tâm thần." },
-  { id: 9, name: "Nguyễn Thị I", academicTitle: "Tiến sĩ", facultyId: 9, isActive: true, image: "dt1.jpg", description: "Chuyên khoa tiêu hóa." },
-  { id: 10, name: "Trần Văn J", academicTitle: "Bác sĩ", facultyId: 10, isActive: true, image: "dt1.jpg", description: "Chuyên về phụ khoa." },
-  { id: 11, name: "Lê Văn K", academicTitle: "Thạc sĩ", facultyId: 11, isActive: true, image: "dt1.jpg", description: "Bác sĩ mắt." },
-  { id: 12, name: "Phạm Thị L", academicTitle: "Tiến sĩ", facultyId: 12, isActive: true, image: "dt1.jpg", description: "Chuyên khoa răng hàm mặt." },
-  { id: 13, name: "Nguyễn Văn M", academicTitle: "Bác sĩ", facultyId: 13, isActive: true, image: "dt1.jpg", description: "Chuyên về ngoại khoa." },
-  { id: 14, name: "Trần Thị N", academicTitle: "Thạc sĩ", facultyId: 14, isActive: true, image: "dt1.jpg", description: "Bác sĩ y học cổ truyền." },
-  { id: 15, name: "Lê Văn O", academicTitle: "Tiến sĩ", facultyId: 15, isActive: true, image: "dt1.jpg", description: "Chuyên về xét nghiệm." },
-  { id: 16, name: "Phạm Văn P", academicTitle: "Bác sĩ", facultyId: 16, isActive: true, image: "dt1.jpg", description: "Chuyên khoa chấn thương." },
-  { id: 17, name: "Nguyễn Thị Q", academicTitle: "Thạc sĩ", facultyId: 17, isActive: true, image: "dt1.jpg", description: "Bác sĩ huyết học." },
-  { id: 18, name: "Trần Văn R", academicTitle: "Tiến sĩ", facultyId: 18, isActive: true, image: "dt1.jpg", description: "Chuyên khoa tâm lý học." },
-  { id: 19, name: "Lê Thị S", academicTitle: "Bác sĩ", facultyId: 19, isActive: true, image: "dt1.jpg", description: "Chuyên về chăm sóc sức khỏe." },
-  { id: 20, name: "Phạm Văn T", academicTitle: "Thạc sĩ", facultyId: 20, isActive: true, image: "dt1.jpg", description: "Bác sĩ dinh dưỡng." },
-  { id: 21, name: "Nguyễn Văn U", academicTitle: "Tiến sĩ", facultyId: 1, isActive: true, image: "dt1.jpg", description: "Bác sĩ chuyên về tim mạch." },
-  { id: 22, name: "Trần Thị V", academicTitle: "Thạc sĩ", facultyId: 2, isActive: true, image: "dt1.jpg", description: "Chuyên khoa thần kinh." },
-  { id: 23, name: "Lê Văn W", academicTitle: "Bác sĩ", facultyId: 3, isActive: true, image: "dt1.jpg", description: "Chuyên về chấn thương chỉnh hình." },
-  { id: 24, name: "Phạm Thị X", academicTitle: "Tiến sĩ", facultyId: 4, isActive: true, image: "dt1.jpg", description: "Bác sĩ da liễu." },
-  { id: 25, name: "Nguyễn Văn Y", academicTitle: "Bác sĩ", facultyId: 5, isActive: true, image: "dt1.jpg", description: "Chuyên khoa nhi." },
-  { id: 26, name: "Trần Văn Z", academicTitle: "Thạc sĩ", facultyId: 6, isActive: true, image: "dt1.jpg", description: "Chuyên về nội tiết." },
-  { id: 27, name: "Lê Thị Duyên", academicTitle: "Tiến sĩ", facultyId: 7, isActive: true, image: "dt1.jpg", description: "Chuyên về hô hấp." },
-  { id: 28, name: "Phạm Văn Bình", academicTitle: "Bác sĩ", facultyId: 8, isActive: true, image: "dt1.jpg", description: "Bác sĩ tâm thần." },
-  { id: 29, name: "Nguyễn Thị Huyền", academicTitle: "Thạc sĩ", facultyId: 9, isActive: true, image: "dt1.jpg", description: "Chuyên khoa tiêu hóa." },
-  { id: 30, name: "Trần Văn Đức", academicTitle: "Tiến sĩ", facultyId: 10, isActive: true, image: "dt1.jpg", description: "Chuyên về phụ khoa." },
-];
-
-
 export const academicTitles = [
-  { id: 1, name: "Giáo sư" },
-  { id: 2, name: "Phó Giáo sư" },
-  { id: 3, name: "Tiến sĩ" },
-  { id: 4, name: "Thạc sĩ" },
-  { id: 5, name: "Bác sĩ Chuyên khoa I" },
-  { id: 6, name: "Bác sĩ Chuyên khoa II" },
-  { id: 7, name: "Bác sĩ Đa khoa" },
-  { id: 8, name: "Bác sĩ Nội trú" },
+  { id: "acd01", name: "Giáo sư" },
+  { id: "acd02", name: "Phó Giáo sư" },
+  { id: "acd03", name: "Tiến sĩ" },
+  { id: "acd04", name: "Thạc sĩ" },
+  { id: "acd05", name: "Bác sĩ Chuyên khoa I" },
+  { id: "acd06", name: "Bác sĩ Chuyên khoa II" },
+  { id: "acd07", name: "Bác sĩ Đa khoa" },
+  { id: "acd08", name: "Bác sĩ Nội trú" },
 ];
 
 export const bills = [

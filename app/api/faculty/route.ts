@@ -20,7 +20,7 @@ export async function GET(req: Request) {
     if (!faculties) {
         return notFoundResponse("NOT FOUND FACULTIES");
     }
-    return successResponse(faculties);
+    return successResponse(faculties || []);
 }
 
 // Xử lý POST request - Tạo chuyên khoa mới

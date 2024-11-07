@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import ModalDelete from "@/components/ModalDelete";
 import Pagination from "@/components/Pagination";
@@ -7,27 +7,30 @@ import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import {
   ArrowDownNarrowWide,
+  CalendarRange,
   Pencil,
   SlidersHorizontal,
   Trash2,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
-import { facultyData } from "@/lib/data";
-import { doctorData as initialDoctorData } from "@/lib/data";
+import { academicTitles } from "@/lib/data";
 
 type Doctor = {
-  id: number;
+  id: string;
   name: string;
   academicTitle: string;
-  facultyId: number;
-  isActive: boolean;
   image: string;
   description: string;
+  facultyId: string;
+};
+
+type Faculty = {
+  id: string;
+  name: string;
 };
 
 const columns = [
-  { header: "ID", accessor: "id", className: "hidden lg:table-cell " },
+  { header: "STT", accessor: "index", className: "w-[5%]" },
   { header: "Bác sĩ", accessor: "doctor" },
   { header: "Học hàm/học vị", accessor: "academicTitle" },
   { header: "Chuyên khoa", accessor: "facultyName" },
@@ -40,18 +43,60 @@ const columns = [
 ];
 
 const ListDoctor = () => {
-  const [doctorData, setDoctorData] = useState<Doctor[]>(initialDoctorData);
+  const [doctorData, setDoctorData] = useState<Doctor[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const [showModal, setShowModal] = useState(false);
   const [doctorToDelete, setDoctorToDelete] = useState<Doctor | null>(null);
   const [message, setMessage] = useState("");
   const [fadeOut, setFadeOut] = useState(false);
-  const [selectedFaculties, setSelectedFaculties] = useState<number[]>([]);
+  const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
   const [showFilter, setShowFilter] = useState(false);
   const [showSort, setShowSort] = useState(false);
   const [sortOption, setSortOption] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [facultyData, setFacultyData] = useState<Faculty[]>([]);
+
+  useEffect(() => {
+    const fetchDoctorData = async () => {
+      setLoading(true);
+      const response = await fetch(`/api/doctor`);
+
+      if (response.ok) {
+        const data = await response.json();
+        setDoctorData(data);
+      } else {
+        setError("Failed to fetch faculties");
+      }
+      setLoading(false);
+    };
+
+    const fetchFacultyData = async () => {
+      const response = await fetch(`/api/faculty`);
+      if (response.ok) {
+        const data = await response.json();
+        setFacultyData(data);
+      } else {
+        setError("Failed to fetch faculties");
+      }
+    };
+
+    fetchDoctorData();
+    fetchFacultyData();
+  }, []);
+
+  const getFacultyName = (facultyId: string) => {
+    const faculty = facultyData.find((fac) => fac.id === facultyId);
+    return faculty ? faculty.name : "Unknown Faculty";
+  };
+
+  //function lấy tên academic title
+  const getAcademicTitleName = (titleId: string) => {
+    const title = academicTitles.find((title) => title.id === titleId);
+    return title ? title.name : titleId;
+  };
 
   const showMessage = (msg: string) => {
     setMessage(msg);
@@ -61,19 +106,41 @@ const ListDoctor = () => {
     }, 2000);
   };
 
-  const confirmDelete = () => {
-    if (doctorToDelete) {
-      const updatedDoctorData = doctorData.filter(
-        (doctor) => doctor.id !== doctorToDelete.id
-      );
-      setDoctorData(updatedDoctorData);
+  const confirmDelete = async () => {
+    if (!doctorToDelete) return;
+
+    try {
+      const response = await fetch(`/api/doctor`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ doctor: doctorToDelete }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Cập nhật state sau khi xóa thành công
+        setDoctorData((prevData) =>
+          prevData.filter((doctor) => doctor.id !== doctorToDelete.id)
+        );
+        showMessage(`Bác sĩ ${doctorToDelete.name} đã xóa thành công!`);
+      } else {
+        // Hiển thị thông báo lỗi cụ thể từ server
+        showMessage(data.message || "Không thể xóa bác sĩ!");
+      }
+    } catch (error) {
+      console.error("Error deleting doctor:", error);
+      showMessage("Đã xảy ra lỗi khi xóa bác sĩ!");
+    } finally {
+      // Reset trạng thái
       setDoctorToDelete(null);
       setShowModal(false);
-      showMessage(`Bác sĩ ${doctorToDelete.name} đã xóa thành công!`);
     }
   };
 
-  const handleFacultyFilterChange = (facultyId: number) => {
+  const handleFacultyFilterChange = (facultyId: string) => {
     if (selectedFaculties.includes(facultyId)) {
       setSelectedFaculties(selectedFaculties.filter((id) => id !== facultyId));
     } else {
@@ -99,11 +166,6 @@ const ListDoctor = () => {
     currentPage * itemsPerPage
   );
 
-  const getFacultyName = (facultyId: number) => {
-    const faculty = facultyData.find((f) => f.id === facultyId);
-    return faculty ? faculty.name : "NULL";
-  };
-
   // Xử lý sắp xếp
   const handleSortOptionChange = (option: string) => {
     setSortOption(option);
@@ -127,46 +189,52 @@ const ListDoctor = () => {
       sortedData = sortedData.sort((a, b) => sortByName(a, b));
     } else if (option === "Z-A") {
       sortedData = sortedData.sort((a, b) => sortByName(b, a));
-    } else if (option === "ID") {
-      sortedData = sortedData.sort((a, b) => a.id - b.id);
     }
 
     setDoctorData(sortedData);
   };
 
-  const renderRow = (item: Doctor) => (
+  // Tính toán số thứ tự dựa trên trang hiện tại
+  const getSequentialNumber = (index: number) => {
+    return (currentPage - 1) * itemsPerPage + index + 1;
+  };
+
+  // Thêm dữ liệu STT vào displayedData
+  const dataWithIndex = displayedData.map((item, index) => ({
+    ...item,
+    index: getSequentialNumber(index),
+  }));
+
+  const renderRow = (item: Doctor & { index: number }) => (
     <tr
       key={item.id}
       className="h-15 border-b border-slate-200 even:bg-slate-50 text-sm hover:bg-blue-50"
     >
-      <td>
-        <div className="flex flex-col items-center p-2">
-          <h3 className="font-semi">{item.id}</h3>
-        </div>
+      <td className="hidden lg:table-cell text-center">{item.index}</td>
+      <td className="text-center">{item.name}</td>
+      <td className="text-center">
+        {getAcademicTitleName(item.academicTitle)}
       </td>
-      <td className="hidden md:table-cell text-center">{item.name}</td>
-      <td className="hidden md:table-cell text-center">{item.academicTitle}</td>
-      <td className="hidden md:table-cell text-center">
-        {getFacultyName(item.facultyId)}
-      </td>
-      <td className="hidden md:table-cell text-center">
-        <Image
+      <td className="text-center">{getFacultyName(item.facultyId)}</td>
+      <td className="text-center">
+        <img
           src={`/assets/doctor/${item.image}`}
           alt={item.name}
           width={100}
           height={100}
-          className="rounded"
+          className="rounded mx-auto"
         />
       </td>
+
       <td className="hidden md:table-cell text-center">{item.description}</td>
       <td>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 justify-center">
           <Link href={`/test-doctor/${item.id}/schedule`}>
             <Button className="w-auto h-10 flex items-center justify-center rounded-full bg-green-300">
-              <span className="text-white font-bold">Xem lịch</span>
+              <CalendarRange size={20} strokeWidth={1.75} color="white" />
             </Button>
           </Link>
-          <Link href={`/test-doctor/${item.id}/edit-doctor`}>
+          <Link href={`/test-doctor/edit-doctor?id=${item.id}`}>
             <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-blue-300">
               <Pencil size={28} strokeWidth={3} color="white" />
             </Button>
@@ -266,17 +334,6 @@ const ListDoctor = () => {
               <input
                 type="radio"
                 name="sortOption"
-                value="ID"
-                checked={sortOption === "ID"}
-                onChange={() => handleSortOptionChange("ID")}
-                className="mr-2"
-              />
-              ID
-            </label>
-            <label className="flex items-center mt-2">
-              <input
-                type="radio"
-                name="sortOption"
                 value="A-Z"
                 checked={sortOption === "A-Z"}
                 onChange={() => handleSortOptionChange("A-Z")}
@@ -300,7 +357,7 @@ const ListDoctor = () => {
       )}
       {/* LIST */}
       <div className="overflow-x-auto">
-        <Table columns={columns} data={displayedData} renderRow={renderRow} />
+        <Table columns={columns} data={dataWithIndex} renderRow={renderRow} />
       </div>
 
       {/* Pagination */}
