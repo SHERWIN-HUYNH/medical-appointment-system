@@ -40,7 +40,6 @@ export async function PUT(req: Request, context: any)  {
     }
       
 }
-    
 export async function GET(request: Request, context: { params: { userId: string } }) {
   const { userId } = context.params;
   try {

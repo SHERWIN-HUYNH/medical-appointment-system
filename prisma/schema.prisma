@@ -57,6 +57,9 @@ model Doctor {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String
   academicTitle String
+  image         String
+  isActive      Boolean
+  description   String
   faculty       Faculty @relation(fields: [facultyId], references: [id])
   facultyId     String @db.Uuid
   comments      Comment[]
@@ -113,9 +116,8 @@ model StripeCustomer{
 }
 model Schedule {
   id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  date        DateTime
+  date        String
   timeSlot    String     
-  isAvailable Boolean      
   doctorSchedule DoctorSchedule[]  
 }
 
@@ -126,7 +128,7 @@ model DoctorSchedule{
   scheduleId String @db.Uuid
   schedule Schedule @relation(fields: [scheduleId], references: [id])
   appointment Appointment?
-  @@unique([doctorId, scheduleId])
+  isAvailable Boolean   
 }
 
 enum BillStatus {

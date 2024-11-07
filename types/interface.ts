@@ -45,3 +45,10 @@ export interface Service{
     facultyId: string;
     description: string;
 }
+export interface Schedule{
+  id:string,
+  date: string;
+  timeSlot: string;
+  isAvailable: boolean;
+  doctorScheduleId: string;
+}

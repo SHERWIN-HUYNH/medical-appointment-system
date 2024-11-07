@@ -1,5 +1,5 @@
 "use client";
-import Calendar from "@/components/Calender";
+import Calendar from "@/components/DoctorSchedule";
 import DefaultLayout from "@/components/Layouts/defaultLayout";
 import { Metadata } from "next";
 import FullCalendar from '@fullcalendar/react'
@@ -14,8 +14,9 @@ import clsx from "clsx";
 import { log } from "console";
 import { RiH1 } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
-import Footer from "../homepage/Footer";
-import Header from "../homepage/Header";
+import Header from "@/app/homepage/Header";
+import Footer from "@/app/homepage/Footer";
+
 
 interface Event {
   title: string;

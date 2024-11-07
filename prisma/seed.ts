@@ -5,13 +5,12 @@ import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-  const appointment = await prisma.appointment.findMany({
+  const doctor = await prisma.doctor.findFirst({
     where:{
-      serviceId:"e914e7ab-e249-476f-b524-6ee51c219f79",
-      status:"PENDING"
+      id:'fcf7baa3-f8bc-4615-b03c-1ef507234105'
     }
   })
- console.log('APPOINTMENT',appointment)
+  console.log('DATA DOCTOR',doctor)
 }
 
 // Execute the main function and catch any errors
