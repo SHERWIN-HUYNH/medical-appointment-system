@@ -419,13 +419,20 @@
 }
 
 .fc{
-  @apply min-h-[800px] w-[825px] !important;
+  @apply min-h-[800px] w-[900px] !important;
 }
 .fc .fc-scrollgrid-sync-table {
   @apply overflow-auto !important;
 }
 .fc .fc-scrollgrid {
   @apply h-[700px];
+}
+.fc .fc-day-disabled{
+  background-color: none !important;
+}
+.fc-daygrid-day.fc-day-past{
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .custom-scrollbar {

@@ -1,6 +1,7 @@
 import { badRequestResponse, notFoundResponse, successResponse } from "@/helpers/response";
 import prisma from "@/lib/prisma";
 import { FacultyRepository } from "@/repositories/faculty";
+import { ServiceRepository } from "@/repositories/service";
 import { Faculty } from "@/types/interface";
 
 // Xử lý GET request - Lấy một hoặc tất cả chuyên khoa
@@ -25,18 +26,23 @@ export async function GET(req: Request) {
 
 // Xử lý POST request - Tạo chuyên khoa mới
 export async function POST(req: Request) {
-    const faculty: Faculty = await req.json();
+    const faculty = await req.json(); 
+
     if (!faculty) {
-        return badRequestResponse("MISSING FACULTY");
+        return badRequestResponse("MISSING SERVICE DATA");
     }
-    const newFaculty = await FacultyRepository.createFaculty(faculty);
-    if (!newFaculty) {
-        return badRequestResponse("FAIL TO CREATE FACULTY");
+
+    const newService = await FacultyRepository.createFaculty(faculty);
+
+    if (!newService) {
+        return badRequestResponse("FAIL TO CREATE SERVICE");
+
     }
-    return successResponse(newFaculty);
+
+    return successResponse(newService);
 }
 
-// Xử lý PUT request - Cập nhật chuyên khoa
+
 export async function PUT(req: Request) {
     const { faculty } = await req.json();
     const facultyData = await FacultyRepository.getFacultyById(faculty.id);
