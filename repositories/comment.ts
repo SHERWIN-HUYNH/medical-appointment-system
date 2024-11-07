@@ -1,34 +1,44 @@
 import { PrismaClient } from '@prisma/client'
+import { Comment } from '@/types/interface';
 
 const prisma = new PrismaClient();
 
-export  class CommentRepository
+export  class CommentRespository
 {
     static async getListComments(){
-        try {
-            const comments = await prisma.comment.findMany({
-            });
-            return comments; 
-          } catch (error) {
-            console.error("Lỗi khi truy xuất hồ sơ bệnh nhân: ", error);
-            throw error;
-          } finally {
-            await prisma.$disconnect(); 
-          }
+      try {
+        const comments = await prisma.comment.findMany({
+            include: {
+                doctor: {
+                    select: { name: true }, 
+                },
+                user: {
+                    select: { name: true }, 
+                },
+            },
+        });
+        const formattedComments = comments.map((comment) => ({
+            ...comment,
+            doctorName: comment.doctor?.name || "Không xác định", 
+            userName: comment.user?.name || "Không xác định",    
+        }));
+
+        return formattedComments;
+    } catch (error) {
+        console.error("Lỗi khi truy xuất đánh giá của bệnh nhân: ", error);
+        throw error;
+    } finally {
+        await prisma.$disconnect();
     }
-    static async  getCommentsByUserName(userName: string) {
+    }
+    static async  getCommentsByUserDoctor(name: string) {
         try {
           const comments = await prisma.comment.findMany({
-            where: {user: {
-                name: userName,
+            where: {doctor: {
+                name: name,
               },
             },
             include: {
-              user: {
-                select: {
-                  name: true,
-                },
-              },
               doctor: {
                 select: {
                   name: true,
@@ -38,16 +48,30 @@ export  class CommentRepository
           });
           return comments;
         } catch (error) {
-          console.error('Error fetching comments:', error);
+          console.error('Lỗi truy xuất đánh gia theo tên bác sĩ', error);
           throw error;
         }
       }
-
-      async  deleteCommentById(id: string) {
+      static async getCommentById(id:string){
+        try {
+          const comment = await prisma.comment.findUnique({ 
+            where: {
+              id: id, 
+            },
+          });
+          return comment; 
+        } catch (error) {
+          console.error("Lỗi khi truy xuất đánh giá: ", error);
+          throw error;
+        } finally {
+          await prisma.$disconnect(); 
+        }
+      }
+      static async  deleteComment({ commentData }: { commentData: Comment }) {
         try {
           const deletedComment = await prisma.comment.delete({
             where: {
-              id: id,
+              id: commentData.id,
             },
           });
           return deletedComment;

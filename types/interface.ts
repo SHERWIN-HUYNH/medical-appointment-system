@@ -3,15 +3,15 @@ declare type Status = "PENDING" | "SCHEDULED" | "CANCELLED";
 export interface Profile {
     id: string; 
     name: string;
-    birthday: Date; // Hoặc string tùy theo định dạng bạn sử dụng
+    birthday: Date; 
     gender: Gender;
     email: string;
     phone: string;
     allergies ?:string;
     identificationType: string;
     identificationNumber: string;
-    identificationDocumentUrl: string; // Hoặc URL kiểu string
-    pastMedicalHistory : string; // Hoặc một kiểu dữ liệu khác nếu cần
+    identificationDocumentUrl: string; 
+    pastMedicalHistory : string; 
   }
   export interface UserRole {
     id: string;
@@ -51,4 +51,13 @@ export interface Schedule{
   timeSlot: string;
   isAvailable: boolean;
   doctorScheduleId: string;
+}
+
+export interface Comment{
+  id:string,
+  date: string;
+  content: string;
+  rating: number;
+  doctorId: string;
+  userId: string;
 }
