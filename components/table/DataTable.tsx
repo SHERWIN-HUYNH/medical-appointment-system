@@ -6,10 +6,14 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
+  SortingState,
+  ColumnFiltersState,
+  getSortedRowModel,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +25,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { decryptKey } from "@/lib/utils";
+import React from "react";
+import { Input } from "../ui/input";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { MoveLeft, MoveRight } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -31,28 +39,56 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const encryptedKey =
-    typeof window !== "undefined"
-      ? window.localStorage.getItem("accessKey")
-      : null;
-
-  useEffect(() => {
-    const accessKey = encryptedKey && decryptKey(encryptedKey);
-
-    if (accessKey !== process.env.NEXT_PUBLIC_ADMIN_PASSKEY!.toString()) {
-      redirect("/");
-    }
-  }, [encryptedKey]);
-
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
+ 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+    },
   });
-
   return (
     <div className="data-table">
+      <div className="table-header flex items-center justify-between mb-3">
+        <div className="">
+        <Input
+          placeholder="Tìm theo tên bệnh nhân..."
+          value={table.getColumn("patient")?.getFilterValue() as string}
+          onChange={(event) =>
+            table.getColumn("patient")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm rounded-2xl"
+        />
+        </div>
+        <div>
+          <label htmlFor="status-filter" className="mr-2">Status:</label>
+          <select
+            id="status-filter"
+            value={(table.getColumn("status")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("status")?.setFilterValue(event.target.value)
+            }
+            className="p-2 border rounded-2xl"
+          >
+            <option value="">All</option>
+            <option value="PENDING">Pending</option>
+            <option value="SCHEDULED">Scheduled</option>
+            <option value="CANCELLED">Cancelled</option>
+          </select>
+        </div>
+       
+      </div>
+      
       <Table className="shad-table">
         <TableHeader className=" bg-dark-200 ">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -104,12 +140,7 @@ export function DataTable<TData, TValue>({
           disabled={!table.getCanPreviousPage()}
           className="shad-gray-btn"
         >
-          <Image
-            src="/assets/icons/arrow.svg"
-            width={24}
-            height={24}
-            alt="arrow"
-          />
+          <MoveLeft />
         </Button>
         <Button
           variant="outline"
@@ -118,13 +149,8 @@ export function DataTable<TData, TValue>({
           disabled={!table.getCanNextPage()}
           className="shad-gray-btn"
         >
-          <Image
-            src="/assets/icons/arrow.svg"
-            width={24}
-            height={24}
-            alt="arrow "
-            className="rotate-180"
-          />
+        
+             <MoveRight />
         </Button>
       </div>
     </div>

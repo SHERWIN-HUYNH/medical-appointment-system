@@ -20,7 +20,7 @@ const Table = ({
           ))}
         </tr>
       </thead>
-      <tbody>{data.map((item) => renderRow(item))}</tbody>
+      <tbody className="text-center">{data.map((item) => renderRow(item))}</tbody>
     </table>
   );
 };

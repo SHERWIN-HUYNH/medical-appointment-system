@@ -19,6 +19,24 @@ export class AppointmentRepository {
             await prisma.$disconnect();
         }
     }
+    static async getAppointmentByServiceId(serviceId: string) {
+        try {
+            const appointments = await prisma.appointment.findMany({
+                where: {
+                    status: "PENDING",
+                    Service:{
+                        id:serviceId
+                    }
+                },
+            });
+            return appointments;
+        } catch (error) {
+            console.error('Error retrieving appointments:', error);
+            throw error;
+        } finally {
+            await prisma.$disconnect();
+        }
+    }
 
     static async createAppointment(appointmentData: Appointment) {
         try {
@@ -33,4 +51,6 @@ export class AppointmentRepository {
             await prisma.$disconnect();
         }
     }
+
+    
 }

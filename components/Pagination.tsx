@@ -25,8 +25,8 @@ const Pagination = ({
         {[...Array(totalPages)].map((_, index) => (
           <Button
             key={index + 1}
-            className={`px-2 h-4 rounded-sm ${
-              currentPage === index + 1 ? "bg-blue-300" : "bg-slate-50"
+            className={`px-4 py-3 h-4 rounded-sm ${
+              currentPage === index + 1 ? " bg-blue-200" : "bg-slate-50"
             }`}
             onClick={() => onPageChange(index + 1)}
           >

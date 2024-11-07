@@ -1,150 +1,75 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { ProfileRespository } from "@/repositories/profile";
-import { Profile } from "@/types/interface";
 
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { ProfileRespository } from '@/repositories/profile'; 
+import { Profile } from '@/types/interface';
+import { badRequestResponse, internalServerErrorResponse, notFoundResponse, successResponse, unauthorizedResponse } from '@/helpers/response';
+import internal from 'stream';
 export async function POST(req: Request, context: any) {
-  try {
-    const { action, profile }: { action: string; profile: Profile } =
-      await req.json();
-    const { userId } = context.params;
-
-    if (!userId) {
-      return new Response(
-        JSON.stringify({
-          message: "NOT AUTHENTICATED",
-          status: 401,
-        }),
-        { status: 401 }
-      );
+    const {profile} : { profile: Profile} = await req.json();
+    const {userId} = context.params
+    if(!userId){
+      return unauthorizedResponse("UNAUTHENTICATED")
     }
 
     const profileId = profile?.id;
-
-    // Handle create profile
-    if (action === "create") {
-      const newProfile = await ProfileRespository.createProfile({
+    const newProfile = await ProfileRespository.createProfile({
         profileData: profile,
         userId,
       });
 
       if (newProfile) {
-        return new Response(
-          JSON.stringify({
-            message: "CREATE PROFILE SUCCESSFULLY",
-            status: 200,
-          }),
-          { status: 200 }
-        );
-      } else {
-        return new Response(
-          JSON.stringify({
-            message: "CREATE PROFILE FAILED",
-            status: 400,
-          }),
-          { status: 400 }
-        );
+
+        return successResponse("CREATE PROFILE SUCCESSFULLY")
+      } else{
+        return badRequestResponse("FAIL TO CREATE PROFILE")
       }
     }
-    // if (action == "update") {
-
-    //   const checkprofile = await ProfileRespository.getListProfileByUserId(profileId);
-    //   if(!checkprofile){
-    //     return new Response(
-    //       JSON.stringify({
-    //         message: "NOT FOUND PROFILE",
-    //         status: 404,
-    //       })
-    //     )
-    //   }
-
-    //   const updateProfile = await ProfileRespository.updateProfile({
-    //     profileData: profile,
-    //     userId: userId
-    // })
-
-    // if (updateProfile) {
-    //   return new Response(JSON.stringify({
-    //     message: "UPDATE PROFILE SUCCESSFULLY",
-    //     status: 200,
-    //   }))
-    //   } else{
-    //     return new Response(JSON.stringify({
-    //       message: "UPDATE PROFILE FAILED",
-    //       status: 400,
-    //     }))
-    //   }
-    // }
-
-    // return new Response(JSON.stringify({
-    //   message: "NOT FOUND ACTION",
-    //   status: 404,
-    // }))
-
-    // Handle findMany
-    if (action === "findMany") {
-      const profiles = await ProfileRespository.getListProfileByUserId(userId);
-
-      if (!profiles || profiles.length === 0) {
-        return new Response(
-          JSON.stringify({
-            message: "NOT FOUND PROFILE",
-            status: 404,
-          }),
-          { status: 404 }
-        );
-      }
-
-      return new Response(
-        JSON.stringify({
-          message: "GET PROFILE SUCCESSFULLY",
-          status: 200,
-          profiles,
-        }),
-        { status: 200 }
-      );
+export async function PUT(req: Request, context: any)  {
+  const {profile} : { profile: Profile} = await req.json();
+  const {userId} = context.params
+    const checkprofile = await ProfileRespository.getListProfileByUserId(profile.id);
+    if(!checkprofile){
+      return notFoundResponse("NOT FOUND PROFILE")
     }
+    const updateProfile = await ProfileRespository.updateProfile({
+      profileData: profile,
+      userId: userId
+  })
 
-    // Handle delete profile
-    if (action === "delete") {
-      const checkProfile = await ProfileRespository.getProfileById(profileId);
-
-      if (!checkProfile) {
-        return new Response(
-          JSON.stringify({
-            message: "NOT FOUND PROFILE",
-            status: 404,
-          }),
-          { status: 404 }
-        );
-      }
-
-      await ProfileRespository.deleteProfile({ profileData: profile });
-      return new Response(
-        JSON.stringify({
-          message: "Profile deleted successfully",
-          status: 200,
-        }),
-        { status: 200 }
-      );
+  if (updateProfile) {
+    return successResponse("UPDATE PROFILE SUCCESSFULLY")
+    } else{
+      return badRequestResponse("FAIL TO UPDATE PROFILE")
     }
-
-    // Handle unknown actions
-    return new Response(
-      JSON.stringify({
-        message: "NOT FOUND ACTION",
-        status: 400,
-      }),
-      { status: 400 }
-    );
+      
+}
+export async function GET(request: Request, context: { params: { userId: string } }) {
+  const { userId } = context.params;
+  try {
+    const profiles = await ProfileRespository.getListProfileByUserId(userId);
+    if (!profiles || profiles.length === 0) {
+      return notFoundResponse("NOT FOUND PROFILE");
+    }
+    return successResponse(profiles); 
   } catch (error: any) {
-    console.error("Error in profile handling:", error.message || error);
-    return new Response(
-      JSON.stringify({
-        message: "Internal Server Error",
-        status: 500,
-        error: error.message || error,
-      }),
-      { status: 500 }
-    );
+    console.error("Error fetching profiles:", error.message || error);
+    return internalServerErrorResponse("FAIL TO GET LIST PROFILE")
   }
 }
+export async function DELETE(req: Request, context: any) {
+  const { profileValues }: { profileValues: Profile } = await req.json();
+  const { userId } = context.params;
+
+  try {
+    const checkProfile = await ProfileRespository.getProfileById(profileValues.id);
+    if (!checkProfile) {
+      return notFoundResponse("NOT FOUND PROFILE");
+    }
+    await ProfileRespository.deleteProfile({ profileData: profileValues });
+    return successResponse("DELETE PROFILE SUCCESSFULLY");
+  } catch (error: any) {
+    console.error("Error deleting profile:", error.message || error);
+    return internalServerErrorResponse("FAIL TO DELETE PROFILE");
+  }
+}
+

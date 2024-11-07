@@ -215,7 +215,7 @@
   }
 
   .shad-gray-btn {
-    @apply border border-dark-500 cursor-pointer bg-dark-400 text-white !important;
+    @apply border bg-primary cursor-pointer text-white !important;
   }
 
   .shad-input-label {
@@ -251,7 +251,7 @@
   }
 
   .shad-dialog {
-    @apply  border-dark-500 !important;
+    @apply bg-white  border-dark-500 !important;
   }
 
   .shad-dialog button {
@@ -419,11 +419,42 @@
 }
 
 .fc{
-  @apply min-h-[800px] w-[825px] !important;
+  @apply min-h-[800px] w-[900px] !important;
 }
 .fc .fc-scrollgrid-sync-table {
   @apply overflow-auto !important;
 }
 .fc .fc-scrollgrid {
   @apply h-[700px];
+}
+.fc .fc-day-disabled{
+  background-color: none !important;
+}
+.fc-daygrid-day.fc-day-past{
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #CBD5E0 #EDF2F7;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #EDF2F7;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #CBD5E0;
+  border-radius: 4px;
+  border: 2px solid #EDF2F7;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #A0AEC0;
 }

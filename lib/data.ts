@@ -20,6 +20,11 @@ export const facultyData = [
   { id: 19, name: "Chăm sóc sức khỏe", description: "Chuyên về quản lý sức khỏe tổng quát." },
   { id: 20, name: "Dinh dưỡng", description: "Chuyên khoa về chế độ ăn uống và dinh dưỡng." },
 ];
+export const faculty2 = [
+  { name: "Tim mạch", description: "Chuyên khoa về tim và hệ tuần hoàn."},
+  { name: "Thần kinh", description: "Tập trung vào các rối loại của hệ thần kinh."},
+  { name: "Chấn thương đnh hình", description: "Điều trị các vấn đề về hệ cơ xương."},
+]
 
 export const serviceData = [
   { id: 1, name: "Khám tim mạch", price: 500000, facultyId: 1, description: "Dịch vụ khám và chẩn đoán các vấn đề về tim." },
@@ -71,10 +76,10 @@ export const doctorData = [
   { id: 24, name: "Phạm Thị X", academicTitle: "Tiến sĩ", facultyId: 4, isActive: true, image: "dt1.jpg", description: "Bác sĩ da liễu." },
   { id: 25, name: "Nguyễn Văn Y", academicTitle: "Bác sĩ", facultyId: 5, isActive: true, image: "dt1.jpg", description: "Chuyên khoa nhi." },
   { id: 26, name: "Trần Văn Z", academicTitle: "Thạc sĩ", facultyId: 6, isActive: true, image: "dt1.jpg", description: "Chuyên về nội tiết." },
-  { id: 27, name: "Lê Thị AA", academicTitle: "Tiến sĩ", facultyId: 7, isActive: true, image: "dt1.jpg", description: "Chuyên về hô hấp." },
-  { id: 28, name: "Phạm Văn BB", academicTitle: "Bác sĩ", facultyId: 8, isActive: true, image: "dt1.jpg", description: "Bác sĩ tâm thần." },
-  { id: 29, name: "Nguyễn Thị CC", academicTitle: "Thạc sĩ", facultyId: 9, isActive: true, image: "dt1.jpg", description: "Chuyên khoa tiêu hóa." },
-  { id: 30, name: "Trần Văn DD", academicTitle: "Tiến sĩ", facultyId: 10, isActive: true, image: "dt1.jpg", description: "Chuyên về phụ khoa." },
+  { id: 27, name: "Lê Thị Duyên", academicTitle: "Tiến sĩ", facultyId: 7, isActive: true, image: "dt1.jpg", description: "Chuyên về hô hấp." },
+  { id: 28, name: "Phạm Văn Bình", academicTitle: "Bác sĩ", facultyId: 8, isActive: true, image: "dt1.jpg", description: "Bác sĩ tâm thần." },
+  { id: 29, name: "Nguyễn Thị Huyền", academicTitle: "Thạc sĩ", facultyId: 9, isActive: true, image: "dt1.jpg", description: "Chuyên khoa tiêu hóa." },
+  { id: 30, name: "Trần Văn Đức", academicTitle: "Tiến sĩ", facultyId: 10, isActive: true, image: "dt1.jpg", description: "Chuyên về phụ khoa." },
 ];
 
 

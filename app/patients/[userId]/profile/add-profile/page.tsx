@@ -1,7 +1,7 @@
 "use client";
 import Payment from "@/app/payment/page";
 import { Button } from "@/components/ui/button";
-import { Eraser, UserRoundPlus } from "lucide-react";
+import { Eraser, UserRoundPlus, Home, Undo2 } from "lucide-react"; // Thêm Home vào đây
 import React, { useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
@@ -10,6 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import Header from "@/app/homepage/Header";
 import Footer from "@/app/homepage/Footer";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -34,8 +36,8 @@ const Add_Profile = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const { data: session } = useSession();
+  const router = useRouter();
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -64,7 +66,6 @@ const Add_Profile = () => {
     setFormData(initialFormData);
     setSelectedFile(null);
     setErrorMessage("");
-    setSuccessMessage("");
   };
 
   const isValidIdentificationNumber = (identificationNumber: string) => {
@@ -94,8 +95,8 @@ const Add_Profile = () => {
 
     if (response.ok) {
       const data = await response.json(); 
-      setSuccessMessage("Thêm hồ sơ thành công!");
-      handleReset();
+      toast.success("Thêm hồ sơ khám bệnh thành công");
+      router.push(`/patients/${session?.user?.id}/profile`);
     } else {
       const errorText = await response.text(); 
       setErrorMessage(errorText || "Thêm hồ sơ thất bại, vui lòng thử lại.");
@@ -105,7 +106,17 @@ const Add_Profile = () => {
   return (
     <div>
       <Header />
-      <div className="mt-[80px] h-max mb-10">
+      <div className="flex justify-start mt-20 ml-24">
+        <Button
+          className="bg-slate-400 text-white rounded hover:bg-slate-300 px-4 py-2"
+          onClick={() => router.push(`/patients/${session?.user?.id}/profile`)}
+        >
+          <Undo2 className="w-4 h-4 inline mr-1" />
+          Quay lại
+        </Button>
+      </div>
+
+      <div className="mt-[30px] h-max mb-10">
         <div className="w-2/3 mx-auto h-max rounded-lg bg-slate-100 p-6 lg:col-span-2 text-center">
           <h1 className="text-lg mb-4">TẠO HỒ SƠ KHÁM BỆNH</h1>
           <hr className="w-2/3 mx-auto mt-10 border-slate-400 mb-4" />
@@ -122,6 +133,7 @@ const Add_Profile = () => {
             className="mt-4 grid grid-cols-1 gap-1 lg:grid-cols-2 lg:gap-2 text-sm"
             onSubmit={handleSubmit}
           >
+            {/* Phần nhập thông tin bệnh nhân */}
             <div className="rounded-lg bg-slate-100 p-1">
               <Label className="block mb-1 text-left">Họ và tên</Label>
               <Input
@@ -302,11 +314,6 @@ const Add_Profile = () => {
               </Button>
             </div>
           </form>
-          {successMessage && (
-            <div className="mt-50 flex ">
-              <div className="text-green-500 font-bold">{successMessage}</div>
-            </div>
-          )}
         </div>
       </div>
       <Footer />

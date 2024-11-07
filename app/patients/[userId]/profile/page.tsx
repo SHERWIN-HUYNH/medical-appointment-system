@@ -4,21 +4,15 @@ import { useSession } from "next-auth/react";
 import { RiEmpathizeFill, RiMoneyDollarCircleLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { FaBookMedical, FaNewspaper } from "react-icons/fa";
-import {
-  Cake,
-  PencilLine,
-  Smartphone,
-  Trash2,
-  UserRoundPen,
-} from "lucide-react";
+import { Cake, PencilLine, Smartphone, Trash2, UserRoundPen } from "lucide-react";
 import Link from "next/link";
 import Header from "@/app/homepage/Header";
 import MedicalRecord from "./MedicalRecord";
 import Footer from "@/app/homepage/Footer";
 import PaymentHistory from "./PaymentHistory";
-import Modal from "@/components/Modal"; 
 
-
+import Modal from "@/components/Modal";
+import { toast } from "sonner";
 
 interface Profile {
   id: number;
@@ -42,25 +36,28 @@ const Profile = () => {
     const fetchProfiles = async () => {
       try {
         const response = await fetch(`/api/profile/${session?.user?.id}`, {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ action: "findMany" }),
         });
-
         if (!response.ok) {
           throw new Error("Lỗi khi lấy dữ liệu hồ sơ");
         }
-
-        const data = await response.json();
-        setProfiles(data.profiles);
+        const profiles = await response.json();
+        if (Array.isArray(profiles)) {
+          setProfiles(profiles);
+        } else {
+          setProfiles([]); 
+        }     
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu hồ sơ:", error);
       }
     };
 
-    fetchProfiles();
+    if (session?.user?.id) {
+      fetchProfiles();
+    }
   }, [session]);
 
   // Hàm xóa hồ sơ
@@ -69,25 +66,22 @@ const Profile = () => {
 
     try {
       const response = await fetch(`/api/profile/${session?.user?.id}`, {
-        method: "POST",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          action: "delete",
-          profile: { id: profileToDelete },
+          profileValues: { id: profileToDelete },
         }),
+        
       });
 
       if (!response.ok) {
         throw new Error("Lỗi khi xóa hồ sơ");
       }
 
-      setProfiles(profiles.filter((profile) => profile.id !== profileToDelete));
-      setNotification({
-        message: "Hồ sơ đã được xóa thành công.",
-        type: "success",
-      });
+      setProfiles((prevProfiles) => prevProfiles.filter((profile) => profile.id !== profileToDelete));
+      toast.success("Xóa hồ sơ thành công");
     } catch (error) {
       console.error("Lỗi khi xóa hồ sơ:", error);
       setNotification({
@@ -152,77 +146,64 @@ const Profile = () => {
 
                 {profiles.length > 0 ? (
                   profiles.map((profile) => (
+                    
                     <div
                       key={profile.id}
                       className="bg-slate-50 p-4 text-sm rounded-lg shadow-md transition-all ease-in-out duration-100 cursor-pointer mb-4"
                     >
-                      <div className="max-h flex flex-col gap-4 lg:flex-row lg:gap-8">
-                        <div className="max-h rounded-lg bg-gray-200 flex-1">
+                      <div className="flex flex-col gap-4 lg:flex-row lg:gap-8">
+                        <div className="rounded-lg bg-gray-200 flex-1">
                           <p className="text-primary mt-2 text-lg flex items-center gap-2">
                             <UserRoundPen className="w-5 h-5" />
-                            <span className="text-lg uppercase">
-                              {profile.name}
-                            </span>
+                            <span className="text-lg uppercase">{profile.name}</span>
                           </p>
-                          <br />
                           <p className="mt-2 text-lg flex items-center gap-2">
                             <Smartphone className="w-5 h-5" />
-                            <span>Số điện thoại</span>
+                            <span>{profile.phone}</span>
                           </p>
                           <p className="mt-2 text-lg flex items-center gap-2">
                             <Cake className="w-5 h-5" />
-                            <span>Ngày sinh</span>
+                            <span>
+                              {profile.birthDate
+                                ? new Date(profile.birthDate).toLocaleDateString()
+                                : "N/A"}
+                            </span>
                           </p>
                         </div>
 
-                        <div className="max-h rounded-lg bg-gray-200 flex-1">
+                        <div className="rounded-lg bg-gray-200 flex-1">
                           <div className="mt-4 flex justify-end">
                             <Button className="bg-slate-50 text-green-400 hover:bg-green-400 hover:text-white text-sm px-4 py-2">
                               Xem chi tiết
                             </Button>
                           </div>
-                          <p className="mt-2 text-lg">{profile.phone}</p>
-                          <p className="mt-2 text-lg">
-                            {profile.birthDate
-                              ? new Date(profile.birthDate).toLocaleDateString()
-                              : "N/A"}
-                          </p>
                         </div>
                       </div>
 
                       <hr className="mt-2" />
-                      <div className="mt-2 flex flex-1 justify-end gap-2">
-                        <div>
-                          <Button
-                            className="bg-slate-50 text-pink-400 hover:bg-pink-400 hover:text-white text-sm"
-                            onClick={() => {
-                              setProfileToDelete(profile.id);
-                              setIsModalOpen(true);
-                            }}
-                          >
-                            <span>
-                              <Trash2 className="w-4 h-4 inline mr-1" />
-                            </span>
-                            Xóa hồ sơ
+                      <div className="mt-2 flex justify-end gap-2">
+                        <Button
+                          className="bg-slate-50 text-pink-400 hover:bg-pink-400 hover:text-white text-sm"
+                          onClick={() => {
+                            setProfileToDelete(profile.id);
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4 inline mr-1" />
+                          Xóa hồ sơ
+                        </Button>
+                        <Link href={`/patients/${profile.id}/profile/edit-profile`}>
+                          <Button className="bg-slate-50 text-primary hover:bg-primary hover:text-white text-sm">
+                            <PencilLine className="w-4 h-4 inline mr-1" />
+                            Sửa hồ sơ
                           </Button>
-                          <Link
-                            href={`/patients/${profile.id}/profile/edit-profile`}
-                          >
-                            <Button className="bg-slate-50 text-primary hover:bg-primary hover:text-white text-sm">
-                              <span>
-                                <PencilLine className="w-4 h-4 inline mr-1" />
-                              </span>
-                              Sửa hồ sơ
-                            </Button>
-                          </Link>
-                        </div>
+                        </Link>
                       </div>
                     </div>
                   ))
                 ) : (
                   <p className="text-slate-400 text-xs">
-                    Bạn chưa có hồ sơ bệnh nhân. Vui lòng tạo mới hồ sơ để được
-                    đặt khám.
+                    Bạn chưa có hồ sơ bệnh nhân. Vui lòng tạo mới hồ sơ để được đặt khám.
                   </p>
                 )}
               </div>
@@ -240,13 +221,10 @@ const Profile = () => {
             {selectedOption === 3 && (
               <div>
                 <p className="text-slate-300 text-xs">PAYMENT HISTORY</p>
-                <h2 className="text-lg font-bold">
-                  Lịch sử thanh toán viện phí
-                </h2>
+                <h2 className="text-lg font-bold">Lịch sử thanh toán viện phí</h2>
                 <hr className="w-full border-t-2 border-blue-300 mt-4" />
                 <br />
-                {/* <p>Hiển thị lịch sử thanh toán viện phí tại đây...</p> */}
-                <PaymentHistory/>
+                <PaymentHistory />
               </div>
             )}
           </div>
