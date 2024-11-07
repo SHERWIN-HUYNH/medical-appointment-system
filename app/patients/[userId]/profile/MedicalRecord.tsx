@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { FilePen, InfoIcon, TrashIcon, X } from "lucide-react";
 import React, { useState } from "react";
+import ReviewModal from "./ReviewModal";
+
 // Define types for the status and medical record
 type Status = {
   id: number;
@@ -131,6 +133,9 @@ const MedicalRecord = () => {
   const [recordToCancel, setRecordToCancel] = useState<MedicalRecord | null>(
     null
   );
+  const [showReviewModal, setShowReviewModal] = useState<boolean>(false);
+  const [rating, setRating] = useState<number>(0); 
+  const [comment, setComment] = useState<string>(""); 
 
   // Filter medical records based on selected status
   const filteredRecords = medicalRecordsData.filter(
@@ -144,13 +149,20 @@ const MedicalRecord = () => {
 
   const confirmCancelRecord = () => {
     if (recordToCancel) {
-      // Update the status of the record to "Đã hủy" (3)
+      // Cap nhat trang thai "Đã hủy" (3)
       recordToCancel.statusId = 3;
       setShowConfirmation(false);
       setSelectedRecord(null);
-      alert("Phiếu khám đã được hủy."); // Display confirmation message
+      alert("Phiếu khám đã được hủy."); 
     }
   };
+
+  const handleReview = () => {
+    console.log("Rating:", rating);
+    console.log("Comment:", comment);
+    setShowReviewModal(false); 
+  };
+
   return (
     <div>
       <div className="flex gap-5 ">
@@ -221,7 +233,7 @@ const MedicalRecord = () => {
                 {record.statusId === 2 && (
                   <Button
                     className="text-yellow-500 flex items-center bg-white hover:bg-slate-50"
-                    onClick={() => handleCancelRecord(record)}
+                    onClick={() => setShowReviewModal(true)} // Hien thi Modal danh gia
                   >
                     <FilePen className="mr-1" /> Đánh giá
                   </Button>
@@ -233,6 +245,17 @@ const MedicalRecord = () => {
                   <InfoIcon className="mr-1" /> Chi tiết
                 </Button>
               </div>
+              {/* Review Modal */}
+              {showReviewModal && (
+                <ReviewModal
+                  rating={rating}
+                  setRating={setRating}
+                  comment={comment}
+                  setComment={setComment}
+                  onSubmit={handleReview}
+                  onClose={() => setShowReviewModal(false)}
+                />
+              )}
             </div>
           ))
         ) : (

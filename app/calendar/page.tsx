@@ -1,5 +1,5 @@
 "use client";
-import Calendar from "@/components/Calender";
+import Calendar from "@/components/DoctorSchedule";
 import DefaultLayout from "@/components/Layouts/defaultLayout";
 import { Metadata } from "next";
 import FullCalendar from '@fullcalendar/react'

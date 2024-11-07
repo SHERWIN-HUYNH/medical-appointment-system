@@ -10,6 +10,7 @@ import Header from "@/app/homepage/Header";
 import MedicalRecord from "./MedicalRecord";
 import Footer from "@/app/homepage/Footer";
 import PaymentHistory from "./PaymentHistory";
+
 import Modal from "@/components/Modal";
 import { toast } from "sonner";
 import ProfileDetailModal from "@/app/patients/[userId]/profile/ProfileDetailModal";

@@ -2,7 +2,7 @@
 import ModalDelete from "@/components/ModalDelete";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
-import TableSearch from "@/components/TableSearch";
+import TableSearch from "@/components/table/TableSearch";
 import { Button } from "@/components/ui/button";
 import { Trash2, Star as StarSolid } from "lucide-react";
 import React, { useState } from "react";
@@ -16,7 +16,6 @@ type Evaluate = {
   rating: number;
 };
 
-// Dữ liệu mẫu
 const initialEvaluateData: Evaluate[] = [
   { id: 1, date: "2024-10-01", username: "Nguyen Van A", doctor: "Dr. Pham Minh Khoa", content: "Dịch vụ tốt", rating: 5 },
   { id: 2, date: "2024-10-02", username: "Tran Thi B", doctor: "Dr. Le Thi Thanh", content: "Phục vụ chưa tốt", rating: 3 },
@@ -28,7 +27,6 @@ const initialEvaluateData: Evaluate[] = [
 ];
 
 const columns = [
-  { header: "ID", accessor: "id", className: "hidden lg:table-cell " },
   { header: "Ngày đăng", accessor: "date" },
   { header: "Tên người dùng", accessor: "username" },
   { header: "Bác sĩ", accessor: "doctor" },
@@ -39,9 +37,9 @@ const columns = [
 const ListEvaluate = () => {
   const [evaluateData, setEvaluateData] = useState<Evaluate[]>(initialEvaluateData);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedDoctor, setSelectedDoctor] = useState<string | null>(null);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
-  const itemsPerPage = 5;
+  const [searchMessage, setSearchMessage] = useState<string>("");
+  const itemsPerPage = 7;
   const [showModal, setShowModal] = useState(false);
   const [evaluateToDelete, setEvaluateToDelete] = useState<Evaluate | null>(null);
   const [message, setMessage] = useState("");
@@ -69,17 +67,34 @@ const ListEvaluate = () => {
 
   const totalPages = Math.ceil(evaluateData.length / itemsPerPage);
 
-  const filteredData = evaluateData.filter((item) => {
-    return (
-      (!selectedDoctor || item.doctor === selectedDoctor) &&
-      (!selectedRating || item.rating === selectedRating)
-    );
-  });
+  const filteredData = evaluateData.filter((item) =>
+    (!selectedRating || item.rating === selectedRating)
+  );
 
   const displayedData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  const handleSearch = (searchTerm: string) => {
+    if (!searchTerm) {
+      setEvaluateData(initialEvaluateData);
+      setSearchMessage("");
+    } else {
+      const results = initialEvaluateData.filter((item) =>
+        item.username.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      if (results.length === 0) {
+        setSearchMessage("");
+      } else {
+        setSearchMessage("");
+      }
+
+      setEvaluateData(results);
+      setCurrentPage(1); 
+    }
+  };
 
   const renderStars = (rating: number) => (
     <div className="flex justify-center">
@@ -96,11 +111,6 @@ const ListEvaluate = () => {
 
   const renderRow = (item: Evaluate) => (
     <tr key={item.id} className="h-15 border-b border-slate-200 even:bg-slate-50 text-sm hover:bg-blue-50">
-      <td>
-        <div className="flex flex-col items-center p-2">
-          <h3 className="font-semi">{item.id}</h3>
-        </div>
-      </td>
       <td className="text-center">{item.date}</td>
       <td className="text-center">{item.username}</td>
       <td className="text-center">{item.doctor}</td>
@@ -129,19 +139,8 @@ const ListEvaluate = () => {
           Quản lý đánh giá
         </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-          <TableSearch />
-          <select
-            className="p-2 border rounded-xl border-primary"
-            value={selectedDoctor || ""}
-            onChange={(e) => setSelectedDoctor(e.target.value || null)}
-          >
-            <option value="">Bác sĩ</option>
-            {Array.from(new Set(evaluateData.map((item) => item.doctor))).map((doctor) => (
-              <option key={doctor} value={doctor}>
-                {doctor}
-              </option>
-            ))}
-          </select>
+          <TableSearch onSearch={handleSearch} />
+          
           <select
             className="p-2 border rounded-xl border-primary"
             value={selectedRating || ""}
@@ -157,11 +156,20 @@ const ListEvaluate = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <Table columns={columns} data={displayedData} renderRow={renderRow} />
-      </div>
+      {searchMessage && (
+        <div className="mt-4 text-center text-red-500">{searchMessage}</div>
+      )}
 
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+      {filteredData.length > 0 ? (
+        <>
+          <div className="overflow-x-auto">
+            <Table columns={columns} data={displayedData} renderRow={renderRow} />
+          </div>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        </>
+      ) : (
+        <div className="mt-4 text-center text-slate-500">Không tìm thấy đánh giá nào phù hợp.</div>
+      )}
 
       {showModal && (
         <ModalDelete
