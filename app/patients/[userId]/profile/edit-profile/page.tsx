@@ -1,14 +1,17 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Eraser, UserRoundPen, UserRoundPlus } from "lucide-react";
-import React, { useState } from "react";
+import { Undo2, PenLine } from "lucide-react";
 import Image from "next/image";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import Header from "@/app/homepage/Header";
 import Footer from "@/app/homepage/Footer";
+import { toast } from "sonner";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+
 import {
   Select,
   SelectContent,
@@ -17,24 +20,37 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const Add_Profile = () => {
-  const initialFormData = {
-    name: "",
-    email: "",
-    phone: "",
-    gender: "",
-    identificationType: "",
-    identificationNumber: "",
-    identificationDocumentUrl: "",
-    pastMedicalHistory: "",
-    birthDate: "",
-  };
+const Edit_Profile = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const email = searchParams.get("email");
+  const name = searchParams.get("name");
+  const phone = searchParams.get("phone");
+  const gender = searchParams.get("gender");
+  const identificationType = searchParams.get("identificationType");
+  const identificationNumber = searchParams.get("identificationNumber");
+  const identificationDocumentUrl = searchParams.get(
+    "identificationDocumentUrl"
+  );
+  const pastMedicalHistory = searchParams.get("pastMedicalHistory");
+  const birthDate = searchParams.get("birthDate");
 
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState({
+    name: name || "",
+    email: email || "",
+    phone: phone || "",
+    gender: gender || "",
+    identificationType: identificationType || "",
+    identificationNumber: identificationNumber || "",
+    identificationDocumentUrl: identificationDocumentUrl || "",
+    pastMedicalHistory: pastMedicalHistory || "",
+    birthDate: birthDate || "",
+  });
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const { data: session } = useSession();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -73,31 +89,51 @@ const Add_Profile = () => {
       return;
     }
 
-    // CALL API
-    const response = await fetch(`/api/profile/${session?.user?.id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        action: "update",
-        profile: formData,
-      }),
-    });
+    const formattedBirthDate = formData.birthDate
+      ? new Date(formData.birthDate)
+      : null;
 
-    if (response.ok) {
-      const data = await response.json(); 
-      setSuccessMessage("Sửa hồ sơ thành công!");
-    } else {
-      const errorText = await response.text(); 
-      setErrorMessage(errorText || "Sửa hồ sơ thất bại, vui lòng thử lại.");
+    try {
+      const response = await fetch(`/api/profile/${session?.user?.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          profile: {
+            ...formData,
+            id: id,
+            birthDate: formattedBirthDate,
+          },
+        }),
+      });
+
+      if (response.ok) {
+        toast.success("Sửa hồ sơ khám bệnh thành công");
+        router.push(`/patients/${session?.user?.id}/profile`);
+      } else {
+        toast.error("Sửa hồ sơ khám bệnh thất bại. Vui lòng thử lại!");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Đã xảy ra lỗi khi cập nhật hồ sơ.");
     }
   };
 
   return (
     <div>
       <Header />
-      <div className="mt-[80px] h-max mb-10">
+      <div className="flex justify-start mt-20 ml-24">
+        <Button
+          className="bg-slate-400 text-white rounded hover:bg-slate-300 px-4 py-2"
+          onClick={() => router.push(`/patients/${session?.user?.id}/profile`)}
+        >
+          <Undo2 className="w-4 h-4 inline mr-1" />
+          Quay lại
+        </Button>
+      </div>
+
+      <div className="mt-[30px] h-max mb-10">
         <div className="w-2/3 mx-auto h-max rounded-lg bg-slate-100 p-6 lg:col-span-2 text-center">
           <h1 className="text-lg mb-4">SỬA HỒ SƠ KHÁM BỆNH</h1>
           <hr className="w-2/3 mx-auto mt-10 border-slate-400 mb-4" />
@@ -114,6 +150,7 @@ const Add_Profile = () => {
             className="mt-4 grid grid-cols-1 gap-1 lg:grid-cols-2 lg:gap-2 text-sm"
             onSubmit={handleSubmit}
           >
+            {/* Phần nhập thông tin bệnh nhân */}
             <div className="rounded-lg bg-slate-100 p-1">
               <Label className="block mb-1 text-left">Họ và tên</Label>
               <Input
@@ -133,7 +170,11 @@ const Add_Profile = () => {
               <Input
                 type="date"
                 name="birthDate"
-                value={formData.birthDate}
+                value={
+                  formData.birthDate
+                    ? new Date(formData.birthDate).toISOString().slice(0, 10)
+                    : ""
+                }
                 onChange={handleChange}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
@@ -148,10 +189,9 @@ const Add_Profile = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                required
+                readOnly
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: "30px", fontSize: "14px" }}
-                placeholder="Nhập email"
               />
             </div>
 
@@ -168,10 +208,10 @@ const Add_Profile = () => {
                 placeholder="Nhập số điện thoại"
               />
             </div>
-
             <div className="rounded-lg bg-slate-100 p-1">
               <Label className="block mb-1 text-left">Giới tính</Label>
               <Select
+                value={formData.gender}
                 onValueChange={(value) =>
                   setFormData({ ...formData, gender: value })
                 }
@@ -199,6 +239,7 @@ const Add_Profile = () => {
                 Loại giấy định danh
               </Label>
               <Select
+                value={formData.identificationType}
                 onValueChange={(value) =>
                   setFormData({ ...formData, identificationType: value })
                 }
@@ -264,14 +305,14 @@ const Add_Profile = () => {
                 className="w-full p-1 border border-slate-300 rounded text-sm bg-white"
                 style={{ height: "30px", fontSize: "14px" }}
               />
-              {selectedFile && (
+              {formData.identificationDocumentUrl && (
                 <div className="mt-2">
                   <Image
-                    src={URL.createObjectURL(selectedFile)}
-                    alt="Document Preview"
-                    className="w-full object-contain"
-                    width={100}
+                    src={formData.identificationDocumentUrl}
+                    alt="Identification Document"
+                    width={150}
                     height={100}
+                    className="w-full object-cover"
                   />
                 </div>
               )}
@@ -282,17 +323,11 @@ const Add_Profile = () => {
                 type="submit"
                 className="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-300 mr-2"
               >
-                <UserRoundPen className="w-4 h-4 inline mr-1" />
+                <PenLine className="w-4 h-4 inline mr-1" />
                 Sửa hồ sơ
               </Button>
-            
             </div>
           </form>
-          {successMessage && (
-            <div className="mt-50 flex ">
-              <div className="text-green-500 font-bold">{successMessage}</div>
-            </div>
-          )}
         </div>
       </div>
       <Footer />
@@ -300,4 +335,4 @@ const Add_Profile = () => {
   );
 };
 
-export default Add_Profile;
+export default Edit_Profile;

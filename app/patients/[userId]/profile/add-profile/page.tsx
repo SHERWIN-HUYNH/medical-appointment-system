@@ -1,7 +1,7 @@
 "use client";
 import Payment from "@/app/payment/page";
 import { Button } from "@/components/ui/button";
-import { Eraser, UserRoundPlus, Home, Undo2 } from "lucide-react"; // Thêm Home vào đây
+import { Eraser, UserRoundPlus, Home, Undo2 } from "lucide-react"; 
 import React, { useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
@@ -75,13 +75,12 @@ const Add_Profile = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     if (!isValidIdentificationNumber(formData.identificationNumber)) {
       setErrorMessage("Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.");
       return;
     }
-
-    // CALL API
+    const formattedBirthDate = formData.birthDate ? new Date(formData.birthDate) : null;
     const response = await fetch(`/api/profile/${session?.user?.id}`, {
       method: "POST",
       headers: {
@@ -89,20 +88,23 @@ const Add_Profile = () => {
       },
       body: JSON.stringify({
         action: "create",
-        profile: formData,
+        profile: {
+          ...formData,
+          birthDate: formattedBirthDate, // Sử dụng đối tượng Date cho birthDate
+        },
       }),
     });
-
+  
     if (response.ok) {
-      const data = await response.json(); 
+      const data = await response.json();
       toast.success("Thêm hồ sơ khám bệnh thành công");
       router.push(`/patients/${session?.user?.id}/profile`);
     } else {
-      const errorText = await response.text(); 
-      setErrorMessage(errorText || "Thêm hồ sơ thất bại, vui lòng thử lại.");
+      const errorText = await response.text();
+      toast.error("Thêm hồ sơ khám bệnh thất bại. Vui lòng thử lại!");
     }
   };
-
+  
   return (
     <div>
       <Header />
@@ -288,7 +290,7 @@ const Add_Profile = () => {
                   <Image
                     src={URL.createObjectURL(selectedFile)}
                     alt="Document Preview"
-                    className="w-full object-contain"
+                    className="w-full object-cover"
                     width={100}
                     height={100}
                   />

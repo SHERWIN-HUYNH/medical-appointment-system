@@ -42,7 +42,7 @@ export class ProfileRespository {
       const newProfile = await prisma.profile.create({
         data: {
           name: profileData.name,
-          birthDate: profileData.birthday,
+          birthDate: profileData.birthDate,
           gender: profileData.gender,
           phone:profileData.phone,
           email: profileData.email,
@@ -69,7 +69,7 @@ export class ProfileRespository {
         },
         data: {
           name: profileData.name,
-          birthDate: profileData.birthday,
+          birthDate: profileData.birthDate,
           gender: profileData.gender,
           phone:profileData.phone,
           email: profileData.email,

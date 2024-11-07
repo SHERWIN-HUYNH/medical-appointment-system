@@ -3,7 +3,7 @@ declare type Status = "PENDING" | "SCHEDULED" | "CANCELLED";
 export interface Profile {
     id: string; 
     name: string;
-    birthday: Date; // Hoặc string tùy theo định dạng bạn sử dụng
+    birthDate?: Date; // Hoặc string tùy theo định dạng bạn sử dụng
     gender: Gender;
     email: string;
     phone: string;

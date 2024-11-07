@@ -12,21 +12,17 @@ import Footer from "@/app/homepage/Footer";
 import PaymentHistory from "./PaymentHistory";
 import Modal from "@/components/Modal";
 import { toast } from "sonner";
-
-interface Profile {
-  id: number;
-  name: string;
-  phone: string;
-  birthDate: Date;
-}
+import ProfileDetailModal from "@/app/patients/[userId]/profile/ProfileDetailModal";
+import type { Profile } from "@/types/interface";
 
 const Profile = () => {
   const [selectedOption, setSelectedOption] = useState(1);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const { data: session } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [profileToDelete, setProfileToDelete] = useState<number | null>(null);
-  const[profileToShow, setProfileToShow] = useState<number | null>(null);
+  const [profileToDelete, setProfileToDelete] = useState<string | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -85,27 +81,10 @@ const Profile = () => {
       setProfileToDelete(null);     
     }
   };
-  const handleShowProfile =async () => {
-    if (profileToShow === null) return;
-    try {
-      const response = await fetch(`/api/profile/${session?.user?.id}`, {
-        method: "GET2",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          profileValues: { id: profileToShow },
-        }),
-        
-      });}
-      catch (error) {
-        toast.error("Lỗi khi lấy hồ sơ");
-      } finally {
-        setIsModalOpen(false);
-        setProfileToShow(null);     
-      }
-    
-  }
+  const handleShowProfile = (profile: Profile) => {
+    setSelectedProfile(profile);
+    setIsDetailModalOpen(true); // Mở modal chi tiết
+  };
 
   const Buttons = [
     { id: 1, name: "Hồ sơ bệnh nhân", icon: <FaBookMedical /> },
@@ -122,7 +101,6 @@ const Profile = () => {
       <Header />
       <div className="mt-[80px] flex justify-center p-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full max-w-5xl">
-          {/* Left Side (Buttons) */}
           <div className="rounded-lg flex flex-col items-center p-4 w-full lg:w-auto">
             <Link href={`/patients/${session?.user.id}/profile/add-profile`}>
               <Button className="justify-start border-slate-300 bg-white hover:bg-sky-200 w-full gap-2 items-center p-3 rounded-lg border-2">
@@ -185,7 +163,10 @@ const Profile = () => {
 
                         <div className="rounded-lg bg-gray-200 flex-1">
                           <div className="mt-4 flex justify-end">
-                            <Button className="bg-slate-50 text-green-400 hover:bg-green-400 hover:text-white text-sm px-4 py-2">
+                            <Button 
+                              className="bg-slate-50 text-green-400 hover:bg-green-400 hover:text-white text-sm px-4 py-2"
+                              onClick={() => handleShowProfile(profile)}
+                            >
                               Xem chi tiết
                             </Button>
                           </div>
@@ -195,7 +176,7 @@ const Profile = () => {
                       <hr className="mt-2" />
                       <div className="mt-2 flex justify-end gap-2">
                         <Button
-                          className="bg-slate-50 text-pink-400 hover:bg-pink-400 hover:text-white text-sm"
+                          className="bg-slate-50 text-red-400 hover:bg-red-400 hover:text-white text-sm"
                           onClick={() => {
                             setProfileToDelete(profile.id);
                             setIsModalOpen(true);
@@ -204,7 +185,19 @@ const Profile = () => {
                           <Trash2 className="w-4 h-4 inline mr-1" />
                           Xóa hồ sơ
                         </Button>
-                        <Link href={`/patients/${profile.id}/profile/edit-profile`}>
+                        <Link href={{
+                          pathname:`/patients/${profile.id}/profile/edit-profile`,
+                          query:{id:profile.id,
+                                name:profile.name,
+                                email:profile.email,
+                                phone:profile.phone,
+                                gender:profile.gender,
+                                identificationType:profile.identificationType,
+                                identificationNumber:profile.identificationNumber,
+                                identificationDocumentUrl:profile.identificationDocumentUrl,
+                                pastMedicalHistory:profile.pastMedicalHistory,
+                                birthDate:profile.birthDate ? profile.birthDate.toString() : ""}
+                        }}>
                           <Button className="bg-slate-50 text-primary hover:bg-primary hover:text-white text-sm">
                             <PencilLine className="w-4 h-4 inline mr-1" />
                             Sửa hồ sơ
@@ -251,6 +244,14 @@ const Profile = () => {
         onConfirm={handleDeleteProfile}
         message="Bạn có chắc chắn muốn xóa hồ sơ này không?"
       />
+
+      {selectedProfile && (
+        <ProfileDetailModal 
+          isOpen={isDetailModalOpen}
+          onClose={() => setIsDetailModalOpen(false)}
+          profile={selectedProfile}
+        />
+      )}  
     </div>
   );
 };

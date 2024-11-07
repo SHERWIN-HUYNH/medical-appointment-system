@@ -70,16 +70,7 @@ export async function DELETE(req: Request) {
   }
 }
 
-export async function GET2(req: Request) {
-  const { profileValues }: { profileValues: Profile } = await req.json();
-  try {
-    const profile = await ProfileRespository.getProfileById(profileValues.id);
-    return successResponse(profile); 
-  } catch (error: any) {
-    console.error("Error fetching profile:", error.message || error);
-    return internalServerErrorResponse("FAIL TO GET PROFILE")
-  }
-}    
+ 
     
 
   
