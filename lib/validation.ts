@@ -2,7 +2,7 @@ import { z } from "zod";
 export const UserLogin = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string(),
-})
+});
 export const UserFormValidation = z.object({
   name: z
     .string()
@@ -86,7 +86,8 @@ export const PatientFormValidation = z.object({
     .default(false)
     .refine((value) => value === true, {
       message: "You must consent to privacy in order to proceed",
-    }).optional(),
+    })
+    .optional(),
 });
 
 export const FacultyFormValidation = z.object({
@@ -96,7 +97,17 @@ export const FacultyFormValidation = z.object({
     .max(50, "Faculty must be at most 50 characters"),
   description: z
     .string()
-    .min(1, "Description can't be empty").max(500, "Description must be at most 500 characters"),
+    .min(1, "Description can't be empty")
+    .max(500, "Description must be at most 500 characters"),
+});
+
+export const DoctorFormValidation = z.object({
+  name: z.string().min(1, "Tên không được để trống"),
+  image: z.string().min(1, "Vui lòng chọn ảnh bác sĩ"),
+  academicTitle: z.string().min(1, "Học hàm/học vị không được để trống"),
+  faculty: z.string().min(1, "Chuyên khoa không được để trống"),
+  description: z.string().min(1, "Mô tả không được để trống"),
+  isActive: z.boolean(),
 });
 export const CreateAppointmentSchema = z.object({
   primaryPhysician: z.string().min(2, "Select at least one doctor"),
@@ -129,14 +140,20 @@ export const CancelAppointmentSchema = z.object({
 });
 
 export const createService = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").max(50, "Name must be at most 50 characters"),
-  description: z.string().max(500, "Description must be at most 500 characters"),
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must be at most 50 characters"),
+  description: z
+    .string()
+    .max(500, "Description must be at most 500 characters"),
   price: z
     .string()
     .refine((price) => /^\d{1,10}(\.\d{1,2})?$/.test(price), "Invalid price"),
-  faculty: z.string().refine((value) => value !== "", { message: "Please select a faculty" }),
+  faculty: z
+    .string()
+    .refine((value) => value !== "", { message: "Please select a faculty" }),
 });
-
 export function getAppointmentSchema(type: string) {
   switch (type) {
     case "create":

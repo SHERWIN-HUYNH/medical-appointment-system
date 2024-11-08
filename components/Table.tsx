@@ -8,9 +8,11 @@ const Table = ({
   columns: { header: string; accessor: string; className?: string }[];
   renderRow: (item: any) => React.ReactNode;
   data: any[];
-  //   data: any[];
-  //   renderRow: (item: any) => React.ReactNode;
 }) => {
+  if (!data || data.length === 0) {
+    return <p>Không có dữ liệu để hiển thị.</p>;
+  }
+
   return (
     <table className="w-full mt-4">
       <thead>

@@ -30,7 +30,7 @@ const EditFaculty = () => {
   // Hook useEffect để fetch dữ liệu chuyên khoa khi component được mount
   useEffect(() => {
     const fetchFacultyData = async () => {
-      const response = await fetch(`/api/faculty?id=${id}`);
+      const response = await fetch(`/api/faculty/${id}`);
       
       if (response.ok) {
         // Nếu fetch thành công, cập nhật form với dữ liệu từ server

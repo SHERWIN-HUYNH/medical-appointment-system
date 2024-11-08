@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect } from "react";
 
-const SwitcherToggle = () => {
-  const [enabled, setEnabled] = useState<boolean>(false);
+interface SwitcherToggleProps {
+  enabled: boolean;
+  onToggle: (value: boolean) => void;
+}
 
+const SwitcherToggle = ({ enabled, onToggle }: SwitcherToggleProps) => {
   return (
     <div>
       <label
@@ -14,8 +17,9 @@ const SwitcherToggle = () => {
             type="checkbox"
             id="toggle1"
             className="sr-only"
+            checked={enabled} // Set the checked state based on the enabled prop
             onChange={() => {
-              setEnabled(!enabled);
+              onToggle(!enabled); // Call the onToggle function with the new value
             }}
           />
           <div className="block h-8 w-14 rounded-full bg-meta-9 dark:bg-[#5A616B]"></div>
