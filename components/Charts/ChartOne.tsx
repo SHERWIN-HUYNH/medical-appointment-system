@@ -1,27 +1,27 @@
-"use client";
-import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
-import dynamic from "next/dynamic";
-import { Button } from "../ui/button";
+'use client';
+import { ApexOptions } from 'apexcharts';
+import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
+import { Button } from '../ui/button';
 
-const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 });
 
 const options: ApexOptions = {
   legend: {
     show: false,
-    position: "top",
-    horizontalAlign: "left",
+    position: 'top',
+    horizontalAlign: 'left',
   },
-  colors: ["#3C50E0", "#80CAEE"],
+  colors: ['#3C50E0', '#80CAEE'],
   chart: {
-    fontFamily: "Satoshi, sans-serif",
+    fontFamily: 'Satoshi, sans-serif',
     height: 335,
-    type: "area", // Dạng biểu đồ mặc định là "area"
+    type: 'area', // Dạng biểu đồ mặc định là "area"
     dropShadow: {
       enabled: true,
-      color: "#623CEA14",
+      color: '#623CEA14',
       top: 10,
       blur: 4,
       left: 0,
@@ -51,7 +51,7 @@ const options: ApexOptions = {
   ],
   stroke: {
     width: [2, 2],
-    curve: "straight",
+    curve: 'straight',
   },
   grid: {
     xaxis: {
@@ -70,8 +70,8 @@ const options: ApexOptions = {
   },
   markers: {
     size: 4,
-    colors: "#fff",
-    strokeColors: ["#3056D3", "#80CAEE"],
+    colors: '#fff',
+    strokeColors: ['#3056D3', '#80CAEE'],
     strokeWidth: 3,
     strokeOpacity: 0.9,
     strokeDashArray: 0,
@@ -83,7 +83,7 @@ const options: ApexOptions = {
     },
   },
   xaxis: {
-    type: "category",
+    type: 'category',
     categories: [],
     axisBorder: {
       show: false,
@@ -95,7 +95,7 @@ const options: ApexOptions = {
   yaxis: {
     title: {
       style: {
-        fontSize: "0px",
+        fontSize: '0px',
       },
     },
     min: 0,
@@ -104,33 +104,43 @@ const options: ApexOptions = {
 };
 
 const ChartOne: React.FC = () => {
-  const [viewBy, setViewBy] = useState<"month" | "year">("month");
+  const [viewBy, setViewBy] = useState<'month' | 'year'>('month');
 
   // Dữ liệu theo tháng
   const monthData = {
     categories: [
-      "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", 
-      "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
+      'Tháng 1',
+      'Tháng 2',
+      'Tháng 3',
+      'Tháng 4',
+      'Tháng 5',
+      'Tháng 6',
+      'Tháng 7',
+      'Tháng 8',
+      'Tháng 9',
+      'Tháng 10',
+      'Tháng 11',
+      'Tháng 12',
     ],
     series: [
-      { name: "Năm 2022", data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45] },
-      { name: "Năm 2023", data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51] },
+      { name: 'Năm 2022', data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45] },
+      { name: 'Năm 2023', data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51] },
     ],
-    chartType: "line" as "line", 
+    chartType: 'line' as 'line',
     yMax: 100, // Sử dụng biểu đồ vùng cho tháng
   };
 
   // Dữ liệu theo năm
   const yearData = {
-    categories: ["2020", "2021", "2022", "2023", "2024"], // Thêm các năm vào đây
+    categories: ['2020', '2021', '2022', '2023', '2024'], // Thêm các năm vào đây
     series: [
-      { name: "Doanh thu", data: [320, 450, 540, 600, 720] }, // Dữ liệu giả theo năm
+      { name: 'Doanh thu', data: [320, 450, 540, 600, 720] }, // Dữ liệu giả theo năm
     ],
-    chartType: "line" as "line", // Sử dụng biểu đồ đường cho năm
+    chartType: 'line' as 'line', // Sử dụng biểu đồ đường cho năm
     yMax: 1000, // Giá trị tối đa của trục y cho năm
   };
 
-  const currentData = viewBy === "month" ? monthData : yearData;
+  const currentData = viewBy === 'month' ? monthData : yearData;
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
@@ -159,17 +169,17 @@ const ChartOne: React.FC = () => {
         <div className="flex w-full max-w-45 justify-end">
           <div className="inline-flex items-center border-slate-500 rounded-md bg-whiter p-1.5 dark:bg-meta-4 gap-2">
             <Button
-              onClick={() => setViewBy("month")}
+              onClick={() => setViewBy('month')}
               className={`rounded px-3 py-1 text-xs font-medium text-black hover:bg-slate-500 hover:shadow-card dark:text-white dark:hover:bg-boxdark ${
-                viewBy === "month" ? "bg-slate-400 text-white" : ""
+                viewBy === 'month' ? 'bg-slate-400 text-white' : ''
               }`}
             >
               Tháng
             </Button>
             <Button
-              onClick={() => setViewBy("year")}
+              onClick={() => setViewBy('year')}
               className={`rounded px-3 py-1 text-xs font-medium text-black hover:bg-slate-500 hover:shadow-card dark:text-white dark:hover:bg-boxdark ${
-                viewBy === "year" ? "bg-slate-400 text-white" : ""
+                viewBy === 'year' ? 'bg-slate-400 text-white' : ''
               }`}
             >
               Năm
@@ -190,7 +200,7 @@ const ChartOne: React.FC = () => {
             series={currentData.series}
             type={currentData.chartType} // Kiểu biểu đồ cố định
             height={350}
-            width={"100%"}
+            width={'100%'}
           />
         </div>
       </div>

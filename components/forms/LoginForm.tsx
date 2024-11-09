@@ -1,36 +1,36 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Form } from "@/components/ui/form";
-import { UserFormValidation, UserLogin } from "@/lib/validation";
-import "react-phone-number-input/style.css";
-import CustomFormField, { FormFieldType } from "../CustomFormField";
-import SubmitButton from "../SubmitButton";
-import { toast } from "sonner";
-import { PasswordInput } from "../PasswordInput";
-import { Label } from "../ui/label";
-import { signIn, useSession } from "next-auth/react";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Form } from '@/components/ui/form';
+import { UserFormValidation, UserLogin } from '@/lib/validation';
+import 'react-phone-number-input/style.css';
+import CustomFormField, { FormFieldType } from '../CustomFormField';
+import SubmitButton from '../SubmitButton';
+import { toast } from 'sonner';
+import { PasswordInput } from '../PasswordInput';
+import { Label } from '../ui/label';
+import { signIn, useSession } from 'next-auth/react';
 
 export const LoginForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState("")
-	const [passwordConfirmation, setPasswordConfirmation] = useState("")
-  const {data: session} = useSession();
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const { data: session } = useSession();
   const form = useForm<z.infer<typeof UserLogin>>({
     resolver: zodResolver(UserLogin),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
   const onSubmit = async (values: z.infer<typeof UserLogin>) => {
     setIsLoading(true);
-    const res = await signIn("credentials", {
+    const res = await signIn('credentials', {
       email: values.email,
       password: currentPassword,
       redirect: false,
@@ -40,20 +40,17 @@ export const LoginForm = () => {
     }
     if (res?.ok) {
       setIsLoading(false);
-      toast.success("Login successfully");
-      if(session?.user.roleName === "USER"){
-        router.push("/");
+      toast.success('Login successfully');
+      if (session?.user.roleName === 'USER') {
+        router.push('/');
       }
-      if(session?.user.roleName === "ADMIN"){
-      
-      router.push("/test-admin");
-
+      if (session?.user.roleName === 'ADMIN') {
+        router.push('/test-admin');
+      }
+    } else {
+      console.log('ERRPR SESSION', session);
     }
-  }else{
-    console.log('ERRPR SESSION', session)
-  }
-  
-  }
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">

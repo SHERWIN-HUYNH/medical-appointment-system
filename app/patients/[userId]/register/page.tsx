@@ -1,8 +1,8 @@
-import Image from "next/image";
-import { redirect } from "next/navigation";
-import * as Sentry from "@sentry/nextjs";
-import { getPatient, getUser } from "@/lib/action/patient.actions";
-import RegisterForm from "@/components/forms/DeclarationForm";
+import Image from 'next/image';
+import { redirect } from 'next/navigation';
+import * as Sentry from '@sentry/nextjs';
+import { getPatient, getUser } from '@/lib/action/patient.actions';
+import RegisterForm from '@/components/forms/DeclarationForm';
 
 const Register = async ({ params: { userId } }: SearchParamProps) => {
   const user = await getUser(userId);

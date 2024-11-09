@@ -1,6 +1,6 @@
-import DefaultLayout from "@/components/Layouts/defaultLayout";
-import React from "react";
-import ListFaculty from "./ListFaculty";
+import DefaultLayout from '@/components/Layouts/defaultLayout';
+import React from 'react';
+import ListFaculty from './ListFaculty';
 
 const Faculty = () => {
   return (

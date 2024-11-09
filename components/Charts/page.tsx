@@ -1,20 +1,20 @@
-"use client";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import ChartOne from "@/components/Charts/ChartOne";
-import ChartTwo from "@/components/Charts/ChartTwo";
-import dynamic from "next/dynamic";
-import React from "react";
+'use client';
+import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
+import ChartOne from '@/components/Charts/ChartOne';
+import ChartTwo from '@/components/Charts/ChartTwo';
+import dynamic from 'next/dynamic';
+import React from 'react';
 
-const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
+const ChartThree = dynamic(() => import('@/components/Charts/ChartThree'), {
   ssr: false,
 });
 
 const Chart: React.FC = () => {
   const statistics = [
-    { specialty: "Nội khoa", appointments: 120, revenue: "$15,000" },
-    { specialty: "Ngoại khoa", appointments: 90, revenue: "$12,000" },
-    { specialty: "Nhi khoa", appointments: 75, revenue: "$9,000" },
-    { specialty: "Khác", appointments: 50, revenue: "$5,000" },
+    { specialty: 'Nội khoa', appointments: 120, revenue: '$15,000' },
+    { specialty: 'Ngoại khoa', appointments: 90, revenue: '$12,000' },
+    { specialty: 'Nhi khoa', appointments: 75, revenue: '$9,000' },
+    { specialty: 'Khác', appointments: 50, revenue: '$5,000' },
   ];
 
   return (
@@ -23,18 +23,18 @@ const Chart: React.FC = () => {
 
       <div className="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5">
         {/* Đặt ChartOne chiếm 8 cột và ChartThree chiếm 4 cột */}
-        <div className="col-span-8"> 
+        <div className="col-span-8">
           <div className="h-full bg-white rounded-lg shadow">
             <ChartOne />
           </div>
         </div>
-        <div className="col-span-4"> 
+        <div className="col-span-4">
           <div className="h-full bg-white rounded-lg shadow">
             <ChartThree />
           </div>
         </div>
 
-        <div className="col-span-7">  
+        <div className="col-span-7">
           <ChartTwo />
         </div>
 
@@ -44,13 +44,22 @@ const Chart: React.FC = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-primary uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-primary uppercase tracking-wider"
+                  >
                     Chuyên Khoa
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-primary uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-primary uppercase tracking-wider"
+                  >
                     Số Cuộc Hẹn
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-primary uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-primary uppercase tracking-wider"
+                  >
                     Doanh Thu
                   </th>
                 </tr>
@@ -58,9 +67,15 @@ const Chart: React.FC = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {statistics.map((stat, index) => (
                   <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{stat.specialty}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{stat.appointments}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{stat.revenue}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {stat.specialty}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {stat.appointments}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {stat.revenue}
+                    </td>
                   </tr>
                 ))}
               </tbody>

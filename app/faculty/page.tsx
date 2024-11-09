@@ -1,8 +1,8 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import Header from "../homepage/Header";
-import Footer from "../homepage/Footer";
-import { Button } from "@/components/ui/button";
+'use client';
+import React, { useState, useEffect } from 'react';
+import Header from '../homepage/Header';
+import Footer from '../homepage/Footer';
+import { Button } from '@/components/ui/button';
 
 interface Faculty {
   id: string;
@@ -11,7 +11,7 @@ interface Faculty {
 }
 
 const Page = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [faculties, setFaculties] = useState<Faculty[]>([]);
 
   useEffect(() => {
@@ -21,14 +21,15 @@ const Page = () => {
         const data = await response.json();
         setFaculties(data || []);
       } catch (error) {
+        console.log(error)
         setFaculties([]);
       }
     };
     fetchFaculties();
   }, []);
 
-  const filteredFaculties = faculties.filter(faculty =>
-    faculty.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredFaculties = faculties.filter((faculty) =>
+    faculty.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -40,7 +41,18 @@ const Page = () => {
           <ul className="px-3 py-2 flex flex-col gap-2">
             <li className="text-16-normal flex">
               <div className="mr-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-hospital">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-hospital"
+                >
                   <path d="M12 6v4" />
                   <path d="M14 14h-4" />
                   <path d="M14 18h-4" />
@@ -51,7 +63,9 @@ const Page = () => {
               </div>
               <div className="flex justify-center flex-col text-sm">
                 <p>Bệnh viện Đại học Y Dược TP.HCM</p>
-                <p className="text-[#858585] text-xs">Cơ sở 201 Nguyễn Chí Thanh, Phường 12, Quận 5, TP. Hồ Chí Minh</p>
+                <p className="text-[#858585] text-xs">
+                  Cơ sở 201 Nguyễn Chí Thanh, Phường 12, Quận 5, TP. Hồ Chí Minh
+                </p>
               </div>
             </li>
           </ul>
@@ -67,7 +81,17 @@ const Page = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <svg className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.3-4.3" />
               </svg>
@@ -75,7 +99,10 @@ const Page = () => {
             <div className="flex flex-col gap-1 h-[280px] overflow-y-auto custom-scrollbar bg-white">
               {filteredFaculties && filteredFaculties.length > 0 ? (
                 filteredFaculties.map((faculty) => (
-                  <div key={faculty.id} className="py-2 px-3 hover:bg-gray-50 text-slate-500 hover:text-primary cursor-pointer border-b border-slate-200 transition-all duration-300 ease-in-out">
+                  <div
+                    key={faculty.id}
+                    className="py-2 px-3 hover:bg-gray-50 text-slate-500 hover:text-primary cursor-pointer border-b border-slate-200 transition-all duration-300 ease-in-out"
+                  >
                     <div className="font-medium mb-0.5 text-sm">{faculty.name}</div>
                     {faculty.description && (
                       <div className="text-[11px] mt-1 italic">{faculty.description}</div>
@@ -83,14 +110,26 @@ const Page = () => {
                   </div>
                 ))
               ) : (
-                <div className="p-4 text-center text-gray-500">Không tìm thấy chuyên khoa nào</div>
+                <div className="p-4 text-center text-gray-500">
+                  Không tìm thấy chuyên khoa nào
+                </div>
               )}
             </div>
             <div className="mt-3 border-t pt-3">
               <Button className="text-sm bg-transparent text-slate-500 hover:text-primary flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m12 19-7-7 7-7"/>
-                  <path d="M19 12H5"/>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="m12 19-7-7 7-7" />
+                  <path d="M19 12H5" />
                 </svg>
                 Quay lại
               </Button>

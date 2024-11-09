@@ -1,6 +1,6 @@
-import React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const SidebarDropdown = ({ item }: any) => {
   const pathname = usePathname();
@@ -13,7 +13,7 @@ const SidebarDropdown = ({ item }: any) => {
             <Link
               href={item.route}
               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-white duration-300 ease-in-out hover:text-white ${
-                pathname === item.route ? "text-white" : ""
+                pathname === item.route ? 'text-white' : ''
               }`}
             >
               {item.icon}

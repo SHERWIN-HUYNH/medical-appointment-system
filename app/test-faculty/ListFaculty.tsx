@@ -1,12 +1,12 @@
-"use client";
-import ModalDelete from "@/components/ModalDelete";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { Pencil, Trash2 } from "lucide-react";
-import Link from "next/link";
-import TableSearch from "@/components/TableSearch";
+'use client';
+import ModalDelete from '@/components/ModalDelete';
+import Pagination from '@/components/Pagination';
+import Table from '@/components/Table';
+import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import TableSearch from '@/components/TableSearch';
 
 type Faculty = {
   id: string;
@@ -16,22 +16,22 @@ type Faculty = {
 
 const columns = [
   {
-    header: "STT",
-    accessor: "index",
-    className: "w-[5%]", 
+    header: 'STT',
+    accessor: 'index',
+    className: 'w-[5%]',
   },
   {
-    header: "Chuyên khoa",
-    accessor: "name",
-    className: "w-[30%]", 
+    header: 'Chuyên khoa',
+    accessor: 'name',
+    className: 'w-[30%]',
   },
   {
-    header: "Mô tả",
-    accessor: "description",
+    header: 'Mô tả',
+    accessor: 'description',
   },
   {
-    header: "Thao tác",
-    accessor: "actions",
+    header: 'Thao tác',
+    accessor: 'actions',
   },
 ];
 
@@ -41,22 +41,22 @@ const ListFaculty = () => {
   const itemsPerPage = 5;
   const [showModal, setShowModal] = useState(false);
   const [facultyToDelete, setFacultyToDelete] = useState<Faculty | null>(null);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [fadeOut, setFadeOut] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchFaculties = async () => {
       setLoading(true);
       const response = await fetch(`api/faculty`);
-      
+
       if (response.ok) {
         const data = await response.json();
         setFacultyData(data);
       } else {
-        setError("Failed to fetch faculties");
+        setError('Failed to fetch faculties');
       }
       setLoading(false);
     };
@@ -65,18 +65,19 @@ const ListFaculty = () => {
   }, []);
 
   // Lọc dữ liệu dựa trên searchTerm
-  const searchData = facultyData.filter((faculty) =>
-    faculty.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    faculty.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const searchData = facultyData.filter(
+    (faculty) =>
+      faculty.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      faculty.description.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // Tính toán số trang dựa trên dữ liệu đã tìm kiếm
   const totalPages = Math.ceil(searchData.length / itemsPerPage);
-  
+
   // Lấy dữ liệu cho trang hiện tại từ dữ liệu đã tìm kiếm
   const displayedData = searchData.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   // Reset về trang 1 khi searchTerm thay đổi
@@ -104,21 +105,21 @@ const ListFaculty = () => {
     if (!facultyToDelete) return;
 
     const response = await fetch(`/api/faculty`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ faculty: facultyToDelete }),
     });
 
     if (response.ok) {
       // Cập nhật state sau khi xóa thành công
-      setFacultyData(prevData => 
-        prevData.filter(faculty => faculty.id !== facultyToDelete.id)
+      setFacultyData((prevData) =>
+        prevData.filter((faculty) => faculty.id !== facultyToDelete.id),
       );
       showMessage(`Chuyên khoa ${facultyToDelete.name} đã xóa thành công!`);
     } else {
-      showMessage("Không thể xóa chuyên khoa!");
+      showMessage('Không thể xóa chuyên khoa!');
     }
-    
+
     // Reset trạng thái
     setFacultyToDelete(null);
     setShowModal(false);
@@ -132,7 +133,7 @@ const ListFaculty = () => {
   // Thêm dữ liệu STT vào displayedData
   const dataWithIndex = displayedData.map((item, index) => ({
     ...item,
-    index: getSequentialNumber(index)
+    index: getSequentialNumber(index),
   }));
 
   // Render hàng trong bảng
@@ -143,7 +144,7 @@ const ListFaculty = () => {
     >
       <td className="text-center p-4">{item.index}</td>
       <td className="p-4">{item.name}</td>
-      <td className="p-4 text-left">{item.description}</td> 
+      <td className="p-4 text-left">{item.description}</td>
       <td className="p-4">
         <div className="flex items-center justify-center gap-2">
           <Link href={`/test-faculty/edit-faculty?id=${item.id}`}>

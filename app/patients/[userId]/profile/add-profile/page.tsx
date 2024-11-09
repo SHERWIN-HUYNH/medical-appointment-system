@@ -1,54 +1,52 @@
-"use client";
-import Payment from "@/app/payment/page";
-import { Button } from "@/components/ui/button";
-import { Eraser, UserRoundPlus, Home, Undo2 } from "lucide-react"; // Thêm Home vào đây
-import React, { useState } from "react";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import Header from "@/app/homepage/Header";
-import Footer from "@/app/homepage/Footer";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+'use client';
+import Payment from '@/app/payment/page';
+import { Button } from '@/components/ui/button';
+import { Eraser, UserRoundPlus, Home, Undo2 } from 'lucide-react'; // Thêm Home vào đây
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { useSession } from 'next-auth/react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import Header from '@/app/homepage/Header';
+import Footer from '@/app/homepage/Footer';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 const Add_Profile = () => {
   const initialFormData = {
-    name: "",
-    email: "",
-    phone: "",
-    gender: "",
-    identificationType: "",
-    identificationNumber: "",
-    identificationDocumentUrl: "",
-    pastMedicalHistory: "",
-    birthDate: "",
+    name: '',
+    email: '',
+    phone: '',
+    gender: '',
+    identificationType: '',
+    identificationNumber: '',
+    identificationDocumentUrl: '',
+    pastMedicalHistory: '',
+    birthDate: '',
   };
 
   const [formData, setFormData] = useState(initialFormData);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const { data: session } = useSession();
   const router = useRouter();
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
 
-    if (name === "identificationNumber" && isValidIdentificationNumber(value)) {
-      setErrorMessage("");
+    if (name === 'identificationNumber' && isValidIdentificationNumber(value)) {
+      setErrorMessage('');
     }
   };
 
@@ -65,7 +63,7 @@ const Add_Profile = () => {
   const handleReset = () => {
     setFormData(initialFormData);
     setSelectedFile(null);
-    setErrorMessage("");
+    setErrorMessage('');
   };
 
   const isValidIdentificationNumber = (identificationNumber: string) => {
@@ -77,29 +75,29 @@ const Add_Profile = () => {
     e.preventDefault();
 
     if (!isValidIdentificationNumber(formData.identificationNumber)) {
-      setErrorMessage("Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.");
+      setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.');
       return;
     }
 
     // CALL API
     const response = await fetch(`/api/profile/${session?.user?.id}`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        action: "create",
+        action: 'create',
         profile: formData,
       }),
     });
 
     if (response.ok) {
-      const data = await response.json(); 
-      toast.success("Thêm hồ sơ khám bệnh thành công");
+      const data = await response.json();
+      toast.success('Thêm hồ sơ khám bệnh thành công');
       router.push(`/patients/${session?.user?.id}/profile`);
     } else {
-      const errorText = await response.text(); 
-      setErrorMessage(errorText || "Thêm hồ sơ thất bại, vui lòng thử lại.");
+      const errorText = await response.text();
+      setErrorMessage(errorText || 'Thêm hồ sơ thất bại, vui lòng thử lại.');
     }
   };
 
@@ -123,9 +121,9 @@ const Add_Profile = () => {
           <h3 className="mt-4 font-bold">NHẬP THÔNG TIN BỆNH NHÂN</h3>
           <div className="mt-4 p-4 border border-blue-400 bg-blue-50 rounded-md text-left text-sm">
             <p>
-              Vui lòng cung cấp thông tin chính xác để được phục vụ tốt nhất.
-              Trong trường hợp cung cấp sai thông tin bệnh nhân & số điện thoại,
-              việc xác nhận cuộc hẹn sẽ không hiệu lực trước khi đặt khám.
+              Vui lòng cung cấp thông tin chính xác để được phục vụ tốt nhất. Trong trường
+              hợp cung cấp sai thông tin bệnh nhân & số điện thoại, việc xác nhận cuộc hẹn
+              sẽ không hiệu lực trước khi đặt khám.
             </p>
           </div>
 
@@ -143,7 +141,7 @@ const Add_Profile = () => {
                 onChange={handleChange}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: '30px', fontSize: '14px' }}
                 placeholder="Nhập họ và tên"
               />
             </div>
@@ -157,7 +155,7 @@ const Add_Profile = () => {
                 onChange={handleChange}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: '30px', fontSize: '14px' }}
               />
             </div>
 
@@ -170,7 +168,7 @@ const Add_Profile = () => {
                 onChange={handleChange}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: '30px', fontSize: '14px' }}
                 placeholder="Nhập email"
               />
             </div>
@@ -184,21 +182,19 @@ const Add_Profile = () => {
                 onChange={handleChange}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: '30px', fontSize: '14px' }}
                 placeholder="Nhập số điện thoại"
               />
             </div>
             <div className="rounded-lg bg-slate-100 p-1">
               <Label className="block mb-1 text-left">Giới tính</Label>
               <Select
-                onValueChange={(value) =>
-                  setFormData({ ...formData, gender: value })
-                }
+                onValueChange={(value) => setFormData({ ...formData, gender: value })}
                 required
               >
                 <SelectTrigger
                   className="w-full p-1 border-slate-300 bg-white rounded text-sm"
-                  style={{ height: "30px", fontSize: "14px" }}
+                  style={{ height: '30px', fontSize: '14px' }}
                 >
                   <SelectValue placeholder="Chọn giới tính" />
                 </SelectTrigger>
@@ -214,9 +210,7 @@ const Add_Profile = () => {
             </div>
 
             <div className="rounded-lg bg-slate-100 p-1">
-              <Label className="block mb-1 text-left">
-                Loại giấy định danh
-              </Label>
+              <Label className="block mb-1 text-left">Loại giấy định danh</Label>
               <Select
                 onValueChange={(value) =>
                   setFormData({ ...formData, identificationType: value })
@@ -225,7 +219,7 @@ const Add_Profile = () => {
               >
                 <SelectTrigger
                   className="w-full p-1 border border-slate-300 bg-white rounded text-sm"
-                  style={{ height: "30px", fontSize: "14px" }}
+                  style={{ height: '30px', fontSize: '14px' }}
                 >
                   <SelectValue placeholder="Chọn loại giấy" />
                 </SelectTrigger>
@@ -252,13 +246,11 @@ const Add_Profile = () => {
                 onChange={handleChange}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: '30px', fontSize: '14px' }}
                 placeholder="Nhập số giấy định danh"
               />
               {errorMessage && (
-                <p className="text-red-500 text-xs mt-1 text-left">
-                  {errorMessage}
-                </p>
+                <p className="text-red-500 text-xs mt-1 text-left">{errorMessage}</p>
               )}
             </div>
 
@@ -269,7 +261,7 @@ const Add_Profile = () => {
                 value={formData.pastMedicalHistory}
                 onChange={handleChange}
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "100px", fontSize: "14px" }}
+                style={{ height: '100px', fontSize: '14px' }}
                 placeholder="Nhập lịch sử bệnh án"
               />
             </div>
@@ -281,7 +273,7 @@ const Add_Profile = () => {
                 accept="image/*"
                 onChange={handleFileChange}
                 className="w-full p-1 border border-slate-300 rounded text-sm bg-white"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: '30px', fontSize: '14px' }}
               />
               {selectedFile && (
                 <div className="mt-2">

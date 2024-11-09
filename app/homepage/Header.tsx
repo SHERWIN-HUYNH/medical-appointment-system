@@ -9,13 +9,13 @@ function Header() {
   const Menu = [
     {
       id: 1,
-      name: "Trang chủ",
-      path: "/",
+      name: 'Trang chủ',
+      path: '/',
     },
     {
       id: 2,
-      name: "Giới thiệu",
-      path: "/",
+      name: 'Giới thiệu',
+      path: '/',
     },
     {
       id: 3,
@@ -29,8 +29,8 @@ function Header() {
     },
     {
       id: 5,
-      name: "Đội ngũ bác sĩ",
-      path: "/",
+      name: 'Đội ngũ bác sĩ',
+      path: '/',
     },
   ];
   return (

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   getPaginationRowModel,
@@ -10,12 +10,12 @@ import {
   ColumnFiltersState,
   getSortedRowModel,
   getFilteredRowModel,
-} from "@tanstack/react-table";
-import Image from "next/image";
-import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
+} from '@tanstack/react-table';
+import Image from 'next/image';
+import { redirect } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -23,12 +23,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { decryptKey } from "@/lib/utils";
-import React from "react";
-import { Input } from "../ui/input";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { MoveLeft, MoveRight } from "lucide-react";
+} from '@/components/ui/table';
+import { decryptKey } from '@/lib/utils';
+import React from 'react';
+import { Input } from '../ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { MoveLeft, MoveRight } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -39,11 +44,9 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
- 
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+
   const table = useReactTable({
     data,
     columns,
@@ -61,22 +64,24 @@ export function DataTable<TData, TValue>({
     <div className="data-table">
       <div className="table-header flex items-center justify-between mb-3">
         <div className="">
-        <Input
-          placeholder="Tìm theo tên bệnh nhân..."
-          value={table.getColumn("patient")?.getFilterValue() as string}
-          onChange={(event) =>
-            table.getColumn("patient")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm rounded-2xl"
-        />
+          <Input
+            placeholder="Tìm theo tên bệnh nhân..."
+            value={table.getColumn('patient')?.getFilterValue() as string}
+            onChange={(event) =>
+              table.getColumn('patient')?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm rounded-2xl"
+          />
         </div>
         <div>
-          <label htmlFor="status-filter" className="mr-2">Status:</label>
+          <label htmlFor="status-filter" className="mr-2">
+            Status:
+          </label>
           <select
             id="status-filter"
-            value={(table.getColumn("status")?.getFilterValue() as string) ?? ""}
+            value={(table.getColumn('status')?.getFilterValue() as string) ?? ''}
             onChange={(event) =>
-              table.getColumn("status")?.setFilterValue(event.target.value)
+              table.getColumn('status')?.setFilterValue(event.target.value)
             }
             className="p-2 border rounded-2xl"
           >
@@ -86,22 +91,21 @@ export function DataTable<TData, TValue>({
             <option value="CANCELLED">Cancelled</option>
           </select>
         </div>
-       
       </div>
-      
+
       <Table className="shad-table">
         <TableHeader className=" bg-dark-200 ">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="shad-table-row-header ">
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id} className="text-[#000000d9] font-medium text-base">
+                  <TableHead
+                    key={header.id}
+                    className="text-[#000000d9] font-medium text-base"
+                  >
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 );
               })}
@@ -113,7 +117,7 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+                data-state={row.getIsSelected() && 'selected'}
                 className="shad-table-row"
               >
                 {row.getVisibleCells().map((cell) => (
@@ -149,8 +153,7 @@ export function DataTable<TData, TValue>({
           disabled={!table.getCanNextPage()}
           className="shad-gray-btn"
         >
-        
-             <MoveRight />
+          <MoveRight />
         </Button>
       </div>
     </div>

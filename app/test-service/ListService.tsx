@@ -1,12 +1,12 @@
-"use client";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
-import TableSearch from "@/components/TableSearch";
-import { Button } from "@/components/ui/button";
-import { facultyData, serviceData } from "@/lib/data";
-import { ArrowDownNarrowWide, Pencil, Trash2 } from "lucide-react";
-import Link from "next/link";
-import React, { useState } from "react";
+'use client';
+import Pagination from '@/components/Pagination';
+import Table from '@/components/Table';
+import TableSearch from '@/components/TableSearch';
+import { Button } from '@/components/ui/button';
+import { facultyData, serviceData } from '@/lib/data';
+import { ArrowDownNarrowWide, Pencil, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import React, { useState } from 'react';
 
 type Service = {
   id: number;
@@ -18,26 +18,26 @@ type Service = {
 
 const columns = [
   {
-    header: "ID",
-    accessor: "id",
-    className: "hidden lg:table-cell ",
+    header: 'ID',
+    accessor: 'id',
+    className: 'hidden lg:table-cell ',
   },
   {
-    header: "Dịch vụ",
-    accessor: "service",
+    header: 'Dịch vụ',
+    accessor: 'service',
   },
   {
-    header: "Giá dịch vụ",
-    accessor: "price",
+    header: 'Giá dịch vụ',
+    accessor: 'price',
   },
   {
-    header: "Chuyên khoa",
-    accessor: "facultyName",
+    header: 'Chuyên khoa',
+    accessor: 'facultyName',
   },
   {
-    header: "Mô tả",
-    accessor: "description",
-    className: "hidden md:table-cell ",
+    header: 'Mô tả',
+    accessor: 'description',
+    className: 'hidden md:table-cell ',
   },
 ];
 
@@ -49,19 +49,19 @@ const ListService = () => {
 
   const displayedData = serviceData.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
-    // Hàm tìm tên chuyên khoa từ facultyId
+  // Hàm tìm tên chuyên khoa từ facultyId
   const getFacultyName = (facultyId: number) => {
     // Tìm đối tượng chuyên khoa có id khớp với facultyId
     const faculty = facultyData.find((f) => f.id === facultyId);
-  
+
     // Kiểm tra nếu faculty tồn tại
     if (faculty) {
       return faculty.name; // Trả về tên của chuyên khoa nếu tìm thấy
     } else {
-      return "NULL"; // Trả về "NULL" nếu không tìm thấy chuyên khoa
+      return 'NULL'; // Trả về "NULL" nếu không tìm thấy chuyên khoa
     }
   };
 
@@ -78,7 +78,9 @@ const ListService = () => {
         </td>
         <td className="hidden md:table-cell text-left">{item.name}</td>
         <td className="hidden md:table-cell text-left">{item.price}</td>
-        <td className="hidden md:table-cell text-left">{getFacultyName(item.facultyId)}</td>
+        <td className="hidden md:table-cell text-left">
+          {getFacultyName(item.facultyId)}
+        </td>
         <td className="hidden md:table-cell text-left">{item.description}</td>
         <td>
           <div className="flex items-center gap-2">
@@ -99,7 +101,9 @@ const ListService = () => {
     <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0 h-screen">
       {/* TOP */}
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold text-primary">All Service</h1>
+        <h1 className="hidden md:block text-lg font-semibold text-primary">
+          All Service
+        </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
         </div>

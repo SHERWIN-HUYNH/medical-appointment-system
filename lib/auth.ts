@@ -1,82 +1,77 @@
-import { NextAuthOptions } from "next-auth";
-import  CredentialsProvider  from "next-auth/providers/credentials";
-import  { PrismaAdapter}  from "@next-auth/prisma-adapter"
-import prisma from "./prisma";
-import { UserRepository } from "@/repositories/user";
-import { compare } from "bcrypt";
-export const authOptions:NextAuthOptions = {
-  session: { strategy: "jwt" },
-  adapter:PrismaAdapter(prisma),
+import { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import prisma from './prisma';
+import { UserRepository } from '@/repositories/user';
+import { compare } from 'bcrypt';
+export const authOptions: NextAuthOptions = {
+  session: { strategy: 'jwt' },
+  adapter: PrismaAdapter(prisma),
   pages: {
-		signIn: "/login",
-		error: "/login",
-	},
+    signIn: '/login',
+    error: '/login',
+  },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
-      id: "credentials",
-      name: "Credentials",
+      id: 'credentials',
+      name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "john@gmail.com" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'email', placeholder: 'john@gmail.com' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if(!credentials?.email || !credentials?.password){
-          throw new Error("Lack Email or Password");
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error('Lack Email or Password');
         } else {
-          console.log(credentials)
+          console.log(credentials);
         }
-        const user = await UserRepository.getUserByEmail(credentials.email)
+        const user = await UserRepository.getUserByEmail(credentials.email);
         if (!user) {
-          throw new Error("User not found");
+          throw new Error('User not found');
         }
         const isPasswordCorrect = await compare(credentials.password, user.password);
-        if(!isPasswordCorrect){
-          throw new Error("Wrong Password");
+        if (!isPasswordCorrect) {
+          throw new Error('Wrong Password');
         }
         return {
           id: `${user.id}`,
           name: user.name,
           email: user.email,
           roleName: user.roleName,
-        }
+        };
       },
     }),
   ],
 
   callbacks: {
     async jwt({ token, user, trigger, session }) {
-
-     if(user){
-
-      return {
-        ...token,
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        roleName:user.roleName
+      if (user) {
+        return {
+          ...token,
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          roleName: user.roleName,
+        };
       }
-     }
-     return token
+      return token;
     },
 
-    async session({ session, token,user }) {
-      return{
+    async session({ session, token, user }) {
+      return {
         ...session,
         user: {
           ...session.user,
           id: token.id,
           name: token.name,
           email: token.email,
-          roleName: token.roleName
+          roleName: token.roleName,
         },
-      }
+      };
     },
-    async redirect({url, baseUrl}) {
-			return url.startsWith(baseUrl)
-			  ? url
-			  : baseUrl
-		  }
+    async redirect({ url, baseUrl }) {
+      return url.startsWith(baseUrl) ? url : baseUrl;
+    },
   },
-}
-
+};
