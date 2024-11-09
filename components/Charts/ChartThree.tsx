@@ -1,6 +1,6 @@
-import { ApexOptions } from "apexcharts";
-import React from "react";
-import ReactApexChart from "react-apexcharts";
+import { ApexOptions } from 'apexcharts';
+import React from 'react';
+import ReactApexChart from 'react-apexcharts';
 
 interface ChartThreeState {
   series: number[];
@@ -8,20 +8,20 @@ interface ChartThreeState {
 
 const options: ApexOptions = {
   chart: {
-    fontFamily: "Satoshi, sans-serif",
-    type: "donut",
+    fontFamily: 'Satoshi, sans-serif',
+    type: 'donut',
   },
-  colors: ["#3C50E0", "#6577F3", "#8FD0EF", "#0FADCF"],
-  labels: ["Nội khoa", "Ngoại khoa", "Nhi khoa", "Khác"],
+  colors: ['#3C50E0', '#6577F3', '#8FD0EF', '#0FADCF'],
+  labels: ['Nội khoa', 'Ngoại khoa', 'Nhi khoa', 'Khác'],
   legend: {
     show: false,
-    position: "bottom",
+    position: 'bottom',
   },
   plotOptions: {
     pie: {
       donut: {
-        size: "65%",
-        background: "transparent",
+        size: '65%',
+        background: 'transparent',
       },
     },
   },

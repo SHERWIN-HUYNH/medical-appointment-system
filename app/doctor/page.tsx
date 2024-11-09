@@ -1,48 +1,40 @@
-"use client";
-import React from "react";
-import Header from "../homepage/Header";
-import Footer from "../homepage/Footer";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectItem,
-  SelectTrigger,
-  SelectContent,
-} from "@/components/ui/select";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { FormProvider, useForm } from "react-hook-form";
+'use client';
+import React from 'react';
+import Header from '../homepage/Header';
+import Footer from '../homepage/Footer';
+import { Button } from '@/components/ui/button';
+import { Select, SelectItem, SelectTrigger, SelectContent } from '@/components/ui/select';
+import { Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { FormProvider, useForm } from 'react-hook-form';
 
 // Giả lập dữ liệu danh sách bác sĩ
 const doctors = [
   {
     id: 1,
-    name: "Dr. Nguyễn Văn A",
-    degree: "Tiến sĩ",
-    specialty: "Tim mạch",
-    image:
-      "https://i.pinimg.com/736x/9f/32/20/9f3220f4535dd9cd9743b995fdfdeaa1.jpg",
-    description: "Bác sĩ với nhiều năm kinh nghiệm trong lĩnh vực tim mạch.",
+    name: 'Dr. Nguyễn Văn A',
+    degree: 'Tiến sĩ',
+    specialty: 'Tim mạch',
+    image: 'https://i.pinimg.com/736x/9f/32/20/9f3220f4535dd9cd9743b995fdfdeaa1.jpg',
+    description: 'Bác sĩ với nhiều năm kinh nghiệm trong lĩnh vực tim mạch.',
   },
   {
     id: 2,
-    name: "Dr. Trần Thị B",
-    degree: "Phó giáo sư",
-    specialty: "Nhi",
-    image:
-      "https://i.pinimg.com/736x/9f/32/20/9f3220f4535dd9cd9743b995fdfdeaa1.jpg",
+    name: 'Dr. Trần Thị B',
+    degree: 'Phó giáo sư',
+    specialty: 'Nhi',
+    image: 'https://i.pinimg.com/736x/9f/32/20/9f3220f4535dd9cd9743b995fdfdeaa1.jpg',
     description:
-      "Chuyên gia đầu ngành trong lĩnh vực nhi khoa, từng công tác tại nhiều bệnh viện lớn.",
+      'Chuyên gia đầu ngành trong lĩnh vực nhi khoa, từng công tác tại nhiều bệnh viện lớn.',
   },
   {
     id: 3,
-    name: "Dr. Lê Văn C",
-    degree: "Thạc sĩ",
-    specialty: "Nội tiết",
-    image:
-      "https://i.pinimg.com/736x/9f/32/20/9f3220f4535dd9cd9743b995fdfdeaa1.jpg",
+    name: 'Dr. Lê Văn C',
+    degree: 'Thạc sĩ',
+    specialty: 'Nội tiết',
+    image: 'https://i.pinimg.com/736x/9f/32/20/9f3220f4535dd9cd9743b995fdfdeaa1.jpg',
     description:
-      "Bác sĩ giàu kinh nghiệm trong điều trị các bệnh liên quan đến nội tiết.",
+      'Bác sĩ giàu kinh nghiệm trong điều trị các bệnh liên quan đến nội tiết.',
   },
 ];
 
@@ -126,19 +118,15 @@ const Doctor = () => {
                 />
 
                 <div className="flex-grow">
-                  <h3 className="text-lg font-semibold text-primary">
-                    {doctor.name}
-                  </h3>
+                  <h3 className="text-lg font-semibold text-primary">{doctor.name}</h3>
                   <p className="text-sm text-slate-500 mt-2">
                     <span className="font-bold">Học hàm:</span> {doctor.degree}
                   </p>
                   <p className="text-sm text-slate-500">
-                    <span className="font-bold">Chuyên khoa:</span>{" "}
-                    {doctor.specialty}
+                    <span className="font-bold">Chuyên khoa:</span> {doctor.specialty}
                   </p>
                   <p className="text-sm text-slate-500">
-                    <span className="font-bold">Giới thiệu:</span>{" "}
-                    {doctor.description}
+                    <span className="font-bold">Giới thiệu:</span> {doctor.description}
                   </p>
                 </div>
               </div>

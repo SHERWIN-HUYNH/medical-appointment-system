@@ -1,13 +1,13 @@
-import React from "react";
-import Link from "next/link";
+import React from 'react';
+import Link from 'next/link';
 
-import { usePathname } from "next/navigation";
-import SidebarDropdown from "./SidebarDropdown";
+import { usePathname } from 'next/navigation';
+import SidebarDropdown from './SidebarDropdown';
 
 const SidebarItem = ({ item, pageName, setPageName }: any) => {
   const handleClick = () => {
     const updatedPageName =
-      pageName !== item.label.toLowerCase() ? item.label.toLowerCase() : "";
+      pageName !== item.label.toLowerCase() ? item.label.toLowerCase() : '';
     return setPageName(updatedPageName);
   };
 
@@ -29,14 +29,14 @@ const SidebarItem = ({ item, pageName, setPageName }: any) => {
         <Link
           href={item.route}
           onClick={handleClick}
-          className={`${isItemActive ? " bg-gray-700 dark:bg-meta-4" : ""} group relative flex items-center gap-3 rounded-sm px-4 py-2 font-medium text-white duration-300 ease-in-out hover:bg-gray-700 hover:bg-white hover:text-black`}
+          className={`${isItemActive ? ' bg-gray-700 dark:bg-meta-4' : ''} group relative flex items-center gap-3 rounded-sm px-4 py-2 font-medium text-white duration-300 ease-in-out hover:bg-gray-700 hover:bg-white hover:text-black`}
         >
           {item.icon}
           {item.label}
           {item.children && (
             <svg
               className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
-                pageName === item.label.toLowerCase() && "rotate-180"
+                pageName === item.label.toLowerCase() && 'rotate-180'
               }`}
               width="20"
               height="20"
@@ -57,7 +57,7 @@ const SidebarItem = ({ item, pageName, setPageName }: any) => {
         {item.children && (
           <div
             className={` translate-x-1 transform overflow-hidden ${
-              pageName !== item.label.toLowerCase() && "hidden"
+              pageName !== item.label.toLowerCase() && 'hidden'
             }`}
           >
             <SidebarDropdown item={item.children} />

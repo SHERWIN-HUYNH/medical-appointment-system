@@ -1,5 +1,5 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { Button } from '@/components/ui/button';
 
 interface PaginationProps {
   currentPage: number;
@@ -7,11 +7,7 @@ interface PaginationProps {
   onPageChange: (page: number) => void; // Type for the function that handles page changes
 }
 
-const Pagination = ({
-  currentPage,
-  totalPages,
-  onPageChange,
-}: PaginationProps) => {
+const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
   return (
     <div className="p-4 flex items-center justify-between text-slate-600">
       <Button
@@ -26,7 +22,7 @@ const Pagination = ({
           <Button
             key={index + 1}
             className={`px-4 py-3 h-4 rounded-sm ${
-              currentPage === index + 1 ? " bg-blue-200" : "bg-slate-50"
+              currentPage === index + 1 ? ' bg-blue-200' : 'bg-slate-50'
             }`}
             onClick={() => onPageChange(index + 1)}
           >

@@ -1,12 +1,29 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Input } from "../../components/ui/input";
-import { Button } from "../../components/ui/button";
-import { Brain, Ear, Search } from "lucide-react";
-import { FaAllergies, FaAppleAlt, FaBaby, FaChild, FaEye, FaFlask, FaHeartbeat, FaLeaf, FaRibbon, FaStethoscope, FaTooth, FaVial, FaVirus, FaWater, FaWheelchair, FaXRay } from "react-icons/fa";
-import { FaUserDoctor } from "react-icons/fa6";
-import { GiBrain, GiBrokenBone, GiMuscleUp } from "react-icons/gi";
+import React, { useState } from 'react';
+import { Input } from '../../components/ui/input';
+import { Button } from '../../components/ui/button';
+import { Brain, Ear, Search } from 'lucide-react';
+import {
+  FaAllergies,
+  FaAppleAlt,
+  FaBaby,
+  FaChild,
+  FaEye,
+  FaFlask,
+  FaHeartbeat,
+  FaLeaf,
+  FaRibbon,
+  FaStethoscope,
+  FaTooth,
+  FaVial,
+  FaVirus,
+  FaWater,
+  FaWheelchair,
+  FaXRay,
+} from 'react-icons/fa';
+import { FaUserDoctor } from 'react-icons/fa6';
+import { GiBrain, GiBrokenBone, GiMuscleUp } from 'react-icons/gi';
 
 // Định nghĩa type Category
 type Category = {
@@ -18,95 +35,95 @@ function CategorySearch() {
   // Danh sách các category với type Category
   const categoryList: Category[] = [
     {
-      name: "Nha khoa",
+      name: 'Nha khoa',
       icon: <FaTooth className="text-white h-6 w-6" />,
     },
     {
-      name: "Tim mạch",
+      name: 'Tim mạch',
       icon: <FaHeartbeat className="text-white h-6 w-6" />,
     },
     {
-      name: "Chỉnh hình",
+      name: 'Chỉnh hình',
       icon: <GiBrokenBone className="text-white h-6 w-6" />,
     },
     {
-      name: "Thần kinh",
+      name: 'Thần kinh',
       icon: <Brain className="text-white h-6 w-6" />,
     },
     {
-      name: "Thính học",
+      name: 'Thính học',
       icon: <Ear className="text-white h-6 w-6" />,
     },
     {
-      name: "Bác sĩ đa khoa",
+      name: 'Bác sĩ đa khoa',
       icon: <FaUserDoctor className="text-white h-6 w-6" />,
     },
     {
-      name: "Phẫu thuật",
+      name: 'Phẫu thuật',
       icon: <FaUserDoctor className="text-white h-6 w-6" />,
     },
     {
-      name: "Tâm thần",
+      name: 'Tâm thần',
       icon: <GiBrain className="text-white h-6 w-6" />,
     },
     {
-      name: "Chuyên khoa mắt",
+      name: 'Chuyên khoa mắt',
       icon: <FaEye className="text-white h-6 w-6" />,
     },
     {
-      name: "Sản khoa",
+      name: 'Sản khoa',
       icon: <FaBaby className="text-white h-6 w-6" />,
     },
     {
-      name: "Nội tiết",
+      name: 'Nội tiết',
       icon: <FaFlask className="text-white h-6 w-6" />,
     },
     {
-      name: "Dinh dưỡng",
+      name: 'Dinh dưỡng',
       icon: <FaAppleAlt className="text-white h-6 w-6" />,
     },
     {
-      name: "Nhi khoa",
+      name: 'Nhi khoa',
       icon: <FaChild className="text-white h-6 w-6" />,
     },
     {
-      name: "Ung bướu",
+      name: 'Ung bướu',
       icon: <FaRibbon className="text-white h-6 w-6" />,
     },
     {
-      name: "Dị ứng - Miễn dịch",
+      name: 'Dị ứng - Miễn dịch',
       icon: <FaAllergies className="text-white h-6 w-6" />,
     },
     {
-      name: "Chẩn đoán hình ảnh",
+      name: 'Chẩn đoán hình ảnh',
       icon: <FaXRay className="text-white h-6 w-6" />,
     },
     {
-      name: "Huyết học",
+      name: 'Huyết học',
       icon: <FaVial className="text-white h-6 w-6" />,
     },
     {
-      name: "Phục hồi chức năng",
+      name: 'Phục hồi chức năng',
       icon: <FaWheelchair className="text-white h-6 w-6" />,
     },
     {
-      name: "Y học cổ truyền",
+      name: 'Y học cổ truyền',
       icon: <FaLeaf className="text-white h-6 w-6" />,
     },
     {
-      name: "Nhiễm khuẩn",
+      name: 'Nhiễm khuẩn',
       icon: <FaVirus className="text-white h-6 w-6" />,
     },
     {
-      name: "Tiêu hóa",
+      name: 'Tiêu hóa',
       icon: <FaStethoscope className="text-white h-6 w-6" />,
     },
     {
-      name: "Thận - Niệu",
+      name: 'Thận - Niệu',
       icon: <FaWater className="text-white h-6 w-6" />,
     },
     {
-      name: "Cơ xương khớp",
+      name: 'Cơ xương khớp',
       icon: <GiMuscleUp className="text-white h-6 w-6" />,
     },
   ];
@@ -135,11 +152,8 @@ function CategorySearch() {
       <h2 className="text-xl">Tìm kiếm bác sĩ của bạn vào bắt đầu đặt lịch hẹn</h2>
 
       <div className="flex w-full mt-3 max-w-sm items-center space-x-2">
-        <Input type="text" placeholder="Search..." className="border-slate-400"/>
-        <Button
-          className="text-white bg-primary hover:bg-[#56c2e6]"
-          type="submit"
-        >
+        <Input type="text" placeholder="Search..." className="border-slate-400" />
+        <Button className="text-white bg-primary hover:bg-[#56c2e6]" type="submit">
           <Search className="h-4 w-4 mr-2" />
           Search
         </Button>
@@ -159,7 +173,7 @@ function CategorySearch() {
         className="bg-primary hover:bg-[#56c2e6] text-white mt-3"
         onClick={toggleShowAllCategories}
       >
-        {showAllCategories ? "Thu gọn" : "Xem thêm"}
+        {showAllCategories ? 'Thu gọn' : 'Xem thêm'}
       </Button>
     </div>
   );

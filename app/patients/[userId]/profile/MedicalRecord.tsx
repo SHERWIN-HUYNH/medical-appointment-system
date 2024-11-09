@@ -1,8 +1,8 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { FilePen, InfoIcon, TrashIcon, X } from "lucide-react";
-import React, { useState } from "react";
-import ReviewModal from "./ReviewModal";
+'use client';
+import { Button } from '@/components/ui/button';
+import { FilePen, InfoIcon, TrashIcon, X } from 'lucide-react';
+import React, { useState } from 'react';
+import ReviewModal from './ReviewModal';
 
 // Define types for the status and medical record
 type Status = {
@@ -21,43 +21,43 @@ type MedicalRecord = {
 
 // Array of statuses
 const statuses: Status[] = [
-  { id: 1, label: "Chưa khám" },
-  { id: 2, label: "Đã khám" },
-  { id: 3, label: "Đã hủy" },
+  { id: 1, label: 'Chưa khám' },
+  { id: 2, label: 'Đã khám' },
+  { id: 3, label: 'Đã hủy' },
 ];
 
 // Array of medical records
 const medicalRecordsData: MedicalRecord[] = [
   {
-    id: "A2111260001",
-    patientName: "NGUYỄN THÚY QUỲNH",
-    department: "Chấn thương chỉnh hình",
-    time: "29/11/2021",
-    hour: "13:00 (Buổi Chiều)",
+    id: 'A2111260001',
+    patientName: 'NGUYỄN THÚY QUỲNH',
+    department: 'Chấn thương chỉnh hình',
+    time: '29/11/2021',
+    hour: '13:00 (Buổi Chiều)',
     statusId: 2, // Đã khám
   },
   {
-    id: "A2111260002",
-    patientName: "NGÔ THỊ DUYÊN",
-    department: "Da Liễu",
-    time: "01/12/2021",
-    hour: "10:00 (Buổi Sáng)",
+    id: 'A2111260002',
+    patientName: 'NGÔ THỊ DUYÊN',
+    department: 'Da Liễu',
+    time: '01/12/2021',
+    hour: '10:00 (Buổi Sáng)',
     statusId: 1, // Chưa khám
   },
   {
-    id: "A2111260003",
-    patientName: "HUỲNH CHÍ TRUNG",
-    department: "Nội tiết",
-    time: "05/12/2021",
-    hour: "14:00 (Buổi Chiều)",
+    id: 'A2111260003',
+    patientName: 'HUỲNH CHÍ TRUNG',
+    department: 'Nội tiết',
+    time: '05/12/2021',
+    hour: '14:00 (Buổi Chiều)',
     statusId: 3, // Đã hủy
   },
   {
-    id: "A2111260004",
-    patientName: "NGUYỄN THÚY QUỲNH",
-    department: "Tâm lý",
-    time: "10/12/2021",
-    hour: "10:00 (Buổi Sáng)",
+    id: 'A2111260004',
+    patientName: 'NGUYỄN THÚY QUỲNH',
+    department: 'Tâm lý',
+    time: '10/12/2021',
+    hour: '10:00 (Buổi Sáng)',
     statusId: 1, // Chưa khám
   },
 ];
@@ -126,20 +126,16 @@ const ConfirmationModal = ({
 
 const MedicalRecord = () => {
   const [selectedStatusId, setSelectedStatusId] = useState<number>(1);
-  const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>(
-    null
-  );
+  const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>(null);
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
-  const [recordToCancel, setRecordToCancel] = useState<MedicalRecord | null>(
-    null
-  );
+  const [recordToCancel, setRecordToCancel] = useState<MedicalRecord | null>(null);
   const [showReviewModal, setShowReviewModal] = useState<boolean>(false);
-  const [rating, setRating] = useState<number>(0); 
-  const [comment, setComment] = useState<string>(""); 
+  const [rating, setRating] = useState<number>(0);
+  const [comment, setComment] = useState<string>('');
 
   // Filter medical records based on selected status
   const filteredRecords = medicalRecordsData.filter(
-    (record) => record.statusId === selectedStatusId
+    (record) => record.statusId === selectedStatusId,
   );
 
   const handleCancelRecord = (record: MedicalRecord) => {
@@ -153,14 +149,14 @@ const MedicalRecord = () => {
       recordToCancel.statusId = 3;
       setShowConfirmation(false);
       setSelectedRecord(null);
-      alert("Phiếu khám đã được hủy."); 
+      alert('Phiếu khám đã được hủy.');
     }
   };
 
   const handleReview = () => {
-    console.log("Rating:", rating);
-    console.log("Comment:", comment);
-    setShowReviewModal(false); 
+    console.log('Rating:', rating);
+    console.log('Comment:', comment);
+    setShowReviewModal(false);
   };
 
   return (
@@ -170,7 +166,7 @@ const MedicalRecord = () => {
           <Button
             key={status.id}
             className={`button hover:bg-slate-300 ${
-              selectedStatusId === status.id ? "button-selected" : ""
+              selectedStatusId === status.id ? 'button-selected' : ''
             }`}
             onClick={() => setSelectedStatusId(status.id)}
           >
@@ -187,22 +183,18 @@ const MedicalRecord = () => {
             >
               <div className="flex justify-between items-center">
                 <p className="text-slate-500">
-                  Mã phiếu:{" "}
-                  <span className="text-lg font-semibold">{record.id}</span>
+                  Mã phiếu: <span className="text-lg font-semibold">{record.id}</span>
                 </p>
                 <span
                   className={`px-4 py-1 rounded-full text-sm ${
                     record.statusId === 1
-                      ? "bg-red-100 text-red-600"
+                      ? 'bg-red-100 text-red-600'
                       : record.statusId === 2
-                      ? "bg-green-100 text-green-600"
-                      : "bg-gray-200 text-gray-600"
+                        ? 'bg-green-100 text-green-600'
+                        : 'bg-gray-200 text-gray-600'
                   }`}
                 >
-                  {
-                    statuses.find((status) => status.id === record.statusId)
-                      ?.label
-                  }
+                  {statuses.find((status) => status.id === record.statusId)?.label}
                 </span>
               </div>
               <div className="flex flex-col gap-1">

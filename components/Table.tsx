@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const Table = ({
   columns,
@@ -8,15 +8,19 @@ const Table = ({
   columns: { header: string; accessor: string; className?: string }[];
   renderRow: (item: any) => React.ReactNode;
   data: any[];
-  //   data: any[];
-  //   renderRow: (item: any) => React.ReactNode;
 }) => {
+  if (!data || data.length === 0) {
+    return <p>Không có dữ liệu để hiển thị.</p>;
+  }
+
   return (
     <table className="w-full mt-4">
       <thead>
         <tr className="text-center text-sm text-slate-600">
           {columns.map((col) => (
-            <th key={col.accessor} className={col.className}>{col.header}</th>
+            <th key={col.accessor} className={col.className}>
+              {col.header}
+            </th>
           ))}
         </tr>
       </thead>

@@ -1,3 +1,4 @@
+
 "use client";
 import { Button } from "@/components/ui/button";
 import { Undo2, PenLine } from "lucide-react";
@@ -18,7 +19,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 const Edit_Profile = () => {
   const { data: session } = useSession();
@@ -49,20 +50,18 @@ const Edit_Profile = () => {
     birthDate: birthDate || "",
   });
 
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
 
-    if (name === "identificationNumber" && isValidIdentificationNumber(value)) {
-      setErrorMessage("");
+    if (name === 'identificationNumber' && isValidIdentificationNumber(value)) {
+      setErrorMessage('');
     }
   };
 
@@ -85,7 +84,7 @@ const Edit_Profile = () => {
     e.preventDefault();
 
     if (!isValidIdentificationNumber(formData.identificationNumber)) {
-      setErrorMessage("Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.");
+      setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.');
       return;
     }
 
@@ -140,9 +139,9 @@ const Edit_Profile = () => {
           <h3 className="mt-4 font-bold">NHẬP THÔNG TIN BỆNH NHÂN</h3>
           <div className="mt-4 p-4 border border-blue-400 bg-blue-50 rounded-md text-left text-sm">
             <p>
-              Vui lòng cung cấp thông tin chính xác để được phục vụ tốt nhất.
-              Trong trường hợp cung cấp sai thông tin bệnh nhân & số điện thoại,
-              việc xác nhận cuộc hẹn sẽ không hiệu lực trước khi đặt khám.
+              Vui lòng cung cấp thông tin chính xác để được phục vụ tốt nhất. Trong trường
+              hợp cung cấp sai thông tin bệnh nhân & số điện thoại, việc xác nhận cuộc hẹn
+              sẽ không hiệu lực trước khi đặt khám.
             </p>
           </div>
 
@@ -160,7 +159,7 @@ const Edit_Profile = () => {
                 onChange={handleChange}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: '30px', fontSize: '14px' }}
                 placeholder="Nhập họ và tên"
               />
             </div>
@@ -178,7 +177,7 @@ const Edit_Profile = () => {
                 onChange={handleChange}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: '30px', fontSize: '14px' }}
               />
             </div>
 
@@ -204,7 +203,7 @@ const Edit_Profile = () => {
                 onChange={handleChange}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: '30px', fontSize: '14px' }}
                 placeholder="Nhập số điện thoại"
               />
             </div>
@@ -219,7 +218,7 @@ const Edit_Profile = () => {
               >
                 <SelectTrigger
                   className="w-full p-1 border-slate-300 bg-white rounded text-sm"
-                  style={{ height: "30px", fontSize: "14px" }}
+                  style={{ height: '30px', fontSize: '14px' }}
                 >
                   <SelectValue placeholder="Chọn giới tính" />
                 </SelectTrigger>
@@ -235,9 +234,7 @@ const Edit_Profile = () => {
             </div>
 
             <div className="rounded-lg bg-slate-100 p-1">
-              <Label className="block mb-1 text-left">
-                Loại giấy định danh
-              </Label>
+              <Label className="block mb-1 text-left">Loại giấy định danh</Label>
               <Select
                 value={formData.identificationType}
                 onValueChange={(value) =>
@@ -247,7 +244,7 @@ const Edit_Profile = () => {
               >
                 <SelectTrigger
                   className="w-full p-1 border border-slate-300 bg-white rounded text-sm"
-                  style={{ height: "30px", fontSize: "14px" }}
+                  style={{ height: '30px', fontSize: '14px' }}
                 >
                   <SelectValue placeholder="Chọn loại giấy" />
                 </SelectTrigger>
@@ -274,13 +271,11 @@ const Edit_Profile = () => {
                 onChange={handleChange}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: '30px', fontSize: '14px' }}
                 placeholder="Nhập số giấy định danh"
               />
               {errorMessage && (
-                <p className="text-red-500 text-xs mt-1 text-left">
-                  {errorMessage}
-                </p>
+                <p className="text-red-500 text-xs mt-1 text-left">{errorMessage}</p>
               )}
             </div>
 
@@ -291,7 +286,7 @@ const Edit_Profile = () => {
                 value={formData.pastMedicalHistory}
                 onChange={handleChange}
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "100px", fontSize: "14px" }}
+                style={{ height: '100px', fontSize: '14px' }}
                 placeholder="Nhập lịch sử bệnh án"
               />
             </div>
@@ -303,7 +298,7 @@ const Edit_Profile = () => {
                 accept="image/*"
                 onChange={handleFileChange}
                 className="w-full p-1 border border-slate-300 rounded text-sm bg-white"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: '30px', fontSize: '14px' }}
               />
               {formData.identificationDocumentUrl && (
                 <div className="mt-2">

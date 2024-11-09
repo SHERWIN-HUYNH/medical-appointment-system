@@ -1,12 +1,9 @@
-
-import Image from "next/image";
-import React from "react";
+import Image from 'next/image';
+import React from 'react';
 
 function Footer() {
-
   return (
     <footer className="bg-white w-full center items-center flex-col">
-      
       <div className="mx-auto max-w-screen-xl px-4 pb-6 pt-16 sm:px-6 lg:px-8 lg:pt-24">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div>
@@ -145,39 +142,27 @@ function Footer() {
 
               <ul className="mt-8 space-y-4 text-sm">
                 <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75"
-                    href="#"
-                  >
+                  <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
                     Company History
                   </a>
                 </li>
 
                 <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75"
-                    href="#"
-                  >
+                  <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
                     Meet the Team
                   </a>
                 </li>
 
                 <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75"
-                    href="#"
-                  >
+                  <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
                     Employee Handbook
                   </a>
                 </li>
 
                 <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75"
-                    href="#"
-                  >
-                    {" "}
-                    Careers{" "}
+                  <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
+                    {' '}
+                    Careers{' '}
                   </a>
                 </li>
               </ul>
@@ -188,41 +173,29 @@ function Footer() {
 
               <ul className="mt-8 space-y-4 text-sm">
                 <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75"
-                    href="#"
-                  >
+                  <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
                     Web Development
                   </a>
                 </li>
 
                 <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75"
-                    href="#"
-                  >
-                    {" "}
-                    Web Design{" "}
+                  <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
+                    {' '}
+                    Web Design{' '}
                   </a>
                 </li>
 
                 <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75"
-                    href="#"
-                  >
-                    {" "}
-                    Marketing{" "}
+                  <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
+                    {' '}
+                    Marketing{' '}
                   </a>
                 </li>
 
                 <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75"
-                    href="#"
-                  >
-                    {" "}
-                    Google Ads{" "}
+                  <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
+                    {' '}
+                    Google Ads{' '}
                   </a>
                 </li>
               </ul>
@@ -233,30 +206,21 @@ function Footer() {
 
               <ul className="mt-8 space-y-4 text-sm">
                 <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75"
-                    href="#"
-                  >
-                    {" "}
-                    FAQs{" "}
+                  <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
+                    {' '}
+                    FAQs{' '}
                   </a>
                 </li>
 
                 <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75"
-                    href="#"
-                  >
-                    {" "}
-                    Support{" "}
+                  <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
+                    {' '}
+                    Support{' '}
                   </a>
                 </li>
 
                 <li>
-                  <a
-                    className=""
-                    href="#"
-                  >
+                  <a className="" href="#">
                     <span className="text-gray-700 transition group-hover:text-gray-700/75">
                       Live Chat
                     </span>

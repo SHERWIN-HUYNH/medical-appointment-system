@@ -1,20 +1,16 @@
-'use client'
-import React, { useState } from 'react'
+'use client';
+import React, { useState } from 'react';
 import Header from '../Header/page';
 import Sidebar from '../SideBar/page';
 
-const DefaultLayout = ({
-    children,
-  }: {
-    children: React.ReactNode;
-  }) => {
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div>
-         {/* <!-- ===== Page Wrapper Start ===== --> */}
+      {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className="flex overflow-y-hidden">
         {/* <!-- ===== Sidebar Start ===== --> */}
-        <Sidebar  sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         {/* <!-- ===== Sidebar End ===== --> */}
 
         {/* <!-- ===== Content Area Start ===== --> */}
@@ -25,9 +21,7 @@ const DefaultLayout = ({
 
           {/* <!-- ===== Main Content Start ===== --> */}
           <main>
-            <div className="mx-auto max-w-screen-2xl ">
-              {children}
-            </div>
+            <div className="mx-auto max-w-screen-2xl ">{children}</div>
           </main>
           {/* <!-- ===== Main Content End ===== --> */}
         </div>
@@ -35,7 +29,7 @@ const DefaultLayout = ({
       </div>
       {/* <!-- ===== Page Wrapper End ===== --> */}
     </div>
-  )
-}
+  );
+};
 
-export default DefaultLayout
+export default DefaultLayout;

@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -29,22 +30,22 @@ const Profile = () => {
     const fetchProfiles = async () => {
       try {
         const response = await fetch(`/api/profile/${session?.user?.id}`, {
-          method: "GET",
+          method: 'GET',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         });
         if (!response.ok) {
-          throw new Error("Lỗi khi lấy dữ liệu hồ sơ");
+          throw new Error('Lỗi khi lấy dữ liệu hồ sơ');
         }
         const profiles = await response.json();
         if (Array.isArray(profiles)) {
           setProfiles(profiles);
         } else {
-          setProfiles([]); 
-        }     
+          setProfiles([]);
+        }
       } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu hồ sơ:", error);
+        console.error('Lỗi khi lấy dữ liệu hồ sơ:', error);
       }
     };
 
@@ -59,22 +60,23 @@ const Profile = () => {
 
     try {
       const response = await fetch(`/api/profile/${session?.user?.id}`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           profileValues: { id: profileToDelete },
         }),
-        
       });
 
       if (!response.ok) {
         toast.error("Lỗi khi xóa hồ sơ");
       }
 
-      setProfiles((prevProfiles) => prevProfiles.filter((profile) => profile.id !== profileToDelete));
-      toast.success("Xóa hồ sơ thành công");
+      setProfiles((prevProfiles) =>
+        prevProfiles.filter((profile) => profile.id !== profileToDelete),
+      );
+      toast.success('Xóa hồ sơ thành công');
     } catch (error) {
       toast.error("Lỗi khi xóa hồ sơ");
     } finally {
@@ -88,11 +90,11 @@ const Profile = () => {
   };
 
   const Buttons = [
-    { id: 1, name: "Hồ sơ bệnh nhân", icon: <FaBookMedical /> },
-    { id: 2, name: "Phiếu khám bệnh", icon: <FaNewspaper /> },
+    { id: 1, name: 'Hồ sơ bệnh nhân', icon: <FaBookMedical /> },
+    { id: 2, name: 'Phiếu khám bệnh', icon: <FaNewspaper /> },
     {
       id: 3,
-      name: "Lịch sử thanh toán viện phí",
+      name: 'Lịch sử thanh toán viện phí',
       icon: <RiMoneyDollarCircleLine />,
     },
   ];
@@ -115,7 +117,7 @@ const Profile = () => {
                 <li key={item.id} className="mt-2 w-full">
                   <Button
                     className={`w-full gap-2 flex items-center justify-start p-3 hover:bg-sky-200 bg-white ${
-                      selectedOption === item.id ? "bg-blue-50" : ""
+                      selectedOption === item.id ? 'bg-blue-50' : ''
                     }`}
                     onClick={() => setSelectedOption(item.id)}
                   >
@@ -137,7 +139,6 @@ const Profile = () => {
 
                 {profiles.length > 0 ? (
                   profiles.map((profile) => (
-                    
                     <div
                       key={profile.id}
                       className="bg-slate-50 p-4 text-sm rounded-lg shadow-md transition-all ease-in-out duration-100 cursor-pointer mb-4"
@@ -157,7 +158,7 @@ const Profile = () => {
                             <span>
                               {profile.birthDate
                                 ? new Date(profile.birthDate).toLocaleDateString()
-                                : "N/A"}
+                                : 'N/A'}
                             </span>
                           </p>
                         </div>
