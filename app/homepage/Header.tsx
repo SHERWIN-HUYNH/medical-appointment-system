@@ -1,8 +1,9 @@
-"use client";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
-import DropDown from "./DropDown";
+'use client';
+import React from 'react';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import Link from 'next/link';
+import DropDown from './DropDown';
 
 function Header() {
   const { data: session } = useSession();
@@ -19,13 +20,13 @@ function Header() {
     },
     {
       id: 3,
-      name: "Dịch vụ",
-      path: "/",
+      name: 'Dịch vụ',
+      path: '/',
     },
     {
       id: 4,
-      name: "Chuyên khoa",
-      path: "/homepage/faculty",
+      name: 'Chuyên khoa',
+      path: '/homepage/faculty',
     },
     {
       id: 5,
