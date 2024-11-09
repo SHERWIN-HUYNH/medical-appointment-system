@@ -42,6 +42,7 @@ model Faculty {
   id   String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name String
   description String
+  image String
   doctors Doctor[]
   services Service[]
 }

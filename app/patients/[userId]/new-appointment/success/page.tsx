@@ -1,29 +1,27 @@
-import Image from "next/image";
-import Link from "next/link";
-import * as Sentry from "@sentry/nextjs";
-import { Button } from "@/components/ui/button";
-import { Doctors } from "@/constants";
+import Image from 'next/image';
+import Link from 'next/link';
+import * as Sentry from '@sentry/nextjs';
+import { Button } from '@/components/ui/button';
+import { Doctors } from '@/constants';
 
-import { formatDateTime } from "@/lib/utils";
-import { getAppointment } from "@/lib/action/appointment.actions";
-import { getUser } from "@/lib/action/patient.actions";
-import { User } from "lucide-react";
+import { formatDateTime } from '@/lib/utils';
+import { getAppointment } from '@/lib/action/appointment.actions';
+import { getUser } from '@/lib/action/patient.actions';
+import { User } from 'lucide-react';
 
-const RequestSuccess = async ({
-  searchParams,
-  params: { userId },
-}: SearchParamProps) => {
-  const appointmentId = (searchParams?.appointmentId as string) || "";
+const RequestSuccess = async ({ searchParams, params: { userId } }: SearchParamProps) => {
+  const appointmentId = (searchParams?.appointmentId as string) || '';
   const appointment = await getAppointment(appointmentId);
-  const doctor = Doctors.find(
-    (doctor) => doctor.name === appointment.primaryPhysician
-  );
+  const doctor = Doctors.find((doctor) => doctor.name === appointment.primaryPhysician);
   const user = await getUser(userId);
 
   return (
     <div className=" flex h-screen max-h-screen px-[5%] bg-[#4158D0] bg-[linear-gradient(43deg,#4158D0_0%,#C850C0_46%,#FFCC70_100%)]">
       <div className="success-img max-w-[800px] bg-white">
-        <Link href="/" className="bg-primary w-[600px] rounded-full p-3 flex items-center justify-center">
+        <Link
+          href="/"
+          className="bg-primary w-[600px] rounded-full p-3 flex items-center justify-center"
+        >
           <Image
             src="/assets/icons/logo-full.svg"
             height={1000}
@@ -34,15 +32,10 @@ const RequestSuccess = async ({
         </Link>
 
         <section className="flex flex-col items-center">
-          <Image
-            src="/assets/gifs/success.gif"
-            height={300}
-            width={280}
-            alt="success"
-          />
+          <Image src="/assets/gifs/success.gif" height={300} width={280} alt="success" />
           <h2 className="header mb-6 max-w-[600px] text-center">
-            Your <span className="text-green-500">appointment request</span> has
-            been successfully submitted!
+            Your <span className="text-green-500">appointment request</span> has been
+            successfully submitted!
           </h2>
           <p>We&apos;ll be in touch shortly to confirm.</p>
         </section>
@@ -73,9 +66,7 @@ const RequestSuccess = async ({
         </section>
 
         <Button variant="outline" className="shad-primary-btn" asChild>
-          <Link href={`/patients/${userId}/new-appointment`}>
-            Quay lại Trang chủ
-          </Link>
+          <Link href={`/patients/${userId}/new-appointment`}>Quay lại Trang chủ</Link>
         </Button>
 
         <p className="copyright">© 2024 CarePluse</p>

@@ -1,7 +1,6 @@
-"use client";
+'use client';
 import { useState } from 'react';
-import ReactDatePicker from "react-datepicker";
-
+import ReactDatePicker from 'react-datepicker';
 
 const Calendar = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -26,17 +25,16 @@ const Calendar = () => {
     return 'normal-day';
   };
   return (
-    <div>   
-      <h1>DATE HERE</h1> 
+    <div>
+      <h1>DATE HERE</h1>
       <ReactDatePicker
-              
-              onChange={handleDateChange}
-              timeInputLabel="Time:"
-              dateFormat={ "MM/dd/yyyy"}
-              wrapperClassName="date-picker"
-            />
-  </div>
-  )
-}
+        onChange={handleDateChange}
+        timeInputLabel="Time:"
+        dateFormat={'MM/dd/yyyy'}
+        wrapperClassName="date-picker"
+      />
+    </div>
+  );
+};
 
-export default Calendar
+export default Calendar;

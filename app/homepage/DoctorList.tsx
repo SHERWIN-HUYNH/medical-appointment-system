@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
-import { Button } from "../../components/ui/button";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { Button } from '../../components/ui/button';
 
 type Doctor = {
   name: string;
@@ -18,58 +18,52 @@ function DoctorList() {
 
   const doctorList: Doctor[] = [
     {
-      name: "Mary",
-      category: "Nha sĩ",
-      image: "/assets/doctor/dt1.jpg",
-      address:
-        "425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh",
-      phone: "",
-      year_of_experience: "20 years",
+      name: 'Mary',
+      category: 'Nha sĩ',
+      image: '/assets/doctor/dt1.jpg',
+      address: '425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh',
+      phone: '',
+      year_of_experience: '20 years',
     },
     {
-      name: "Mary",
-      category: "Nha sĩ",
-      image: "/assets/doctor/dt2.jpg",
-      address:
-        "425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh",
-      phone: "",
-      year_of_experience: "20 years",
+      name: 'Mary',
+      category: 'Nha sĩ',
+      image: '/assets/doctor/dt2.jpg',
+      address: '425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh',
+      phone: '',
+      year_of_experience: '20 years',
     },
     {
-      name: "Mary",
-      category: "Nha sĩ",
-      image: "/assets/doctor/dt3.jpg",
-      address:
-        "425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh",
-      phone: "",
-      year_of_experience: "20 years",
+      name: 'Mary',
+      category: 'Nha sĩ',
+      image: '/assets/doctor/dt3.jpg',
+      address: '425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh',
+      phone: '',
+      year_of_experience: '20 years',
     },
     {
-      name: "Mary",
-      category: "Nha sĩ",
-      image: "/assets/doctor/dt4.jpg",
-      address:
-        "425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh",
-      phone: "",
-      year_of_experience: "20 years",
+      name: 'Mary',
+      category: 'Nha sĩ',
+      image: '/assets/doctor/dt4.jpg',
+      address: '425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh',
+      phone: '',
+      year_of_experience: '20 years',
     },
     {
-      name: "Mary",
-      category: "Nha sĩ",
-      image: "/assets/doctor/dt5.jpg",
-      address:
-        "425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh",
-      phone: "",
-      year_of_experience: "20 years",
+      name: 'Mary',
+      category: 'Nha sĩ',
+      image: '/assets/doctor/dt5.jpg',
+      address: '425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh',
+      phone: '',
+      year_of_experience: '20 years',
     },
     {
-      name: "Mary",
-      category: "Nha sĩ",
-      image: "/assets/doctor/dt10.jpg",
-      address:
-        "425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh",
-      phone: "",
-      year_of_experience: "20 years",
+      name: 'Mary',
+      category: 'Nha sĩ',
+      image: '/assets/doctor/dt10.jpg',
+      address: '425 – 427 – 429 đường Nơ Trang Long, Phường 13, Quận Bình Thạnh',
+      phone: '',
+      year_of_experience: '20 years',
     },
   ];
 
@@ -121,7 +115,7 @@ function DoctorList() {
           className="bg-primary hover:bg-[#56c2e6] text-white"
           onClick={() => setShowAll(!showAll)}
         >
-          {showAll ? "Thu gọn" : "Xêm thêm"}
+          {showAll ? 'Thu gọn' : 'Xêm thêm'}
         </Button>
       </div>
     </div>

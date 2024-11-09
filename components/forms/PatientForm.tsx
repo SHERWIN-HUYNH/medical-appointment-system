@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Form } from "@/components/ui/form";
-import { UserFormValidation } from "@/lib/validation";
-import { signIn } from "next-auth/react";
-import "react-phone-number-input/style.css";
-import CustomFormField, { FormFieldType } from "../CustomFormField";
-import SubmitButton from "../SubmitButton";
-import { createUser } from "@/lib/action/patient.actions";
-import { toast } from "sonner";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Form } from '@/components/ui/form';
+import { UserFormValidation } from '@/lib/validation';
+import { signIn } from 'next-auth/react';
+import 'react-phone-number-input/style.css';
+import CustomFormField, { FormFieldType } from '../CustomFormField';
+import SubmitButton from '../SubmitButton';
+import { createUser } from '@/lib/action/patient.actions';
+import { toast } from 'sonner';
 
 export const PatientForm = () => {
   const router = useRouter();
@@ -21,9 +21,9 @@ export const PatientForm = () => {
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
     defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
+      name: '',
+      email: '',
+      phone: '',
     },
   });
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
@@ -36,20 +36,20 @@ export const PatientForm = () => {
         phone: values.phone,
       };
       console.log('user: ', user);
-      const res = await signIn("credentials", {
+      const res = await signIn('credentials', {
         name: values.name,
         email: values.email,
         phone: values.phone,
-				redirect: false,
-			});
+        redirect: false,
+      });
       if (res?.error) {
-				throw new Error(res.error);
-			}
-      toast.success("Login successfully!");
+        throw new Error(res.error);
+      }
+      toast.success('Login successfully!');
     } catch (error) {
       if (error instanceof Error) {
-				toast.error(error.message);
-			}
+        toast.error(error.message);
+      }
       console.log(error);
     }
 

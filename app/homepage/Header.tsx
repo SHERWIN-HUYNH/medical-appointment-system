@@ -1,37 +1,37 @@
-"use client";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
-import { FaUser } from "react-icons/fa";
-import DropDown from "./DropDown";
+'use client';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { FaUser } from 'react-icons/fa';
+import DropDown from './DropDown';
 
 function Header() {
   const { data: session } = useSession();
   const Menu = [
     {
       id: 1,
-      name: "Trang chủ",
-      path: "/",
+      name: 'Trang chủ',
+      path: '/',
     },
     {
       id: 2,
-      name: "Giới thiệu",
-      path: "/",
+      name: 'Giới thiệu',
+      path: '/',
     },
     {
       id: 3,
-      name: "Dịch vụ",
-      path: "/explore",
+      name: 'Dịch vụ',
+      path: '/explore',
     },
     {
       id: 4,
-      name: "Chuyên khoa",
-      path: "/",
+      name: 'Chuyên khoa',
+      path: '/',
     },
     {
       id: 5,
-      name: "Đội ngũ bác sĩ",
-      path: "/",
+      name: 'Đội ngũ bác sĩ',
+      path: '/',
     },
   ];
   return (

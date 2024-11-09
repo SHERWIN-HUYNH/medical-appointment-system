@@ -1,34 +1,34 @@
-"use client";
-import DefaultLayout from "@/components/Layouts/defaultLayout";
-import SelectGroup from "@/components/SelectGroup";
-import SwitcherToggle from "@/components/SwitcherToggle";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { academicTitles } from "@/lib/data";
-import { DoctorFormValidation } from "@/lib/validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Faculty } from "@prisma/client";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+'use client';
+import DefaultLayout from '@/components/Layouts/defaultLayout';
+import SelectGroup from '@/components/SelectGroup';
+import SwitcherToggle from '@/components/SwitcherToggle';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { academicTitles } from '@/lib/data';
+import { DoctorFormValidation } from '@/lib/validation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Faculty } from '@prisma/client';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 const EditDoctor = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [fileName, setFileName] = useState<string>("");
+  const [fileName, setFileName] = useState<string>('');
   const [isActive, setIsActive] = useState<boolean>(false);
   const form = useForm<z.infer<typeof DoctorFormValidation>>({
     resolver: zodResolver(DoctorFormValidation),
     defaultValues: {
-      name: "",
-      image: "",
-      academicTitle: "",
-      faculty: "",
-      description: "",
+      name: '',
+      image: '',
+      academicTitle: '',
+      faculty: '',
+      description: '',
       isActive: false,
     },
   });
@@ -41,7 +41,7 @@ const EditDoctor = () => {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+  const id = searchParams.get('id');
 
   const fetchFacultyData = async () => {
     const response = await fetch(`/api/faculty`);
@@ -53,7 +53,7 @@ const EditDoctor = () => {
 
   const getAcademicTitleId = (name: string) => {
     const title = academicTitles.find((title) => title.name === name);
-    return title?.id || "";
+    return title?.id || '';
   };
 
   const fetchDoctorData = async () => {
@@ -70,7 +70,7 @@ const EditDoctor = () => {
       });
       setImagePreview(doctor.image);
       setIsActive(doctor.isActive);
-      setFileName(doctor.image || "");
+      setFileName(doctor.image || '');
     }
   };
 
@@ -85,23 +85,23 @@ const EditDoctor = () => {
     const file = event.target.files?.[0];
 
     if (!file) {
-      toast.error("Vui lòng tải lên một tệp hình ảnh");
+      toast.error('Vui lòng tải lên một tệp hình ảnh');
       return;
     }
-    if (!file.type.startsWith("image/")) {
-      toast.error("Chỉ cho phép tải lên các tệp hình ảnh");
-      event.target.value = "";
+    if (!file.type.startsWith('image/')) {
+      toast.error('Chỉ cho phép tải lên các tệp hình ảnh');
+      event.target.value = '';
       return;
     }
     setImageFile(file);
-    form.setValue("image", file.name);
+    form.setValue('image', file.name);
     setImagePreview(file.name);
     setFileName(file.name);
   };
 
   const handleToggle = (value: boolean) => {
     setIsActive(value);
-    form.setValue("isActive", value);
+    form.setValue('isActive', value);
   };
 
   const onSubmit = async (values: z.infer<typeof DoctorFormValidation>) => {
@@ -109,8 +109,8 @@ const EditDoctor = () => {
       academicTitles.find((title) => title.id === values.academicTitle)?.name ||
       values.academicTitle;
     const response = await fetch(`/api/doctor`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         doctor: { id, ...values, academicTitle: academicTitleName },
       }),
@@ -119,17 +119,14 @@ const EditDoctor = () => {
     const data = await response.json();
 
     if (response.ok) {
-      toast.success("Cập nhật thông tin bác sĩ thành công");
-      router.push("/test-doctor");
+      toast.success('Cập nhật thông tin bác sĩ thành công');
+      router.push('/test-doctor');
     } else {
-      toast.error(data.message || "Cập nhật thông tin bác sĩ thất bại");
+      toast.error(data.message || 'Cập nhật thông tin bác sĩ thất bại');
       // Nếu cập nhật thất bại do bác sĩ có lịch hẹn, reset trạng thái
-      if (
-        data.message ===
-        "Bác sĩ này đang có cuộc hẹn không thể chuyển trạng thái"
-      ) {
+      if (data.message === 'Bác sĩ này đang có cuộc hẹn không thể chuyển trạng thái') {
         setIsActive(true);
-        form.setValue("isActive", true);
+        form.setValue('isActive', true);
       }
     }
   };
@@ -153,7 +150,7 @@ const EditDoctor = () => {
                   <Input
                     type="text"
                     placeholder="Nhập họ tên bác sĩ"
-                    {...register("name")}
+                    {...register('name')}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
                 </div>
@@ -162,10 +159,7 @@ const EditDoctor = () => {
                     <Label className="mb-3 block text-sm font-medium text-black dark:text-white">
                       Trạng thái hoạt động
                     </Label>
-                    <SwitcherToggle
-                      enabled={isActive}
-                      onToggle={handleToggle}
-                    />
+                    <SwitcherToggle enabled={isActive} onToggle={handleToggle} />
                   </div>
                 </div>
               </div>
@@ -196,7 +190,7 @@ const EditDoctor = () => {
                     src={`/assets/doctor/${imagePreview}`}
                     alt="Image Preview"
                     className="mt-4 w-30 h-30 object-cover"
-                    style={{ maxWidth: "200px", maxHeight: "200px" }}
+                    style={{ maxWidth: '200px', maxHeight: '200px' }}
                   />
                 )}
               </div>
@@ -235,7 +229,7 @@ const EditDoctor = () => {
                   rows={6}
                   placeholder="Nhập mô tả"
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  {...register("description")}
+                  {...register('description')}
                 />
                 {errors.description && (
                   <span className="mt-2 block text-red-500">

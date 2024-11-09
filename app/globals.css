@@ -27,20 +27,20 @@
 }
 
 @layer utilities {
-  .blue-header{
+  .blue-header {
     @apply font-bold text-xl px-3 py-4 text-white text-center rounded-t-lg bg-gradient-to-r from-[#00b5f1] to-[#00e0ff];
   }
-  .center{
+  .center {
     @apply flex justify-center;
   }
-  .timeSlot{
-    @apply py-6 px-2 text-[#818181] bg-[#f5f5f5] min-w-36 font-medium text-xl rounded-md hover:bg-[#f5f5f5]
+  .timeSlot {
+    @apply py-6 px-2 text-[#818181] bg-[#f5f5f5] min-w-36 font-medium text-xl rounded-md hover:bg-[#f5f5f5];
   }
-  .activeTimeSlot{
-    @apply py-6 px-2 border border-solid text-[#003553] border-[#00e0ff] hover:bg-gradient-to-r hover:from-[#00b5f1] hover:to-[#00e0ff] hover:border-transparent bg-white min-w-36 font-medium text-xl
+  .activeTimeSlot {
+    @apply py-6 px-2 border border-solid text-[#003553] border-[#00e0ff] hover:bg-gradient-to-r hover:from-[#00b5f1] hover:to-[#00e0ff] hover:border-transparent bg-white min-w-36 font-medium text-xl;
   }
-  .text-16-normal{
-    @apply text-base font-normal text-[#003553] ;
+  .text-16-normal {
+    @apply text-base font-normal text-[#003553];
   }
   /* ===== UTILITIES */
   .sidebar {
@@ -66,7 +66,6 @@
   .button {
     @apply rounded-full py-2 px-10 bg-slate-200 font-semibold border-2 border-transparent transition-all ease-linear duration-300 shadow-none hover:border-blue-500 hover:shadow-lg hover:translate-y-[-2px];
   }
-
 
   .button-selected {
     @apply bg-gradient-to-r from-cyan-500 to-blue-400 text-white shadow-lg;
@@ -148,7 +147,7 @@
 
   /* Data Table */
   .data-table {
-    @apply z-10 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] w-full overflow-hidden rounded-lg border-none ;
+    @apply z-10 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] w-full overflow-hidden rounded-lg border-none;
   }
 
   .table-actions {
@@ -223,15 +222,15 @@
   }
 
   .shad-input {
-    @apply  placeholder:text-[#495057] border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
+    @apply placeholder:text-[#495057] border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
   }
 
   .shad-input-icon {
-    @apply  placeholder:text-[#495057] border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
+    @apply placeholder:text-[#495057] border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
   }
 
   .shad-textArea {
-    @apply  placeholder:text-[#495057] border-dark-500 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
+    @apply placeholder:text-[#495057] border-dark-500 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
   }
 
   .shad-combobox-item {
@@ -243,11 +242,11 @@
   }
 
   .shad-select-trigger {
-    @apply   placeholder:text-[#495057] border-dark-500 bg-white h-11 focus:ring-0 focus:ring-offset-0 !important;
+    @apply placeholder:text-[#495057] border-dark-500 bg-white h-11 focus:ring-0 focus:ring-offset-0 !important;
   }
 
   .shad-select-content {
-    @apply  border-dark-500 bg-white !important;
+    @apply border-dark-500 bg-white !important;
   }
 
   .shad-dialog {
@@ -375,50 +374,48 @@
 .fc-header-toolbar {
   display: inline-block;
   padding: 4px 4px;
-  
+
   @apply space-x-8;
 }
 
 .fc-day {
-@apply m-8;
+  @apply m-8;
 }
 
 .fc-scrollgrid-sync-table {
-@apply w-full;
+  @apply w-full;
 }
 
 .fc-view {
-@apply w-full h-full lg:h-3/4 xl:h-2/3 bg-white;
+  @apply w-full h-full lg:h-3/4 xl:h-2/3 bg-white;
 }
 
 .fc-h-event {
-@apply bg-primary border border-primary ;
-
+  @apply bg-primary border border-primary;
 }
-.gradient-color{
-@apply bg-gradient-to-r from-[#00b5f1] to-[#00e0ff];
+.gradient-color {
+  @apply bg-gradient-to-r from-[#00b5f1] to-[#00e0ff];
 }
 .fc .fc-daygrid-day.fc-day-today {
-@apply bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-black;
+  @apply bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-black;
 }
 
-.fc .fc-button{
-@apply bg-primary hover:bg-primary/50  ;
+.fc .fc-button {
+  @apply bg-primary hover:bg-primary/50;
 }
 
 .fc .fc-button-primary:not(:disabled).fc-button-active {
-@apply bg-gradient-to-r from-[#00b5f1] to-[#00e0ff];
+  @apply bg-gradient-to-r from-[#00b5f1] to-[#00e0ff];
 }
 
 .fc .fc-button-primary:disabled {
-@apply bg-primary;
+  @apply bg-primary;
 }
 .fc-v-event {
-@apply bg-primary border border-primary ;
-
+  @apply bg-primary border border-primary;
 }
 
-.fc{
+.fc {
   @apply min-h-[800px] w-[900px] !important;
 }
 .fc .fc-scrollgrid-sync-table {
@@ -427,17 +424,17 @@
 .fc .fc-scrollgrid {
   @apply h-[700px];
 }
-.fc .fc-day-disabled{
+.fc .fc-day-disabled {
   background-color: none !important;
 }
-.fc-daygrid-day.fc-day-past{
+.fc-daygrid-day.fc-day-past {
   opacity: 0.5;
   pointer-events: none;
 }
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #CBD5E0 #EDF2F7;
+  scrollbar-color: #cbd5e0 #edf2f7;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -445,16 +442,16 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #EDF2F7;
+  background: #edf2f7;
   border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #CBD5E0;
+  background-color: #cbd5e0;
   border-radius: 4px;
-  border: 2px solid #EDF2F7;
+  border: 2px solid #edf2f7;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #A0AEC0;
+  background-color: #a0aec0;
 }

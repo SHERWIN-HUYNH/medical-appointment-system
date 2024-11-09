@@ -1,19 +1,19 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import ModalDelete from "@/components/ModalDelete";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
-import TableSearch from "@/components/TableSearch";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import ModalDelete from '@/components/ModalDelete';
+import Pagination from '@/components/Pagination';
+import Table from '@/components/Table';
+import TableSearch from '@/components/TableSearch';
 import {
   ArrowDownNarrowWide,
   CalendarRange,
   Pencil,
   SlidersHorizontal,
   Trash2,
-} from "lucide-react";
-import Link from "next/link";
-import { academicTitles } from "@/lib/data";
+} from 'lucide-react';
+import Link from 'next/link';
+import { academicTitles } from '@/lib/data';
 
 type Doctor = {
   id: string;
@@ -30,15 +30,15 @@ type Faculty = {
 };
 
 const columns = [
-  { header: "STT", accessor: "index", className: "w-[5%]" },
-  { header: "Bác sĩ", accessor: "doctor" },
-  { header: "Học hàm/học vị", accessor: "academicTitle" },
-  { header: "Chuyên khoa", accessor: "facultyName" },
-  { header: "Hình ảnh", accessor: "imageDoctor" },
+  { header: 'STT', accessor: 'index', className: 'w-[5%]' },
+  { header: 'Bác sĩ', accessor: 'doctor' },
+  { header: 'Học hàm/học vị', accessor: 'academicTitle' },
+  { header: 'Chuyên khoa', accessor: 'facultyName' },
+  { header: 'Hình ảnh', accessor: 'imageDoctor' },
   {
-    header: "Mô tả",
-    accessor: "description",
-    className: "hidden md:table-cell ",
+    header: 'Mô tả',
+    accessor: 'description',
+    className: 'hidden md:table-cell ',
   },
 ];
 
@@ -50,13 +50,13 @@ const ListDoctor = () => {
   const itemsPerPage = 5;
   const [showModal, setShowModal] = useState(false);
   const [doctorToDelete, setDoctorToDelete] = useState<Doctor | null>(null);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [fadeOut, setFadeOut] = useState(false);
   const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
   const [showFilter, setShowFilter] = useState(false);
   const [showSort, setShowSort] = useState(false);
-  const [sortOption, setSortOption] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOption, setSortOption] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [facultyData, setFacultyData] = useState<Faculty[]>([]);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const ListDoctor = () => {
         const data = await response.json();
         setDoctorData(data);
       } else {
-        setError("Failed to fetch faculties");
+        setError('Failed to fetch faculties');
       }
       setLoading(false);
     };
@@ -79,7 +79,7 @@ const ListDoctor = () => {
         const data = await response.json();
         setFacultyData(data);
       } else {
-        setError("Failed to fetch faculties");
+        setError('Failed to fetch faculties');
       }
     };
 
@@ -89,7 +89,7 @@ const ListDoctor = () => {
 
   const getFacultyName = (facultyId: string) => {
     const faculty = facultyData.find((fac) => fac.id === facultyId);
-    return faculty ? faculty.name : "Unknown Faculty";
+    return faculty ? faculty.name : 'Unknown Faculty';
   };
 
   //function lấy tên academic title
@@ -111,9 +111,9 @@ const ListDoctor = () => {
 
     try {
       const response = await fetch(`/api/doctor`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ doctor: doctorToDelete }),
       });
@@ -123,16 +123,16 @@ const ListDoctor = () => {
       if (response.ok) {
         // Cập nhật state sau khi xóa thành công
         setDoctorData((prevData) =>
-          prevData.filter((doctor) => doctor.id !== doctorToDelete.id)
+          prevData.filter((doctor) => doctor.id !== doctorToDelete.id),
         );
         showMessage(`Bác sĩ ${doctorToDelete.name} đã xóa thành công!`);
       } else {
         // Hiển thị thông báo lỗi cụ thể từ server
-        showMessage(data.message || "Không thể xóa bác sĩ!");
+        showMessage(data.message || 'Không thể xóa bác sĩ!');
       }
     } catch (error) {
-      console.error("Error deleting doctor:", error);
-      showMessage("Đã xảy ra lỗi khi xóa bác sĩ!");
+      console.error('Error deleting doctor:', error);
+      showMessage('Đã xảy ra lỗi khi xóa bác sĩ!');
     } finally {
       // Reset trạng thái
       setDoctorToDelete(null);
@@ -151,8 +151,7 @@ const ListDoctor = () => {
 
   const filteredDoctorData = doctorData.filter((doctor) => {
     const matchesFaculty =
-      selectedFaculties.length === 0 ||
-      selectedFaculties.includes(doctor.facultyId);
+      selectedFaculties.length === 0 || selectedFaculties.includes(doctor.facultyId);
     const matchesSearchTerm = doctor.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
@@ -163,7 +162,7 @@ const ListDoctor = () => {
 
   const displayedData = filteredDoctorData.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   // Xử lý sắp xếp
@@ -173,8 +172,8 @@ const ListDoctor = () => {
 
     const sortByName = (a: Doctor, b: Doctor) => {
       // Tách tên và họ
-      const [firstNameA, lastNameA] = a.name.split(" ").slice(-1);
-      const [firstNameB, lastNameB] = b.name.split(" ").slice(-1);
+      const [firstNameA, lastNameA] = a.name.split(' ').slice(-1);
+      const [firstNameB, lastNameB] = b.name.split(' ').slice(-1);
 
       // So sánh tên trước
       if (firstNameA !== firstNameB) {
@@ -185,9 +184,9 @@ const ListDoctor = () => {
       return lastNameA.localeCompare(lastNameB);
     };
 
-    if (option === "A-Z") {
+    if (option === 'A-Z') {
       sortedData = sortedData.sort((a, b) => sortByName(a, b));
-    } else if (option === "Z-A") {
+    } else if (option === 'Z-A') {
       sortedData = sortedData.sort((a, b) => sortByName(b, a));
     }
 
@@ -212,9 +211,7 @@ const ListDoctor = () => {
     >
       <td className="hidden lg:table-cell text-center">{item.index}</td>
       <td className="text-center">{item.name}</td>
-      <td className="text-center">
-        {getAcademicTitleName(item.academicTitle)}
-      </td>
+      <td className="text-center">{getAcademicTitleName(item.academicTitle)}</td>
       <td className="text-center">{getFacultyName(item.facultyId)}</td>
       <td className="text-center">
         <img
@@ -288,7 +285,7 @@ const ListDoctor = () => {
       {showFilter && (
         <div
           className="absolute right-0 mt-4 w-60 p-4 border rounded-lg shadow-lg bg-white border-slate-200 overflow-y-auto"
-          style={{ maxHeight: "300px", zIndex: 10 }}
+          style={{ maxHeight: '300px', zIndex: 10 }}
         >
           <h3 className="font-semibold text-primary">Lọc theo chuyên khoa:</h3>
           <div className="flex flex-col mt-2">
@@ -326,7 +323,7 @@ const ListDoctor = () => {
       {showSort && (
         <div
           className="absolute right-0 mt-4 w-60 p-4 border rounded-lg shadow-lg bg-white border-slate-200"
-          style={{ maxHeight: "300px", zIndex: 10 }}
+          style={{ maxHeight: '300px', zIndex: 10 }}
         >
           <h3 className="font-semibold text-primary">Sắp xếp:</h3>
           <div className="flex flex-col mt-2">
@@ -335,8 +332,8 @@ const ListDoctor = () => {
                 type="radio"
                 name="sortOption"
                 value="A-Z"
-                checked={sortOption === "A-Z"}
-                onChange={() => handleSortOptionChange("A-Z")}
+                checked={sortOption === 'A-Z'}
+                onChange={() => handleSortOptionChange('A-Z')}
                 className="mr-2"
               />
               Tên (A-Z)
@@ -346,8 +343,8 @@ const ListDoctor = () => {
                 type="radio"
                 name="sortOption"
                 value="Z-A"
-                checked={sortOption === "Z-A"}
-                onChange={() => handleSortOptionChange("Z-A")}
+                checked={sortOption === 'Z-A'}
+                onChange={() => handleSortOptionChange('Z-A')}
                 className="mr-2"
               />
               Tên (Z-A)

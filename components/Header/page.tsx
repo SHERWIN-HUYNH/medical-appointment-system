@@ -1,18 +1,18 @@
-import React from 'react'
+import React from 'react';
 
 // const Header = () => {
 //   return (
 //     // <header  className="sticky top-0 z-999 flex w-full min-h-32 bg-red-400 drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
 //     //     Header
 //     // </header>
-    
+
 //   )
 // }
 
 // export default Header
-import Link from "next/link";
+import Link from 'next/link';
 
-import Image from "next/image";
+import Image from 'next/image';
 import DarkModeSwitcher from './DarkModeSwitcher';
 import DropdownMessage from './DropdownMessage';
 import DropdownNotification from './DropdownNotification';
@@ -39,29 +39,29 @@ const Header = (props: {
               <span className="du-block absolute right-0 h-full w-full">
                 <span
                   className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-&lsqb;\0&rsqb; duration-200 ease-in-out dark:bg-white ${
-                    !props.sidebarOpen && "!w-full delay-300"
+                    !props.sidebarOpen && '!w-full delay-300'
                   }`}
                 ></span>
                 <span
                   className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-150 duration-200 ease-in-out dark:bg-white ${
-                    !props.sidebarOpen && "delay-400 !w-full"
+                    !props.sidebarOpen && 'delay-400 !w-full'
                   }`}
                 ></span>
                 <span
                   className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-200 duration-200 ease-in-out dark:bg-white ${
-                    !props.sidebarOpen && "!w-full delay-500"
+                    !props.sidebarOpen && '!w-full delay-500'
                   }`}
                 ></span>
               </span>
               <span className="absolute right-0 h-full w-full rotate-45">
                 <span
                   className={`absolute left-2.5 top-0 block h-full w-0.5 rounded-sm bg-black delay-300 duration-200 ease-in-out dark:bg-white ${
-                    !props.sidebarOpen && "!h-0 !delay-&lsqb;\0&rsqb;"
+                    !props.sidebarOpen && '!h-0 !delay-&lsqb;\0&rsqb;'
                   }`}
                 ></span>
                 <span
                   className={`delay-400 absolute left-0 top-2.5 block h-0.5 w-full rounded-sm bg-black duration-200 ease-in-out dark:bg-white ${
-                    !props.sidebarOpen && "!h-0 !delay-200"
+                    !props.sidebarOpen && '!h-0 !delay-200'
                   }`}
                 ></span>
               </span>
@@ -70,12 +70,7 @@ const Header = (props: {
           {/* <!-- Hamburger Toggle BTN --> */}
 
           <Link className="block flex-shrink-0 lg:hidden" href="/">
-            <Image
-              width={32}
-              height={32}
-              src={"/images/logo/logo-icon.svg"}
-              alt="Logo"
-            />
+            <Image width={32} height={32} src={'/images/logo/logo-icon.svg'} alt="Logo" />
           </Link>
         </div>
 
@@ -117,12 +112,12 @@ const Header = (props: {
 
         <div className="flex items-center gap-3 2xsm:gap-7">
           <ul className="flex items-center gap-2 2xsm:gap-4">
-           {/* <!-- Dark Mode Toggler --> */}
-          
-           <DropdownUser />
-          {/* <!-- User Area --> */}
-        </ul>
-      </div>
+            {/* <!-- Dark Mode Toggler --> */}
+
+            <DropdownUser />
+            {/* <!-- User Area --> */}
+          </ul>
+        </div>
       </div>
     </header>
   );

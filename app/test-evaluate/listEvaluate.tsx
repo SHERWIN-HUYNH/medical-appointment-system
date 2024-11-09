@@ -1,12 +1,12 @@
-"use client";
-import ModalDelete from "@/components/ModalDelete";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
-import TableSearch from "@/components/table/TableSearch";
-import { Button } from "@/components/ui/button";
-import { Trash2, Star as StarSolid } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
+'use client';
+import ModalDelete from '@/components/ModalDelete';
+import Pagination from '@/components/Pagination';
+import Table from '@/components/Table';
+import TableSearch from '@/components/table/TableSearch';
+import { Button } from '@/components/ui/button';
+import { Trash2, Star as StarSolid } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 type Comment = {
   id: number;
@@ -18,12 +18,12 @@ type Comment = {
 };
 
 const columns = [
-  { header: "STT", accessor: "index" },
-  { header: "Ngày đăng", accessor: "createdAt" },
-  { header: "Bác sĩ", accessor: "doctorName" },
-  { header: "Tên người dùng", accessor: "userName" },
-  { header: "Nội dung", accessor: "content", className: "hidden md:table-cell" },
-  { header: "Số sao đánh giá", accessor: "rating" },
+  { header: 'STT', accessor: 'index' },
+  { header: 'Ngày đăng', accessor: 'createdAt' },
+  { header: 'Bác sĩ', accessor: 'doctorName' },
+  { header: 'Tên người dùng', accessor: 'userName' },
+  { header: 'Nội dung', accessor: 'content', className: 'hidden md:table-cell' },
+  { header: 'Số sao đánh giá', accessor: 'rating' },
 ];
 
 const ListComment = () => {
@@ -38,20 +38,20 @@ const ListComment = () => {
     const fetchComments = async () => {
       try {
         const response = await fetch(`/api/comment`, {
-          method: "GET",
+          method: 'GET',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         });
         if (!response.ok) {
-          throw new Error("Lỗi khi lấy danh sách đánh giá");
+          throw new Error('Lỗi khi lấy danh sách đánh giá');
         }
         const comments = await response.json();
-        console.log(comments)
-        setCommentData(comments)
+        console.log(comments);
+        setCommentData(comments);
       } catch (error) {
-        console.error("Error fetching comments:", error);
-        toast.error("Lỗi khi tải đánh giá! Vui lòng thử lại.")
+        console.error('Error fetching comments:', error);
+        toast.error('Lỗi khi tải đánh giá! Vui lòng thử lại.');
       }
     };
 
@@ -62,52 +62,54 @@ const ListComment = () => {
     if (commentToDelete) {
       try {
         const response = await fetch(`/api/comment`, {
-          method: "DELETE",
+          method: 'DELETE',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({ commentValues: commentToDelete }),
         });
         if (!response.ok) {
-          throw new Error("Không thể xóa đánh giá.");
+          throw new Error('Không thể xóa đánh giá.');
         }
 
         const updatedCommentData = comments.filter(
-          (comment) => comment.id !== commentToDelete.id
+          (comment) => comment.id !== commentToDelete.id,
         );
         setCommentData(updatedCommentData);
 
         setCommentToDelete(null);
         setShowModal(false);
-        toast.success("Xóa đánh giá thành công");
+        toast.success('Xóa đánh giá thành công');
       } catch (error) {
-        console.error("Lỗi khi xóa đánh giá:", error);
-        toast.error("Lỗi khi xóa đánh giá!");
+        console.error('Lỗi khi xóa đánh giá:', error);
+        toast.error('Lỗi khi xóa đánh giá!');
       }
     }
   };
 
   const totalPages = Math.ceil(comments.length / itemsPerPage);
 
-  const filteredData = comments.filter((item) =>
-    !selectedRating || item.rating === selectedRating
+  const filteredData = comments.filter(
+    (item) => !selectedRating || item.rating === selectedRating,
   );
 
-  const displayedData = filteredData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  ).map((item, index) => ({ ...item, index: (currentPage - 1) * itemsPerPage + index + 1 }));
+  const displayedData = filteredData
+    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+    .map((item, index) => ({
+      ...item,
+      index: (currentPage - 1) * itemsPerPage + index + 1,
+    }));
 
   const handleSearch = (searchTerm: string) => {
     if (!searchTerm) {
     } else {
       const results = comments.filter((item) =>
-        item.doctorName.toLowerCase().includes(searchTerm.toLowerCase())
+        item.doctorName.toLowerCase().includes(searchTerm.toLowerCase()),
       );
 
       if (results.length === 0) {
-        toast.error("Không tìm thấy đánh giá nào phù hợp.");
-      } 
+        toast.error('Không tìm thấy đánh giá nào phù hợp.');
+      }
 
       setCommentData(results);
       setCurrentPage(1);
@@ -120,7 +122,7 @@ const ListComment = () => {
         <StarSolid
           key={index}
           size={20}
-          fill={index < rating ? "gold" : "gray"}
+          fill={index < rating ? 'gold' : 'gray'}
           stroke="none"
         />
       ))}
@@ -129,15 +131,18 @@ const ListComment = () => {
 
   const renderRow = (item: Comment & { index: number }) => {
     const date = new Date(item.createdAt);
-    const day = String(date.getDate()).padStart(2, '0'); 
-    const month = String(date.getMonth() + 1).padStart(2, '0'); 
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     const formattedDate = `${day}/${month}/${year}`;
 
     return (
-      <tr key={item.id} className="h-15 border-b border-slate-200 even:bg-slate-50 text-sm hover:bg-blue-50">
+      <tr
+        key={item.id}
+        className="h-15 border-b border-slate-200 even:bg-slate-50 text-sm hover:bg-blue-50"
+      >
         <td className="text-center">{item.index}</td>
-        <td className="text-center">{formattedDate}</td> 
+        <td className="text-center">{formattedDate}</td>
         <td className="text-center">{item.doctorName}</td>
         <td className="text-center">{item.userName}</td>
         <td className="hidden md:table-cell text-center">{item.content}</td>
@@ -170,7 +175,7 @@ const ListComment = () => {
 
           <select
             className="p-2 border rounded-xl border-primary"
-            value={selectedRating || ""}
+            value={selectedRating || ''}
             onChange={(e) => setSelectedRating(Number(e.target.value) || null)}
           >
             <option value="">Số sao</option>
@@ -187,10 +192,16 @@ const ListComment = () => {
           <div className="overflow-x-auto">
             <Table columns={columns} data={displayedData} renderRow={renderRow} />
           </div>
-          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </>
       ) : (
-        <div className="mt-4 text-center text-slate-500">Không tìm thấy đánh giá nào phù hợp.</div>
+        <div className="mt-4 text-center text-slate-500">
+          Không tìm thấy đánh giá nào phù hợp.
+        </div>
       )}
 
       {showModal && (

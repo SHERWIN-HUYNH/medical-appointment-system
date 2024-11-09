@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { ApexOptions } from "apexcharts";
-import React from "react";
-import dynamic from "next/dynamic";
+import { ApexOptions } from 'apexcharts';
+import React from 'react';
+import dynamic from 'next/dynamic';
 
-const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 });
 
 const options: ApexOptions = {
-  colors: ["#3C50E0", "#80CAEE"],
+  colors: ['#3C50E0', '#80CAEE'],
   chart: {
-    fontFamily: "Satoshi, sans-serif",
-    type: "bar",
+    fontFamily: 'Satoshi, sans-serif',
+    type: 'bar',
     height: 335,
     stacked: true,
     toolbar: {
@@ -30,7 +30,7 @@ const options: ApexOptions = {
         plotOptions: {
           bar: {
             borderRadius: 0,
-            columnWidth: "25%",
+            columnWidth: '25%',
           },
         },
       },
@@ -40,9 +40,9 @@ const options: ApexOptions = {
     bar: {
       horizontal: false,
       borderRadius: 0,
-      columnWidth: "25%",
-      borderRadiusApplication: "end",
-      borderRadiusWhenStacked: "last",
+      columnWidth: '25%',
+      borderRadiusApplication: 'end',
+      borderRadiusWhenStacked: 'last',
     },
   },
   dataLabels: {
@@ -50,19 +50,31 @@ const options: ApexOptions = {
   },
 
   xaxis: {
-    categories: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+    categories: [
+      'Tháng 1',
+      'Tháng 2',
+      'Tháng 3',
+      'Tháng 4',
+      'Tháng 5',
+      'Tháng 6',
+      'Tháng 7',
+      'Tháng 8',
+      'Tháng 9',
+      'Tháng 10',
+      'Tháng 11',
+      'Tháng 12',
+    ],
   },
   legend: {
-    position: "top",
-    horizontalAlign: "left",
-    fontFamily: "Satoshi",
+    position: 'top',
+    horizontalAlign: 'left',
+    fontFamily: 'Satoshi',
     fontWeight: 500,
-    fontSize: "14px",
+    fontSize: '14px',
 
     markers: {
-      size: 5, 
+      size: 5,
     },
-    
   },
   fill: {
     opacity: 1,
@@ -72,11 +84,11 @@ const options: ApexOptions = {
 const ChartTwo: React.FC = () => {
   const series = [
     {
-      name: "Lịch hẹn 2022",
+      name: 'Lịch hẹn 2022',
       data: [44, 55, 41, 67, 22, 43, 65, 55, 42, 31, 44, 55],
     },
     {
-      name: "Lịch hẹn 2023",
+      name: 'Lịch hẹn 2023',
       data: [13, 23, 20, 8, 13, 27, 15, 20, 23, 19, 17, 27],
     },
   ];
@@ -134,7 +146,7 @@ const ChartTwo: React.FC = () => {
             series={series}
             type="bar"
             height={350}
-            width={"100%"}
+            width={'100%'}
           />
         </div>
       </div>
