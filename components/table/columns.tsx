@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
+import { ColumnDef } from '@tanstack/react-table';
+import Image from 'next/image';
 
-import { Doctors } from "@/constants";
-import { formatDateTime } from "@/lib/utils";
-import { Appointment } from "@/types/appwrite.types";
-import { AppointmentModal } from "../AppointmentModal";
-import { StatusBadge } from "../StatusBadge";
+import { Doctors } from '@/constants';
+import { formatDateTime } from '@/lib/utils';
+import { Appointment } from '@/types/appwrite.types';
+import { AppointmentModal } from '../AppointmentModal';
+import { StatusBadge } from '../StatusBadge';
 
 export const columns: ColumnDef<Appointment>[] = [
   {
-    header: "#",
+    header: '#',
     cell: ({ row }) => {
       return <p className="text-14-medium ">{row.index + 1}</p>;
     },
   },
   {
-    accessorKey: "patient",
-    header: "Bệnh nhân",
+    accessorKey: 'patient',
+    header: 'Bệnh nhân',
     cell: ({ row }) => {
       const appointment = row.original;
       return <p className="text-14-medium ">{appointment.patient.name}</p>;
@@ -30,8 +30,8 @@ export const columns: ColumnDef<Appointment>[] = [
     },
   },
   {
-    accessorKey: "status",
-    header: "Trạng thái",
+    accessorKey: 'status',
+    header: 'Trạng thái',
     cell: ({ row }) => {
       const appointment = row.original;
       return (
@@ -42,8 +42,8 @@ export const columns: ColumnDef<Appointment>[] = [
     },
   },
   {
-    accessorKey: "schedule",
-    header: "Thời gian",
+    accessorKey: 'schedule',
+    header: 'Thời gian',
     cell: ({ row }) => {
       const appointment = row.original;
       return (
@@ -54,13 +54,13 @@ export const columns: ColumnDef<Appointment>[] = [
     },
   },
   {
-    accessorKey: "primaryPhysician",
-    header: "Bác sĩ",
+    accessorKey: 'primaryPhysician',
+    header: 'Bác sĩ',
     cell: ({ row }) => {
       const appointment = row.original;
 
       const doctor = Doctors.find(
-        (doctor) => doctor.name === appointment.primaryPhysician
+        (doctor) => doctor.name === appointment.primaryPhysician,
       );
 
       return (
@@ -78,7 +78,7 @@ export const columns: ColumnDef<Appointment>[] = [
     },
   },
   {
-    id: "actions",
+    id: 'actions',
     header: () => <div className="pl-4">Xem chi tiết</div>,
     cell: ({ row }) => {
       const appointment = row.original;
@@ -98,7 +98,6 @@ export const columns: ColumnDef<Appointment>[] = [
             userId={appointment.userId}
             appointment={appointment}
             type="cancel"
-
             title="Cancel Appointment"
             description="Are you sure you want to cancel your appointment?"
           />

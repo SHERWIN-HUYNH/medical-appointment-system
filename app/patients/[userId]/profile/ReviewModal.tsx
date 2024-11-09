@@ -1,6 +1,6 @@
-import React from "react";
-import { Button } from "@/components/ui/button";;
-import { Textarea } from "@/components/ui/textarea";
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface ReviewModalProps {
   rating: number;
@@ -23,7 +23,7 @@ const ReviewModal = (props: ReviewModalProps) => {
             <span
               key={index}
               className={`cursor-pointer text-3xl ${
-                index < rating ? "text-yellow-500" : "text-slate-300"
+                index < rating ? 'text-yellow-500' : 'text-slate-300'
               }`}
               onClick={() => setRating(index + 1)}
             >

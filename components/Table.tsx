@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const Table = ({
   columns,
@@ -18,7 +18,9 @@ const Table = ({
       <thead>
         <tr className="text-center text-sm text-slate-600">
           {columns.map((col) => (
-            <th key={col.accessor} className={col.className}>{col.header}</th>
+            <th key={col.accessor} className={col.className}>
+              {col.header}
+            </th>
           ))}
         </tr>
       </thead>

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -10,12 +10,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Appointment } from "@/types/appwrite.types";
+} from '@/components/ui/dialog';
+import { Appointment } from '@/types/appwrite.types';
 
-import { AppointmentForm } from "./forms/AppointmentForm";
+import { AppointmentForm } from './forms/AppointmentForm';
 
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
 
 export const AppointmentModal = ({
   patientId,
@@ -26,7 +26,7 @@ export const AppointmentModal = ({
   patientId: string;
   userId: string;
   appointment?: Appointment;
-  type: "schedule" | "cancel" | 'Chi tiết'|'Hủy';
+  type: 'schedule' | 'cancel' | 'Chi tiết' | 'Hủy';
   title: string;
   description: string;
 }) => {
@@ -36,7 +36,7 @@ export const AppointmentModal = ({
       <DialogTrigger asChild>
         <Button
           variant="ghost"
-          className={`capitalize ${type === "Chi tiết" && "text-green-500"}`}
+          className={`capitalize ${type === 'Chi tiết' && 'text-green-500'}`}
           //disabled={appointment?.status === "cancelled" || appointment?.status === "scheduled"}
         >
           {type}

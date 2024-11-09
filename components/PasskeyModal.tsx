@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import {
   AlertDialog,
@@ -12,36 +12,29 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
-import { decryptKey, encryptKey } from "@/lib/utils";
+} from '@/components/ui/alert-dialog';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
+import { decryptKey, encryptKey } from '@/lib/utils';
 
 export const PasskeyModal = () => {
   const router = useRouter();
   const path = usePathname();
   const [open, setOpen] = useState(false);
-  const [passkey, setPasskey] = useState("");
-  const [error, setError] = useState("");
-  
+  const [passkey, setPasskey] = useState('');
+  const [error, setError] = useState('');
+
   const encryptedKey =
-    typeof window !== "undefined"
-      ? window.localStorage.getItem("accessKey")
-      : null;
+    typeof window !== 'undefined' ? window.localStorage.getItem('accessKey') : null;
 
   useEffect(() => {
     const accessKey = encryptedKey && decryptKey(encryptedKey);
-    console.log('1. PASSKEYMODAL accessKey',accessKey)
-    console.log('2. PASSKEYMODAL env',process.env.NEXT_PUBLIC_ADMIN_PASSKEY)
-    if(path)
-      console.log('3. PASSKEYMODAL path',path)
+    console.log('1. PASSKEYMODAL accessKey', accessKey);
+    console.log('2. PASSKEYMODAL env', process.env.NEXT_PUBLIC_ADMIN_PASSKEY);
+    if (path) console.log('3. PASSKEYMODAL path', path);
     if (path)
       if (accessKey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY!.toString()) {
         setOpen(false);
-        router.push("/admin");
+        router.push('/admin');
       } else {
         setOpen(true);
       }
@@ -49,22 +42,20 @@ export const PasskeyModal = () => {
 
   const closeModal = () => {
     setOpen(false);
-    router.push("/");
+    router.push('/');
   };
 
-  const validatePasskey = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const validatePasskey = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
     if (passkey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
       const encryptedKey = encryptKey(passkey);
-      console.log('4. passkeyModal encryptedKey',passkey)
-      localStorage.setItem("accessKey", encryptedKey);
+      console.log('4. passkeyModal encryptedKey', passkey);
+      localStorage.setItem('accessKey', encryptedKey);
 
       setOpen(false);
     } else {
-      setError("Invalid passkey. Please try again.");
+      setError('Invalid passkey. Please try again.');
     }
   };
 
@@ -88,11 +79,7 @@ export const PasskeyModal = () => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div>
-          <InputOTP
-            maxLength={6}
-            value={passkey}
-            onChange={(value) => setPasskey(value)}
-          >
+          <InputOTP maxLength={6} value={passkey} onChange={(value) => setPasskey(value)}>
             <InputOTPGroup className="shad-otp">
               <InputOTPSlot className="shad-otp-slot" index={0} />
               <InputOTPSlot className="shad-otp-slot" index={1} />
@@ -104,9 +91,7 @@ export const PasskeyModal = () => {
           </InputOTP>
 
           {error && (
-            <p className="shad-error text-14-regular mt-4 flex justify-center">
-              {error}
-            </p>
+            <p className="shad-error text-14-regular mt-4 flex justify-center">{error}</p>
           )}
         </div>
         <AlertDialogFooter>

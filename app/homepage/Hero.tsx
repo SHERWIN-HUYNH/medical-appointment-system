@@ -1,6 +1,6 @@
-import Image from "next/image";
-import React from "react";
-import { Button } from "../../components/ui/button";
+import Image from 'next/image';
+import React from 'react';
+import { Button } from '../../components/ui/button';
 
 function Hero() {
   return (
@@ -19,12 +19,12 @@ function Hero() {
 
           <div className="lg:py-24">
             <h2 className="text-3xl font-bold sm:text-4xl text-primary">
-              Đặt lịch khám dễ dàng, an tâm chăm sóc sức khỏe 
+              Đặt lịch khám dễ dàng, an tâm chăm sóc sức khỏe
             </h2>
 
             <p className="mt-4 text-gray-600">
-              Giải pháp đặt lịch hẹn – Tiết kiệm thời gian, tối ưu trải nghiệm
-              chăm sóc sức khỏe
+              Giải pháp đặt lịch hẹn – Tiết kiệm thời gian, tối ưu trải nghiệm chăm sóc
+              sức khỏe
             </p>
 
             <Button className="mt-10 bg-primary hover:bg-[#56c2e6] text-white">

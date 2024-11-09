@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import { Form, FormControl } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { SelectItem } from "@/components/ui/select";
+import { Form, FormControl } from '@/components/ui/form';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { SelectItem } from '@/components/ui/select';
 import {
   Doctors,
   GenderOptions,
   IdentificationTypes,
   PatientFormDefaultValues,
-} from "@/constants";
+} from '@/constants';
 
-import { PatientFormValidation } from "@/lib/validation";
+import { PatientFormValidation } from '@/lib/validation';
 
-import "react-datepicker/dist/react-datepicker.css";
-import "react-phone-number-input/style.css";
-import CustomFormField, { FormFieldType } from "../CustomFormField";
+import 'react-datepicker/dist/react-datepicker.css';
+import 'react-phone-number-input/style.css';
+import CustomFormField, { FormFieldType } from '../CustomFormField';
 
-import SubmitButton from "../SubmitButton";
-import { registerPatient } from "@/lib/action/patient.actions";
-import { FileUploader } from "../FileUploader";
+import SubmitButton from '../SubmitButton';
+import { registerPatient } from '@/lib/action/patient.actions';
+import { FileUploader } from '../FileUploader';
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -78,10 +78,7 @@ const RegisterForm = ({ user }: { user: User }) => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex-1 space-y-12"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-12">
         <section className="space-y-4">
           <h1 className="header">Welcome 👋</h1>
           <p className="text-dark-500">Let us know more about yourself.</p>

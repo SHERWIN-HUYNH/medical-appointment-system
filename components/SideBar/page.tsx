@@ -1,12 +1,12 @@
-"use client";
-import React from "react";
-import ClickOutside from "../ClickOutside";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import SidebarItem from "./SidebarItem";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import { CircleUser, FolderKanban } from "lucide-react";
+'use client';
+import React from 'react';
+import ClickOutside from '../ClickOutside';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import SidebarItem from './SidebarItem';
+import useLocalStorage from '@/hooks/useLocalStorage';
+import { CircleUser, FolderKanban } from 'lucide-react';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -14,15 +14,61 @@ interface SidebarProps {
 }
 const menuGroups = [
   {
-    name: "DANH SÁCH",
+    name: 'DANH SÁCH',
     menuItems: [
       {
         icon: (
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-book-user"><path d="M15 13a3 3 0 1 0-6 0"/><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><circle cx="12" cy="8" r="2"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-book-user"
+          >
+            <path d="M15 13a3 3 0 1 0-6 0" />
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
+            <circle cx="12" cy="8" r="2" />
+          </svg>
         ),
-        label: "Bác sĩ",
-        route: "#",
-        children: [{ label: "Quản lý", route: "/test-doctor",icon: <FolderKanban /> }, { label: "Lịch làm việc", route: "/test-admin/workingSchedule",icon:(<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-calendar-days"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>) }],
+        label: 'Bác sĩ',
+        route: '#',
+        children: [
+          { label: 'Quản lý', route: '/test-doctor', icon: <FolderKanban /> },
+          {
+            label: 'Lịch làm việc',
+            route: '/test-admin/workingSchedule',
+            icon: (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-calendar-days"
+              >
+                <path d="M8 2v4" />
+                <path d="M16 2v4" />
+                <rect width="18" height="18" x="3" y="4" rx="2" />
+                <path d="M3 10h18" />
+                <path d="M8 14h.01" />
+                <path d="M12 14h.01" />
+                <path d="M16 14h.01" />
+                <path d="M8 18h.01" />
+                <path d="M12 18h.01" />
+                <path d="M16 18h.01" />
+              </svg>
+            ),
+          },
+        ],
       },
       {
         icon: (
@@ -40,17 +86,36 @@ const menuGroups = [
             ></path>
           </svg>
         ),
-        label: "Chuyên khoa",
-        route: "/test-faculty",
-        
+        label: 'Chuyên khoa',
+        route: '/test-faculty',
       },
       {
         icon: (
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-notebook-tabs"><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M15 2v20"/><path d="M15 7h5"/><path d="M15 12h5"/><path d="M15 17h5"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-notebook-tabs"
+          >
+            <path d="M2 6h4" />
+            <path d="M2 10h4" />
+            <path d="M2 14h4" />
+            <path d="M2 18h4" />
+            <rect width="16" height="20" x="4" y="2" rx="2" />
+            <path d="M15 2v20" />
+            <path d="M15 7h5" />
+            <path d="M15 12h5" />
+            <path d="M15 17h5" />
+          </svg>
         ),
-        label: "Dich vụ",
-        route: "/test-service",
-        
+        label: 'Dich vụ',
+        route: '/test-service',
       },
       {
         icon: (
@@ -68,14 +133,13 @@ const menuGroups = [
             />
           </svg>
         ),
-        label: "Đánh giá",
-        route: "/test-admin/evaluation",
-      }
-      
+        label: 'Đánh giá',
+        route: '/test-admin/evaluation',
+      },
     ],
   },
   {
-    name: "Khác",
+    name: 'Khác',
     menuItems: [
       {
         icon: (
@@ -109,27 +173,25 @@ const menuGroups = [
             </defs>
           </svg>
         ),
-        label: "Báo cáo & Thống kê",
-        route: "/chart",
+        label: 'Báo cáo & Thống kê',
+        route: '/chart',
       },
       {
-        icon: (
-          <CircleUser />
-        ),
-        label: "Tạo tài khoản",
-        route: "/chart",
+        icon: <CircleUser />,
+        label: 'Tạo tài khoản',
+        route: '/chart',
       },
     ],
   },
 ];
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const pathname = usePathname();
-  const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
+  const [pageName, setPageName] = useLocalStorage('selectedMenu', 'dashboard');
   return (
     <ClickOutside onClick={() => setSidebarOpen(false)}>
       <aside
         className={`fixed left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-primary text-white duration-300 ease-linear dark:bg-boxdark lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* <!-- SIDEBAR HEADER --> */}
@@ -138,7 +200,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <Image
               width={176}
               height={32}
-              src={"/assets/icons/logo-full.svg"}
+              src={'/assets/icons/logo-full.svg'}
               alt="Logo"
               priority
             />
