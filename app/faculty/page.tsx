@@ -21,7 +21,7 @@ const Page = () => {
         const data = await response.json();
         setFaculties(data || []);
       } catch (error) {
-        console.log(error)
+        console.log(error);
         setFaculties([]);
       }
     };

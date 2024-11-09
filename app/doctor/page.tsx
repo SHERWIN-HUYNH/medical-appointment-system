@@ -8,7 +8,6 @@ import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { FormProvider, useForm } from 'react-hook-form';
 
-// Giả lập dữ liệu danh sách bác sĩ
 const doctors = [
   {
     id: 1,
@@ -92,7 +91,7 @@ const Doctor = () => {
                 </SelectContent>
               </Select>
 
-              <Button className="hover:text-white hover:bg-sky-500 transition-all ease-out duration-200">
+              <Button className="hover:text-white hover:bg-primary bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] transition-all ease-out duration-200">
                 Tìm kiếm
               </Button>
             </form>
@@ -133,7 +132,7 @@ const Doctor = () => {
               <hr className=" mt-2 text-slate-300 justify-center mx-auto" />
               {/* Nút đặt khám */}
               <div className="flex justify-end mt-2">
-                <Button className="w-32 hover:text-white hover:bg-sky-500 rounded-3xl transition-all ease-out duration-200">
+                <Button className="w-32 hover:text-white hover:bg-primary bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] rounded-3xl transition-all ease-out duration-200">
                   Đặt khám
                 </Button>
               </div>
