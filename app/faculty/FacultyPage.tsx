@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Header from '../Header';
-import Footer from '../Footer';
+import Header from '../homepage/Header';
+import Footer from '../homepage/Footer';
 import Image from 'next/image';
 
 interface Faculty {
@@ -58,16 +58,14 @@ const FacultyPage = () => {
                 <a
                   key={faculty.id}
                   href={`/faculty/${faculty.id}`}
-                  className="block w-full bg-white hover:bg-blue-50 transition-colors rounded-lg border border-slate-200 shadow-md p-4"
+                  className="block w-full bg-white hover:bg-blue-50 transition-colors rounded-lg border border-slate-200 shadow-md"
                 >
                   <div className="flex items-center w-full">
-                    <div className="relative w-20 h-20 rounded-lg overflow-hidden shrink-0">
-                      <Image
+                    <div className="relative w-20 h-20 rounded-md overflow-hidden shrink-0 bg-gradient-to-b from-[#00b5f1] to-[#00a2ff] flex items-center justify-center">
+                      <img
                         src={`/assets/icons/${faculty.image}`}
                         alt={faculty.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 80px) 100vw, 80px"
+                        className="object-cover w-15 h-15"
                       />
                     </div>
                     <div className="ml-4 flex-grow">
