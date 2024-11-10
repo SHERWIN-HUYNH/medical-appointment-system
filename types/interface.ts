@@ -37,6 +37,7 @@ export interface Faculty {
   id: string;
   name: string;
   description: string;
+  image: string;
 }
 
 export interface Service {
