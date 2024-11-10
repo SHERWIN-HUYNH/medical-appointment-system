@@ -99,6 +99,7 @@ export const FacultyFormValidation = z.object({
     .string()
     .min(1, "Description can't be empty")
     .max(500, 'Description must be at most 500 characters'),
+  image: z.string().min(1, 'Vui lòng chọn ảnh chuyên khoa'),
 });
 
 export const DoctorFormValidation = z.object({

@@ -62,3 +62,15 @@ export interface Comment {
   doctorId: string;
   userId: string;
 }
+
+export interface Doctor {
+  id: string;
+  name: string;
+  academicTitle: string;
+  image: string;
+  isActive: boolean;
+  description: string;
+  facultyId: string;
+  comments: Comment[];
+  doctorSchedule: Schedule[];
+}

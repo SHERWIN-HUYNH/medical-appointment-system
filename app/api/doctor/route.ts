@@ -6,7 +6,7 @@ import {
 import { DoctorRespository } from '@/repositories/doctor';
 
 // Xử lý GET request - Lấy thông tin bác sĩ theo ID hoặc tất cả bác sĩ
-export async function GET(context: any) {
+export async function GET() {
   const doctors = await DoctorRespository.getDoctores(); // Fetch all doctors
   return successResponse(doctors);
 }
@@ -21,6 +21,7 @@ export async function POST(req: Request) {
     const newDoctor = await DoctorRespository.createDoctor(doctorData);
     return successResponse(newDoctor);
   } catch (error) {
+    console.log(error);
     return badRequestResponse('FAIL TO CREATE DOCTOR');
   }
 }

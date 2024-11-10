@@ -1,8 +1,8 @@
 'use client';
+import React from 'react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaUser } from 'react-icons/fa';
 import DropDown from './DropDown';
 
 function Header() {
@@ -21,17 +21,17 @@ function Header() {
     {
       id: 3,
       name: 'Dịch vụ',
-      path: '/explore',
+      path: '/',
     },
     {
       id: 4,
       name: 'Chuyên khoa',
-      path: '/',
+      path: '/faculty',
     },
     {
       id: 5,
       name: 'Đội ngũ bác sĩ',
-      path: '/',
+      path: '/doctor',
     },
   ];
   return (
