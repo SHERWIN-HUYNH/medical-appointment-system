@@ -5,20 +5,24 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { FacultyFormValidation } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { FacultyRepository } from '@/repositories/faculty';
+import Image from 'next/image';
 
 const EditFaculty = () => {
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [fileName, setFileName] = useState<string>('');
   // Khởi tạo form với validation schema và giá trị mặc định
   const form = useForm<z.infer<typeof FacultyFormValidation>>({
     resolver: zodResolver(FacultyFormValidation),
     defaultValues: {
       name: '',
       description: '',
+      image: '',
     },
   });
 
@@ -38,7 +42,10 @@ const EditFaculty = () => {
         form.reset({
           name: facultyData.name,
           description: facultyData.description,
+          image: facultyData.image,
         });
+        setImagePreview(facultyData.image);
+        setFileName(facultyData.image || '');
       } else {
         // Hiển thị thông báo lỗi nếu fetch thất bại
         toast.error('Failed to fetch faculty details.');
@@ -47,6 +54,23 @@ const EditFaculty = () => {
 
     if (id) fetchFacultyData();
   }, [id, form]);
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      toast.error('Vui lòng tải lên một tệp hình ảnh');
+      return;
+    }
+    if (!file.type.startsWith('image/')) {
+      toast.error('Chỉ cho phép tải lên các tệp hình ảnh');
+      event.target.value = '';
+      return;
+    }
+    setImageFile(file);
+    form.setValue('image', file.name);
+    setImagePreview(file.name);
+    setFileName(file.name);
+  };
 
   // Xử lý khi form được submit
   const onSubmit = async (values: z.infer<typeof FacultyFormValidation>) => {
@@ -97,6 +121,37 @@ const EditFaculty = () => {
                   label="Mô tả"
                   placeholder="Nhập mô tả chuyên khoa"
                 />
+              </div>
+              <div className="mb-3">
+                <div className="relative">
+                  <input
+                    type="text"
+                    className="w-full rounded-md border border-stroke p-2 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary pr-[120px]"
+                    value={fileName}
+                    readOnly
+                    placeholder="Chưa có file nào được chọn"
+                  />
+                  <label
+                    htmlFor="file-input"
+                    className="absolute right-0 top-0 bottom-0 flex items-center justify-center px-4 bg-[#EEEEEE] rounded-r-md cursor-pointer"
+                  >
+                    Chọn file
+                  </label>
+                  <input
+                    id="file-input"
+                    type="file"
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+                </div>
+                {imagePreview && (
+                  <img
+                    src={`/assets/images/${imagePreview}`}
+                    alt="Image Preview"
+                    className="mt-4 w-30 h-30 object-cover"
+                    style={{ maxWidth: '200px', maxHeight: '200px' }}
+                  />
+                )}
               </div>
               {/* Nút lưu */}
               <div className="flex justify-end">
