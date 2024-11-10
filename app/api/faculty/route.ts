@@ -8,18 +8,7 @@ import { FacultyRepository } from '@/repositories/faculty';
 import { Faculty } from '@/types/interface';
 
 // Xử lý GET request - Lấy một hoặc tất cả chuyên khoa
-export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const id = url.searchParams.get('id');
-
-  if (id) {
-    const faculty = await FacultyRepository.getFacultyById(id);
-    if (!faculty) {
-      return notFoundResponse('FACULTY NOT FOUND');
-    }
-    return successResponse(faculty);
-  }
-
+export async function GET() {
   const faculties = await FacultyRepository.getFaculties();
   if (!faculties) {
     return notFoundResponse('NOT FOUND FACULTIES');

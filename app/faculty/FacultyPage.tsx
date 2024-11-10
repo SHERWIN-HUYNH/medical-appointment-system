@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../homepage/Header';
 import Footer from '../homepage/Footer';
-import Image from 'next/image';
 
 interface Faculty {
   id: string;
@@ -29,6 +28,7 @@ const FacultyPage = () => {
           setLoading(false);
         }
       } catch (error) {
+        console.error(error);
         setError('Đã có lỗi xảy ra');
         setLoading(false);
       }

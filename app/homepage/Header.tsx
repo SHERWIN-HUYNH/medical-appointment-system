@@ -26,7 +26,7 @@ function Header() {
     {
       id: 4,
       name: 'Chuyên khoa',
-      path: '/homepage/faculty',
+      path: '/faculty',
     },
     {
       id: 5,

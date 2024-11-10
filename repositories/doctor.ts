@@ -133,4 +133,18 @@ export class DoctorRespository {
     await prisma.$disconnect();
     return appointments !== null;
   }
+
+  static async getDoctorsByFaculty(facultyId: string) {
+    const doctors = await prisma.doctor.findMany({
+      where: {
+        facultyId: facultyId,
+        isActive: true,
+      },
+      include: {
+        doctorSchedule: true,
+      },
+    });
+    await prisma.$disconnect();
+    return doctors;
+  }
 }
