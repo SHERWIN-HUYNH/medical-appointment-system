@@ -31,7 +31,7 @@ function Header() {
     {
       id: 5,
       name: 'Đội ngũ bác sĩ',
-      path: '/',
+      path: '/doctor',
     },
   ];
   return (
