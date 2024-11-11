@@ -1,17 +1,19 @@
-'use client';
-import Payment from '@/app/payment/page';
-import { Button } from '@/components/ui/button';
-import { Eraser, UserRoundPlus, Home, Undo2 } from 'lucide-react'; // Thêm Home vào đây
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { useSession } from 'next-auth/react';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import Header from '@/app/homepage/Header';
-import Footer from '@/app/homepage/Footer';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+
+"use client";
+import Payment from "@/app/payment/page";
+import { Button } from "@/components/ui/button";
+import { Eraser, UserRoundPlus, Home, Undo2 } from "lucide-react"; 
+import React, { useState } from "react";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import Header from "@/app/homepage/Header";
+import Footer from "@/app/homepage/Footer";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
 import {
   Select,
   SelectContent,
@@ -73,34 +75,36 @@ const Add_Profile = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     if (!isValidIdentificationNumber(formData.identificationNumber)) {
       setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.');
       return;
     }
-
-    // CALL API
+    const formattedBirthDate = formData.birthDate ? new Date(formData.birthDate) : null;
     const response = await fetch(`/api/profile/${session?.user?.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        action: 'create',
-        profile: formData,
+        action: "create",
+        profile: {
+          ...formData,
+          birthDate: formattedBirthDate, // Sử dụng đối tượng Date cho birthDate
+        },
       }),
     });
-
+  
     if (response.ok) {
       const data = await response.json();
-      toast.success('Thêm hồ sơ khám bệnh thành công');
+      toast.success("Thêm hồ sơ khám bệnh thành công");
       router.push(`/patients/${session?.user?.id}/profile`);
     } else {
       const errorText = await response.text();
-      setErrorMessage(errorText || 'Thêm hồ sơ thất bại, vui lòng thử lại.');
+      toast.error("Thêm hồ sơ khám bệnh thất bại. Vui lòng thử lại!");
     }
   };
-
+  
   return (
     <div>
       <Header />
@@ -280,7 +284,7 @@ const Add_Profile = () => {
                   <Image
                     src={URL.createObjectURL(selectedFile)}
                     alt="Document Preview"
-                    className="w-full object-contain"
+                    className="w-full object-cover"
                     width={100}
                     height={100}
                   />
