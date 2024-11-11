@@ -1,36 +1,30 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { RiEmpathizeFill, RiMoneyDollarCircleLine } from 'react-icons/ri';
-import { Button } from '@/components/ui/button';
-import { FaBookMedical, FaNewspaper } from 'react-icons/fa';
-import { Cake, PencilLine, Smartphone, Trash2, UserRoundPen } from 'lucide-react';
-import Link from 'next/link';
-import Header from '@/app/homepage/Header';
-import MedicalRecord from './MedicalRecord';
-import Footer from '@/app/homepage/Footer';
-import PaymentHistory from './PaymentHistory';
 
-import Modal from '@/components/Modal';
-import { toast } from 'sonner';
+"use client";
+import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { RiEmpathizeFill, RiMoneyDollarCircleLine } from "react-icons/ri";
+import { Button } from "@/components/ui/button";
+import { FaBookMedical, FaNewspaper } from "react-icons/fa";
+import { Cake, PencilLine, Smartphone, Trash2, UserRoundPen } from "lucide-react";
+import Link from "next/link";
+import Header from "@/app/homepage/Header";
+import MedicalRecord from "./MedicalRecord";
+import Footer from "@/app/homepage/Footer";
+import PaymentHistory from "./PaymentHistory";
 
-interface Profile {
-  id: number;
-  name: string;
-  phone: string;
-  birthDate: Date;
-}
+import Modal from "@/components/Modal";
+import { toast } from "sonner";
+import ProfileDetailModal from "@/app/patients/[userId]/profile/ProfileDetailModal";
+import type { Profile } from "@/types/interface";
 
 const Profile = () => {
   const [selectedOption, setSelectedOption] = useState(1);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const { data: session } = useSession();
-  const [notification, setNotification] = useState<{
-    message: string;
-    type: 'success' | 'error';
-  } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [profileToDelete, setProfileToDelete] = useState<number | null>(null);
+  const [profileToDelete, setProfileToDelete] = useState<string | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -76,7 +70,7 @@ const Profile = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Lỗi khi xóa hồ sơ');
+        toast.error("Lỗi khi xóa hồ sơ");
       }
 
       setProfiles((prevProfiles) =>
@@ -84,16 +78,15 @@ const Profile = () => {
       );
       toast.success('Xóa hồ sơ thành công');
     } catch (error) {
-      console.error('Lỗi khi xóa hồ sơ:', error);
-      setNotification({
-        message: 'Xóa hồ sơ không thành công.',
-        type: 'error',
-      });
+      toast.error("Lỗi khi xóa hồ sơ");
     } finally {
       setIsModalOpen(false);
-      setProfileToDelete(null);
-      setTimeout(() => setNotification(null), 3000);
+      setProfileToDelete(null);     
     }
+  };
+  const handleShowProfile = (profile: Profile) => {
+    setSelectedProfile(profile);
+    setIsDetailModalOpen(true); // Mở modal chi tiết
   };
 
   const Buttons = [
@@ -111,7 +104,6 @@ const Profile = () => {
       <Header />
       <div className="mt-[80px] flex justify-center p-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full max-w-5xl">
-          {/* Left Side (Buttons) */}
           <div className="rounded-lg flex flex-col items-center p-4 w-full lg:w-auto">
             <Link href={`/patients/${session?.user.id}/profile/add-profile`}>
               <Button className="justify-start border-slate-300 bg-white hover:bg-sky-200 w-full gap-2 items-center p-3 rounded-lg border-2">
@@ -173,7 +165,10 @@ const Profile = () => {
 
                         <div className="rounded-lg bg-gray-200 flex-1">
                           <div className="mt-4 flex justify-end">
-                            <Button className="bg-slate-50 text-green-400 hover:bg-green-400 hover:text-white text-sm px-4 py-2">
+                            <Button 
+                              className="bg-slate-50 text-green-400 hover:bg-green-400 hover:text-white text-sm px-4 py-2"
+                              onClick={() => handleShowProfile(profile)}
+                            >
                               Xem chi tiết
                             </Button>
                           </div>
@@ -183,7 +178,7 @@ const Profile = () => {
                       <hr className="mt-2" />
                       <div className="mt-2 flex justify-end gap-2">
                         <Button
-                          className="bg-slate-50 text-pink-400 hover:bg-pink-400 hover:text-white text-sm"
+                          className="bg-slate-50 text-red-400 hover:bg-red-400 hover:text-white text-sm"
                           onClick={() => {
                             setProfileToDelete(profile.id);
                             setIsModalOpen(true);
@@ -192,7 +187,19 @@ const Profile = () => {
                           <Trash2 className="w-4 h-4 inline mr-1" />
                           Xóa hồ sơ
                         </Button>
-                        <Link href={`/patients/${profile.id}/profile/edit-profile`}>
+                        <Link href={{
+                          pathname:`/patients/${profile.id}/profile/edit-profile`,
+                          query:{id:profile.id,
+                                name:profile.name,
+                                email:profile.email,
+                                phone:profile.phone,
+                                gender:profile.gender,
+                                identificationType:profile.identificationType,
+                                identificationNumber:profile.identificationNumber,
+                                identificationDocumentUrl:profile.identificationDocumentUrl,
+                                pastMedicalHistory:profile.pastMedicalHistory,
+                                birthDate:profile.birthDate ? profile.birthDate.toString() : ""}
+                        }}>
                           <Button className="bg-slate-50 text-primary hover:bg-primary hover:text-white text-sm">
                             <PencilLine className="w-4 h-4 inline mr-1" />
                             Sửa hồ sơ
@@ -239,6 +246,14 @@ const Profile = () => {
         onConfirm={handleDeleteProfile}
         message="Bạn có chắc chắn muốn xóa hồ sơ này không?"
       />
+
+      {selectedProfile && (
+        <ProfileDetailModal 
+          isOpen={isDetailModalOpen}
+          onClose={() => setIsDetailModalOpen(false)}
+          profile={selectedProfile}
+        />
+      )}  
     </div>
   );
 };

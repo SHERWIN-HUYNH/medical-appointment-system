@@ -5,7 +5,6 @@ import {
 } from '@/helpers/response';
 import prisma from '@/lib/prisma';
 import { FacultyRepository } from '@/repositories/faculty';
-import { ServiceRepository } from '@/repositories/service';
 import { Faculty } from '@/types/interface';
 
 // Xử lý GET request - Lấy một hoặc tất cả chuyên khoa
@@ -36,13 +35,13 @@ export async function POST(req: Request) {
     return badRequestResponse('MISSING SERVICE DATA');
   }
 
-  const newService = await FacultyRepository.createFaculty(faculty);
+  const newFaculty = await FacultyRepository.createFaculty(faculty);
 
-  if (!newService) {
-    return badRequestResponse('FAIL TO CREATE SERVICE');
+  if (!newFaculty) {
+    return badRequestResponse('FAIL TO CREATE Faculty');
   }
 
-  return successResponse(newService);
+  return successResponse(newFaculty);
 }
 
 export async function PUT(req: Request) {

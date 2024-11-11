@@ -64,6 +64,27 @@ export class DoctorRespository {
     return updatedDoctor;
   }
 
+  static async getListDoctorsIsActive() {
+    const doctors = await prisma.doctor.findMany({
+      where: {
+        isActive: true,
+      },
+      include: {
+        faculty: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    const formattedDoctors = doctors.map((doctor) => ({
+      ...doctor,
+      facultyName: doctor.faculty?.name || 'Không xác định',
+    }));
+  await prisma.$disconnect();
+  return formattedDoctors;
+  }
   static async deleteDoctor(doctorData: Doctor) {
     // Kiểm tra xem bác sĩ có lịch hẹn không
     const hasAppointments = await this.hasAppointments(doctorData.id);
