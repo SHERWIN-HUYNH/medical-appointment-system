@@ -2,13 +2,9 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
-import { ReactQueryClientProvider } from '@/providers/ReactQueryClientProvider';
 import { Toaster } from 'sonner';
 import Providers from '@/providers/Providers';
-import Header from '@/app/homepage/Header';
-import Footer from '@/app/homepage/Footer';
-import { SessionProvider } from 'next-auth/react';
-
+import React from 'react';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -18,9 +14,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   params: { session, ...params },
 }: Readonly<{
   children: React.ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params: any;
 }>) {
   return (

@@ -15,6 +15,7 @@ const Payment = (props: Props) => {
       },
       body: JSON.stringify({}),
     });
+    console.log('RESPONSE PAYMENT', response);
     window.location.assign(response.url);
     console.log(response);
   };

@@ -3,7 +3,7 @@
 import DefaultLayout from '@/components/Layouts/defaultLayout';
 import { useParams } from 'next/navigation';
 import DoctorSchedule from '@/components/DoctorSchedule';
-
+import React from 'react';
 const WorkingSchedulePage = () => {
   const { doctorId } = useParams();
   if (!doctorId) return null;
@@ -154,6 +154,4 @@ const WorkingSchedulePage = () => {
 };
 
 export default WorkingSchedulePage;
-function setDeletedEvents(arg0: (prevDeleted: any) => any[]) {
-  throw new Error('Function not implemented.');
-}
+

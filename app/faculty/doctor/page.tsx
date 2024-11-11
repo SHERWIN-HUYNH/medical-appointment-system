@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
-import Header from '../homepage/Header';
-import Footer from '../homepage/Footer';
+import Header from '../../homepage/Header';
+import Footer from '../../homepage/Footer';
 import { Button } from '@/components/ui/button';
 import { Select, SelectItem, SelectTrigger, SelectContent } from '@/components/ui/select';
 import { Search } from 'lucide-react';

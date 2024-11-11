@@ -1,5 +1,5 @@
 'use client';
-import Payment from '@/app/payment/page';
+import Payment from '@/app/old-payment/page';
 import { Button } from '@/components/ui/button';
 import { Eraser, UserRoundPlus, Home, Undo2 } from 'lucide-react'; // Thêm Home vào đây
 import React, { useState } from 'react';
