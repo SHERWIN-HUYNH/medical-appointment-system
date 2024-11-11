@@ -1,26 +1,16 @@
 'use client';
-import Calendar from '@/components/DoctorSchedule';
-import DefaultLayout from '@/components/Layouts/defaultLayout';
-import { Metadata } from 'next';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
-import { DayCellContentArg, EventSourceInput } from '@fullcalendar/core/index.js';
-import { Dialog } from '@radix-ui/react-dialog';
-import interactionPlugin, {
-  DateClickArg,
-  Draggable,
-  DropArg,
-} from '@fullcalendar/interaction';
-import { CheckIcon, Divide } from 'lucide-react';
-import { useState, useEffect, Fragment } from 'react';
+import { EventSourceInput } from '@fullcalendar/core/index.js';
+import interactionPlugin from '@fullcalendar/interaction';
+import { useState, useEffect } from 'react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import clsx from 'clsx';
-import { log } from 'console';
-import { RiH1 } from 'react-icons/ri';
 import { Button } from '@/components/ui/button';
-import Footer from '../homepage/Footer';
-import Header from '../homepage/Header';
-
+import Footer from '../../../../homepage/Footer';
+import Header from '../../../../homepage/Header';
+import React from 'react';
+import UserLayout from '@/components/Layouts/userLayout';
 interface Event {
   title: string;
   start: Date | string;
@@ -72,8 +62,7 @@ const CalendarPage = () => {
   };
   console.log('TIME SLOT', showTimeSlots);
   return (
-    <div className="bg-[#e8f2f7] w-full h-min flex flex-col items-center justify-center mt-16">
-      <Header />
+    <UserLayout>
       <section className=" flex  space-x-7  max-w-screen-xl px-4 pb-6 mt-8">
         <div className=" w-67 rounded-lg bg-white h-max">
           <h1 className="blue-header w-full">Thông tin cơ sở y tế</h1>
@@ -281,8 +270,7 @@ const CalendarPage = () => {
           </div>
         </main>
       </section>
-      <Footer />
-    </div>
+    </UserLayout>
   );
 };
 

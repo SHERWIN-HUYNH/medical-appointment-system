@@ -1,13 +1,7 @@
 import { stripe } from '@/lib/stripe';
-import { useSession } from 'next-auth/react';
 import prisma from '@/lib/prisma';
 import Stripe from 'stripe';
-import { Appointment } from '@/types/interface';
-import { AppointmentRepository } from '@/repositories/appointment';
-import { ServiceRepository } from '@/repositories/service';
-import { ProfileRespository } from '@/repositories/profile';
 import { UserRepository } from '@/repositories/user';
-import { userInfo } from 'os';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request, context: any) {
@@ -52,7 +46,7 @@ export async function POST(req: Request, context: any) {
       console.log('APP RUN 2');
       stripeCustomer = await prisma.stripeCustomer.create({
         data: {
-          userId: userInfor?.id!,
+          userId: userInfor?.id,
           stripeCustomerId: customer.id,
         },
       });
@@ -63,7 +57,7 @@ export async function POST(req: Request, context: any) {
       line_items,
       mode: 'payment',
       success_url: `http://localhost:3000/patients/${userId}/new-appointment/success`,
-      cancel_url: `http://localhost:3000`,
+      cancel_url: `http://localhost:3000/payment`,
       metadata: {
         appointemntId: '53534sfsdf',
         userId: userInfor?.id!,

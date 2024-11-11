@@ -1,8 +1,8 @@
 
 "use client";
-import Payment from "@/app/payment/page";
+
 import { Button } from "@/components/ui/button";
-import { Eraser, UserRoundPlus, Home, Undo2 } from "lucide-react"; 
+import { Eraser, UserRoundPlus, Undo2 } from "lucide-react"; 
 import React, { useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
