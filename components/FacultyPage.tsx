@@ -1,8 +1,7 @@
 'use client';
+import UserLayout from '@/components/Layouts/userLayout';
 import React, { useEffect, useState } from 'react';
-import Header from '../homepage/Header';
-import Footer from '../homepage/Footer';
-import Image from 'next/image';
+
 
 interface Faculty {
   id: string;
@@ -38,8 +37,8 @@ const FacultyPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col bg-gray-50 min-h-screen">
-      <Header />
+    <UserLayout>
+   
       <main className="flex-grow container mx-auto px-4 py-24">
         {loading ? (
           <div className="flex justify-center items-center">
@@ -83,8 +82,8 @@ const FacultyPage = () => {
           </div>
         )}
       </main>
-      <Footer />
-    </div>
+     
+    </UserLayout>
   );
 };
 
