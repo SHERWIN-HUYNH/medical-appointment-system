@@ -1,9 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import Header from '../../homepage/Header';
-import Footer from '../../homepage/Footer';
-import { Button } from '@/components/ui/button';
+import UserLayout from '@/components/Layouts/userLayout';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 interface Doctor {
   id: string;
@@ -77,8 +76,8 @@ const ChooseDoctor = ({ params }: { params: { facultyId: string } }) => {
   );
 
   return (
-    <div className="bg-[#e8f2f7] w-full h-min flex flex-col items-center justify-center mt-16">
-      <Header />
+    <div className="bg-[#e8f2f7] w-full h-min flex flex-col items-center justify-center">
+      <UserLayout>
       <section className="flex space-x-7 max-w-screen-xl px-4 pb-4 mt-5">
         <div className="w-[300px] rounded-lg bg-white h-max flex-shrink-0">
           <h1 className="blue-header w-full">Thông tin khám</h1>
@@ -175,10 +174,33 @@ const ChooseDoctor = ({ params }: { params: { facultyId: string } }) => {
                 </div>
               )}
             </div>
+
+            <div className="mt-3 border-t pt-3">
+              <Button 
+                onClick={() => router.push('/choose-faculty')}
+                className="text-sm bg-transparent text-slate-500 hover:text-primary flex items-center gap-1"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="m12 19-7-7 7-7" />
+                  <path d="M19 12H5" />
+                </svg>
+                Quay lại
+              </Button>
+            </div>
           </div>
         </main>
       </section>
-      <Footer />
+      </UserLayout>
     </div>
   );
 };

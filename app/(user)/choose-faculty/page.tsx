@@ -1,11 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-<<<<<<< HEAD:app/choose-faculty/page.tsx
 import { useRouter } from 'next/navigation';
-=======
 import UserLayout from '@/components/Layouts/userLayout';
->>>>>>> 7cdf53af557d07108acb34f38fcd732f8f53902e:app/(user)/choose-faculty/page.tsx
+
 
 interface Faculty {
   id: string;
