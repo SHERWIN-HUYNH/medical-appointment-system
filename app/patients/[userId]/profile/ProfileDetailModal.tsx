@@ -1,5 +1,6 @@
 import React from "react";
 import { Profile } from "@/types/interface";
+import { Cake, CircleUser, FileDigit, FlipVertical2, History, Mails, Scroll, Smartphone } from "lucide-react";
 
 interface ProfileDetailModalProps {
   isOpen: boolean;
@@ -22,8 +23,6 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
-      
-      {/* Thu nhỏ chiều rộng của modal */}
       <div className="bg-white rounded-lg p-4 shadow-lg z-10 w-[40%] max-h-[80vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-xl text-primary font-bold">Chi tiết hồ sơ</h2>
@@ -36,42 +35,62 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
             </svg>
           </button>
         </div>
-
-        {/* Giảm khoảng cách giữa các cột */}
         <div className="grid grid-cols-2 gap-2">
-          <div className="space-y-2">
-            <p><span className=" text-primary ">Họ và tên:</span> {profile.name}</p>
-            <p><span className=" text-primary ">Email:</span> {profile.email}</p>
-            <p><span className="text-primary ">Số điện thoại:</span> {profile.phone}</p>
-            <p><span className="text-primary ">Giới tính:</span> {
-              profile.gender === 'MALE' ? 'Nam' : 
-              profile.gender === 'FEMALE' ? 'Nữ' : 'Khác'
-            }</p>
-            <p><span className="text-primary ">Ngày sinh:</span> {formatDate(profile.birthDate)}</p>
-            <p><span className="text-primary ">Tiền sử bệnh:</span> {profile.pastMedicalHistory || 'Không có'}</p>
-          </div>
-          <div className="space-y-2">
-            <p><span className="text-primary ">Loại giấy tờ:</span> {profile.identificationType}</p>
-            <p><span className="text-primary ">Số giấy tờ:</span> {profile.identificationNumber}</p>
-           
+  <div className="space-y-2">
+    <p className="flex items-center gap-2">
+    <CircleUser className="w-5 h-5 text-slate-400" />
+      <span className="text-slate-400">Họ và tên:</span> {profile.name}
+    </p>
+    <p className="flex items-center gap-2">
+      <Mails className="w-5 h-5 text-slate-400" />
+      <span className="text-slate-400">Email:</span> {profile.email}
+    </p>
+    <p className="flex items-center gap-2">
+      <Smartphone className="w-5 h-5 text-slate-400" />
+      <span className="text-slate-400">Số điện thoại:</span> 
+      {profile.phone ? profile.phone : 'N/A'}
+    </p>
+    <p className="flex items-center gap-2">
+      <FlipVertical2 className="w-5 h-5 text-slate-400" />
+      <span className="text-slate-400">Giới tính:</span> 
+      {profile.gender === 'MALE' ? 'Nam' : profile.gender === 'FEMALE' ? 'Nữ' : 'Khác'}
+    </p>
+    <p className="flex items-center gap-2">
+      <Cake className="w-5 h-5 text-slate-400" />
+      <span className="text-slate-400">Ngày sinh:</span> 
+      {profile.birthDate ? new Date(profile.birthDate).toLocaleDateString() : 'N/A'}
+    </p>
+    <p className="flex items-center gap-2">
+    <History className="w-5 h-5 text-slate-400" />
+      <span className="text-slate-400">Tiền sử bệnh:</span> {profile.pastMedicalHistory || 'Không có'}
+    </p>
+  </div>
+  <div className="space-y-2">
+    <p className="flex items-center gap-2">
+    <Scroll className="w-5 h-5 text-slate-400" />
+      <span className="text-slate-400">Loại giấy tờ:</span> {profile.identificationType}
+    </p>
+    <p className="flex items-center gap-2">
+    <FileDigit className="w-5 h-5 text-slate-400" />
+      <span className="text-slate-400">Số giấy tờ:</span> {profile.identificationNumber}
+    </p>
+    
+    {profile.identificationDocumentUrl && (
+      <div className="mt-2">
+        <img
+          src={profile.identificationDocumentUrl}
+          alt="Identification Document"
+          className="w-32 h-auto rounded-lg shadow-md"
+        />
+      </div>
+    )}
+  </div>
+</div>
 
-            {/* Hiển thị hình ảnh giấy tờ với kích thước nhỏ */}
-            {profile.identificationDocumentUrl && (
-              <div className="mt-2">
-                {/* <p className=" mb-1 text-primary ">Hình ảnh giấy tờ:</p> */}
-                <img
-                  src={profile.identificationDocumentUrl}
-                  alt="Identification Document"
-                  className="w-32 h-auto rounded-lg shadow-md" 
-                />
-              </div>
-            )}
-          </div>
-        </div>
 
         <div className="mt-4 flex justify-end">
           <button
-            className="bg-blue-400 text-white px-3 py-1.5 rounded hover:bg-blue-500 transition-colors"
+            className="bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] hover:from-[#67e0f3] hover:to-[#e7f1f2] text-white px-3 py-1.5 rounded  transition-colors"
             onClick={onClose}
           >
             Đóng
