@@ -80,7 +80,7 @@ export class DoctorRespository {
 
     const formattedDoctors = doctors.map((doctor) => ({
       ...doctor,
-      facultyName: doctor.faculty?.name || 'Không xác định',
+      facultyName: doctor.faculty?.name,
     }));
     await prisma.$disconnect();
     return formattedDoctors;
@@ -153,5 +153,28 @@ export class DoctorRespository {
     });
     await prisma.$disconnect();
     return appointments !== null;
+  }
+
+  static async getDoctorsByFaculty(facultyId: string) {
+    try {
+      const doctors = await prisma.doctor.findMany({
+        where: {
+          facultyId: facultyId,
+          isActive: true
+        },
+        include: {
+          faculty: {
+            select: {
+              name: true
+            }
+          }
+        }
+      });
+      await prisma.$disconnect();
+      return doctors;
+    } catch (error) {
+      await prisma.$disconnect();
+      throw error;
+    }
   }
 }

@@ -4,6 +4,32 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export class FacultyRepository {
+  static async getFacultyById(facultyId: string) {
+    try {
+      const faculty = await prisma.faculty.findUnique({
+        where: {
+          id: facultyId,
+        },
+      });
+      await prisma.$disconnect();
+      return faculty;
+    } catch (error) {
+      await prisma.$disconnect();
+      throw error;
+    }
+  }
+
+  static async getFaculties() {
+    try {
+      const faculties = await prisma.faculty.findMany();
+      await prisma.$disconnect();
+      return faculties;
+    } catch (error) {
+      await prisma.$disconnect();
+      throw error;
+    }
+  }
+
   static async createFaculty(facultyData: Faculty) {
     const newFaculty = await prisma.faculty.create({
       data: {
@@ -14,22 +40,6 @@ export class FacultyRepository {
     });
     await prisma.$disconnect();
     return newFaculty;
-  }
-
-  static async getFaculties() {
-    const faculties = await prisma.faculty.findMany();
-    await prisma.$disconnect();
-    return faculties;
-  }
-
-  static async getFacultyById(facultyId: string) {
-    const faculty = await prisma.faculty.findUnique({
-      where: {
-        id: facultyId,
-      },
-    });
-    await prisma.$disconnect();
-    return faculty;
   }
 
   static async updateFaculty(facultyData: Faculty, id: string) {

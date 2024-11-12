@@ -68,10 +68,13 @@ export interface Doctor {
   id: string;
   name: string;
   academicTitle: string;
-  image: string;
-  isActive: boolean;
-  description: string;
+  description?: string;
+  image?: string;
   facultyId: string;
+  isActive: boolean;
+  faculty?: {
+    name: string;
+  };
   comments: Comment[];
   doctorSchedule: Schedule[];
 }
