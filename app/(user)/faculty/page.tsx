@@ -1,5 +1,6 @@
+import FacultyPage from '@/components/FacultyPage';
 import React from 'react';
-import FacultyPage from './FacultyPage';
+
 
 const page = () => {
   return (

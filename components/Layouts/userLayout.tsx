@@ -1,7 +1,8 @@
 'use client';
-import Footer from '@/app/homepage/Footer';
-import Header from '@/app/homepage/Header';
+
 import React from 'react';
+import Header from '../homepage/Header';
+import Footer from '../homepage/Footer';
 
 const UserLayout = ({ children }: { children: React.ReactNode }) => {
   return (

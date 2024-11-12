@@ -23,7 +23,7 @@ export function CheckoutForm({ product, clientSecret }: CheckoutFormProps) {
   // serviceId -> price 
   
   return (
-    <div className="mx-auto card-container">
+    <div className="mx-auto card-container animation">
       <div className=" reset-css card basis-1/4 gap-y-5 max-w-1/4">
         <div>
           <h1 className="card-header">Thông tin bệnh nhân</h1>
