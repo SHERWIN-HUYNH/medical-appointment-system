@@ -3,17 +3,17 @@ import {
   notFoundResponse,
   successResponse,
 } from '@/helpers/response';
-import prisma from '@/lib/prisma';
 import { FacultyRepository } from '@/repositories/faculty';
-import { Faculty } from '@/types/interface';
+
 
 // Xử lý GET request - Lấy một hoặc tất cả chuyên khoa
 export async function GET() {
-  const faculties = await FacultyRepository.getFaculties();
-  if (!faculties) {
-    return notFoundResponse('NOT FOUND FACULTIES');
+  try {
+    const faculties = await FacultyRepository.getFaculties();
+    return successResponse(faculties || []);
+  } catch (error) {
+    return badRequestResponse('Failed to fetch faculties');
   }
-  return successResponse(faculties || []);
 }
 
 // Xử lý POST request - Tạo chuyên khoa mới

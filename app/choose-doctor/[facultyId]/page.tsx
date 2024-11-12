@@ -3,76 +3,90 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../homepage/Header';
 import Footer from '../../homepage/Footer';
 import { Button } from '@/components/ui/button';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 interface Doctor {
   id: string;
   name: string;
   academicTitle: string;
-  image: string;
-  description: string;
-  isActive: boolean;
+  description?: string;
+  image?: string;
+  faculty?: {
+    name: string;
+  };
 }
 
 interface Faculty {
   id: string;
   name: string;
-  description: string;
+  description?: string;
+  image?: string;
 }
 
-const ChooseDoctor = () => {
+const ChooseDoctor = ({ params }: { params: { facultyId: string } }) => {
   const router = useRouter();
-  const params = useParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [faculty, setFaculty] = useState<Faculty | null>(null);
+  const [faculty, setFaculty] = useState<Faculty>({
+    id: params.facultyId,
+    name: '',
+    description: '',
+    image: ''
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchFaculty = async () => {
       try {
-        // Fetch faculty first
-        const facultyResponse = await fetch(`/api/faculty/${params.facultyId}`);
-        const facultyData = await facultyResponse.json();
-
-        if (facultyData.success) {
-          setFaculty(facultyData.data);
-        }
-
-        // Fetch doctors
-        const doctorsResponse = await fetch(`/api/doctor/${params.facultyId}`);
-        const doctorsData = await doctorsResponse.json();
-        if (doctorsData.success) {
-          setDoctors(doctorsData.data || []);
+        const res = await fetch(`/api/faculty/${params.facultyId}`);
+        const facultyData = await res.json();
+        
+        if (facultyData) {
+          setFaculty({
+            id: facultyData.id,
+            name: facultyData.name,
+            description: facultyData.description,
+            image: facultyData.image
+          });
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching faculty:', error);
+      }
+    };
+
+    const fetchDoctors = async () => {
+      try {
+        const res = await fetch(`/api/doctor/faculty/${params.facultyId}`);
+        const doctorsData = await res.json();
+        
+        if (Array.isArray(doctorsData)) {
+          setDoctors(doctorsData);
+        }
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
       }
     };
 
     if (params.facultyId) {
-      fetchData();
+      fetchFaculty();
+      fetchDoctors();
     }
   }, [params.facultyId]);
 
   const filteredDoctors = doctors.filter((doctor) =>
-    doctor.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    doctor.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const handleDoctorClick = (doctorId: string) => {
-    router.push(`/booking/${doctorId}`);
-  };
 
   return (
     <div className="bg-[#e8f2f7] w-full h-min flex flex-col items-center justify-center mt-16">
       <Header />
       <section className="flex space-x-7 max-w-screen-xl px-4 pb-4 mt-5">
-        {/* Left sidebar */}
         <div className="w-[300px] rounded-lg bg-white h-max flex-shrink-0">
           <h1 className="blue-header w-full">Thông tin khám</h1>
           <ul className="px-3 py-2 flex flex-col gap-2">
+            {/* Hospital Info */}
             <li className="text-16-normal flex">
               <div className="mr-2">
-                <svg
+              <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
                   height="20"
@@ -99,34 +113,21 @@ const ChooseDoctor = () => {
                 </p>
               </div>
             </li>
-            <li className="text-sm flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-gray-500"
-              >
-                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
-              </svg>
-              <span className="text-[#858585]">Chuyên khoa: </span>
-              <span className="text-primary font-medium">
-                {faculty?.name || 'Đang tải...'}
-              </span>
+            {/* Faculty Info */}
+            <li className="text-16-normal flex">
+              <div className="mr-2">
+                
+              </div>
+              <div className="flex justify-center flex-col text-sm">
+                <p>Chuyên khoa: {faculty.name}</p>
+              </div>
             </li>
           </ul>
         </div>
 
-        {/* Main content */}
         <main className="w-[700px] bg-white flex flex-col h-min justify-between overflow-hidden flex-shrink-0">
           <h1 className="blue-header w-full text-sm">Vui lòng chọn bác sĩ</h1>
           <div className="p-3">
-            {/* Search box */}
             <div className="relative mb-3">
               <input
                 type="text"
@@ -151,25 +152,21 @@ const ChooseDoctor = () => {
               </svg>
             </div>
 
-            {/* Doctors list */}
-            <div className="flex flex-col gap-1 h-[280px] overflow-y-auto custom-scrollbar">
+            <div className="flex flex-col gap-1 h-[280px] overflow-y-auto custom-scrollbar bg-white">
               {filteredDoctors.length > 0 ? (
                 filteredDoctors.map((doctor) => (
                   <div
                     key={doctor.id}
-                    onClick={() => handleDoctorClick(doctor.id)}
-                    className="p-3 hover:bg-gray-50 cursor-pointer border-b border-slate-200"
+                    className="py-2 px-3 hover:bg-gray-50 text-slate-500 hover:text-primary cursor-pointer border-b border-slate-200 transition-all duration-300 ease-in-out"
                   >
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-medium text-sm text-primary">
-                          {doctor.academicTitle} {doctor.name}
-                        </h3>
-                        <p className="text-xs text-slate-500 mt-1">
-                          {doctor.description}
-                        </p>
-                      </div>
+                    <div className="font-medium mb-0.5 text-sm">
+                      {doctor.academicTitle} {doctor.name}
                     </div>
+                    {doctor.description && (
+                      <div className="text-[11px] mt-1 italic">
+                        {doctor.description}
+                      </div>
+                    )}
                   </div>
                 ))
               ) : (
@@ -177,30 +174,6 @@ const ChooseDoctor = () => {
                   Không tìm thấy bác sĩ nào
                 </div>
               )}
-            </div>
-
-            {/* Back button */}
-            <div className="mt-3 border-t pt-3">
-              <Button
-                onClick={() => router.push('/choose-faculty')}
-                className="text-sm bg-transparent text-slate-500 hover:text-primary flex items-center gap-1"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="m12 19-7-7 7-7" />
-                  <path d="M19 12H5" />
-                </svg>
-                Quay lại
-              </Button>
             </div>
           </div>
         </main>
