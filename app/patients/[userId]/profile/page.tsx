@@ -15,15 +15,15 @@ import {
   Trash2,
 } from 'lucide-react';
 import Link from 'next/link';
-import Header from '@/app/homepage/Header';
 import MedicalRecord from './MedicalRecord';
-import Footer from '@/app/homepage/Footer';
 import PaymentHistory from './PaymentHistory';
 
 import Modal from '@/components/Modal';
 import { toast } from 'sonner';
 import ProfileDetailModal from '@/app/patients/[userId]/profile/ProfileDetailModal';
 import type { Profile } from '@/types/interface';
+import Header from '@/components/homepage/Header';
+import Footer from '@/components/homepage/Footer';
 
 const Profile = () => {
   const [selectedOption, setSelectedOption] = useState(1);

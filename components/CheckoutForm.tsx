@@ -12,7 +12,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from './ui/button';
 import { useParams } from 'next/navigation';
 
-
 type CheckoutFormProps = {
   clientSecret: string;
   product?: object;

@@ -97,9 +97,22 @@ const Doctor = () => {
 
   return (
     <UserLayout>
-  
-      <div className="flex justify-center mt-12 bg-slate-100 pt-1.5 pb-4">
-        <div className="w-3/4 mt-6 bg-white p-2 rounded-2xl shadow-md">
+     <div  className="relative w-full h-[200px] bg-sky-100 bg-cover bg-center">
+      <div className="absolute inset-0 flex items-center justify-center  bg-opacity-25">
+        <div className="text-left text-black p-4 bg-white bg-opacity-75 rounded-xl max-w-md">
+          <h1 className="text-2xl font-semibold text-primary">ĐẶT KHÁM THEO BÁC SĨ</h1>
+          <p className="mt-2 text-lg">Chủ động chọn bác sĩ mà bạn tin tưởng, an tâm khám bệnh</p>
+        </div>
+      </div>
+      <img
+        src="https://cdn.medpro.vn/prod-partner/9a085fa0-374e-4aca-9ffe-6e6d2c5c03e7-dat-kham-theo-bac-si.webp"
+        alt="Doctor and Nurse"
+        className="absolute bottom-0 right-0 w-1/4 max-w-[250px] mb-4 mr-4"
+        style={{ objectFit: 'contain' }}
+      />
+    </div>
+      <div className="flex justify-center mt-2 px-6 pt-1.5 pb-4">
+        <div className="w-full bg-white p-2  rounded-2xl shadow-md">
           <FormProvider {...formMethods}>
             <form className="flex justify-center items-center gap-4">
               <Input
@@ -139,8 +152,8 @@ const Doctor = () => {
         </div>
       </div>
 
-      <div className="flex justify-center bg-slate-100 py-6">
-        <div className="w-5/6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="flex justify-center px-2 py-4">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-6">
           {displayedDoctors.length > 0 ? (
             displayedDoctors.map((doctor) => (
               <div
@@ -180,15 +193,13 @@ const Doctor = () => {
         </div>
       </div>
 
-      <div className="flex bg-slate-100 justify-center ">
+      <div className="flex  justify-center ">
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
         />
       </div>
-
-  
     </UserLayout>
   );
 };

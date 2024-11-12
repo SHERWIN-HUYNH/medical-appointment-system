@@ -8,8 +8,6 @@ import { useSession } from "next-auth/react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import Header from "@/app/homepage/Header";
-import Footer from "@/app/homepage/Footer";
 import { toast } from "sonner";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 
@@ -20,6 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import Header from "@/components/homepage/Header";
+import Footer from "@/components/homepage/Footer";
 
 const Edit_Profile = () => {
   const { data: session } = useSession();
