@@ -27,8 +27,45 @@
 }
 
 @layer utilities {
+  .animation{
+    @apply transition duration-500 ease-in-out;
+  }
   .blue-header {
     @apply font-bold text-xl px-3 py-4 text-white text-center rounded-t-lg bg-gradient-to-r from-[#00b5f1] to-[#00e0ff];
+  }
+  .card-container {
+    @apply flex space-x-7 max-w-screen-xl px-4 pb-6 mt-8 gap-y-5;
+  }
+  .card-header {
+    @apply font-medium text-xl px-3 py-4 text-white text-center rounded-t-lg bg-gradient-to-r from-[#00b5f1] to-[#00e0ff];
+  }
+  .card-item {
+    @apply flex items-start gap-x-1 text-[#003553] text-base font-normal mb-2;
+  }
+  .style_body {
+    @apply bg-[#e8f2f7] min-h-[65vh] text-[#003553];
+  }
+  .card {
+    @apply flex flex-col flex-shrink-0 flex-grow-0 ;
+  }
+  .highlight-text {
+    @apply text-highlight font-semibold text-base;
+  }
+  .body-width {
+    @apply max-w-[1180px] px-0;
+  }
+  .reset-css {
+    @apply box-border m-0 p-0;
+  }
+  .list-item-payment{
+    @apply flex flex-grow-0 flex-shrink-0 items-center justify-between border-solid border-b-[1px] border-iconGray py-4;
+  }
+  .card-body {
+    @apply px-3 py-4 bg-white;
+  }
+  .li-payment-center{
+    @apply flex-grow-0 flex-shrink-0 basis-3/5 text-end;
+
   }
   .center {
     @apply flex justify-center;
@@ -416,7 +453,7 @@
 }
 
 .fc {
-  @apply min-h-[800px] w-[900px] !important;
+  @apply min-h-[800px] !important;
 }
 .fc .fc-scrollgrid-sync-table {
   @apply overflow-auto !important;

@@ -1,9 +1,11 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import Header from '../homepage/Header';
-import Footer from '../homepage/Footer';
 import { Button } from '@/components/ui/button';
+<<<<<<< HEAD:app/choose-faculty/page.tsx
 import { useRouter } from 'next/navigation';
+=======
+import UserLayout from '@/components/Layouts/userLayout';
+>>>>>>> 7cdf53af557d07108acb34f38fcd732f8f53902e:app/(user)/choose-faculty/page.tsx
 
 interface Faculty {
   id: string;
@@ -39,8 +41,7 @@ const ChooseFaculty = () => {
   };
 
   return (
-    <div className="bg-[#e8f2f7] w-full h-min flex flex-col items-center justify-center mt-16">
-      <Header />
+    <UserLayout>
       <section className="flex space-x-7 max-w-screen-xl px-4 pb-4 mt-5">
         <div className="w-[300px] rounded-lg bg-white h-max flex-shrink-0">
           <h1 className="blue-header w-full">Thông tin khám</h1>
@@ -144,8 +145,8 @@ const ChooseFaculty = () => {
           </div>
         </main>
       </section>
-      <Footer />
-    </div>
+   
+    </UserLayout>
   );
 };
 

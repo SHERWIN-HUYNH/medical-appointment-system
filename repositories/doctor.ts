@@ -82,8 +82,8 @@ export class DoctorRespository {
       ...doctor,
       facultyName: doctor.faculty?.name,
     }));
-  await prisma.$disconnect();
-  return formattedDoctors;
+    await prisma.$disconnect();
+    return formattedDoctors;
   }
   static async deleteDoctor(doctorData: Doctor) {
     // Kiểm tra xem bác sĩ có lịch hẹn không

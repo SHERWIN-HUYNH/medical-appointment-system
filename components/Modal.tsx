@@ -1,4 +1,3 @@
-// components/Modal.tsx
 import React from 'react';
 
 interface ModalProps {
@@ -25,7 +24,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, message }) =>
             Hủy
           </button>
           <button
-            className="bg-pink-400 text-white px-4 py-2 rounded hover:bg-pink-500"
+            className="bg-red-400 text-white px-4 py-2 rounded hover:bg-red-500"
             onClick={onConfirm}
           >
             Xóa

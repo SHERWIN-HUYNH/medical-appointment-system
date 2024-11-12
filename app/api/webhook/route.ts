@@ -1,7 +1,6 @@
 import Stripe from 'stripe';
 import { stripe } from '@/lib/stripe';
 import prisma from '@/lib/prisma';
-import { buffer } from 'micro';
 export async function POST(req: Request) {
   const body = await req.text();
   const sig = req.headers.get('Stripe-Signature') as string;

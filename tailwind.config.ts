@@ -107,6 +107,11 @@ const config = {
         230: '57.5rem',
         242.5: '60.625rem',
       },
+      maxWidth: {
+        '1/4': '25%',
+        '3/4': '75%',
+        '1/2': '50%',
+      },
       zIndex: {
         999999: '999999',
         99999: '99999',
@@ -139,6 +144,8 @@ const config = {
         14: '0px 2px 3px 0px rgba(0, 0, 0, 0.10)',
       },
       colors: {
+        iconGray:'#b1b1b1',
+        highlight:'#003553',
         secondaryPriamry: '#dbeafe',
         current: 'currentColor',
         transparent: 'transparent',
