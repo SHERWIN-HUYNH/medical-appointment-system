@@ -11,10 +11,10 @@ async function main() {
   if (!existingUser) {
     const user = await prisma.user.create({
       data: {
-        name: 'Nguyễn Trần Thanh Tường', 
+        name: 'Nguyễn Trần Thanh Tường',
         email: 'duyen@gmail.com',
         password: await bcrypt.hash('123456', 10),
-        phone: '0123456789',      
+        phone: '0123456789',
       },
     });
     console.log('User created:', user);
@@ -26,7 +26,8 @@ async function main() {
     {
       name: 'Dr. Trần Thanh Tường',
       academicTitle: 'Giáo sư',
-      image: 'https://th.bing.com/th/id/OIP.q4L1sG9zTVtR-uhWParTOQHaHa?w=212&h=212&c=7&r=0&o=5&dpr=1.1&pid=1.7',
+      image:
+        'https://th.bing.com/th/id/OIP.q4L1sG9zTVtR-uhWParTOQHaHa?w=212&h=212&c=7&r=0&o=5&dpr=1.1&pid=1.7',
       isActive: true,
       description: 'Giáo sư có nhiều năm kinh nghiệm',
       facultyId: '35390041-7a13-49d4-9f65-9c6563f2b5b7',
@@ -34,7 +35,8 @@ async function main() {
     {
       name: 'Dr. Trần Thanh Tường',
       academicTitle: 'Giáo sư',
-      image: 'https://th.bing.com/th/id/OIP.q4L1sG9zTVtR-uhWParTOQHaHa?w=212&h=212&c=7&r=0&o=5&dpr=1.1&pid=1.7',
+      image:
+        'https://th.bing.com/th/id/OIP.q4L1sG9zTVtR-uhWParTOQHaHa?w=212&h=212&c=7&r=0&o=5&dpr=1.1&pid=1.7',
       isActive: true,
       description: 'Giáo sư có nhiều năm kinh nghiệm',
       facultyId: '35390041-7a13-49d4-9f65-9c6563f2b5b7',

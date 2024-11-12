@@ -1,52 +1,91 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
 import UserLayout from '@/components/Layouts/userLayout';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
+interface Doctor {
+  id: string;
+  name: string;
+  academicTitle: string;
+  description?: string;
+  image?: string;
+  faculty?: {
+    name: string;
+  };
+}
 
 interface Faculty {
   id: string;
   name: string;
   description?: string;
+  image?: string;
 }
 
-const ChooseFaculty = () => {
+const ChooseDoctor = ({ params }: { params: { facultyId: string } }) => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
-  const [faculties, setFaculties] = useState<Faculty[]>([]);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [faculty, setFaculty] = useState<Faculty>({
+    id: params.facultyId,
+    name: '',
+    description: '',
+    image: ''
+  });
 
   useEffect(() => {
-    const fetchFaculties = async () => {
+    const fetchFaculty = async () => {
       try {
-        const response = await fetch('/api/faculty');
-        const data = await response.json();
-        setFaculties(data || []);
+        const res = await fetch(`/api/faculty/${params.facultyId}`);
+        const facultyData = await res.json();
+        
+        if (facultyData) {
+          setFaculty({
+            id: facultyData.id,
+            name: facultyData.name,
+            description: facultyData.description,
+            image: facultyData.image
+          });
+        }
       } catch (error) {
-        console.log(error);
-        setFaculties([]);
+        console.error('Error fetching faculty:', error);
       }
     };
-    fetchFaculties();
-  }, []);
 
-  const filteredFaculties = faculties.filter((faculty) =>
-    faculty.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    const fetchDoctors = async () => {
+      try {
+        const res = await fetch(`/api/doctor/faculty/${params.facultyId}`);
+        const doctorsData = await res.json();
+        
+        if (Array.isArray(doctorsData)) {
+          setDoctors(doctorsData);
+        }
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
+    };
+
+    if (params.facultyId) {
+      fetchFaculty();
+      fetchDoctors();
+    }
+  }, [params.facultyId]);
+
+  const filteredDoctors = doctors.filter((doctor) =>
+    doctor.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleFacultyClick = (facultyId: string) => {
-    router.push(`/choose-doctor/${facultyId}`);
-  };
-
   return (
-    <UserLayout>
+    <div className="bg-[#e8f2f7] w-full h-min flex flex-col items-center justify-center">
+      <UserLayout>
       <section className="flex space-x-7 max-w-screen-xl px-4 pb-4 mt-5">
         <div className="w-[300px] rounded-lg bg-white h-max flex-shrink-0">
           <h1 className="blue-header w-full">Thông tin khám</h1>
           <ul className="px-3 py-2 flex flex-col gap-2">
+            {/* Hospital Info */}
             <li className="text-16-normal flex">
               <div className="mr-2">
-                <svg
+              <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
                   height="20"
@@ -73,15 +112,25 @@ const ChooseFaculty = () => {
                 </p>
               </div>
             </li>
+            {/* Faculty Info */}
+            <li className="text-16-normal flex">
+              <div className="mr-2">
+                
+              </div>
+              <div className="flex justify-center flex-col text-sm">
+                <p>Chuyên khoa: {faculty.name}</p>
+              </div>
+            </li>
           </ul>
         </div>
+
         <main className="w-[700px] bg-white flex flex-col h-min justify-between overflow-hidden flex-shrink-0">
-          <h1 className="blue-header w-full text-sm">Vui lòng chọn chuyên khoa</h1>
+          <h1 className="blue-header w-full text-sm">Vui lòng chọn bác sĩ</h1>
           <div className="p-3">
             <div className="relative mb-3">
               <input
                 type="text"
-                placeholder="Tìm nhanh chuyên khoa"
+                placeholder="Tìm nhanh bác sĩ"
                 className="w-full p-1.5 border rounded-md pl-8 text-sm"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -101,28 +150,36 @@ const ChooseFaculty = () => {
                 <path d="m21 21-4.3-4.3" />
               </svg>
             </div>
+
             <div className="flex flex-col gap-1 h-[280px] overflow-y-auto custom-scrollbar bg-white">
-              {filteredFaculties && filteredFaculties.length > 0 ? (
-                filteredFaculties.map((faculty) => (
+              {filteredDoctors.length > 0 ? (
+                filteredDoctors.map((doctor) => (
                   <div
-                    key={faculty.id}
-                    onClick={() => handleFacultyClick(faculty.id)}
+                    key={doctor.id}
                     className="py-2 px-3 hover:bg-gray-50 text-slate-500 hover:text-primary cursor-pointer border-b border-slate-200 transition-all duration-300 ease-in-out"
                   >
-                    <div className="font-medium mb-0.5 text-sm">{faculty.name}</div>
-                    {faculty.description && (
-                      <div className="text-[11px] mt-1 italic">{faculty.description}</div>
+                    <div className="font-medium mb-0.5 text-sm">
+                      {doctor.academicTitle} {doctor.name}
+                    </div>
+                    {doctor.description && (
+                      <div className="text-[11px] mt-1 italic">
+                        {doctor.description}
+                      </div>
                     )}
                   </div>
                 ))
               ) : (
                 <div className="p-4 text-center text-gray-500">
-                  Không tìm thấy chuyên khoa nào
+                  Không tìm thấy bác sĩ nào
                 </div>
               )}
             </div>
+
             <div className="mt-3 border-t pt-3">
-              <Button className="text-sm bg-transparent text-slate-500 hover:text-primary flex items-center gap-1">
+              <Button 
+                onClick={() => router.push('/choose-faculty')}
+                className="text-sm bg-transparent text-slate-500 hover:text-primary flex items-center gap-1"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -143,9 +200,9 @@ const ChooseFaculty = () => {
           </div>
         </main>
       </section>
-   
-    </UserLayout>
+      </UserLayout>
+    </div>
   );
 };
 
-export default ChooseFaculty;
+export default ChooseDoctor;

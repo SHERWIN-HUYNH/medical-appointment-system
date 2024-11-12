@@ -2,7 +2,6 @@
 import UserLayout from '@/components/Layouts/userLayout';
 import React, { useEffect, useState } from 'react';
 
-
 interface Faculty {
   id: string;
   name: string;
@@ -28,6 +27,7 @@ const FacultyPage = () => {
           setLoading(false);
         }
       } catch (error) {
+        console.error(error);
         setError('Đã có lỗi xảy ra');
         setLoading(false);
       }
