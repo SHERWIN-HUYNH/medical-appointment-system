@@ -1,12 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Header from '../homepage/Header';
-import Footer from '../homepage/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import Pagination from '@/components/Pagination';
+import UserLayout from '@/components/Layouts/userLayout';
 
 interface Doctor {
   id: string;
@@ -44,6 +43,7 @@ const Doctor = () => {
           toast.error('Lỗi khi tải dữ liệu bác sĩ');
         }
       } catch (error) {
+        console.log('ERROR', error);
         toast.error('Lỗi khi kết nối với máy chủ');
       }
     };
@@ -54,6 +54,7 @@ const Doctor = () => {
         const data = await response.json();
         setfaculties(data);
       } catch (error) {
+        console.log('ERROR', error);
         toast.error('Lỗi khi tải dữ liệu chuyên khoa');
       }
     };
@@ -95,8 +96,8 @@ const Doctor = () => {
   );
 
   return (
-    <div>
-      <Header />
+    <UserLayout>
+  
       <div className="flex justify-center mt-12 bg-slate-100 pt-1.5 pb-4">
         <div className="w-3/4 mt-6 bg-white p-2 rounded-2xl shadow-md">
           <FormProvider {...formMethods}>
@@ -187,8 +188,8 @@ const Doctor = () => {
         />
       </div>
 
-      <Footer />
-    </div>
+  
+    </UserLayout>
   );
 };
 

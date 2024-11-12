@@ -1,31 +1,24 @@
-import { Calendar, CalendarApi, DateSpanApi, EventDropArg } from '@fullcalendar/core';
+import { CalendarApi, DateSpanApi, EventDropArg } from '@fullcalendar/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import {
   DateSelectArg,
   DatesSetArg,
-  DayCellContentArg,
   EventClickArg,
-  EventSourceInput,
 } from '@fullcalendar/core/index.js';
 import interactionPlugin, {
   DateClickArg,
-  Draggable,
-  DropArg,
 } from '@fullcalendar/interaction';
-import { useState, useEffect, Fragment, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import clsx from 'clsx';
 import { Button } from '@/components/ui/button';
 import {
   fetchEventsFromApi,
-  formatTimeSlot,
   transformApiEventData,
 } from '@/helpers/formatTimeSlots';
-import { useParams, useRouter } from 'next/navigation';
-import { set } from 'zod';
-import { Toast } from '@/components/ui/toast';
 import { toast } from 'sonner';
+import React from 'react';
 interface Event {
   id?: string;
   title: string;
@@ -42,7 +35,6 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
   const [visibleRange, setVisibleRange] = useState({ start: '', end: '' });
   const [selectedDates, setSelectedDates] = useState<Date[]>([]); // Track selected dates
   const [deletedDates, setDeletedDates] = useState<Event[]>([]);
-  const [formattedSelectedDates, setFormattedSelectedDates] = useState<string[]>([]);
   const [isSelectable, setIsSelectable] = useState(true); // Enable/disable date selection
   const [allEvents, setAllEvents] = useState<Event[]>([]);
   const calendarRef = useRef<FullCalendar>(null);
@@ -200,8 +192,6 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
         throw new Error('Failed to save timeslots');
       }
       setSelectedDates([]); // Clear selected dates after saving
-
-      const result = await response.json();
 
       toast.success('Cập nhật lịch làm việc thành công!');
     } catch (error) {
