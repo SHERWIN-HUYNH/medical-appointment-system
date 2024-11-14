@@ -135,7 +135,6 @@ const Page = () => {
           </div>
         </main>
       </section>
-   
     </UserLayout>
   );
 };

@@ -82,8 +82,8 @@ export class DoctorRespository {
       ...doctor,
       facultyName: doctor.faculty?.name || 'Không xác định',
     }));
-  await prisma.$disconnect();
-  return formattedDoctors;
+    await prisma.$disconnect();
+    return formattedDoctors;
   }
   static async deleteDoctor(doctorData: Doctor) {
     // Kiểm tra xem bác sĩ có lịch hẹn không
@@ -153,5 +153,21 @@ export class DoctorRespository {
     });
     await prisma.$disconnect();
     return appointments !== null;
+  }
+
+  static async getFacultyByDoctorId(doctorId: string) {
+    try {
+      const doctor = await prisma.doctor.findUnique({
+        where: {
+          id: doctorId,
+        },
+        include: {
+          faculty: true,
+        },
+      });
+      return doctor;
+    } catch (error) {
+      throw new Error('Error getting faculty by doctor ID', error as Error);
+    }
   }
 }

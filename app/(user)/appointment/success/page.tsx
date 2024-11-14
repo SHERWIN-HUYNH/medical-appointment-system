@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -11,14 +11,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 const RequestSuccess = async ({
   searchParams,
 }: {
-  searchParams: { payment_intent: string }
+  searchParams: { payment_intent: string };
 }) => {
-  const {userId} = useParams()
-  const paymentIntent = await stripe.paymentIntents.retrieve(
-    searchParams.payment_intent
-  )
-  if (paymentIntent.metadata.billId == null) return notFound()
-  const isSuccess = paymentIntent.status === "succeeded"
+  const { userId } = useParams();
+  const paymentIntent = await stripe.paymentIntents.retrieve(searchParams.payment_intent);
+  if (paymentIntent.metadata.billId == null) return notFound();
+  const isSuccess = paymentIntent.status === 'succeeded';
   return (
     <div className=" flex h-screen max-h-screen px-[5%] bg-[#4158D0] bg-[linear-gradient(43deg,#4158D0_0%,#C850C0_46%,#FFCC70_100%)]">
       <div className="success-img max-w-[800px] bg-white">
@@ -70,17 +68,17 @@ const RequestSuccess = async ({
         </section>
 
         <Button variant="outline" className="shad-primary-btn" asChild>
-        {isSuccess ? (
-              <a
-                // href={`/products/download/${await createDownloadVerification(
-                //   product.id
-                // )}`}
-              >
-                Download
-              </a>
-            ) : (
-              <Link href={`/appointment/${userId}/payment`}>Quay lại trang thanh toán</Link>
-            )}
+          {isSuccess ? (
+            <a
+            // href={`/products/download/${await createDownloadVerification(
+            //   product.id
+            // )}`}
+            >
+              Download
+            </a>
+          ) : (
+            <Link href={`/appointment/${userId}/payment`}>Quay lại trang thanh toán</Link>
+          )}
           <Link href={`/patients/${userId}/new-appointment`}>Quay lại Trang chủ</Link>
         </Button>
 

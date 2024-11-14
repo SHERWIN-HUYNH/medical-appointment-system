@@ -1,25 +1,24 @@
 declare type Gender = 'MALE' | 'FEMALE' | 'OTHER';
 declare type Status = 'PENDING' | 'SCHEDULED' | 'CANCELLED';
 export interface Profile {
-    id: string; 
-    name: string;
-    birthDate?: Date; // Hoặc string tùy theo định dạng bạn sử dụng
-    gender: Gender;
-    email: string;
-    phone: string;
-    allergies ?:string;
-    identificationType: string;
-    identificationNumber: string;
-    identificationDocumentUrl: string; // Hoặc URL kiểu string
-    pastMedicalHistory : string; // Hoặc một kiểu dữ liệu khác nếu cần
-  }
-  export interface UserRole {
-    id: string;
-    name: string;
-    email: string;
-    roleName: string;
-  }
-
+  id: string;
+  name: string;
+  birthDate?: Date; // Hoặc string tùy theo định dạng bạn sử dụng
+  gender: Gender;
+  email: string;
+  phone: string;
+  allergies?: string;
+  identificationType: string;
+  identificationNumber: string;
+  identificationDocumentUrl: string; // Hoặc URL kiểu string
+  pastMedicalHistory: string; // Hoặc một kiểu dữ liệu khác nếu cần
+}
+export interface UserRole {
+  id: string;
+  name: string;
+  email: string;
+  roleName: string;
+}
 
 export interface Appointment {
   date: Date;
@@ -74,4 +73,16 @@ export interface Doctor {
   facultyId: string;
   comments: Comment[];
   doctorSchedule: Schedule[];
+}
+export interface Bill {
+  id: string;
+  date: string;
+  price: number;
+  appointmentId: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  status: string;
+  paymentMethod: string;
+  note: string;
 }

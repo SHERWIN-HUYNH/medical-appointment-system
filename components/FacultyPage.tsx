@@ -2,7 +2,6 @@
 import UserLayout from '@/components/Layouts/userLayout';
 import React, { useEffect, useState } from 'react';
 
-
 interface Faculty {
   id: string;
   name: string;
@@ -38,7 +37,6 @@ const FacultyPage = () => {
 
   return (
     <UserLayout>
-   
       <main className="flex-grow container mx-auto px-4 py-24">
         {loading ? (
           <div className="flex justify-center items-center">
@@ -82,7 +80,6 @@ const FacultyPage = () => {
           </div>
         )}
       </main>
-     
     </UserLayout>
   );
 };

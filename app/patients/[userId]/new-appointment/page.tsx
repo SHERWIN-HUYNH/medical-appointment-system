@@ -3,7 +3,6 @@ import { getPatient } from '@/lib/action/patient.actions';
 import { AppointmentForm } from '@/components/forms/AppointmentForm';
 import React from 'react';
 const Appointment = async ({ params: { userId } }: SearchParamProps) => {
-
   const patient = await getPatient(userId);
   console.log('take patientId', patient?.$id);
   return (

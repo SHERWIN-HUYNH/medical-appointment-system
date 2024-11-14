@@ -62,6 +62,7 @@ model Doctor {
   image         String
   isActive      Boolean
   description   String
+  gender        Boolean
   faculty       Faculty @relation(fields: [facultyId], references: [id],onDelete: Cascade)
   facultyId     String @db.Uuid
   comments      Comment[]
@@ -101,8 +102,7 @@ model Bill {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @default(now())
-  amount          Float
-  paymentMethod   String
+  price           Float
   note            String?
   status          BillStatus @default(PENDING)
   user            User @relation(fields: [userId], references: [id])
