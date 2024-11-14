@@ -27,6 +27,7 @@ const FacultyPage = () => {
           setLoading(false);
         }
       } catch (error) {
+        console.error(error);
         setError('Đã có lỗi xảy ra');
         setLoading(false);
       }
