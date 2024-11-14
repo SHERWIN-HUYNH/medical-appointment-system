@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Image from 'next/image';
-
+import React from 'react';
 type StatCardProps = {
   type: 'appointments' | 'pending' | 'cancelled';
   count: number;

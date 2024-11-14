@@ -97,7 +97,6 @@ const Doctor = () => {
 
   return (
     <UserLayout>
-  
       <div className="flex justify-center mt-12 bg-slate-100 pt-1.5 pb-4">
         <div className="w-3/4 mt-6 bg-white p-2 rounded-2xl shadow-md">
           <FormProvider {...formMethods}>
@@ -187,8 +186,6 @@ const Doctor = () => {
           onPageChange={setCurrentPage}
         />
       </div>
-
-  
     </UserLayout>
   );
 };

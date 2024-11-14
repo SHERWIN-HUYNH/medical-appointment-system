@@ -13,9 +13,6 @@ import React from 'react';
 import Link from 'next/link';
 
 import Image from 'next/image';
-import DarkModeSwitcher from './DarkModeSwitcher';
-import DropdownMessage from './DropdownMessage';
-import DropdownNotification from './DropdownNotification';
 import DropdownUser from './DropdownUser';
 
 const Header = (props: {

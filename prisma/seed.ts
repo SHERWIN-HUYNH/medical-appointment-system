@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
+
   const existingUser = await prisma.user.findUnique({
     where: { email: 'duyen@gmail.com' },
   });
@@ -41,15 +42,14 @@ async function main() {
       description: 'Giáo sư có nhiều năm kinh nghiệm',
       facultyId: '35390041-7a13-49d4-9f65-9c6563f2b5b7',
     },
-  ];
+    orderBy: {
+      schedule: {
+        date: 'asc',
+      },
+    },
+  });
 
-  for (const doctor of doctors) {
-    await prisma.doctor.create({
-      data: doctor,
-    });
-  }
-
-  console.log('Doctors created.');
+  console.log('Doctors created.', doctorSchedules);
 }
 
 main()

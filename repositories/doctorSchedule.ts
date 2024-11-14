@@ -1,6 +1,5 @@
 import prisma from '@/lib/prisma';
 import { Schedule } from '@/types/interface';
-import { AwardIcon } from 'lucide-react';
 
 export class ScheduleRepository {
   static async getDoctorSchedules(doctorId: string) {
@@ -8,14 +7,20 @@ export class ScheduleRepository {
       where: {
         doctorId: doctorId,
       },
-      include: {
+      select: {
+        isAvailable: true,
         schedule: true,
+      },
+      orderBy: {
+        schedule: {
+          date: 'asc',
+        },
       },
     });
     if (!doctorSchedules) {
       throw new Error('No Doctor Schedule found');
     }
-    return doctorSchedules.map((ds) => ds.schedule);
+    return doctorSchedules;
   }
 
   static async deleteDoctorSchedule(doctorId: string, scheduleValue: Array<Schedule>) {
@@ -31,7 +36,7 @@ export class ScheduleRepository {
           },
         });
         if (existingDoctorSchedule) {
-          const deleted = await prisma.doctorSchedule.delete({
+          await prisma.doctorSchedule.delete({
             where: {
               id: existingDoctorSchedule.id,
             },
@@ -39,6 +44,7 @@ export class ScheduleRepository {
         }
       }
       return true;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       return false;
     }
@@ -46,6 +52,7 @@ export class ScheduleRepository {
 
   static async saveSchedule(doctorId: string, schedules: Array<Schedule>) {
     return prisma.$transaction(async (tx) => {
+      console.log('RESPO SCHEDULE', schedules);
       const datesToDelete = Array.from(
         new Set(schedules.map((schedule) => schedule.date)),
       );

@@ -38,7 +38,6 @@ const FacultyPage = () => {
 
   return (
     <UserLayout>
-   
       <main className="flex-grow container mx-auto px-4 py-24">
         {loading ? (
           <div className="flex justify-center items-center">
@@ -82,7 +81,6 @@ const FacultyPage = () => {
           </div>
         )}
       </main>
-     
     </UserLayout>
   );
 };
