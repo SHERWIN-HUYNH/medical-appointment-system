@@ -90,7 +90,7 @@ const Add_Profile = () => {
         action: "create",
         profile: {
           ...formData,
-          birthDate: formattedBirthDate, // Sử dụng đối tượng Date cho birthDate
+          birthDate: formattedBirthDate, 
         },
       }),
     });
@@ -98,7 +98,7 @@ const Add_Profile = () => {
     if (response.ok) {
       const data = await response.json();
       toast.success("Thêm hồ sơ khám bệnh thành công");
-      router.push(`/patients/${session?.user?.id}/profile`);
+      router.back();
     } else {
       const errorText = await response.text();
       toast.error("Thêm hồ sơ khám bệnh thất bại. Vui lòng thử lại!");

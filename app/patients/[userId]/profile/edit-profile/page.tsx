@@ -109,7 +109,7 @@ const Edit_Profile = () => {
 
       if (response.ok) {
         toast.success("Sửa hồ sơ khám bệnh thành công");
-        router.push(`/patients/${session?.user?.id}/profile`);
+        router.back();
       } else {
         toast.error("Sửa hồ sơ khám bệnh thất bại. Vui lòng thử lại!");
       }
@@ -125,7 +125,7 @@ const Edit_Profile = () => {
       <div className="flex justify-start mt-20 ml-24">
         <Button
           className="bg-slate-400 text-white rounded hover:bg-slate-300 px-4 py-2"
-          onClick={() => router.push(`/patients/${session?.user?.id}/profile`)}
+          onClick={() => router.back()}
         >
           <Undo2 className="w-4 h-4 inline mr-1" />
           Quay lại

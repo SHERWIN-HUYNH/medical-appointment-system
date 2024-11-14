@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { RiEmpathizeFill, RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { Button } from '@/components/ui/button';
-import { FaBookMedical, FaNewspaper } from 'react-icons/fa';
+import { FaBookMedical, FaNewspaper, FaVenusMars } from 'react-icons/fa';
 import {
   Cake,
   CircleDot,
@@ -176,7 +176,7 @@ const Profile = () => {
                             </span>
                           </p>
                           <p className="mt-2 flex items-center gap-2">
-                            <FlipVertical2 className="w-5 h-5 text-slate-400" />
+                            <FaVenusMars className="w-5 h-5 text-slate-400" />
                             <span className="text-slate-400">Giới tính:</span>
                             <span>{profile.gender === 'FEMALE' ? 'Nữ' : 'Nam'}</span>
                           </p>
