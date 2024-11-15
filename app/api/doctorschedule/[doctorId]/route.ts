@@ -8,6 +8,10 @@ import { ScheduleRepository } from '@/repositories/doctorSchedule';
 
 export async function GET(req: Request, context: any) {
   const { doctorId } = context.params;
+  const doctor = await DoctorRespository.getDoctorById(doctorId);
+  if (!doctor) {
+    return notFoundResponse('NOT FOUND DOCTOR');
+  }
   const schedule = await ScheduleRepository.getDoctorSchedules(doctorId);
   if (!schedule) {
     return notFoundResponse('NOT FOUND SCHEDULE');

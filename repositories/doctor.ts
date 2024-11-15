@@ -156,6 +156,22 @@ export class DoctorRespository {
     return appointments !== null;
   }
 
+  static async getFacultyByDoctorId(doctorId: string) {
+    try {
+      const doctor = await prisma.doctor.findUnique({
+        where: {
+          id: doctorId,
+        },
+        include: {
+          faculty: true,
+        },
+      });
+      return doctor;
+    } catch (error) {
+      throw new Error('Error getting faculty by doctor ID', error as Error);
+    }
+  }
+
   static async getDoctorsByFaculty(facultyId: string) {
     const doctors = await prisma.doctor.findMany({
       where: {

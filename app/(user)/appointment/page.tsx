@@ -16,7 +16,7 @@ const Appointment = async () => {
     metadata: { billId: serviceInfor.customerId },
   });
   console.log('paymentIntent', paymentIntent);
-  console.log('STRIPE',process.env.STRIPE_SECRET_KEY)
+  console.log('STRIPE', process.env.STRIPE_SECRET_KEY);
   if (paymentIntent.client_secret == null) {
     throw new Error('Stripe failed to create payment intent');
   }

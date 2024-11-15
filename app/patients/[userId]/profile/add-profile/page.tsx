@@ -1,18 +1,17 @@
+'use client';
 
-"use client";
-
-import { Button } from "@/components/ui/button";
-import { Eraser, UserRoundPlus, Undo2 } from "lucide-react"; 
-import React, { useState } from "react";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import Header from "@/app/homepage/Header";
-import Footer from "@/app/homepage/Footer";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { Button } from '@/components/ui/button';
+import { Eraser, UserRoundPlus, Undo2 } from 'lucide-react';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { useSession } from 'next-auth/react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import Header from '@/app/homepage/Header';
+import Footer from '@/app/homepage/Footer';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 import {
   Select,
@@ -75,7 +74,7 @@ const Add_Profile = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     if (!isValidIdentificationNumber(formData.identificationNumber)) {
       setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.');
       return;
@@ -87,24 +86,24 @@ const Add_Profile = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        action: "create",
+        action: 'create',
         profile: {
           ...formData,
           birthDate: formattedBirthDate, // Sử dụng đối tượng Date cho birthDate
         },
       }),
     });
-  
+
     if (response.ok) {
       const data = await response.json();
-      toast.success("Thêm hồ sơ khám bệnh thành công");
+      toast.success('Thêm hồ sơ khám bệnh thành công');
       router.push(`/patients/${session?.user?.id}/profile`);
     } else {
       const errorText = await response.text();
-      toast.error("Thêm hồ sơ khám bệnh thất bại. Vui lòng thử lại!");
+      toast.error('Thêm hồ sơ khám bệnh thất bại. Vui lòng thử lại!');
     }
   };
-  
+
   return (
     <div>
       <Header />

@@ -1,4 +1,3 @@
-
 import CategorySearch from '@/components/homepage/CategorySearch';
 import DoctorList from '@/components/homepage/DoctorList';
 import Footer from '@/components/homepage/Footer';

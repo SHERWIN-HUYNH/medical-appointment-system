@@ -1,17 +1,16 @@
-
-"use client";
-import { Button } from "@/components/ui/button";
-import { Undo2, PenLine } from "lucide-react";
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import Header from "@/app/homepage/Header";
-import Footer from "@/app/homepage/Footer";
-import { toast } from "sonner";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+'use client';
+import { Button } from '@/components/ui/button';
+import { Undo2, PenLine } from 'lucide-react';
+import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import Header from '@/app/homepage/Header';
+import Footer from '@/app/homepage/Footer';
+import { toast } from 'sonner';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 import {
   Select,
@@ -25,34 +24,31 @@ const Edit_Profile = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-  const email = searchParams.get("email");
-  const name = searchParams.get("name");
-  const phone = searchParams.get("phone");
-  const gender = searchParams.get("gender");
-  const identificationType = searchParams.get("identificationType");
-  const identificationNumber = searchParams.get("identificationNumber");
-  const identificationDocumentUrl = searchParams.get(
-    "identificationDocumentUrl"
-  );
-  const pastMedicalHistory = searchParams.get("pastMedicalHistory");
-  const birthDate = searchParams.get("birthDate");
+  const id = searchParams.get('id');
+  const email = searchParams.get('email');
+  const name = searchParams.get('name');
+  const phone = searchParams.get('phone');
+  const gender = searchParams.get('gender');
+  const identificationType = searchParams.get('identificationType');
+  const identificationNumber = searchParams.get('identificationNumber');
+  const identificationDocumentUrl = searchParams.get('identificationDocumentUrl');
+  const pastMedicalHistory = searchParams.get('pastMedicalHistory');
+  const birthDate = searchParams.get('birthDate');
 
   const [formData, setFormData] = useState({
-    name: name || "",
-    email: email || "",
-    phone: phone || "",
-    gender: gender || "",
-    identificationType: identificationType || "",
-    identificationNumber: identificationNumber || "",
-    identificationDocumentUrl: identificationDocumentUrl || "",
-    pastMedicalHistory: pastMedicalHistory || "",
-    birthDate: birthDate || "",
+    name: name || '',
+    email: email || '',
+    phone: phone || '',
+    gender: gender || '',
+    identificationType: identificationType || '',
+    identificationNumber: identificationNumber || '',
+    identificationDocumentUrl: identificationDocumentUrl || '',
+    pastMedicalHistory: pastMedicalHistory || '',
+    birthDate: birthDate || '',
   });
 
-
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -88,15 +84,13 @@ const Edit_Profile = () => {
       return;
     }
 
-    const formattedBirthDate = formData.birthDate
-      ? new Date(formData.birthDate)
-      : null;
+    const formattedBirthDate = formData.birthDate ? new Date(formData.birthDate) : null;
 
     try {
       const response = await fetch(`/api/profile/${session?.user?.id}`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           profile: {
@@ -108,14 +102,14 @@ const Edit_Profile = () => {
       });
 
       if (response.ok) {
-        toast.success("Sửa hồ sơ khám bệnh thành công");
+        toast.success('Sửa hồ sơ khám bệnh thành công');
         router.push(`/patients/${session?.user?.id}/profile`);
       } else {
-        toast.error("Sửa hồ sơ khám bệnh thất bại. Vui lòng thử lại!");
+        toast.error('Sửa hồ sơ khám bệnh thất bại. Vui lòng thử lại!');
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
-      toast.error("Đã xảy ra lỗi khi cập nhật hồ sơ.");
+      console.error('Error updating profile:', error);
+      toast.error('Đã xảy ra lỗi khi cập nhật hồ sơ.');
     }
   };
 
@@ -172,7 +166,7 @@ const Edit_Profile = () => {
                 value={
                   formData.birthDate
                     ? new Date(formData.birthDate).toISOString().slice(0, 10)
-                    : ""
+                    : ''
                 }
                 onChange={handleChange}
                 required
@@ -190,7 +184,7 @@ const Edit_Profile = () => {
                 onChange={handleChange}
                 readOnly
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: "30px", fontSize: "14px" }}
+                style={{ height: '30px', fontSize: '14px' }}
               />
             </div>
 
@@ -211,9 +205,7 @@ const Edit_Profile = () => {
               <Label className="block mb-1 text-left">Giới tính</Label>
               <Select
                 value={formData.gender}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, gender: value })
-                }
+                onValueChange={(value) => setFormData({ ...formData, gender: value })}
                 required
               >
                 <SelectTrigger

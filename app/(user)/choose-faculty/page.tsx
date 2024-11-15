@@ -143,7 +143,6 @@ const ChooseFaculty = () => {
           </div>
         </main>
       </section>
-   
     </UserLayout>
   );
 };
