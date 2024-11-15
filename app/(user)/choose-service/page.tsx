@@ -2,99 +2,44 @@
 import UserLayout from '@/components/Layouts/userLayout';
 import { Button } from '@/components/ui/button';
 import { Service } from '@prisma/client';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-const ChooseService = () => {
+interface Faculty {
+  id: string;
+  name: string;
+}
+
+const ChooseService = ({ params }: { params: { facultyId: string } }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  // const [services, setServices] = useState<Service[]>([service]);
+  const [services, setServices] = useState<Service[]>([]);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const doctorId = searchParams.get("doctorId");
+  const doctorName = searchParams.get("doctorName");
+  const facultyId = searchParams.get("facultyId");
+  const facultyName = searchParams.get("facultyName");
 
-  const services = [
-    {
-      id: '1',
-      name: 'Khám Tim mạch',
-      description:
-        'Khám và điều trị các bệnh lý về tim mạch, bao gồm huyết áp cao, rối loạn nhịp tim, và suy tim.',
-      price: 500000, // Giá dịch vụ
-    },
-    {
-      id: '2',
-      name: 'Chụp X-quang',
-      description: 'Dịch vụ chụp X-quang để phát hiện các vấn đề về xương và phổi.',
-      price: 300000,
-    },
-    {
-      id: '3',
-      name: 'Khám Sản phụ khoa',
-      description:
-        'Chăm sóc sức khỏe phụ nữ, bao gồm khám thai, kiểm tra sức khỏe phụ khoa định kỳ.',
-      price: 450000,
-    },
-    {
-      id: '4',
-      name: 'Siêu âm thai',
-      description: 'Siêu âm để theo dõi sự phát triển của thai nhi trong suốt thai kỳ.',
-      price: 600000,
-    },
-    {
-      id: '5',
-      name: 'Khám Nhi khoa',
-      description:
-        'Khám và điều trị các bệnh lý về trẻ em, từ sơ sinh đến thanh thiếu niên.',
-      price: 400000,
-    },
-    {
-      id: '6',
-      name: 'Khám Răng hàm mặt',
-      description:
-        'Khám và điều trị các vấn đề về răng miệng, bao gồm trám răng, chữa tủy, và làm răng giả.',
-      price: 350000,
-    },
-    {
-      id: '7',
-      name: 'Khám Hô hấp',
-      description:
-        'Khám và điều trị các bệnh lý về hệ hô hấp như hen suyễn, viêm phổi, và bệnh phổi mãn tính.',
-      price: 450000,
-    },
-    {
-      id: '8',
-      name: 'Khám Nội tiết',
-      description:
-        'Điều trị các bệnh lý về tuyến giáp, tiểu đường, và các vấn đề nội tiết khác.',
-      price: 500000,
-    },
-    {
-      id: '9',
-      name: 'Chụp CT Scanner',
-      description:
-        'Chụp cắt lớp vi tính (CT scan) để kiểm tra các bệnh lý trong cơ thể, bao gồm các bệnh về não và bụng.',
-      price: 800000,
-    },
-    {
-      id: '10',
-      name: 'Khám Mắt',
-      description:
-        'Khám và điều trị các bệnh lý về mắt, bao gồm cận thị, viễn thị, và các bệnh lý khác của mắt.',
-      price: 350000,
-    },
-  ];
-
-  // useEffect(() => {
-  //   const fetchServices = async () => {
-  //     try {
-  //       const response = await fetch('/api/service/user');
-  //       const data = await response.json();
-  //       setServices(data || []);
-  //     } catch (error) {
-  //       console.log(error);
-  //       setServices([]);
-  //     }
-  //   };
-  //   fetchServices();
-  // }, []);
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await fetch(`/api/service/user`);
+        const data = await response.json();
+        if (data.success) {  
+          setServices(data.data || []);
+        } else {
+          setServices([]); 
+        }
+      } catch (error) {
+        console.log(error);
+        setServices([]);
+      }
+    };
+    fetchServices();
+  }, [params.facultyId]);
 
   const filteredServices = services.filter((service) =>
-    service.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    service.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -105,18 +50,7 @@ const ChooseService = () => {
           <ul className="card-body">
             <li className="card-item">
               <p className="mt-[6px]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-hospital"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-hospital">
                   <path d="M12 6v4" />
                   <path d="M14 14h-4" />
                   <path d="M14 18h-4" />
@@ -126,7 +60,7 @@ const ChooseService = () => {
                 </svg>
               </p>
               <p>
-                Bệnh Viện Quận Bình Thạnh<br></br>
+                Bệnh Viện Quận Bình Thạnh<br />
                 <span className="text-[#8a8a8a]">
                   132 Lê Văn Duyệt, Phường 1, Bình Thạnh, Thành phố Hồ Chí Minh
                 </span>
@@ -134,18 +68,7 @@ const ChooseService = () => {
             </li>
             <li className="card-item">
               <p className="mt-[6px]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-stethoscope"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-stethoscope">
                   <path d="M11 2v2" />
                   <path d="M5 2v2" />
                   <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" />
@@ -154,29 +77,18 @@ const ChooseService = () => {
                 </svg>
               </p>
               <p>
-                Chuyên khoa: <span className="text-[#8a8a8a]">Chuẩn đoán hình ảnh</span>
+                Chuyên khoa: <span className="text-[#8a8a8a]">{facultyName}</span>
               </p>
             </li>
             <li className="card-item">
               <p className="mt-[6px]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-heart-pulse"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-heart-pulse">
                   <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                   <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27" />
                 </svg>
               </p>
               <p>
-                Bác sĩ: <span className="text-[#8a8a8a]">Trần Thanh Trường</span>
+                Bác sĩ: <span className="text-[#8a8a8a]">{doctorName}</span>
               </p>
             </li>
           </ul>
@@ -208,31 +120,25 @@ const ChooseService = () => {
               </svg>
             </div>
             <div className="flex flex-col gap-1 h-[280px] overflow-y-auto custom-scrollbar bg-white">
-              {filteredServices && filteredServices.length > 0 ? (
+              {filteredServices.length > 0 ? (
                 filteredServices.map((service) => (
-                  <div
-                    key={service.id}
-                    className="grid grid-cols-3 gap-2 pt-1 pb-2 px-3  text-slate-500 cursor-pointer border-b border-slate-200 transition-all duration-300 ease-in-out"
-                  >
-                    <div className="mt-1 text-sm">{service.name}</div>
-                    <div className="text-sm  mt-1  text-slate-500">
-                      Giá: {service.price.toLocaleString()} VND
-                    </div>
-                    <div className="flex justify-center items-center">
-                      <Button className="text-xs w-min h-min text-slate-500 bg-white border border-slate-500 rounded-md hover:bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] hover:text-white">
-                        Chọn
-                      </Button>
-                    </div>
+                  <div key={service.id} className="flex items-center justify-between">
+                    <div className="text-sm">{service.name}</div>
+                    <Button
+                      className="text-sm"
+                      onClick={() => router.push(`/appointment/${params.facultyId}/${service.id}`)}
+                    >
+                      Chọn
+                    </Button>
                   </div>
                 ))
               ) : (
-                <div className="p-4 text-center text-slate-500">
-                  Không tìm thấy dịch vụ nào
-                </div>
+                <div className="text-center text-slate-400 py-6 text-base">Không có dịch vụ</div>
               )}
             </div>
             <div className="mt-3 border-t pt-3 flex justify-between">
-              <Button className="text-sm bg-transparent text-slate-500 hover:text-primary flex items-center gap-1">
+              <Button className="text-sm bg-transparent text-slate-500 hover:text-primary flex items-center gap-1"
+              onClick={() => router.back()}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
