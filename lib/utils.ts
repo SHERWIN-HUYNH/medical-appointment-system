@@ -76,3 +76,33 @@ export function encryptKey(passkey: string) {
 export function decryptKey(passkey: string) {
   return atob(passkey);
 }
+
+export const shortenTitle = (title: string) => {
+  const titleMap: { [key: string]: string } = {
+    'Giáo sư': 'GS',
+    'Phó Giáo sư': 'PGS',
+    'Tiến sĩ': 'TS',
+    'Thạc sĩ': 'ThS',
+    'Bác sĩ Chuyên khoa I': 'BSCK I', 
+    'Bác sĩ Chuyên khoa II': 'BSCK II',
+    'Bác sĩ Đa khoa': 'BSĐK',
+  };
+  return titleMap[title] || title;
+};
+
+export const getDayOfWeek = (dateStr: string) => {
+  const daysInVietnamese: { [key: string]: string } = {
+    'Mon': 'Thứ 2',
+    'Tue': 'Thứ 3',
+    'Wed': 'Thứ 4',
+    'Thu': 'Thứ 5',
+    'Fri': 'Thứ 6',
+    'Sat': 'Thứ 7',
+    'Sun': 'Chủ nhật'
+  };
+  
+  const [year, month, day] = dateStr.split('-').map(num => parseInt(num));
+  const date = new Date(year, month - 1, day);
+  const dayOfWeek = date.toLocaleString('en-US', { weekday: 'short' });
+  return daysInVietnamese[dayOfWeek] || dayOfWeek;
+};

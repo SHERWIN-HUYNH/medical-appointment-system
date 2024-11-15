@@ -62,6 +62,7 @@ model Doctor {
   image         String
   isActive      Boolean
   description   String
+  gender        Boolean
   faculty       Faculty @relation(fields: [facultyId], references: [id],onDelete: Cascade)
   facultyId     String @db.Uuid
   comments      Comment[]

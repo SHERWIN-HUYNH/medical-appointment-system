@@ -142,14 +142,9 @@ export const serviceData = [
 ];
 
 export const academicTitles = [
-  { id: 'acd01', name: 'Giáo sư' },
-  { id: 'acd02', name: 'Phó Giáo sư' },
-  { id: 'acd03', name: 'Tiến sĩ' },
-  { id: 'acd04', name: 'Thạc sĩ' },
-  { id: 'acd05', name: 'Bác sĩ Chuyên khoa I' },
-  { id: 'acd06', name: 'Bác sĩ Chuyên khoa II' },
-  { id: 'acd07', name: 'Bác sĩ Đa khoa' },
-  { id: 'acd08', name: 'Bác sĩ Nội trú' },
+  { id: 'acd01', name: 'Bác sĩ Chuyên khoa I' },
+  { id: 'acd02', name: 'Bác sĩ Chuyên khoa II' },
+  { id: 'acd03', name: 'Bác sĩ Đa khoa' }
 ];
 
 export const bills = [

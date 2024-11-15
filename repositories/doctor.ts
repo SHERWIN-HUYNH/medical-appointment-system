@@ -15,6 +15,7 @@ export class DoctorRespository {
         description: doctorData.description,
         facultyId: doctorData.facultyId,
         isActive: true,
+        gender: doctorData.gender,
       },
     });
     await prisma.$disconnect();
@@ -156,25 +157,30 @@ export class DoctorRespository {
   }
 
   static async getDoctorsByFaculty(facultyId: string) {
-    try {
-      const doctors = await prisma.doctor.findMany({
-        where: {
-          facultyId: facultyId,
-          isActive: true
-        },
-        include: {
-          faculty: {
-            select: {
-              name: true
-            }
+    const doctors = await prisma.doctor.findMany({
+      where: {
+        facultyId: facultyId,
+        isActive: true
+      },
+      include: {
+        faculty: true,
+        doctorSchedule: {
+          include: {
+            schedule: true
+          },
+          where: {
+            isAvailable: true
           }
         }
-      });
-      await prisma.$disconnect();
-      return doctors;
-    } catch (error) {
-      await prisma.$disconnect();
-      throw error;
-    }
+      }
+    });
+
+    // Thêm scheduleDays vào mỗi doctor
+    const doctorsWithScheduleDays = doctors.map(doctor => ({
+      ...doctor,
+      scheduleDays: doctor.doctorSchedule.map(ds => ds.schedule.date)
+    }));
+
+    return doctorsWithScheduleDays;
   }
 }

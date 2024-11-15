@@ -335,6 +335,19 @@
   .date-picker {
     @apply overflow-hidden border-transparent w-full placeholder:text-[#495057]  h-11 text-14-medium rounded-md px-3 outline-none !important;
   }
+
+  /* Thêm vào @layer utilities */
+  .custom-select {
+    @apply w-31 text-[11px] py-1 px-2 h-6 min-h-0 border rounded text-white bg-gradient-to-b from-[#00b5f1] to-[#0099ff] hover:border-primary focus:border-primary focus:outline-none;
+  }
+
+  .custom-select > option {
+    @apply bg-white text-slate-700 py-1 px-2 text-left;
+  }
+
+  .custom-select > option:first-of-type {
+    @apply text-[#00b5f1] font-medium;
+  }
 }
 
 /* =====  REACT-DATEPICKER OVERRIDES */
