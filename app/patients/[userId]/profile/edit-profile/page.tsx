@@ -1,17 +1,14 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import { Undo2, PenLine } from 'lucide-react';
-import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import Header from '@/app/homepage/Header';
-import Footer from '@/app/homepage/Footer';
-import { toast } from 'sonner';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-
+"use client";
+import { Button } from "@/components/ui/button";
+import { Undo2, PenLine } from "lucide-react";
+import Image from "next/image";
+import React, { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -19,6 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import Header from "@/components/homepage/Header";
+import Footer from "@/components/homepage/Footer";
 
 const Edit_Profile = () => {
   const { data: session } = useSession();
@@ -102,8 +101,8 @@ const Edit_Profile = () => {
       });
 
       if (response.ok) {
-        toast.success('Sửa hồ sơ khám bệnh thành công');
-        router.push(`/patients/${session?.user?.id}/profile`);
+        toast.success("Sửa hồ sơ khám bệnh thành công");
+        router.back();
       } else {
         toast.error('Sửa hồ sơ khám bệnh thất bại. Vui lòng thử lại!');
       }
@@ -119,7 +118,7 @@ const Edit_Profile = () => {
       <div className="flex justify-start mt-20 ml-24">
         <Button
           className="bg-slate-400 text-white rounded hover:bg-slate-300 px-4 py-2"
-          onClick={() => router.push(`/patients/${session?.user?.id}/profile`)}
+          onClick={() => router.back()}
         >
           <Undo2 className="w-4 h-4 inline mr-1" />
           Quay lại

@@ -6,6 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import Pagination from '@/components/Pagination';
 import UserLayout from '@/components/Layouts/userLayout';
+import DoctorLayout from '@/components/Layouts/doctorLayout';
 
 interface Doctor {
   id: string;
@@ -96,9 +97,25 @@ const Doctor = () => {
   );
 
   return (
-    <UserLayout>
-      <div className="flex justify-center mt-12 bg-slate-100 pt-1.5 pb-4">
-        <div className="w-3/4 mt-6 bg-white p-2 rounded-2xl shadow-md">
+    <div>
+      <div  className="relative  mt-16 w-full h-[250px] bg-sky-100 bg-cover bg-center">
+      <div className="absolute inset-0 flex items-center ml-45 bg-opacity-25">
+        <div className="text-left text-black p-6 bg-white bg-opacity-90 rounded-xl max-w-2xl shadow-lg">
+          <h1 className="text-4xl font-semibold text-primary">ĐẶT KHÁM THEO BÁC SĨ</h1>
+          <p className="mt-2 text-xl mb-4">Chủ động chọn bác sĩ mà bạn tin tưởng, an tâm khám bệnh</p>
+        </div>
+      </div>
+      <img
+        src="https://cdn.medpro.vn/prod-partner/9a085fa0-374e-4aca-9ffe-6e6d2c5c03e7-dat-kham-theo-bac-si.webp"
+        alt="Doctor and Nurse"
+        className="absolute bottom-0 right-0 w-1/4 max-w-[350px]  mr-35"
+        style={{ objectFit: 'contain' }}
+      />
+    </div>
+   
+    <DoctorLayout>
+      <div className="flex justify-center mt-2 px-2 pt-1.5 pb-4">
+        <div className="w-full bg-white p-1  rounded-2xl shadow-md">
           <FormProvider {...formMethods}>
             <form className="flex justify-center items-center gap-4">
               <Input
@@ -130,21 +147,18 @@ const Doctor = () => {
                   </option>
                 ))}
               </select>
-              <Button className="text-white hover:bg-primary bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] hover:from-[#67e0f3] hover:to-[#e7f1f2]">
-                Tìm kiếm
-              </Button>
             </form>
           </FormProvider>
         </div>
       </div>
 
-      <div className="flex justify-center bg-slate-100 py-6">
-        <div className="w-5/6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="flex justify-center py-4">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-6">
           {displayedDoctors.length > 0 ? (
             displayedDoctors.map((doctor) => (
               <div
                 key={doctor.id}
-                className="bg-white p-4 rounded-lg shadow-md hover:scale-105 hover:border-primary border border-transparent"
+                className="bg-white p-2 rounded-lg shadow-md hover:scale-105 hover:border-primary border border-transparent"
               >
                 <div className="flex items-center">
                   <img
@@ -179,14 +193,15 @@ const Doctor = () => {
         </div>
       </div>
 
-      <div className="flex bg-slate-100 justify-center ">
+      <div className="flex  justify-center ">
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
         />
       </div>
-    </UserLayout>
+    </DoctorLayout>
+    </div>
   );
 };
 
