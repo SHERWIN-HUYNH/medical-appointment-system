@@ -5,7 +5,6 @@ import {
 } from '@/helpers/response';
 import { FacultyRepository } from '@/repositories/faculty';
 
-
 // Xử lý GET request - Lấy một hoặc tất cả chuyên khoa
 export async function GET() {
   try {

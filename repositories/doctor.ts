@@ -213,7 +213,7 @@ export class DoctorRespository {
         scheduleDays: uniqueDays
       };
     });
-
+    await prisma.$disconnect();
     return doctorsWithScheduleDays;
   }
 }

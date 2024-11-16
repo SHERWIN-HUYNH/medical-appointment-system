@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { decryptKey, encryptKey } from '@/lib/utils';
-
+import React from 'react';
 export const PasskeyModal = () => {
   const router = useRouter();
   const path = usePathname();

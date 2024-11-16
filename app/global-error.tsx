@@ -1,13 +1,10 @@
 'use client';
 
-
 import NextError from 'next/error';
 import { useEffect } from 'react';
 import React from 'react';
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
-  useEffect(() => {
-
-  }, [error]);
+  useEffect(() => {}, [error]);
 
   return (
     <html>
