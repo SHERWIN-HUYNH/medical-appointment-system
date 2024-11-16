@@ -4,20 +4,12 @@ import { PasskeyModal } from '@/components/PasskeyModal';
 
 import { PatientForm } from '@/components/forms/PatientForm';
 import { LoginForm } from '@/components/forms/LoginForm';
-
+import React from 'react';
 const Home = async ({ searchParams }: SearchParamProps) => {
   return (
     <div className="flex h-screen max-h-screen bg-[#f1eff2]">
       <section className="remove-scrollbar container my-auto ">
         <div className="sub-container max-w-[496px]">
-          {/* <Image
-            src="/assets/icons/logo-full.svg"
-            height={1000}
-            width={1000}
-            alt="patient"
-            className="mb-12 h-10 w-fit"
-          /> */}
-
           <LoginForm />
 
           <div className="text-14-regular mt-20 flex justify-between">

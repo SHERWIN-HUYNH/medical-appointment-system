@@ -17,19 +17,23 @@ import {
   CardTitle,
 } from './ui/card';
 import { Button } from './ui/button';
-import { useParams, useSearchParams } from 'next/navigation';
+// import { useParams, useSearchParams } from 'next/navigation';
 import { formatPrice } from '@/helpers/formatCurrency';
+import { useAppointmentContext } from '@/context/AppointmentContext';
 
 type CheckoutFormProps = {
   clientSecret: string;
-  product?: object;
+  product: object;
+  timeSlot: string;
+  date:string
 };
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as string);
-export function CheckoutForm({ product, clientSecret }: CheckoutFormProps) {
-  // From the id of
-  const timeSlot = useSearchParams().get('timeSlot');
-  const doctorId = useSearchParams().get('doctorId');
-  const scheduleId = useSearchParams().get('scheduleId');
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY as string);
+export function CheckoutForm({ clientSecret,timeSlot,date }: CheckoutFormProps) {
+  const { data } = useAppointmentContext();
+  console.log('CONTEXT DATA')
+  if(clientSecret == '')
+    return <h1>Chưa có sản phẩm</h1>
+
   return (
     <div className="mx-auto card-container animation">
       <div className=" reset-css card basis-1/4 gap-y-5 max-w-1/4">
@@ -262,7 +266,7 @@ export function CheckoutForm({ product, clientSecret }: CheckoutFormProps) {
                       </p>
                       <p className="highlight-text">Ngày khám</p>
                     </div>
-                    <p className="li-payment-center">{timeSlot}</p>
+                    <p className="li-payment-center">{date}</p>
                   </li>
                   <li className="list-item-payment">
                     <div className="flex items-center gap-x-2">
@@ -288,7 +292,7 @@ export function CheckoutForm({ product, clientSecret }: CheckoutFormProps) {
                       </p>
                       <p className="highlight-text">Giờ khám</p>
                     </div>
-                    <p className="li-payment-center">08:30 - 09:30</p>
+                    <p className="li-payment-center">{timeSlot}</p>
                   </li>
                 </ul>
               </CardContent>
@@ -305,7 +309,7 @@ function Form({ price }: { price: string }) {
   const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>();
-  const { userId } = useParams();
+  // const { userId } = useParams();
   const handleSumit = (e: FormEvent) => {
     e.preventDefault();
     if (!stripe || !elements) {
