@@ -27,8 +27,11 @@ export class ServiceRepository {
       try {
         const services = await prisma.service.findMany({
           where: {
-            id: facultyId,
+            facultyId: facultyId,
           },
+          include: {
+            faculty: true
+          }
         });
         return services;
       } catch (error) {
