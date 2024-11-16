@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { academicTitles } from '@/lib/data';
 import { shortenTitle } from '@/lib/utils';
 import { getDayOfWeek, sortDayOfWeek } from '@/lib/utils';
+import { useAppointmentContext } from '@/context/AppointmentContext';
 
 interface Doctor {
   id: string;
@@ -23,8 +24,9 @@ interface Doctor {
 const ChooseDoctor = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { data } = useAppointmentContext();
   
-  const facultyId = searchParams.get('facultyId');
+  const facultyId = data.facultyId;
   const facultyName = searchParams.get('facultyName');
 
   const [searchQuery, setSearchQuery] = useState('');

@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import UserLayout from '@/components/Layouts/userLayout';
+import { useAppointmentContext } from '@/context/AppointmentContext';
+import { useRouter } from 'next/navigation';
 
 interface Faculty {
   id: string;
@@ -13,6 +15,8 @@ interface Faculty {
 const ChooseFaculty = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [faculties, setFaculties] = useState<Faculty[]>([]);
+  const { setData } = useAppointmentContext();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchFaculties = async () => {
@@ -31,6 +35,10 @@ const ChooseFaculty = () => {
   const filteredFaculties = faculties.filter((faculty) =>
     faculty.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+
+  const handleFacultyClick = (facultyId: string) => {
+    setData({ facultyId });
+  };
 
   return (
     <UserLayout>
@@ -102,11 +110,9 @@ const ChooseFaculty = () => {
                     key={faculty.id}
                     href={{
                       pathname: '/choose-doctor',
-                      query: {
-                        facultyId: faculty.id,
-                        facultyName: faculty.name
-                      }
+                      query: { facultyName: faculty.name }
                     }}
+                    onClick={() => handleFacultyClick(faculty.id)}
                     className="py-2 px-3 hover:bg-gray-50 text-slate-500 hover:text-primary cursor-pointer border-b border-slate-200 transition-all duration-300 ease-in-out"
                   >
                     <div className="font-medium mb-0.5 text-sm">{faculty.name}</div>
