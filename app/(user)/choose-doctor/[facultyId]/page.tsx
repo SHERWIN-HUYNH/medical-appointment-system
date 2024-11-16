@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import UserLayout from '@/components/Layouts/userLayout';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 
 interface Doctor {
   id: string;
@@ -33,7 +32,7 @@ const ChooseDoctor = ({ params }: { params: { facultyId: string } }) => {
     description: '',
     image: '',
   });
-  const facultyId = params.facultyId;
+
   useEffect(() => {
     const fetchFaculty = async () => {
       try {
@@ -83,6 +82,7 @@ const ChooseDoctor = ({ params }: { params: { facultyId: string } }) => {
           <div className="w-[300px] rounded-lg bg-white h-max flex-shrink-0">
             <h1 className="blue-header w-full">Thông tin khám</h1>
             <ul className="px-3 py-2 flex flex-col gap-2">
+              {/* Hospital Info */}
               <li className="text-16-normal flex">
                 <div className="mr-2">
                   <svg
