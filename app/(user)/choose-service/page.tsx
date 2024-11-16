@@ -5,12 +5,7 @@ import { Service } from '@prisma/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-interface Faculty {
-  id: string;
-  name: string;
-}
-
-const ChooseService = ({ params }: { params: { facultyId: string } }) => {
+const ChooseService = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [services, setServices] = useState<Service[]>([]);
   const router = useRouter();
@@ -23,20 +18,22 @@ const ChooseService = ({ params }: { params: { facultyId: string } }) => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetch(`/api/service/user`);
+        const response = await fetch(`/api/service/faculty/${facultyId}`,{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }); 
+        if (!response.ok) throw new Error('Lỗi khi lấy danh sách dịch vụ');
         const data = await response.json();
-        if (data.success) {  
-          setServices(data.data || []);
-        } else {
-          setServices([]); 
-        }
+        setServices(data);
       } catch (error) {
-        console.log(error);
-        setServices([]);
+        console.error('Error fetching services:', error);
+        setServices([]); 
       }
     };
     fetchServices();
-  }, [params.facultyId]);
+  }, [facultyId]);
 
   const filteredServices = services.filter((service) =>
     service.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -126,7 +123,7 @@ const ChooseService = ({ params }: { params: { facultyId: string } }) => {
                     <div className="text-sm">{service.name}</div>
                     <Button
                       className="text-sm"
-                      onClick={() => router.push(`/appointment/${params.facultyId}/${service.id}`)}
+                      onClick={() => router.push(`/doctor/${doctorId}/schedule`)}
                     >
                       Chọn
                     </Button>
