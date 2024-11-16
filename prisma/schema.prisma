@@ -43,6 +43,7 @@ model Faculty {
   name String
   description String
   image String
+  isDeleted Boolean @default(false)
   doctors Doctor[]
   services Service[]
 }
@@ -51,6 +52,7 @@ model Service{
   name String 
   price Float
   description String
+  isDeleted Boolean @default(false)
   facultyId String  @db.Uuid
   faculty Faculty @relation(fields: [facultyId], references: [id],onDelete: Cascade)
   appointment Appointment[]
@@ -62,6 +64,8 @@ model Doctor {
   image         String
   isActive      Boolean
   description   String
+  gender        Boolean
+  isDeleted     Boolean @default(false)
   faculty       Faculty @relation(fields: [facultyId], references: [id],onDelete: Cascade)
   facultyId     String @db.Uuid
   comments      Comment[]
@@ -101,8 +105,7 @@ model Bill {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @default(now())
-  amount          Float
-  paymentMethod   String
+  price           Float
   note            String?
   status          BillStatus @default(PENDING)
   user            User @relation(fields: [userId], references: [id])

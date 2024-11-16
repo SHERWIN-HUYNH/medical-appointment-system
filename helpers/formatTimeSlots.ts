@@ -1,5 +1,4 @@
 import { Schedule } from '@/types/interface';
-import { time } from 'console';
 
 export function formatTimeSlot(timeSlot: string): string {
   const [start, end] = timeSlot.split(' - ');
@@ -10,7 +9,9 @@ export function formatTimeSlot(timeSlot: string): string {
   return `${formattedStart}-${formattedEnd}`;
 }
 
-export async function fetchEventsFromApi(doctorId: string): Promise<Schedule[]> {
+export async function fetchEventsFromApi(
+  doctorId: string,
+): Promise<DoctorScheduleResult[]> {
   const response = await fetch(`/api/doctorschedule/${doctorId}`, {
     method: 'GET',
     headers: {
@@ -18,22 +19,42 @@ export async function fetchEventsFromApi(doctorId: string): Promise<Schedule[]> 
     },
   });
   const data = await response.json();
+  console.log('api data from fetch', data);
   if (!response.ok) {
     throw new Error(data.message || 'Failed to fetch events');
   }
   return data;
 }
-export function transformApiEventData(data: Schedule) {
-  const [startTime, endTime] = data.timeSlot.split('-');
-  const start = new Date(`${data.date}T${startTime}`);
-  const end = new Date(`${data.date}T${endTime}`);
+export interface DoctorScheduleResult {
+  isAvailable: boolean;
+  schedule: Schedule;
+}
+export function transformApiEventData(data: DoctorScheduleResult) {
+  const { isAvailable, schedule } = data;
+  const [startTime, endTime] = schedule.timeSlot.split('-');
+  const start = new Date(`${schedule.date}T${startTime}`);
+  const end = new Date(`${schedule.date}T${endTime}`);
   return {
-    id: `${data.date}-${data.timeSlot}`,
-    title: 'Available Slot', // or customize based on your requirements
+    id: `${schedule.date}-${schedule.timeSlot}`,
+    title: isAvailable == true ? 'Trống' : 'Có hẹn',
     start: start,
     end: end,
-    backgroundColor: data.isAvailable ? 'blue' : 'red',
-    date: data.date,
-    timeSlot: data.timeSlot,
+    backgroundColor: isAvailable == true ? '#00b5f1' : 'red',
+    date: schedule.date,
+    timeSlot: schedule.timeSlot,
   };
+}
+
+type ApiResponse = { id: string; date: string; timeSlot: string };
+type GroupedTimeSlots = { [date: string]: string[] };
+
+export function groupTimeSlotsByDate(data: ApiResponse[]): GroupedTimeSlots {
+  return data.reduce((acc: GroupedTimeSlots, item: ApiResponse) => {
+    const { date, timeSlot } = item;
+    if (!acc[date]) {
+      acc[date] = []; // Khởi tạo mảng nếu chưa có ngày này
+    }
+    acc[date].push(timeSlot); // Thêm timeSlot vào mảng
+    return acc;
+  }, {});
 }

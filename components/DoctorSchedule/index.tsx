@@ -1,22 +1,13 @@
-import { CalendarApi, DateSpanApi, EventDropArg } from '@fullcalendar/core';
+import { CalendarApi, DateSpanApi, EventAddArg } from '@fullcalendar/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
-import {
-  DateSelectArg,
-  DatesSetArg,
-  EventClickArg,
-} from '@fullcalendar/core/index.js';
-import interactionPlugin, {
-  DateClickArg,
-} from '@fullcalendar/interaction';
+import { DateSelectArg, DatesSetArg, EventClickArg } from '@fullcalendar/core/index.js';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { useState, useEffect, useRef } from 'react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import clsx from 'clsx';
 import { Button } from '@/components/ui/button';
-import {
-  fetchEventsFromApi,
-  transformApiEventData,
-} from '@/helpers/formatTimeSlots';
+import { fetchEventsFromApi, transformApiEventData } from '@/helpers/formatTimeSlots';
 import { toast } from 'sonner';
 import React from 'react';
 interface Event {
@@ -53,7 +44,6 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
     const today = new Date();
     const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0);
-
     setVisibleRange({
       start: startDate.toISOString().slice(0, 10),
       end: endDate.toISOString().slice(0, 10),
@@ -61,24 +51,21 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
     async function loadEvents() {
       const apiData = await fetchEventsFromApi(doctorId as string);
       const transformedEvents = apiData.map(transformApiEventData);
+
       updateEvents(transformedEvents);
     }
     loadEvents();
   }, []);
-  const handleDateClassNames = (renderProps: any): string[] => {
-    // const today = new Date();
-    // const date = renderProps.date;
-    // if (selectedDates.some(d => d.getTime() === date.getTime())) {
-    //   return ["text-gray-300"]; // Đổi màu chữ thành xám cho các ngày đã chọn
-    // }
-
-    // // if (date < today) {
-    // //   return ["text-[#cfd9df]"]; // Style cho các ngày đã qua
-    // // }
-    return [];
-  };
 
   const handleSelect = (selectInfo: DateSelectArg) => {
+    const { start, end, view } = selectInfo;
+    const duration = (end.getTime() - start.getTime()) / (1000 * 60);
+    if (duration !== 30) {
+      alert('Thời lượng sự kiện phải là 30 phút. Vui lòng chọn lại.');
+      view.calendar.unselect();
+      return;
+    }
+    console.log('SELET WRKING');
     const date = selectInfo.startStr.split('T')[0]; // Lấy ngày
     const startTime = selectInfo.startStr.split('T')[1].slice(0, 5); // Get "HH:mm" for start time
     const endTime = selectInfo.endStr.split('T')[1].slice(0, 5); // Get "HH:mm" for end time
@@ -102,13 +89,10 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
   const handleEventClick = (clickInfo: EventClickArg) => {
     const eventDate = clickInfo.event.startStr;
     if (eventDate < today) {
-      clickInfo.jsEvent.preventDefault(); // Prevent clicking on past events
+      clickInfo.jsEvent.preventDefault();
       return false;
     }
-    const eventTitle = clickInfo.event.title;
-    const isConfirmed = window.confirm(
-      `Do you want to delete the timeslot ${eventTitle}?`,
-    );
+    const isConfirmed = window.confirm(`Bạn muốn xóa khung giờ này`);
 
     if (isConfirmed) {
       const date = clickInfo.event.startStr.split('T')[0]; // Lấy ngày
@@ -199,33 +183,22 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
       console.error('Error saving timeslots:', error);
     }
   };
-  const handleEventDrop = (dropInfo: EventDropArg) => {
-    const event = dropInfo.event;
-    const eventId = event.id;
-    const newStart = new Date(event.startStr);
-    const newEnd = new Date(event.endStr);
 
-    console.log('Event Dropped:');
-    console.log('Title:', event.title);
-    console.log('New Start Time:', newStart);
-    console.log('New End Time:', newEnd);
-
-    const newEvent: Event = {
-      id: `${eventId}-${newStart.toISOString()}`,
-      title: event.title,
-      start: newStart,
-      end: newEnd,
-      timeSlot: `${newStart.toISOString().split('T')[1].slice(0, 5)}-${newEnd.toISOString().split('T')[1].slice(0, 5)}`,
-      date: newStart.toISOString().split('T')[0],
-    };
-
-    setAllEvents((prevEvents) => {
-      return prevEvents
-        .filter((existingEvent) => existingEvent.id !== eventId)
-        .concat(newEvent);
-    });
-    event.remove();
+  const handleEventAdd = (eventAddInfo: EventAddArg) => {
+    const event = eventAddInfo.event;
+    const start = event.start;
+    const end = event.end;
+    console.log('WORKING ADD ');
+    if (start && end) {
+      const duration = (end.getTime() - start.getTime()) / (1000 * 60); // Tính thời lượng sự kiện theo phút
+      if (duration !== 30) {
+        // Xóa sự kiện nếu không đúng 30 phút
+        event.remove();
+        alert('Thời lượng sự kiện phải là 30 phút. Vui lòng chọn lại.');
+      }
+    }
   };
+
   return (
     <div>
       <div className=" p-5 rounded-2xl">
@@ -249,15 +222,21 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
               minute: '2-digit',
               second: '2-digit',
             }}
+            slotMaxTime={'18:00:00'}
+            slotMinTime={'07:00:00'}
+            slotDuration="00:15:00"
+            defaultTimedEventDuration="00:30:00"
             height={650}
             visibleRange={visibleRange}
             select={handleSelect}
-            // dayCellClassNames={handleDateClassNames}
             eventClick={handleEventClick}
             dateClick={handleDateClick}
-            eventDrop={handleEventDrop}
-            editable={true}
+            droppable={false}
+            eventAdd={handleEventAdd}
+            eventMinHeight={30}
+            editable={false}
             fixedWeekCount={false}
+            eventOverlap={false}
             selectable={isSelectable}
             events={allEvents}
             datesSet={handleDatesSet}

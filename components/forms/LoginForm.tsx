@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { UserFormValidation, UserLogin } from '@/lib/validation';
+import { UserLogin } from '@/lib/validation';
 import 'react-phone-number-input/style.css';
 import CustomFormField, { FormFieldType } from '../CustomFormField';
 import SubmitButton from '../SubmitButton';
@@ -14,12 +14,11 @@ import { toast } from 'sonner';
 import { PasswordInput } from '../PasswordInput';
 import { Label } from '../ui/label';
 import { signIn, useSession } from 'next-auth/react';
-
+import React from 'react';
 export const LoginForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const { data: session } = useSession();
   const form = useForm<z.infer<typeof UserLogin>>({
     resolver: zodResolver(UserLogin),
@@ -40,7 +39,7 @@ export const LoginForm = () => {
     }
     if (res?.ok) {
       setIsLoading(false);
-      toast.success('Login successfully');
+      toast.success('Đăng nhập thành công');
       if (session?.user.roleName === 'USER') {
         router.push('/');
       }

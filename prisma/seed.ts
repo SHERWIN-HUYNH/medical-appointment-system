@@ -1,8 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
-
 async function main() {
   const existingUser = await prisma.user.findUnique({
     where: { email: 'duyen@gmail.com' },
@@ -43,7 +41,6 @@ async function main() {
   });
 
 }
-
 main()
   .catch((e) => {
     console.error(e);

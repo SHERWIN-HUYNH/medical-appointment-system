@@ -144,8 +144,8 @@ const config = {
         14: '0px 2px 3px 0px rgba(0, 0, 0, 0.10)',
       },
       colors: {
-        iconGray:'#b1b1b1',
-        highlight:'#003553',
+        iconGray: '#b1b1b1',
+        highlight: '#003553',
         secondaryPriamry: '#dbeafe',
         current: 'currentColor',
         transparent: 'transparent',

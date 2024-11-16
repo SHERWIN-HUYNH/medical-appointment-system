@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
 import {
   Select,
   SelectContent,
@@ -75,7 +73,7 @@ const Add_Profile = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     if (!isValidIdentificationNumber(formData.identificationNumber)) {
       setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.');
       return;
@@ -87,24 +85,24 @@ const Add_Profile = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        action: "create",
+        action: 'create',
         profile: {
           ...formData,
           birthDate: formattedBirthDate, 
         },
       }),
     });
-  
+
     if (response.ok) {
       const data = await response.json();
       toast.success("Thêm hồ sơ khám bệnh thành công");
       router.back();
     } else {
       const errorText = await response.text();
-      toast.error("Thêm hồ sơ khám bệnh thất bại. Vui lòng thử lại!");
+      toast.error('Thêm hồ sơ khám bệnh thất bại. Vui lòng thử lại!');
     }
   };
-  
+
   return (
     <div>
       <Header />

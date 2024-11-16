@@ -1,12 +1,38 @@
-import { PrismaClient } from '@prisma/client';
+import { Bill } from '@/types/interface';
+import { BillStatus, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 export class BillRespository {
-  static async create(billData: any) {
+  static async createBill(billData: Bill) {
     try {
       const newBill = await prisma.bill.create({
-        data: billData,
+        data: {
+          price: billData.price,
+          note: billData.note,
+          status: billData.status as BillStatus,
+          userId: billData.userId,
+          appointmentId: billData.appointmentId,
+        },
       });
-    } catch (error) {}
+      return newBill;
+    } catch (error) {
+      throw new Error('Error creating bill', error as Error);
+    }
+  }
+  static async cancelBill(billId: string) {
+    try {
+      const deletedBill = await prisma.bill.update({
+        where: {
+          id: billId,
+        },
+        data: {
+          status: BillStatus.CANCELLED,
+          updatedAt: new Date(),
+        },
+      });
+      return deletedBill;
+    } catch (error) {
+      throw new Error('Error canceling bill', error as Error);
+    }
   }
 }

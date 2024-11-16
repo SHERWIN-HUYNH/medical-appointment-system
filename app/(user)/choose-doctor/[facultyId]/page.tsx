@@ -152,17 +152,9 @@ const ChooseDoctor = ({ params }: { params: { facultyId: string } }) => {
               <div className="flex flex-col gap-1 h-[280px] overflow-y-auto custom-scrollbar bg-white">
                 {filteredDoctors.length > 0 ? (
                   filteredDoctors.map((doctor) => (
-                    <Link
-                    key={doctor.id}
-                    href={{
-                      pathname: `/choose-service`,
-                      query: {
-                        doctorId: doctor.id,
-                        doctorName: doctor.name,
-                        facultyName: faculty.name,
-                      },
-                    }}
-                      className="py-2 px-3 hover:bg-slate-50 text-slate-500 hover:text-primary cursor-pointer border-b border-slate-200 transition-all duration-300 ease-in-out"
+                    <div
+                      key={doctor.id}
+                      className="py-2 px-3 hover:bg-gray-50 text-slate-500 hover:text-primary cursor-pointer border-b border-slate-200 transition-all duration-300 ease-in-out"
                     >
                       <div className="font-medium mb-0.5 text-sm">
                         {doctor.academicTitle} {doctor.name}
@@ -172,7 +164,7 @@ const ChooseDoctor = ({ params }: { params: { facultyId: string } }) => {
                           {doctor.description}
                         </div>
                       )}
-                    </Link>
+                    </div>
                   ))
                 ) : (
                   <div className="p-4 text-center text-gray-500">

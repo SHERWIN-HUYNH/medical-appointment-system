@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import UserLayout from '@/components/Layouts/userLayout';
 
-
 interface Faculty {
   id: string;
   name: string;
@@ -143,7 +142,6 @@ const ChooseFaculty = () => {
           </div>
         </main>
       </section>
-   
     </UserLayout>
   );
 };

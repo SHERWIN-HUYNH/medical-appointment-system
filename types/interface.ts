@@ -20,7 +20,6 @@ export interface Profile {
     roleName: string;
   }
 
-
 export interface Appointment {
   date: Date;
   timeSlots: string;
@@ -77,4 +76,16 @@ export interface Doctor {
   };
   comments: Comment[];
   doctorSchedule: Schedule[];
+}
+export interface Bill {
+  id: string;
+  date: string;
+  price: number;
+  appointmentId: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  status: string;
+  paymentMethod: string;
+  note: string;
 }
