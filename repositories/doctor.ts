@@ -1,4 +1,5 @@
 import { AppointmentStatus, Doctor, PrismaClient } from '@prisma/client';
+import { getDayOfWeek } from '@/lib/utils';
 
 const prisma = new PrismaClient();
 
@@ -15,6 +16,7 @@ export class DoctorRespository {
         description: doctorData.description,
         facultyId: doctorData.facultyId,
         isActive: true,
+        gender: doctorData.gender,
       },
     });
     await prisma.$disconnect();
@@ -170,26 +172,48 @@ export class DoctorRespository {
       throw new Error('Error getting faculty by doctor ID', error as Error);
     }
   }
+
   static async getDoctorsByFaculty(facultyId: string) {
-    try {
-      const doctors = await prisma.doctor.findMany({
-        where: {
-          facultyId: facultyId,
-          isActive: true,
-        },
-        include: {
-          faculty: {
-            select: {
-              name: true,
-            },
+    const doctors = await prisma.doctor.findMany({
+      where: {
+        facultyId: facultyId,
+        isActive: true
+      },
+      include: {
+        faculty: true,
+        doctorSchedule: {
+          include: {
+            schedule: true
           },
-        },
+          where: {
+            isAvailable: true
+          }
+        }
+      }
+    });
+
+    // Gom nhóm các lịch theo thứ trong tuần
+    const doctorsWithScheduleDays = doctors.map(doctor => {
+      // Tạo Map để lưu trữ ngày đại diện cho mỗi thứ trong tuần
+      const daysByWeekday = new Map<string, string>();
+      
+      doctor.doctorSchedule.forEach(ds => {
+        const weekday = getDayOfWeek(ds.schedule.date);
+        // Nếu thứ này chưa có trong Map, thêm vào với ngày đầu tiên gặp
+        if (!daysByWeekday.has(weekday)) {
+          daysByWeekday.set(weekday, ds.schedule.date);
+        }
       });
-      await prisma.$disconnect();
-      return doctors;
-    } catch (error) {
-      await prisma.$disconnect();
-      throw error;
-    }
+
+      // Chuyển Map thành mảng các ngày đại diện
+      const uniqueDays = Array.from(daysByWeekday.values());
+
+      return {
+        ...doctor,
+        scheduleDays: uniqueDays
+      };
+    });
+    await prisma.$disconnect();
+    return doctorsWithScheduleDays;
   }
 }
