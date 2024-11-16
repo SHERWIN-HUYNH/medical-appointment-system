@@ -1,38 +1,31 @@
+
 'use client';
 import UserLayout from '@/components/Layouts/userLayout';
 import { Button } from '@/components/ui/button';
 import { Service } from '@prisma/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { fetchServices } from '@/helpers/servicesApi';
 
-const ChooseService = () => {
+const ChooseService = ({ params }: { params: { facultyId: string } }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [services, setServices] = useState<Service[]>([]);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const doctorId = searchParams.get("doctorId");
   const doctorName = searchParams.get("doctorName");
-  const facultyId = searchParams.get("facultyId");
+  const doctorId = searchParams.get("doctorId");
+  const facultyId = params.facultyId;
   const facultyName = searchParams.get("facultyName");
 
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await fetch(`/api/service/faculty/${facultyId}`,{
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }); 
-        if (!response.ok) throw new Error('Lỗi khi lấy danh sách dịch vụ');
-        const data = await response.json();
-        setServices(data);
-      } catch (error) {
-        console.error('Error fetching services:', error);
-        setServices([]); 
-      }
+    const loadServices = async () => {
+      const data = await fetchServices(facultyId); 
+      setServices(data);
     };
-    fetchServices();
+
+    if (facultyId) {
+      loadServices();
+    }
   }, [facultyId]);
 
   const filteredServices = services.filter((service) =>
@@ -123,7 +116,7 @@ const ChooseService = () => {
                     <div className="text-sm">{service.name}</div>
                     <Button
                       className="text-sm"
-                      onClick={() => router.push(`/doctor/${doctorId}/schedule`)}
+                      onClick={() => router.push(`/doctor/${doctorId}/schedule?serviceId=${service.id}`)}
                     >
                       Chọn
                     </Button>
@@ -134,24 +127,7 @@ const ChooseService = () => {
               )}
             </div>
             <div className="mt-3 border-t pt-3 flex justify-between">
-              <Button className="text-sm bg-transparent text-slate-500 hover:text-primary flex items-center gap-1"
-              onClick={() => router.back()}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="m12 19-7-7 7-7" />
-                  <path d="M19 12H5" />
-                </svg>
-                Quay lại
-              </Button>
+              <Button className="py-2 text-sm w-full">Hủy</Button>
             </div>
           </div>
         </main>

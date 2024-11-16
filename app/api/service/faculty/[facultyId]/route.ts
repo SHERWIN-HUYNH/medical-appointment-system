@@ -4,10 +4,6 @@ import { ServiceRepository } from "@/repositories/service";
 export async function GET(req: Request,context: { params: { facultyId: string } }) {
   const { facultyId } = context.params;
 
-  if (!facultyId) {
-    return new Response(JSON.stringify({ error: "Faculty ID is required" }), { status: 400 });
-  }
-
   try {
     const services = await ServiceRepository.getServicesByFacultyId(facultyId);
     if (!services || services.length === 0) {
