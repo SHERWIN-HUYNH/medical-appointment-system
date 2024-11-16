@@ -1,6 +1,5 @@
 import { Schedule } from '@/types/interface';
 
-
 export function formatTimeSlot(timeSlot: string): string {
   const [start, end] = timeSlot.split(' - ');
 
@@ -59,9 +58,3 @@ export function groupTimeSlotsByDate(data: ApiResponse[]): GroupedTimeSlots {
     return acc;
   }, {});
 }
-
-
-
-
-
-

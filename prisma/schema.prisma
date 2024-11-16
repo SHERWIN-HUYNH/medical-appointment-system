@@ -43,6 +43,7 @@ model Faculty {
   name String
   description String
   image String
+  isDeleted Boolean @default(false)
   doctors Doctor[]
   services Service[]
 }
@@ -51,6 +52,7 @@ model Service{
   name String 
   price Float
   description String
+  isDeleted Boolean @default(false)
   facultyId String  @db.Uuid
   faculty Faculty @relation(fields: [facultyId], references: [id],onDelete: Cascade)
   appointment Appointment[]
@@ -63,6 +65,7 @@ model Doctor {
   isActive      Boolean
   description   String
   gender        Boolean
+  isDeleted     Boolean @default(false)
   faculty       Faculty @relation(fields: [facultyId], references: [id],onDelete: Cascade)
   facultyId     String @db.Uuid
   comments      Comment[]

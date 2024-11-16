@@ -5,13 +5,11 @@ import {
 } from '@/helpers/response';
 import { DoctorRespository } from '@/repositories/doctor';
 
-// Xử lý GET request - Lấy thông tin bác sĩ theo ID hoặc tất cả bác sĩ
 export async function GET() {
-  const doctors = await DoctorRespository.getDoctores(); // Fetch all doctors
+  const doctors = await DoctorRespository.getDoctores();
   return successResponse(doctors);
 }
 
-// Xử lý POST request - Tạo bác sĩ mới
 export async function POST(req: Request) {
   const doctorData = await req.json();
   if (!doctorData) {
@@ -26,7 +24,6 @@ export async function POST(req: Request) {
   }
 }
 
-// Xử lý PUT request - Cập nhật thông tin bác sĩ theo ID
 export async function PUT(req: Request) {
   const { doctor } = await req.json();
   const doctorData = await DoctorRespository.getDoctorById(doctor.id);

@@ -8,25 +8,25 @@ import viLocale from '@fullcalendar/core/locales/vi';
 import clsx from 'clsx';
 import {
   fetchEventsFromApi,
-  groupTimeSlotsByDate,
-  transformApiEventData,
 } from '@/helpers/formatTimeSlots';
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAppointmentContext } from '@/context/AppointmentContext';
+import { useRouter } from 'next/navigation';
+
 
 type ChooseScheduleProps = {
   doctorId: string;
   setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
 };
 type TimeSlot = { id: string; date: string; timeSlot: string; isAvailable: boolean };
-type GroupedTimeSlots = { [date: string]: string[] };
-const ChooseSchedule = ({ doctorId,setSelectedDate }: ChooseScheduleProps) => {
+
+const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
   const [showTimeSlots, setShowTimeSlots] = useState(false);
   const [visibleRange, setVisibleRange] = useState({ start: '', end: '' });
   const [morningTimeslot, setMorningTimeslot] = useState<TimeSlot[]>([]);
   const [eveningTimeslot, setEveningTimeslot] = useState<TimeSlot[]>([]);
-  const [groupedTimeSlots, setGroupedTimeSlots] = useState<GroupedTimeSlots>({});
   const [availableDates, setAvailableDates] = useState<string[]>([]);
   const updateAvailableDate = (date: string[]) => {
     setAvailableDates(date);
@@ -44,12 +44,10 @@ const ChooseSchedule = ({ doctorId,setSelectedDate }: ChooseScheduleProps) => {
     });
     async function loadEvents() {
       const apiData = await fetchEventsFromApi(doctorId as string);
-      const transformApiData = apiData.map(transformApiEventData);
       dateFromApi = apiData
         .filter((item) => item.isAvailable)
         .map((item) => item.schedule.date);
       updateAvailableDate(dateFromApi);
-      setGroupedTimeSlots(groupTimeSlotsByDate(transformApiData));
       const morningSchedules = apiData
         .filter(({ schedule }) => {
           const [startHour] = schedule.timeSlot.split('-')[0].split(':').map(Number);
@@ -87,7 +85,12 @@ const ChooseSchedule = ({ doctorId,setSelectedDate }: ChooseScheduleProps) => {
   const handleDateClick = (info: DateClickArg) => {
     setSelectedDate(info.dateStr);
     setShowTimeSlots(true);
-
+  };
+  const { data, setData } = useAppointmentContext();
+  const router = useRouter();
+  const handleSelectTimeSlot = (doctorId: string) => {
+    setData({ doctorId });
+    router.push("/appointment");
   };
   return (
     <div>
@@ -136,19 +139,22 @@ const ChooseSchedule = ({ doctorId,setSelectedDate }: ChooseScheduleProps) => {
                         'bg-white ': item.isAvailable,
                       },
                     )}
+                    onClick={() => handleSelectTimeSlot(doctorId as string)}
                   >
-                    <Link
+                    {/* <Link
                       href={{
                         pathname: '/appointment',
                         query: {
                           doctorId: doctorId,
                           scheduleId: item.id,
                           timeSlot: item.timeSlot,
+                          date: item.date,
                         },
                       }}
                     >
                       {item.timeSlot}
-                    </Link>
+                    </Link> */}
+                    {item.timeSlot}
                   </Button>
                 </li>
               ))}
@@ -174,7 +180,7 @@ const ChooseSchedule = ({ doctorId,setSelectedDate }: ChooseScheduleProps) => {
                           doctorId: doctorId,
                           scheduleId: item.id,
                           timeSlot: item.timeSlot,
-
+                          date: item.date,
                         },
                       }}
                     >
