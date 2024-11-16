@@ -81,8 +81,8 @@ export const shortenTitle = (title: string) => {
   const titleMap: { [key: string]: string } = {
     'Giáo sư': 'GS',
     'Phó Giáo sư': 'PGS',
-    'Tiến sĩ': 'TS',
-    'Thạc sĩ': 'ThS',
+    'Tiến sĩ': 'TS BS',
+    'Thạc sĩ': 'ThS BS',
     'Bác sĩ Chuyên khoa I': 'BSCK I', 
     'Bác sĩ Chuyên khoa II': 'BSCK II',
     'Bác sĩ Đa khoa': 'BSĐK',
@@ -105,4 +105,22 @@ export const getDayOfWeek = (dateStr: string) => {
   const date = new Date(year, month - 1, day);
   const dayOfWeek = date.toLocaleString('en-US', { weekday: 'short' });
   return daysInVietnamese[dayOfWeek] || dayOfWeek;
+};
+
+const dayOrder: { [key: string]: number } = {
+  'Thứ 2': 1,
+  'Thứ 3': 2,
+  'Thứ 4': 3,
+  'Thứ 5': 4,
+  'Thứ 6': 5,
+  'Thứ 7': 6,
+  'Chủ nhật': 7
+};
+
+export const sortDayOfWeek = (days: string[]) => {
+  return days.sort((a, b) => {
+    const dayA = getDayOfWeek(a);
+    const dayB = getDayOfWeek(b);
+    return dayOrder[dayA] - dayOrder[dayB];
+  });
 };

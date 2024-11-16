@@ -1,9 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import UserLayout from '@/components/Layouts/userLayout';
-
 
 interface Faculty {
   id: string;
@@ -12,7 +11,6 @@ interface Faculty {
 }
 
 const ChooseFaculty = () => {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [faculties, setFaculties] = useState<Faculty[]>([]);
 
@@ -33,10 +31,6 @@ const ChooseFaculty = () => {
   const filteredFaculties = faculties.filter((faculty) =>
     faculty.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
-
-  const handleFacultyClick = (facultyId: string) => {
-    router.push(`/choose-doctor/${facultyId}`);
-  };
 
   return (
     <UserLayout>
@@ -104,16 +98,22 @@ const ChooseFaculty = () => {
             <div className="flex flex-col gap-1 h-[280px] overflow-y-auto custom-scrollbar bg-white">
               {filteredFaculties && filteredFaculties.length > 0 ? (
                 filteredFaculties.map((faculty) => (
-                  <div
+                  <Link
                     key={faculty.id}
-                    onClick={() => handleFacultyClick(faculty.id)}
+                    href={{
+                      pathname: '/choose-doctor',
+                      query: {
+                        facultyId: faculty.id,
+                        facultyName: faculty.name
+                      }
+                    }}
                     className="py-2 px-3 hover:bg-gray-50 text-slate-500 hover:text-primary cursor-pointer border-b border-slate-200 transition-all duration-300 ease-in-out"
                   >
                     <div className="font-medium mb-0.5 text-sm">{faculty.name}</div>
                     {faculty.description && (
                       <div className="text-[11px] mt-1 italic">{faculty.description}</div>
                     )}
-                  </div>
+                  </Link>
                 ))
               ) : (
                 <div className="p-4 text-center text-gray-500">

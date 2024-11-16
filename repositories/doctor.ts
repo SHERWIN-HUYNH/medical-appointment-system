@@ -1,4 +1,5 @@
 import { AppointmentStatus, Doctor, PrismaClient } from '@prisma/client';
+import { getDayOfWeek } from '@/lib/utils';
 
 const prisma = new PrismaClient();
 
@@ -191,11 +192,27 @@ export class DoctorRespository {
       }
     });
 
-    // Thêm scheduleDays vào mỗi doctor
-    const doctorsWithScheduleDays = doctors.map(doctor => ({
-      ...doctor,
-      scheduleDays: doctor.doctorSchedule.map(ds => ds.schedule.date)
-    }));
+    // Gom nhóm các lịch theo thứ trong tuần
+    const doctorsWithScheduleDays = doctors.map(doctor => {
+      // Tạo Map để lưu trữ ngày đại diện cho mỗi thứ trong tuần
+      const daysByWeekday = new Map<string, string>();
+      
+      doctor.doctorSchedule.forEach(ds => {
+        const weekday = getDayOfWeek(ds.schedule.date);
+        // Nếu thứ này chưa có trong Map, thêm vào với ngày đầu tiên gặp
+        if (!daysByWeekday.has(weekday)) {
+          daysByWeekday.set(weekday, ds.schedule.date);
+        }
+      });
+
+      // Chuyển Map thành mảng các ngày đại diện
+      const uniqueDays = Array.from(daysByWeekday.values());
+
+      return {
+        ...doctor,
+        scheduleDays: uniqueDays
+      };
+    });
 
     return doctorsWithScheduleDays;
   }
