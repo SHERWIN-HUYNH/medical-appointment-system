@@ -13,6 +13,7 @@ import { z } from 'zod';
 import { DoctorFormValidation } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const AddDoctorPage = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([]);
@@ -27,6 +28,7 @@ const AddDoctorPage = () => {
       faculty: '',
       description: '',
       isActive: true,
+      gender: true,
     },
   });
 
@@ -72,6 +74,7 @@ const AddDoctorPage = () => {
           description: values.description,
           facultyId: values.faculty,
           isActive: values.isActive,
+          gender: values.gender,
         }),
       });
 
@@ -123,35 +126,97 @@ const AddDoctorPage = () => {
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="p-6.5">
-              <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                <div className="w-full xl:w-1/2">
-                  <Label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Họ và tên
-                  </Label>
-                  <Input
-                    type="text"
-                    placeholder="Nhập họ tên bác sĩ"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    {...register('name')}
-                  />
-                  {errors.name && (
-                    <span className="text-red-500">{errors.name.message}</span>
-                  )}
+              <div className="grid grid-cols-2 gap-8">
+                <div>
+                  <div className="mb-6 h-[90px]">
+                    <Label className="mb-2.5 block font-medium text-black dark:text-white">
+                      Họ và tên
+                    </Label>
+                    <Input
+                      type="text"
+                      placeholder="Nhập họ tên bác sĩ"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      {...register('name')}
+                    />
+                    {errors.name && (
+                      <span className="mt-1 text-sm text-red-500">{errors.name.message}</span>
+                    )}
+                  </div>
+
+                  <div className="mb-6 h-[90px]">
+                    <SelectGroup
+                      label="Chuyên khoa"
+                      options={facultyData}
+                      fieldName="faculty"
+                    />
+                    {errors.faculty && (
+                      <span className="mt-10 text-sm text-red-500">{errors.faculty.message}</span>
+                    )}
+                  </div>
+
+                  <div className="mb-6">
+                    <Label className="mb-2.5 block font-medium text-black dark:text-white">
+                      Mô tả
+                    </Label>
+                    <Textarea
+                      rows={5}
+                      placeholder="Nhập mô tả"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      {...register('description')}
+                    />
+                    {errors.description && (
+                      <span className="mt-1 text-sm text-red-500">{errors.description.message}</span>
+                    )}
+                  </div>
                 </div>
-                <div className="w-full xl:w-1/2">
-                  <Label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Hình ảnh
-                  </Label>
-                  <div className="mt-3">
+
+                <div>
+                  <div className="mb-6 h-[90px]">
+                    <Label className="mb-4 block font-medium text-black dark:text-white">
+                      Giới tính
+                    </Label>
+                    <RadioGroup
+                      defaultValue={form.getValues("gender") ? "true" : "false"}
+                      className="flex gap-4"
+                      onValueChange={(value) => form.setValue("gender", value === "true")}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="true" id="male" />
+                        <Label htmlFor="male">Nam</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="false" id="female" />
+                        <Label htmlFor="female">Nữ</Label>
+                      </div>
+                    </RadioGroup>
+                    {errors.gender && (
+                      <span className="mt-1 text-sm text-red-500">{errors.gender.message}</span>
+                    )}
+                  </div>
+
+                  <div className="mb-6 h-[90px]">
+                    <SelectGroup
+                      label="Học hàm/học vị"
+                      options={academicTitles}
+                      fieldName="academicTitle"
+                    />
+                    {errors.academicTitle && (
+                      <span className="mt-10 text-sm text-red-500">{errors.academicTitle.message}</span>
+                    )}
+                  </div>
+
+                  <div className="mb-6">
+                    <Label className="mb-2.5 block font-medium text-black dark:text-white">
+                      Hình ảnh
+                    </Label>
                     <input
                       type="file"
                       accept="image/*"
                       className="w-full rounded-md border border-stroke p-2 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:px-2.5 file:py-1 file:text-sm focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
                       onChange={handleImageChange}
                     />
-
                     {errors.image && (
-                      <span className="text-red-500">{errors.image.message}</span>
+                      <span className="mt-1 text-sm text-red-500">{errors.image.message}</span>
                     )}
                     {imagePreview && (
                       <Image
@@ -164,47 +229,6 @@ const AddDoctorPage = () => {
                     )}
                   </div>
                 </div>
-              </div>
-              <div className="mb-16 flex flex-col gap-6 xl:flex-row">
-                <div className="w-full xl:w-1/2">
-                  <SelectGroup
-                    label="Học hàm/học vị"
-                    options={academicTitles}
-                    fieldName="academicTitle"
-                  />
-                  {errors.academicTitle && (
-                    <span className="mt-12 block text-red-500">
-                      {errors.academicTitle.message}
-                    </span>
-                  )}
-                </div>
-                <div className="w-full xl:w-1/2">
-                  <SelectGroup
-                    label="Chuyên khoa"
-                    options={facultyData}
-                    fieldName="faculty"
-                  />
-                  {errors.faculty && (
-                    <span className="mt-12 block text-red-500">
-                      {errors.faculty.message}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <Label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Mô tả
-                </Label>
-                <Textarea
-                  rows={5}
-                  placeholder="Nhập mô tả"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  {...register('description')}
-                />
-                {errors.description && (
-                  <span className="text-red-500">{errors.description.message}</span>
-                )}
               </div>
 
               <div className="flex justify-end">

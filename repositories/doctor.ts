@@ -128,16 +128,38 @@ export class DoctorRespository {
   }
 
   static async hasAppointments(doctorId: string): Promise<boolean> {
+    // Kiểm tra DoctorSchedule
+    const doctorSchedules = await prisma.doctorSchedule.findMany({
+      where: {
+        doctorId: doctorId
+      }
+    });
+    console.log('1. Doctor Schedules:', doctorSchedules);
+
+    if (doctorSchedules.length === 0) {
+      console.log('Không tìm thấy lịch làm việc của bác sĩ');
+      return false;
+    }
+    const doctorScheduleIds = doctorSchedules.map(ds => ds.id);
+
+    // Kiểm tra Appointments với các ID này
     const appointments = await prisma.appointment.findFirst({
       where: {
-        doctorSchedule: {
-          doctorId: doctorId,
+        doctorScheduleId: {
+          in: doctorScheduleIds
         },
-        // Chỉ xét các lịch hẹn có status là SCHEDULED hoặc PENDING
         status: {
-          in: [AppointmentStatus.SCHEDULED, AppointmentStatus.PENDING],
-        },
+          in: [AppointmentStatus.SCHEDULED, AppointmentStatus.PENDING]
+        }
       },
+      include: {
+        doctorSchedule: true,
+        profile: {
+          select: {
+            name: true
+          }
+        }
+      }
     });
 
     await prisma.$disconnect();
