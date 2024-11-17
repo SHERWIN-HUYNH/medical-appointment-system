@@ -370,15 +370,13 @@ const ListDoctor = () => {
         <Table columns={columns} data={dataWithIndex} renderRow={renderRow} />
       </div>
 
-      {/* Pagination - Thêm các class mới */}
-      <div className="mt-auto pt-4">
-        <div className="justify-center items-center gap-2">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </div>
+      {/* Pagination */}
+      <div className="mt-auto pt-4 border-t">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
 
       {/* Modal Confirm Delete */}
