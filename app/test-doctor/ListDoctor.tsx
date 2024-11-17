@@ -371,7 +371,7 @@ const ListDoctor = () => {
       </div>
 
       {/* Pagination */}
-      <div className="mt-auto pt-4 border-t">
+      <div className="mt-auto pt-4">
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
