@@ -6,14 +6,12 @@ import { useState, useEffect } from 'react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import viLocale from '@fullcalendar/core/locales/vi';
 import clsx from 'clsx';
-import {
-  fetchEventsFromApi,
-} from '@/helpers/formatTimeSlots';
+import { fetchEventsFromApi } from '@/helpers/formatTimeSlots';
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
-import { useAppointmentContext } from '@/context/AppointmentContext';
 import { useRouter } from 'next/navigation';
+import { Schedule } from '@prisma/client';
+import { useSession } from 'next-auth/react';
 
 
 type ChooseScheduleProps = {
@@ -30,7 +28,6 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
   const [availableDates, setAvailableDates] = useState<string[]>([]);
   const updateAvailableDate = (date: string[]) => {
     setAvailableDates(date);
-    console.log('AVAILABLE', availableDates);
   };
   let dateFromApi: string[] = [];
   useEffect(() => {
@@ -76,21 +73,38 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateClassNames = (renderProps: any): string[] => {
-    const dateStr = renderProps.date.toISOString().split('T')[0];
-    if (renderProps.isPast || !availableDates.includes(dateStr)) {
-      return ['text-[#cfd9df]'];
-    }
-    return [];
+    const dateStr = renderProps.date;
+    const year = dateStr.getFullYear();
+    const month = String(dateStr.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(dateStr.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+  
+    if (renderProps.isPast || !availableDates.includes(formattedDate)) {
+        return ['text-[#cfd9df]'];
+    } 
+    
+    return ['valid-date-class'];
   };
   const handleDateClick = (info: DateClickArg) => {
     setSelectedDate(info.dateStr);
-    setShowTimeSlots(true);
+    const date = info.dateStr;
+    if(availableDates.includes(date)){
+      setShowTimeSlots(true);
+    }
   };
-  const { data, setData } = useAppointmentContext();
   const router = useRouter();
-  const handleSelectTimeSlot = (doctorId: string) => {
-    setData({ doctorId });
-    router.push("/appointment");
+  const {data:session} = useSession();
+
+  const handleSelectTimeSlot = (item: Schedule) => {
+    const scheduleId = item.id;
+    const facultyId = '051735cd-fb23-47cf-bfa9-9931131a58e6';
+    
+    const userId = session?.user.id;
+    const serviceId = '0dfa3c28-83ff-41db-bbf6-41cb8bd32ca5';
+
+    // Set gia tri tam thoi de thuc hien goi du lieu
+    
+    router.push(`/appointment?date=${item.date}&timeSlot=${item.timeSlot}&doctorId=${doctorId}&userId=${userId}&serviceId=${serviceId}&scheduleId=${scheduleId}&facultyId=${facultyId}`);
   };
   return (
     <div>
@@ -116,13 +130,12 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
             }}
             locale={viLocale}
             visibleRange={visibleRange}
-            dayCellClassNames={handleDateClassNames}
-            dateClick={handleDateClick}
-            nowIndicator={true}
             editable={true}
             fixedWeekCount={false}
             selectable={true}
             selectMirror={true}
+            dayCellClassNames={handleDateClassNames}
+            dateClick={handleDateClick}
           />
         </div>
       ) : (
@@ -139,21 +152,8 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
                         'bg-white ': item.isAvailable,
                       },
                     )}
-                    onClick={() => handleSelectTimeSlot(doctorId as string)}
+                    onClick={() => handleSelectTimeSlot(item)}
                   >
-                    {/* <Link
-                      href={{
-                        pathname: '/appointment',
-                        query: {
-                          doctorId: doctorId,
-                          scheduleId: item.id,
-                          timeSlot: item.timeSlot,
-                          date: item.date,
-                        },
-                      }}
-                    >
-                      {item.timeSlot}
-                    </Link> */}
                     {item.timeSlot}
                   </Button>
                 </li>
@@ -172,20 +172,9 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
                         'bg-white ': item.isAvailable,
                       },
                     )}
+                    onClick={() => handleSelectTimeSlot(item)}
                   >
-                    <Link
-                      href={{
-                        pathname: '/appointment',
-                        query: {
-                          doctorId: doctorId,
-                          scheduleId: item.id,
-                          timeSlot: item.timeSlot,
-                          date: item.date,
-                        },
-                      }}
-                    >
-                      {item.timeSlot}
-                    </Link>
+                    {item.timeSlot}
                   </Button>
                 </li>
               ))}

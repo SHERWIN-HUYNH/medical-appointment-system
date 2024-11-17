@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       data: {
         userId,
         appointmentId,
-        amount: parseInt(price, 10),
+        price: parseInt(price, 10),
         status: 'COMPLETED',
         paymentMethod: 'STRIPE',
         note: 'Stripe payment',
