@@ -49,13 +49,15 @@ export async function PUT(req: Request) {
 // Xử lý DELETE request - Xóa bác sĩ theo ID
 export async function DELETE(req: Request) {
   const { doctor } = await req.json();
+  
+  if (!doctor?.id) {
+    return badRequestResponse('Missing doctor ID');
+  }
+
   try {
-    const deletedDoctor = await DoctorRespository.deleteDoctor(doctor);
+    const deletedDoctor = await DoctorRespository.deleteDoctor(doctor.id);
     return successResponse(deletedDoctor);
-  } catch (error) {
-    if (error instanceof Error) {
-      return badRequestResponse(error.message);
-    }
-    return badRequestResponse('Lỗi khi xóa bác sĩ');
+  } catch (error: any) {
+    return badRequestResponse(error.message);
   }
 }

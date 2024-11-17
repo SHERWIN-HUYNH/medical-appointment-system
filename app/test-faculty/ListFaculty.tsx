@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import ModalDelete from '@/components/ModalDelete';
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
