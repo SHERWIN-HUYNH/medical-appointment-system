@@ -22,6 +22,26 @@ export class ServiceRepository {
     }
   }
 
+
+    static async getServicesByFacultyId(facultyId: string) {
+      try {
+        const services = await prisma.service.findMany({
+          where: {
+            facultyId: facultyId,
+          },
+          include: {
+            faculty: true
+          }
+        });
+        return services;
+      } catch (error) {
+        console.error('Error retrieving services:', error);
+        throw error;
+      } finally {
+        await prisma.$disconnect();
+      }
+    }
+
   static async getAllServices() {
     try {
       const services = await prisma.service.findMany();

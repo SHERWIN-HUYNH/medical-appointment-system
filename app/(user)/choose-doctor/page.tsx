@@ -7,6 +7,7 @@ import { academicTitles } from '@/lib/data';
 import { shortenTitle } from '@/lib/utils';
 import { getDayOfWeek, sortDayOfWeek } from '@/lib/utils';
 import { useAppointmentContext } from '@/context/AppointmentContext';
+import Link from 'next/link';
 
 interface Doctor {
   id: string;
@@ -24,7 +25,7 @@ interface Doctor {
 const ChooseDoctor = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { data } = useAppointmentContext();
+  const { data, setData } = useAppointmentContext();
   
   const facultyId = data.facultyId;
   const facultyName = searchParams.get('facultyName');
@@ -80,6 +81,10 @@ const ChooseDoctor = () => {
 
   const handleGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedGender(e.target.value);
+  };
+
+  const handleDoctorClick = (facultyId: string, doctorId: string) => {
+    setData({ facultyId, doctorId });
   };
 
   return (
@@ -203,10 +208,21 @@ const ChooseDoctor = () => {
               <div className="flex flex-col gap-3 h-[280px] overflow-y-auto custom-scrollbar bg-white px-1">
                 {filteredDoctors.length > 0 ? (
                   filteredDoctors.map((doctor) => (
-                    <div
+                    <Link
                       key={doctor.id}
+                      href={{
+                        pathname: '/choose-service',
+                        query: { 
+                          doctorName: doctor.name, 
+                          facultyName: facultyName 
+                        }
+                      }}
+                      onClick={() => {
+                        handleDoctorClick(facultyId!, doctor.id);
+                      }}
                       className="p-4 hover:bg-slate-50 cursor-pointer rounded-lg border border-slate-200 shadow-sm bg-white transition-all hover:shadow-md"
                     >
+                    
                       <div className="flex flex-col gap-2">
                         <div className="flex items-center gap-2">
                           <svg
@@ -308,7 +324,7 @@ const ChooseDoctor = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   ))
                 ) : (
                   <div className="p-4 text-center text-gray-500">
