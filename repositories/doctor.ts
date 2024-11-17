@@ -94,22 +94,7 @@ export class DoctorRespository {
       throw new Error('Bác sĩ đang có lịch hẹn không thể xóa');
     }
 
-    // Lấy tất cả lịch làm việc của bác sĩ
-    const schedules = await prisma.doctorSchedule.findMany({
-      where: {
-        doctorId: doctorData.id,
-      },
-    });
-
-    // Kiểm tra từng lịch làm việc
-    for (const schedule of schedules) {
-      const hasScheduleAppointments = await this.hasScheduleWithAppointments(schedule.id);
-      if (hasScheduleAppointments) {
-        throw new Error('Không thể xóa bác sĩ vì có lịch làm việc đang có lịch hẹn');
-      }
-    }
-
-    // Xóa tất cả lịch làm việc trước
+    // Xóa tất cả lịch làm việc
     await prisma.doctorSchedule.deleteMany({
       where: {
         doctorId: doctorData.id,
@@ -128,53 +113,17 @@ export class DoctorRespository {
   }
 
   static async hasAppointments(doctorId: string): Promise<boolean> {
-    // Kiểm tra DoctorSchedule
-    const doctorSchedules = await prisma.doctorSchedule.findMany({
-      where: {
-        doctorId: doctorId
-      }
-    });
-    console.log('1. Doctor Schedules:', doctorSchedules);
-
-    if (doctorSchedules.length === 0) {
-      console.log('Không tìm thấy lịch làm việc của bác sĩ');
-      return false;
-    }
-    const doctorScheduleIds = doctorSchedules.map(ds => ds.id);
-
-    // Kiểm tra Appointments với các ID này
     const appointments = await prisma.appointment.findFirst({
       where: {
-        doctorScheduleId: {
-          in: doctorScheduleIds
+        doctorSchedule: {
+          doctorId: doctorId
         },
         status: {
           in: [AppointmentStatus.SCHEDULED, AppointmentStatus.PENDING]
         }
-      },
-      include: {
-        doctorSchedule: true,
-        profile: {
-          select: {
-            name: true
-          }
-        }
       }
     });
-
-    await prisma.$disconnect();
-    return appointments !== null;
-  }
-
-  static async hasScheduleWithAppointments(scheduleId: string): Promise<boolean> {
-    const appointments = await prisma.appointment.findFirst({
-      where: {
-        doctorScheduleId: scheduleId,
-        status: {
-          in: [AppointmentStatus.SCHEDULED, AppointmentStatus.PENDING],
-        },
-      },
-    });
+    
     await prisma.$disconnect();
     return appointments !== null;
   }
