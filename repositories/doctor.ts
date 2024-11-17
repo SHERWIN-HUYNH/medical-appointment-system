@@ -94,22 +94,7 @@ export class DoctorRespository {
       throw new Error('Bác sĩ đang có lịch hẹn không thể xóa');
     }
 
-    // Lấy tất cả lịch làm việc của bác sĩ
-    const schedules = await prisma.doctorSchedule.findMany({
-      where: {
-        doctorId: doctorData.id,
-      },
-    });
-
-    // Kiểm tra từng lịch làm việc
-    for (const schedule of schedules) {
-      const hasScheduleAppointments = await this.hasScheduleWithAppointments(schedule.id);
-      if (hasScheduleAppointments) {
-        throw new Error('Không thể xóa bác sĩ vì có lịch làm việc đang có lịch hẹn');
-      }
-    }
-
-    // Xóa tất cả lịch làm việc trước
+    // Xóa tất cả lịch làm việc
     await prisma.doctorSchedule.deleteMany({
       where: {
         doctorId: doctorData.id,
@@ -131,28 +116,14 @@ export class DoctorRespository {
     const appointments = await prisma.appointment.findFirst({
       where: {
         doctorSchedule: {
-          doctorId: doctorId,
+          doctorId: doctorId
         },
-        // Chỉ xét các lịch hẹn có status là SCHEDULED hoặc PENDING
         status: {
-          in: [AppointmentStatus.SCHEDULED, AppointmentStatus.PENDING],
-        },
-      },
+          in: [AppointmentStatus.SCHEDULED, AppointmentStatus.PENDING]
+        }
+      }
     });
-
-    await prisma.$disconnect();
-    return appointments !== null;
-  }
-
-  static async hasScheduleWithAppointments(scheduleId: string): Promise<boolean> {
-    const appointments = await prisma.appointment.findFirst({
-      where: {
-        doctorScheduleId: scheduleId,
-        status: {
-          in: [AppointmentStatus.SCHEDULED, AppointmentStatus.PENDING],
-        },
-      },
-    });
+    
     await prisma.$disconnect();
     return appointments !== null;
   }

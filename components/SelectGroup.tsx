@@ -17,8 +17,10 @@ const SelectGroup: React.FC<SelectGroupProps> = ({ label, options = [], fieldNam
   const { register } = useFormContext();
 
   return (
-    <div className="mb-1 h-10">
-      <label className="mb-2.5 block text-md font-semibold text-primary">{label}</label>
+    <div>
+      <label className="mb-2.5 block text-md font-semibold text-primary">
+        {label}
+      </label>
       <div className="relative z-20 bg-transparent dark:bg-form-input">
         <select
           {...register(fieldName)}
