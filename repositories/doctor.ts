@@ -24,7 +24,11 @@ export class DoctorRespository {
   }
 
   static async getDoctores() {
-    const doctors = await prisma.doctor.findMany();
+    const doctors = await prisma.doctor.findMany({
+      where: {
+        isDeleted: false
+      }
+    });
     await prisma.$disconnect();
     return doctors;
   }
@@ -87,25 +91,24 @@ export class DoctorRespository {
     await prisma.$disconnect();
     return formattedDoctors;
   }
-  static async deleteDoctor(doctorData: Doctor) {
-    // Kiểm tra xem bác sĩ có lịch hẹn không
-    const hasAppointments = await this.hasAppointments(doctorData.id);
-    if (hasAppointments) {
-      throw new Error('Bác sĩ đang có lịch hẹn không thể xóa');
+  static async deleteDoctor(doctorId: string) {
+    if (!doctorId) {
+        throw new Error('Doctor ID is missing.');
     }
 
-    // Xóa tất cả lịch làm việc
-    await prisma.doctorSchedule.deleteMany({
-      where: {
-        doctorId: doctorData.id,
-      },
-    });
+    const hasActiveAppointments = await this.hasAppointments(doctorId);
+    if (hasActiveAppointments) {
+        throw new Error('Bác sĩ đang có lịch hẹn không thể xóa');
+    }
 
-    // Sau đó xóa bác sĩ
-    const deletedDoctor = await prisma.doctor.delete({
-      where: {
-        id: doctorData.id,
-      },
+    const deletedDoctor = await prisma.doctor.update({
+        where: {
+            id: doctorId,
+        },
+        data: {
+            isDeleted: true,
+            isActive: false
+        }
     });
 
     await prisma.$disconnect();
@@ -113,19 +116,23 @@ export class DoctorRespository {
   }
 
   static async hasAppointments(doctorId: string): Promise<boolean> {
-    const appointments = await prisma.appointment.findFirst({
-      where: {
-        doctorSchedule: {
-          doctorId: doctorId
-        },
-        status: {
-          in: [AppointmentStatus.SCHEDULED, AppointmentStatus.PENDING]
+    const doctorSchedule = await prisma.doctorSchedule.findFirst({
+        where: {
+            AND: [
+                { doctorId: doctorId },
+                {
+                    appointment: {
+                        status: {
+                            in: [AppointmentStatus.PENDING]
+                        }
+                    }
+                }
+            ]
         }
-      }
     });
     
     await prisma.$disconnect();
-    return appointments !== null;
+    return doctorSchedule !== null;
   }
 
   static async getFacultyByDoctorId(doctorId: string) {

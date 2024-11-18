@@ -18,16 +18,14 @@ const SelectGroup: React.FC<SelectGroupProps> = ({ label, options = [], fieldNam
 
   return (
     <div>
-      <label className="mb-2.5 block text-md font-semibold text-primary">
-        {label}
-      </label>
+      <label className="mb-2.5 block text-md font-semibold text-primary">{label}</label>
       <div className="relative z-20 bg-transparent dark:bg-form-input">
         <select
           {...register(fieldName)}
           className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
         >
           <option value="" disabled className="text-slate-500 dark:text-bodydark">
-            Chọn <span className="lowercase">{label}</span>
+            Chọn {label}
           </option>
           {options.map((option) => (
             <option
