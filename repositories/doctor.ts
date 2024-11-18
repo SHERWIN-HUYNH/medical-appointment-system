@@ -123,7 +123,7 @@ export class DoctorRespository {
                 {
                     appointment: {
                         status: {
-                            in: [AppointmentStatus.SCHEDULED, AppointmentStatus.PENDING]
+                            in: [AppointmentStatus.PENDING]
                         }
                     }
                 }
