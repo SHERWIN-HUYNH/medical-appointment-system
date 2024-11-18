@@ -6,12 +6,13 @@ import { useState, useEffect } from 'react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import viLocale from '@fullcalendar/core/locales/vi';
 import clsx from 'clsx';
-import { fetchEventsFromApi } from '@/helpers/formatTimeSlots';
+import { DoctorScheduleResult, fetchEventsFromApi } from '@/helpers/formatTimeSlots';
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Schedule } from '@prisma/client';
 import { useSession } from 'next-auth/react';
+import { set } from 'zod';
 
 
 type ChooseScheduleProps = {
@@ -19,15 +20,18 @@ type ChooseScheduleProps = {
   setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
 };
 type TimeSlot = { id: string; date: string; timeSlot: string; isAvailable: boolean };
-
 const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
   const [showTimeSlots, setShowTimeSlots] = useState(false);
   const [visibleRange, setVisibleRange] = useState({ start: '', end: '' });
   const [morningTimeslot, setMorningTimeslot] = useState<TimeSlot[]>([]);
   const [eveningTimeslot, setEveningTimeslot] = useState<TimeSlot[]>([]);
   const [availableDates, setAvailableDates] = useState<string[]>([]);
+  const [apiData,setApiData] = useState<DoctorScheduleResult[]>();
   const updateAvailableDate = (date: string[]) => {
     setAvailableDates(date);
+  };
+  const handleUpdateSchedule = (newData: DoctorScheduleResult[]) => {
+    setApiData(newData);
   };
   let dateFromApi: string[] = [];
   useEffect(() => {
@@ -40,33 +44,14 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
       end: endDate.toISOString().slice(0, 10),
     });
     async function loadEvents() {
-      const apiData = await fetchEventsFromApi(doctorId as string);
-      dateFromApi = apiData
+      const data = await fetchEventsFromApi(doctorId as string);
+      // setApiData(data);
+      handleUpdateSchedule(data);
+      dateFromApi = data
         .filter((item) => item.isAvailable)
         .map((item) => item.schedule.date);
       updateAvailableDate(dateFromApi);
-      const morningSchedules = apiData
-        .filter(({ schedule }) => {
-          const [startHour] = schedule.timeSlot.split('-')[0].split(':').map(Number);
-          return startHour >= 7 && startHour < 12;
-        })
-        .map(({ isAvailable, schedule }) => ({
-          ...schedule,
-          isAvailable,
-          period: 'morning' as const, // Thêm kiểu tường minh cho "period" mà không cần kiểu mở rộng
-        }));
-      setMorningTimeslot(morningSchedules);
-      const afternoonSchedules = apiData
-        .filter(({ schedule }) => {
-          const [startHour] = schedule.timeSlot.split('-')[0].split(':').map(Number);
-          return startHour >= 12;
-        })
-        .map(({ isAvailable, schedule }) => ({
-          ...schedule,
-          isAvailable,
-          period: 'afternoon' as const, // Tương tự, định nghĩa kiểu cho buổi chiều
-        }));
-      setEveningTimeslot(afternoonSchedules);
+      
     }
     loadEvents();
   }, []);
@@ -88,7 +73,32 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
   const handleDateClick = (info: DateClickArg) => {
     setSelectedDate(info.dateStr);
     const date = info.dateStr;
-    if(availableDates.includes(date)){
+    const schedules = apiData?.filter((schedule) => schedule.schedule.date === date);
+    
+    console.log('schedules', schedules);
+    if(availableDates.includes(date) && schedules) {
+      const morningSchedules = schedules
+        .filter(({ schedule }) => {
+          const [startHour] = schedule.timeSlot.split('-')[0].split(':').map(Number);
+          return startHour >= 7 && startHour < 12;
+        })
+        .map(({ isAvailable, schedule }) => ({
+          ...schedule,
+          isAvailable,
+          period: 'morning' as const, // Thêm kiểu tường minh cho "period" mà không cần kiểu mở rộng
+        }));
+      setMorningTimeslot(morningSchedules);
+      const afternoonSchedules = schedules
+        .filter(({ schedule }) => {
+          const [startHour] = schedule.timeSlot.split('-')[0].split(':').map(Number);
+          return startHour >= 12;
+        })
+        .map(({ isAvailable, schedule }) => ({
+          ...schedule,
+          isAvailable,
+          period: 'afternoon' as const, // Tương tự, định nghĩa kiểu cho buổi chiều
+        }));
+      setEveningTimeslot(afternoonSchedules);
       setShowTimeSlots(true);
     }
   };
@@ -97,14 +107,13 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
 
   const handleSelectTimeSlot = (item: Schedule) => {
     const scheduleId = item.id;
-    const facultyId = '051735cd-fb23-47cf-bfa9-9931131a58e6';
-    
+    const facultyId = 'b0990c2e-0784-4781-b03e-b12c4fedee6e';
     const userId = session?.user.id;
-    const serviceId = '0dfa3c28-83ff-41db-bbf6-41cb8bd32ca5';
+    const serviceId = 'cb407f19-b77e-493f-bd01-185991811840';
 
     // Set gia tri tam thoi de thuc hien goi du lieu
-    
-    router.push(`/appointment?date=${item.date}&timeSlot=${item.timeSlot}&doctorId=${doctorId}&userId=${userId}&serviceId=${serviceId}&scheduleId=${scheduleId}&facultyId=${facultyId}`);
+    const profileId = 'dfb8c741-dedc-44d7-a734-23b16812ebe2'
+    router.push(`/appointment?date=${item.date}&timeSlot=${item.timeSlot}&doctorId=${doctorId}&userId=${userId}&serviceId=${serviceId}&scheduleId=${scheduleId}&facultyId=${facultyId}&profileId=${profileId}`);
   };
   return (
     <div>

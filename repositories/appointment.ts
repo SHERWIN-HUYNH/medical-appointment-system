@@ -1,4 +1,4 @@
-import { Appointment } from '@/types/interface';
+import { Appointment, CreateAppointment } from '@/types/interface';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -38,10 +38,14 @@ export class AppointmentRepository {
     }
   }
 
-  static async createAppointment(appointmentData: Appointment) {
+  static async createAppointment({doctorScheduleId,serviceId,profileId}:CreateAppointment) {
     try {
       const newAppointment = await prisma.appointment.create({
-        data: appointmentData,
+        data:{
+          doctorScheduleId,
+          serviceId,
+          profileId
+        }
       });
       return newAppointment;
     } catch (error) {

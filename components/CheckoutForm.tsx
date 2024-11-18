@@ -1,5 +1,5 @@
 'use client';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import {
   Elements,
   PaymentElement,
@@ -20,6 +20,7 @@ import { Button } from './ui/button';
 // import { useParams, useSearchParams } from 'next/navigation';
 import { formatPrice } from '@/helpers/formatCurrency';
 import { useAppointmentContext } from '@/context/AppointmentContext';
+import { useSession } from 'next-auth/react';
 
 type CheckoutFormProps = {
   clientSecret: string;
@@ -333,7 +334,7 @@ function Form({ price }: { price: string }) {
         }
       })
       .finally(() => setIsLoading(false));
-    console.log('SUCCESS OR NOT');
+    
   };
   return (
     <form onSubmit={handleSumit}>
