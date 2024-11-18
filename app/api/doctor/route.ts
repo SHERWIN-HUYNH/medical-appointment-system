@@ -49,7 +49,7 @@ export async function PUT(req: Request) {
 // Xử lý DELETE request - Xóa bác sĩ theo ID
 export async function DELETE(req: Request) {
   const { doctor } = await req.json();
-  
+
   if (!doctor?.id) {
     return badRequestResponse('Missing doctor ID');
   }

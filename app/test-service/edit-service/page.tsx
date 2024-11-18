@@ -1,17 +1,17 @@
 'use client';
 import React from 'react';
-import CreateServiceForm from '@/components/forms/CreateServiceForm';
 import DefaultLayout from '@/components/Layouts/defaultLayout';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import EditServiceForm from '@/components/forms/EditServiceForm';
 
-const AddService = () => {
+const EditService = () => {
   const router = useRouter();
   return (
     <DefaultLayout>
       <div>
-        <section className="sub-container">
+        <section>
           <div className="rounded-sm border border-stroke bg-white shadow-xl dark:border-strokedark dark:bg-boxdark">
             <Button
               onClick={() => router.push('/test-service')}
@@ -23,9 +23,9 @@ const AddService = () => {
             </Button>
 
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">Thêm dịch vụ</h3>
+              <h3 className="font-medium text-black dark:text-white">Sửa dịch vụ</h3>
             </div>
-            <CreateServiceForm />
+            <EditServiceForm />
           </div>
         </section>
       </div>
@@ -33,4 +33,4 @@ const AddService = () => {
   );
 };
 
-export default AddService;
+export default EditService;

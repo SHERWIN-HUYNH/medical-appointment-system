@@ -1,6 +1,5 @@
 import { Service } from '@/types/interface';
 import { PrismaClient } from '@prisma/client';
-import { connect } from 'http2';
 import { FacultyRepository } from './faculty';
 
 const prisma = new PrismaClient();
@@ -22,25 +21,24 @@ export class ServiceRepository {
     }
   }
 
-
-    static async getServicesByFacultyId(facultyId: string) {
-      try {
-        const services = await prisma.service.findMany({
-          where: {
-            facultyId: facultyId,
-          },
-          include: {
-            faculty: true
-          }
-        });
-        return services;
-      } catch (error) {
-        console.error('Error retrieving services:', error);
-        throw error;
-      } finally {
-        await prisma.$disconnect();
-      }
+  static async getServicesByFacultyId(facultyId: string) {
+    try {
+      const services = await prisma.service.findMany({
+        where: {
+          facultyId: facultyId,
+        },
+        include: {
+          faculty: true,
+        },
+      });
+      return services;
+    } catch (error) {
+      console.error('Error retrieving services:', error);
+      throw error;
+    } finally {
+      await prisma.$disconnect();
     }
+  }
 
   static async getAllServices() {
     try {
@@ -74,20 +72,13 @@ export class ServiceRepository {
     }
   }
   static async updateService(serviceData: Service) {
-    try {
-      const updatedService = await prisma.service.update({
-        where: {
-          id: serviceData.id,
-        },
-        data: serviceData,
-      });
-      return updatedService;
-    } catch (error) {
-      console.error('Error updating service:', error);
-      throw error;
-    } finally {
-      await prisma.$disconnect();
-    }
+    const updatedService = await prisma.service.update({
+      where: {
+        id: serviceData.id,
+      },
+      data: serviceData,
+    });
+    return updatedService;
   }
   static async deleteService(serviceId: string) {
     try {

@@ -11,6 +11,7 @@ export async function GET() {
     const faculties = await FacultyRepository.getFaculties();
     return successResponse(faculties || []);
   } catch (error) {
+    console.log(error);
     return badRequestResponse('Failed to fetch faculties');
   }
 }

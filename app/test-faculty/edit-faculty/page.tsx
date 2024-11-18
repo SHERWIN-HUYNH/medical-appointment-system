@@ -10,7 +10,6 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
 import { Label } from '@/components/ui/label';
 
 const EditFaculty = () => {

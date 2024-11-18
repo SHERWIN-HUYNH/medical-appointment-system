@@ -1,4 +1,7 @@
-export const formatPrice = (value: string): string => {
-  const numericValue = value.replace(/\D/g, '');
-  return new Intl.NumberFormat('vi-VN').format(Number(numericValue)) + 'VND';
+export const formatPrice = (value: string | number): string => {
+  if (!value) return '0 VND';
+  return Number(value.toString().replace(/\D/g, '')).toLocaleString('it-IT', {
+    style: 'currency',
+    currency: 'VND',
+  });
 };

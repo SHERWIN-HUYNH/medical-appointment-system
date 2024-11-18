@@ -118,9 +118,9 @@ const EditDoctor = () => {
   };
 
   const handleGenderChange = (value: string) => {
-    const genderValue = value === "true";
+    const genderValue = value === 'true';
     setGender(genderValue);
-    form.setValue("gender", genderValue);
+    form.setValue('gender', genderValue);
   };
 
   const handleConfirmStatusChange = async () => {
@@ -141,8 +141,6 @@ const EditDoctor = () => {
         }),
       });
 
-      const data = await response.json();
-
       if (response.ok) {
         setIsActive(pendingStatus);
         form.setValue('isActive', pendingStatus);
@@ -151,6 +149,7 @@ const EditDoctor = () => {
         toast.error('Bác sĩ hiện đang có lịch hẹn không thể thay đổi trạng thái');
       }
     } catch (error) {
+      console.log(error);
       toast.error('Đã có lỗi xảy ra khi thay đổi trạng thái');
     } finally {
       setShowConfirmModal(false);
@@ -211,7 +210,9 @@ const EditDoctor = () => {
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                     {errors.name && (
-                      <span className="mt-1 text-sm text-red-500">{errors.name.message}</span>
+                      <span className="mt-1 text-sm text-red-500">
+                        {errors.name.message}
+                      </span>
                     )}
                   </div>
 
@@ -223,19 +224,23 @@ const EditDoctor = () => {
                       fieldName="academicTitle"
                     />
                     {errors.academicTitle && (
-                      <span className="mt-10 text-sm text-red-500">{errors.academicTitle.message}</span>
+                      <span className="mt-10 text-sm text-red-500">
+                        {errors.academicTitle.message}
+                      </span>
                     )}
                   </div>
 
                   {/* Chuyên khoa */}
                   <div className="h-[90px]">
                     <SelectGroup
-                      label='Chuyên khoa'
+                      label="Chuyên khoa"
                       options={facultyData}
                       fieldName="faculty"
                     />
                     {errors.faculty && (
-                      <span className="mt-10 text-sm text-red-500">{errors.faculty.message}</span>
+                      <span className="mt-10 text-sm text-red-500">
+                        {errors.faculty.message}
+                      </span>
                     )}
                   </div>
 
@@ -251,7 +256,9 @@ const EditDoctor = () => {
                       {...register('description')}
                     />
                     {errors.description && (
-                      <span className="mt-1 text-sm text-red-500">{errors.description.message}</span>
+                      <span className="mt-1 text-sm text-red-500">
+                        {errors.description.message}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -272,22 +279,22 @@ const EditDoctor = () => {
                       Giới tính
                     </Label>
                     <RadioGroup
-                      defaultValue={gender ? "true" : "false"}
-                      value={gender ? "true" : "false"}
+                      defaultValue={gender ? 'true' : 'false'}
+                      value={gender ? 'true' : 'false'}
                       className="flex gap-8"
                       onValueChange={handleGenderChange}
                     >
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem 
-                          value="true" 
+                        <RadioGroupItem
+                          value="true"
                           id="male"
                           checked={gender === true}
                         />
                         <Label htmlFor="male">Nam</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem 
-                          value="false" 
+                        <RadioGroupItem
+                          value="false"
                           id="female"
                           checked={gender === false}
                         />
@@ -323,16 +330,16 @@ const EditDoctor = () => {
                       />
                     </div>
                     {/* Preview ảnh - tách riêng khỏi container h-[90px] */}
-                  {imagePreview && (
-                    <div>
-                      <img
-                        src={`/assets/doctor/${imagePreview}`}
-                        alt="Image Preview"
-                        className="w-30 h-30 object-cover"
-                        style={{ maxWidth: '200px', maxHeight: '200px' }}
-                      />
-                    </div>
-                  )}
+                    {imagePreview && (
+                      <div>
+                        <img
+                          src={`/assets/doctor/${imagePreview}`}
+                          alt="Image Preview"
+                          className="w-30 h-30 object-cover"
+                          style={{ maxWidth: '200px', maxHeight: '200px' }}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -346,7 +353,7 @@ const EditDoctor = () => {
             </div>
           </form>
         </div>
-        
+
         {/* Thêm Modal */}
         <ConfirmModal
           isOpen={showConfirmModal}

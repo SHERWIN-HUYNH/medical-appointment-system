@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 
 const Test = () => {
-  console.log('STRIPE',process.env.NEXT_PUBLIC_STRIPE_API_KEY as string)
+  console.log('STRIPE', process.env.NEXT_PUBLIC_STRIPE_API_KEY as string);
   return (
     <Button>
       <Link

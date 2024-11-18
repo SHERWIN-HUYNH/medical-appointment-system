@@ -6,15 +6,12 @@ import { useState, useEffect } from 'react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import viLocale from '@fullcalendar/core/locales/vi';
 import clsx from 'clsx';
-import {
-  fetchEventsFromApi,
-} from '@/helpers/formatTimeSlots';
+import { fetchEventsFromApi } from '@/helpers/formatTimeSlots';
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAppointmentContext } from '@/context/AppointmentContext';
 import { useRouter } from 'next/navigation';
-
 
 type ChooseScheduleProps = {
   doctorId: string;
@@ -90,7 +87,7 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
   const router = useRouter();
   const handleSelectTimeSlot = (doctorId: string) => {
     setData({ doctorId });
-    router.push("/appointment");
+    router.push('/appointment');
   };
   return (
     <div>

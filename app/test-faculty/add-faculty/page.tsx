@@ -1,5 +1,5 @@
 'use client';
-
+import React from 'react';
 import DefaultLayout from '@/components/Layouts/defaultLayout';
 import { FacultyFormValidation } from '@/lib/validation';
 import { z } from 'zod';
@@ -69,6 +69,7 @@ const AddFaculty = () => {
 
       toast.success('Thêm chuyên khoa thành công!');
     } catch (error) {
+      console.log(error);
       toast.error('Không thể thêm chuyên khoa');
     } finally {
       setLoading(false);

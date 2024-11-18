@@ -66,10 +66,8 @@ const ListFaculty = () => {
   }, []);
 
   // Lọc dữ liệu dựa trên searchTerm
-  const searchData = facultyData.filter(
-    (faculty) =>
-      faculty.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      faculty.description.toLowerCase().includes(searchTerm.toLowerCase()),
+  const searchData = facultyData.filter((faculty) =>
+    faculty.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // Tính toán số trang dựa trên dữ liệu đã tìm kiếm

@@ -25,14 +25,13 @@ type CheckoutFormProps = {
   clientSecret: string;
   product: object;
   timeSlot: string;
-  date:string
+  date: string;
 };
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY as string);
-export function CheckoutForm({ clientSecret,timeSlot,date }: CheckoutFormProps) {
+export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps) {
   const { data } = useAppointmentContext();
-  console.log('CONTEXT DATA')
-  if(clientSecret == '')
-    return <h1>Chưa có sản phẩm</h1>
+  console.log('CONTEXT DATA');
+  if (clientSecret == '') return <h1>Chưa có sản phẩm</h1>;
 
   return (
     <div className="mx-auto card-container animation">
