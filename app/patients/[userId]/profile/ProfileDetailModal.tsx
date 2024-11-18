@@ -1,6 +1,7 @@
 import React from 'react';
 import { Profile } from '@/types/interface';
 import {
+  Cable,
   Cake,
   CircleUser,
   FileDigit,
@@ -10,6 +11,7 @@ import {
   Scroll,
   Smartphone,
 } from 'lucide-react';
+import { FaVenusMars } from 'react-icons/fa';
 
 interface ProfileDetailModalProps {
   isOpen: boolean;
@@ -32,7 +34,7 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
-      <div className="bg-white rounded-lg p-4 shadow-lg z-10 w-[40%] max-h-[80vh] overflow-y-auto">
+      <div className="bg-white rounded-lg p-4 shadow-lg z-10 w-[50%] max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-xl text-primary font-bold">Chi tiết hồ sơ</h2>
           <button onClick={onClose} className="text-slate-500 hover:text-slate-700">
@@ -67,7 +69,7 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
               {profile.phone ? profile.phone : 'N/A'}
             </p>
             <p className="flex items-center gap-2">
-              <FlipVertical2 className="w-5 h-5 text-slate-400" />
+              <FaVenusMars className="w-5 h-5 text-slate-400" />
               <span className="text-slate-400">Giới tính:</span>
               {profile.gender === 'MALE'
                 ? 'Nam'
@@ -82,13 +84,18 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
                 ? new Date(profile.birthDate).toLocaleDateString()
                 : 'N/A'}
             </p>
+          </div>
+          <div className="space-y-2">
+          <p className="flex items-center gap-2">
+              <Cable className="w-5 h-5 text-slate-400" />
+              <span className="text-slate-400">Triệu chứng:</span>{' '}
+              {profile.symptom || 'Không có'}
+            </p>
             <p className="flex items-center gap-2">
               <History className="w-5 h-5 text-slate-400" />
               <span className="text-slate-400">Tiền sử bệnh:</span>{' '}
               {profile.pastMedicalHistory || 'Không có'}
             </p>
-          </div>
-          <div className="space-y-2">
             <p className="flex items-center gap-2">
               <Scroll className="w-5 h-5 text-slate-400" />
               <span className="text-slate-400">Loại giấy tờ:</span>{' '}
@@ -99,16 +106,6 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
               <span className="text-slate-400">Số giấy tờ:</span>{' '}
               {profile.identificationNumber}
             </p>
-
-            {profile.identificationDocumentUrl && (
-              <div className="mt-2">
-                <img
-                  src={profile.identificationDocumentUrl}
-                  alt="Identification Document"
-                  className="w-32 h-auto rounded-lg shadow-md"
-                />
-              </div>
-            )}
           </div>
         </div>
 

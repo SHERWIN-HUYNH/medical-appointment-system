@@ -8,6 +8,7 @@ export interface Profile {
     email: string;
     phone: string;
     allergies ?:string;
+    symptom: string;
     identificationType: string;
     identificationNumber: string;
     identificationDocumentUrl: string; 
