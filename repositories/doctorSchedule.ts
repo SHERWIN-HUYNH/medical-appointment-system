@@ -1,7 +1,7 @@
 import prisma from '@/lib/prisma';
 import { Schedule } from '@/types/interface';
 
-export class ScheduleRepository {
+export class DoctorScheduleRespository {
   static async getDoctorSchedules(doctorId: string) {
     const doctorSchedules = await prisma.doctorSchedule.findMany({
       where: {
@@ -100,4 +100,35 @@ export class ScheduleRepository {
       return doctorSchedules;
     });
   }
+  static async getDoctorScheduleById(scheduleId: string, doctorId: string) {
+    if (!scheduleId || !doctorId) {
+      throw new Error('Missing scheduleId or doctorId');
+    }
+    const doctorSchedule = await prisma.doctorSchedule.findFirst({
+      where: {
+        scheduleId: scheduleId,
+        doctorId: doctorId,
+      },
+    });
+    if (!doctorSchedule) {
+      throw new Error('No Doctor Schedule found');
+    }
+    return doctorSchedule;
+  }
+  static async updateStateSchedule(id:string){
+   
+    const doctorSchedule = await prisma.doctorSchedule.update({
+      where: {
+        id: id
+      },
+      data: {
+        isAvailable: false
+      }
+    });
+    if (!doctorSchedule) {
+      throw new Error('No Doctor Schedule found');
+    }
+    return doctorSchedule;
+  }
+
 }

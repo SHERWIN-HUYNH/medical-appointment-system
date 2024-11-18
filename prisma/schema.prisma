@@ -87,18 +87,14 @@ model Comment {
 
 model Appointment {
   id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  date               DateTime
-  timeSlots          String
-  reason             String
   status             AppointmentStatus @default(SCHEDULED)
   cancellationReason String?
-  note               String?
   profile            Profile   @relation(fields: [profileId], references: [id])
   profileId          String    @db.Uuid
   serviceId          String    @db.Uuid
+  doctorScheduleId   String @unique @db.Uuid
   Service            Service  @relation(fields: [serviceId],references:[id])
   payments           Bill?
-  doctorScheduleId   String @unique @db.Uuid
   doctorSchedule     DoctorSchedule @relation(fields: [doctorScheduleId],references:[id])
 }
 

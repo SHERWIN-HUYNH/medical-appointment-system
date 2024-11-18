@@ -22,15 +22,17 @@ export interface Profile {
   }
 
 export interface Appointment {
-  date: Date;
-  timeSlots: string;
   profileId: string;
   doctorScheduleId: string;
   serviceId: string;
-  reason: string;
   note: string;
   status: Status;
   cancellationReason: string;
+}
+export interface CreateAppointment{
+  profileId: string;
+  doctorScheduleId: string;
+  serviceId: string;
 }
 
 export interface Faculty {
@@ -79,14 +81,13 @@ export interface Doctor {
   doctorSchedule: Schedule[];
 }
 export interface Bill {
-  id: string;
-  date: string;
+  id?: string;
   price: number;
   appointmentId: string;
   userId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   status: string;
-  paymentMethod: string;
-  note: string;
+  paymentMethod?: string;
+  note?: string;
 }

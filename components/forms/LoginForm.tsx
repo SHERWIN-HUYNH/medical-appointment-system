@@ -15,11 +15,13 @@ import { PasswordInput } from '../PasswordInput';
 import { Label } from '../ui/label';
 import { signIn, useSession } from 'next-auth/react';
 import React from 'react';
+import { useAppointmentContext } from '@/context/AppointmentContext';
 export const LoginForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const { data: session } = useSession();
+  const {data,setData} = useAppointmentContext();
   const form = useForm<z.infer<typeof UserLogin>>({
     resolver: zodResolver(UserLogin),
     defaultValues: {
@@ -39,6 +41,8 @@ export const LoginForm = () => {
     }
     if (res?.ok) {
       setIsLoading(false);
+      setData({userId: session?.user.id});
+      console.log('CONTEXT USERID',data.userId)
       toast.success('Đăng nhập thành công');
       if (session?.user.roleName === 'USER') {
         router.push('/');

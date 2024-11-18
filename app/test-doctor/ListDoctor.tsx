@@ -61,6 +61,11 @@ const columns = [
     accessor: 'description',
     className: 'w-[25%] text-left pl-8',
   },
+  {
+    header: 'Thao tác',
+    accessor: 'actions',
+    className: 'w-[25%] text-left pl-16',
+  },
 ];
 
 const ListDoctor = () => {
@@ -237,7 +242,7 @@ const ListDoctor = () => {
       <td className="hidden md:table-cell text-left pl-8 line-clamp-2">
         {item.description}
       </td>
-      <td className="pr-4">
+      <td className="pl-4">
         <div className="flex items-center gap-2">
           <Link href={`/test-doctor/${item.id}/schedule`}>
             <Button className="w-auto h-10 flex items-center justify-center rounded-full bg-green-300">

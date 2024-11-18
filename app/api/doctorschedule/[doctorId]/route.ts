@@ -4,7 +4,7 @@ import {
   successResponse,
 } from '@/helpers/response';
 import { DoctorRespository } from '@/repositories/doctor';
-import { ScheduleRepository } from '@/repositories/doctorSchedule';
+import { DoctorScheduleRespository } from '@/repositories/doctorSchedule';
 
 export async function GET(req: Request, context: any) {
   const { doctorId } = context.params;
@@ -12,10 +12,7 @@ export async function GET(req: Request, context: any) {
   if (!doctor) {
     return notFoundResponse('NOT FOUND DOCTOR');
   }
-  const schedule = await ScheduleRepository.getDoctorSchedules(doctorId);
-  if (!schedule) {
-    return notFoundResponse('NOT FOUND SCHEDULE');
-  }
+  const schedule = await DoctorScheduleRespository.getDoctorSchedules(doctorId);
   return successResponse(schedule);
 }
 
@@ -26,7 +23,7 @@ export async function DELETE(req: Request, context: any) {
   if (!doctor) {
     return notFoundResponse('NOT FOUND DOCTOR');
   }
-  const schedule = await ScheduleRepository.deleteDoctorSchedule(doctor.id, schedules);
+  const schedule = await DoctorScheduleRespository.deleteDoctorSchedule(doctor.id, schedules);
   if (!schedule) {
     return notFoundResponse('NOT FOUND SCHEDULE');
   }
@@ -40,7 +37,7 @@ export async function POST(req: Request, context: any) {
   if (!doctor) {
     return notFoundResponse('NOT FOUND DOCTOR');
   }
-  const schedule = await ScheduleRepository.saveSchedule(doctor.id, schedules);
+  const schedule = await DoctorScheduleRespository.saveSchedule(doctor.id, schedules);
   if (!schedule) {
     return badRequestResponse('FAIL TO SAVE SCHEDULE');
   }

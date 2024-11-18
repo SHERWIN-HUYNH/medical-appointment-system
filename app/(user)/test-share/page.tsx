@@ -1,22 +1,15 @@
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import React from 'react';
+'use client'
+
+import { useAppointmentContext } from "@/context/AppointmentContext";
+import ServerComponent from "./_component/ServerComponent";
+import React from "react";
 
 const Test = () => {
-  console.log('STRIPE',process.env.NEXT_PUBLIC_STRIPE_API_KEY as string)
+  const {data,setData }= useAppointmentContext();
+  setData({userId: '123'})
+  console.log(data);
   return (
-    <Button>
-      <Link
-        href={{
-          pathname: '/choose-schedule',
-          query: {
-            value: 'hello',
-          },
-        }}
-      >
-        SHARE DATA
-      </Link>
-    </Button>
+    <ServerComponent userId={data?.userId ?? 'sfsfsdfd'} />
   );
 };
 

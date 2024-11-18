@@ -14,6 +14,8 @@ declare interface CreateUserParams {
   phone: string;
 }
 declare interface User extends CreateUserParams {
+  id: unknown;
+  roleName: unknown;
   $id: string;
 }
 
