@@ -2,6 +2,10 @@ import { DoctorScheduleRespository } from '@/repositories/doctorSchedule';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+async function main() {
+  
+  const facultyId = '051735cd-fb23-47cf-bfa9-9931131a58e6';
+
 
 async function main() {
   const doctorId= '3663a05b-138a-443d-a7bc-6f04730d4753'
@@ -15,6 +19,8 @@ const doctorSchedule = await prisma.doctorSchedule.findFirst({
 console.log('doctorSchedule',doctorSchedule)
 }
 
+
+}
 main()
   .catch((e) => {
     console.error(e);

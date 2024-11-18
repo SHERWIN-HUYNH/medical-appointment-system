@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { academicTitles } from '@/lib/data';
+import { toast } from 'sonner';
 
 type Doctor = {
   id: string;
@@ -30,22 +31,45 @@ type Faculty = {
 };
 
 const columns = [
-  { header: 'STT', accessor: 'index', className: 'w-[5%]' },
-  { header: 'Bác sĩ', accessor: 'doctor' },
-  { header: 'Học hàm/học vị', accessor: 'academicTitle' },
-  { header: 'Chuyên khoa', accessor: 'facultyName' },
-  { header: 'Hình ảnh', accessor: 'imageDoctor' },
+  {
+    header: 'STT',
+    accessor: 'index',
+    className: 'w-[8%] text-left pl-5',
+  },
+  {
+    header: 'Bác sĩ',
+    accessor: 'doctor',
+    className: 'w-[20%] text-left pl-8',
+  },
+  {
+    header: 'Học hàm/học vị',
+    accessor: 'academicTitle',
+    className: 'w-[20%] text-left pl-8',
+  },
+  {
+    header: 'Chuyên khoa',
+    accessor: 'facultyName',
+    className: 'w-[20%] text-left pl-8',
+  },
+  {
+    header: 'Hình ảnh',
+    accessor: 'imageDoctor',
+    className: 'w-[15%] text-left pl-8',
+  },
   {
     header: 'Mô tả',
     accessor: 'description',
-    className: 'hidden md:table-cell ',
+    className: 'w-[25%] text-left pl-8',
+  },
+  {
+    header: 'Thao tác',
+    accessor: 'actions',
+    className: 'w-[25%] text-left pl-16',
   },
 ];
 
 const ListDoctor = () => {
   const [doctorData, setDoctorData] = useState<Doctor[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const [showModal, setShowModal] = useState(false);
@@ -61,16 +85,12 @@ const ListDoctor = () => {
 
   useEffect(() => {
     const fetchDoctorData = async () => {
-      setLoading(true);
       const response = await fetch(`/api/doctor`);
 
       if (response.ok) {
         const data = await response.json();
         setDoctorData(data);
-      } else {
-        setError('Failed to fetch faculties');
       }
-      setLoading(false);
     };
 
     const fetchFacultyData = async () => {
@@ -78,8 +98,6 @@ const ListDoctor = () => {
       if (response.ok) {
         const data = await response.json();
         setFacultyData(data);
-      } else {
-        setError('Failed to fetch faculties');
       }
     };
 
@@ -118,17 +136,14 @@ const ListDoctor = () => {
         body: JSON.stringify({ doctor: doctorToDelete }),
       });
 
-      const data = await response.json();
-
       if (response.ok) {
         // Cập nhật state sau khi xóa thành công
         setDoctorData((prevData) =>
           prevData.filter((doctor) => doctor.id !== doctorToDelete.id),
         );
-        showMessage(`Bác sĩ ${doctorToDelete.name} đã xóa thành công!`);
+        toast.success(`Bác sĩ ${doctorToDelete.name} đã xóa thành công!`);
       } else {
-        // Hiển thị thông báo lỗi cụ thể từ server
-        showMessage(data.message || 'Không thể xóa bác sĩ!');
+        toast.error('Không thể xóa bác sĩ đang có lịch hẹn!');
       }
     } catch (error) {
       console.error('Error deleting doctor:', error);
@@ -209,23 +224,26 @@ const ListDoctor = () => {
       key={item.id}
       className="h-15 border-b border-slate-200 even:bg-slate-50 text-sm hover:bg-blue-50"
     >
-      <td className="hidden lg:table-cell text-center">{item.index}</td>
-      <td className="text-center">{item.name}</td>
-      <td className="text-center">{getAcademicTitleName(item.academicTitle)}</td>
-      <td className="text-center">{getFacultyName(item.facultyId)}</td>
-      <td className="text-center">
+      <td className="text-left pl-7">{item.index}</td>
+      <td className="text-left pl-8 truncate max-w-[200px]">{item.name}</td>
+      <td className="text-left pl-8 truncate">
+        {getAcademicTitleName(item.academicTitle)}
+      </td>
+      <td className="text-left pl-8 truncate">{getFacultyName(item.facultyId)}</td>
+      <td className="text-left pl-8">
         <img
           src={`/assets/doctor/${item.image}`}
           alt={item.name}
-          width={100}
-          height={100}
-          className="rounded mx-auto"
+          width={80}
+          height={80}
+          className="rounded object-cover"
         />
       </td>
-
-      <td className="hidden md:table-cell text-center">{item.description}</td>
-      <td>
-        <div className="flex items-center gap-2 justify-center">
+      <td className="hidden md:table-cell text-left pl-8 line-clamp-2">
+        {item.description}
+      </td>
+      <td className="pl-4">
+        <div className="flex items-center gap-2">
           <Link href={`/test-doctor/${item.id}/schedule`}>
             <Button className="w-auto h-10 flex items-center justify-center rounded-full bg-green-300">
               <CalendarRange size={20} strokeWidth={1.75} color="white" />
@@ -251,9 +269,9 @@ const ListDoctor = () => {
   );
 
   return (
-    <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0 relative">
+    <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0 relative min-h-screen flex flex-col">
       {/* TOP */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-4">
         <h1 className="hidden md:block text-lg font-semibold text-primary">
           Quản lý bác sĩ
         </h1>
@@ -353,16 +371,18 @@ const ListDoctor = () => {
         </div>
       )}
       {/* LIST */}
-      <div className="overflow-x-auto">
+      <div className="flex-1 overflow-x-auto w-full">
         <Table columns={columns} data={dataWithIndex} renderRow={renderRow} />
       </div>
 
       {/* Pagination */}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+      <div className="mt-auto pt-4">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
 
       {/* Modal Confirm Delete */}
       {showModal && (

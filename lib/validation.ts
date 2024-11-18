@@ -109,6 +109,7 @@ export const DoctorFormValidation = z.object({
   faculty: z.string().min(1, 'Chuyên khoa không được để trống'),
   description: z.string().min(1, 'Mô tả không được để trống'),
   isActive: z.boolean(),
+  gender: z.boolean(),
 });
 export const CreateAppointmentSchema = z.object({
   primaryPhysician: z.string().min(2, 'Select at least one doctor'),
