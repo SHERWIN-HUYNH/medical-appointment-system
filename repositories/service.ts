@@ -1,6 +1,5 @@
 import { Service } from '@/types/interface';
 import { PrismaClient } from '@prisma/client';
-import { connect } from 'http2';
 import { FacultyRepository } from './faculty';
 
 const prisma = new PrismaClient();

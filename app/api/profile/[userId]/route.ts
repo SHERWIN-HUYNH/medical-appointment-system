@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { ProfileRespository } from '@/repositories/profile';
 import { Profile } from '@/types/interface';
 import {
@@ -8,14 +7,12 @@ import {
   successResponse,
   unauthorizedResponse,
 } from '@/helpers/response';
-import internal from 'stream';
 export async function POST(req: Request, context: any) {
   const { profile }: { profile: Profile } = await req.json();
   const { userId } = context.params;
   if (!userId) {
     return unauthorizedResponse('UNAUTHENTICATED');
   }
-
   const profileId = profile?.id;
   const newProfile = await ProfileRespository.createProfile({
     profileData: profile,

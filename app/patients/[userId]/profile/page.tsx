@@ -135,7 +135,7 @@ const Profile = () => {
           <div className="rounded-lg lg:col-span-2 p-4 bg-white w-full">
             {selectedOption === 1 && (
               <div>
-                <p className="text-slate-300 text-xs">PATIENT'S RECORDS</p>
+                <p className="text-slate-300 text-xs">PATIENT&apos;S RECORDS</p>
                 <h2 className="text-lg font-bold">Danh sách hồ sơ bệnh nhân</h2>
                 <hr className="w-full border-t-2 border-primary mt-4" />
                 <br />

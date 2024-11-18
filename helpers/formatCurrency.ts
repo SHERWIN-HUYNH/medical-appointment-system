@@ -1,4 +1,6 @@
 export const formatPrice = (value: string): string => {
-  const numericValue = value.replace(/\D/g, '');
-  return new Intl.NumberFormat('vi-VN').format(Number(numericValue)) + 'VND';
+  const numericValue = parseFloat(value.replace(/\D/g, ''));
+  return numericValue.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
+  
 };
+
