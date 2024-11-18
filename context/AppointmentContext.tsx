@@ -8,6 +8,7 @@ type AppointmentData = {
   serviceId?: string;
   doctorId?: string;
   scheduleId?: string;
+  userId?: string;
 };
 
 type AppointmentContextType = {
@@ -19,11 +20,9 @@ const AppointmentContext = createContext<AppointmentContextType | null>(null);
 
 export const AppointmentProvider = ({ children }: { children: React.ReactNode }) => {
   const [data, setData] = useState<AppointmentData>({});
-
   const updateData = (newData: Partial<AppointmentData>) => {
     setData((prev) => ({ ...prev, ...newData }));
   };
-
   return (
     <AppointmentContext.Provider value={{ data, setData: updateData }}>
       {children}

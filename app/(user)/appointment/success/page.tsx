@@ -1,11 +1,10 @@
-'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import React from 'react';
 import { User } from 'lucide-react';
 import Stripe from 'stripe';
-import { notFound, useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 const RequestSuccess = async ({
@@ -13,9 +12,10 @@ const RequestSuccess = async ({
 }: {
   searchParams: { payment_intent: string };
 }) => {
-  const { userId } = useParams();
+  const userId = '243rwkefskf';
   const paymentIntent = await stripe.paymentIntents.retrieve(searchParams.payment_intent);
-  if (paymentIntent.metadata.billId == null) return notFound();
+  console.log('PAYMENT INTENT', paymentIntent)
+  if (paymentIntent.metadata.billId == null) return <h1>NOT FOUND</h1>;
   const isSuccess = paymentIntent.status === 'succeeded';
   return (
     <div className=" flex h-screen max-h-screen px-[5%] bg-[#4158D0] bg-[linear-gradient(43deg,#4158D0_0%,#C850C0_46%,#FFCC70_100%)]">
@@ -79,7 +79,6 @@ const RequestSuccess = async ({
           ) : (
             <Link href={`/appointment/${userId}/payment`}>Quay lại trang thanh toán</Link>
           )}
-          <Link href={`/patients/${userId}/new-appointment`}>Quay lại Trang chủ</Link>
         </Button>
 
         <p className="copyright">© 2024 CarePluse</p>

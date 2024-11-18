@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import DefaultLayout from '@/components/Layouts/defaultLayout';
 import Chart from '@/components/Charts/page';

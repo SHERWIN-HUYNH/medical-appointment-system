@@ -1,5 +1,5 @@
 'use client';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import {
   Elements,
   PaymentElement,
@@ -20,6 +20,7 @@ import { Button } from './ui/button';
 // import { useParams, useSearchParams } from 'next/navigation';
 import { formatPrice } from '@/helpers/formatCurrency';
 import { useAppointmentContext } from '@/context/AppointmentContext';
+import { useSession } from 'next-auth/react';
 
 type CheckoutFormProps = {
   clientSecret: string;
@@ -30,8 +31,9 @@ type CheckoutFormProps = {
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY as string);
 export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps) {
   const { data } = useAppointmentContext();
-  console.log('CONTEXT DATA');
-  if (clientSecret == '') return <h1>Chưa có sản phẩm</h1>;
+  console.log('CONTEXT DATA',data)
+  if(clientSecret == '')
+    return <h1>Chưa có sản phẩm</h1>
 
   return (
     <div className="mx-auto card-container animation">
@@ -321,7 +323,7 @@ function Form({ price }: { price: string }) {
       .confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/old-payment`,
+          return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/appointment/success`,
         },
       })
       .then(({ error }) => {
@@ -332,7 +334,7 @@ function Form({ price }: { price: string }) {
         }
       })
       .finally(() => setIsLoading(false));
-    console.log('SUCCESS OR NOT');
+    
   };
   return (
     <form onSubmit={handleSumit}>

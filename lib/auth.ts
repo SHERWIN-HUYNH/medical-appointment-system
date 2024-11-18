@@ -4,6 +4,9 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import prisma from './prisma';
 import { UserRepository } from '@/repositories/user';
 import { compare } from 'bcrypt';
+import { JWT } from 'next-auth/jwt';
+import { AdapterUser } from 'next-auth/adapters';
+
 export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
   adapter: PrismaAdapter(prisma),
@@ -45,8 +48,9 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user }) {
       if (user) {
+        console.log('token', token,user);
         return {
           ...token,
           id: user.id,
@@ -57,17 +61,16 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-
-    async session({ session, token, user }) {
+   
+    async session({ session, token }) {
       return {
         ...session,
         user: {
           ...session.user,
           id: token.id,
-          name: token.name,
-          email: token.email,
           roleName: token.roleName,
         },
+        infor: {token}
       };
     },
     async redirect({ url, baseUrl }) {

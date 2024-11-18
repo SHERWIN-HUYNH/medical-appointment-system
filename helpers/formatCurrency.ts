@@ -5,3 +5,4 @@ export const formatPrice = (value: string | number): string => {
     currency: 'VND',
   });
 };
+
