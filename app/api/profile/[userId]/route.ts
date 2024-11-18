@@ -10,10 +10,11 @@ import {
 export async function POST(req: Request, context: any) {
   const { profile }: { profile: Profile } = await req.json();
   const { userId } = context.params;
+  console.log('PROFILE: ', profile);
+  console.log('USER ID: ', userId);
   if (!userId) {
     return unauthorizedResponse('UNAUTHENTICATED');
   }
-  const profileId = profile?.id;
   const newProfile = await ProfileRespository.createProfile({
     profileData: profile,
     userId,

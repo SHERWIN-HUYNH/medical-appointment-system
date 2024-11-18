@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Eraser, UserRoundPlus, Undo2 } from "lucide-react"; 
-import React, { useState } from "react";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { Button } from '@/components/ui/button';
+import { Eraser, UserRoundPlus, Undo2 } from 'lucide-react';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { useSession } from 'next-auth/react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 import {
   Select,
   SelectContent,
@@ -17,8 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import Header from "@/components/homepage/Header";
-import Footer from "@/components/homepage/Footer";
+import Header from '@/components/homepage/Header';
+import Footer from '@/components/homepage/Footer';
 
 const Add_Profile = () => {
   const initialFormData = {
@@ -31,6 +31,7 @@ const Add_Profile = () => {
     identificationDocumentUrl: '',
     pastMedicalHistory: '',
     birthDate: '',
+    symptom: '',
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -38,6 +39,7 @@ const Add_Profile = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const { data: session } = useSession();
   const router = useRouter();
+  const today = new Date().toISOString().split('T')[0];
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -47,6 +49,25 @@ const Add_Profile = () => {
 
     if (name === 'identificationNumber' && isValidIdentificationNumber(value)) {
       setErrorMessage('');
+    }
+  };
+
+  const capitalizeWords = (text: string) => {
+    return text
+      .trim()
+      .split(/\s+/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+  const capitalizeFirstLetterOfSentence = (str: string) => {
+    if (str.length === 0) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const charCode = event.key;
+    if (!/^\d$/.test(charCode)) {
+      event.preventDefault();
     }
   };
 
@@ -78,7 +99,14 @@ const Add_Profile = () => {
       setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.');
       return;
     }
-    const formattedBirthDate = formData.birthDate ? new Date(formData.birthDate) : null;
+    const formattedData = {
+      ...formData,
+      name: capitalizeWords(formData.name),
+      symptom: capitalizeFirstLetterOfSentence(formData.symptom),
+      pastMedicalHistory: capitalizeFirstLetterOfSentence(formData.pastMedicalHistory),
+      birthDate: formData.birthDate ? new Date(formData.birthDate) : null,
+    };
+
     const response = await fetch(`/api/profile/${session?.user?.id}`, {
       method: 'POST',
       headers: {
@@ -86,16 +114,13 @@ const Add_Profile = () => {
       },
       body: JSON.stringify({
         action: 'create',
-        profile: {
-          ...formData,
-          birthDate: formattedBirthDate, 
-        },
+        profile: formattedData,
       }),
     });
 
     if (response.ok) {
       const data = await response.json();
-      toast.success("Thêm hồ sơ khám bệnh thành công");
+      toast.success('Thêm hồ sơ khám bệnh thành công');
       router.back();
     } else {
       const errorText = await response.text();
@@ -109,14 +134,14 @@ const Add_Profile = () => {
       <div className="flex justify-start mt-20 ml-24">
         <Button
           className="bg-slate-400 text-white rounded hover:bg-slate-300 px-4 py-2"
-          onClick={() => router.push(`/patients/${session?.user?.id}/profile`)}
+          onClick={() => router.back()}
         >
           <Undo2 className="w-4 h-4 inline mr-1" />
           Quay lại
         </Button>
       </div>
 
-      <div className="mt-[30px] h-max mb-10">
+      <div className="mt-[22px] h-max mb-10">
         <div className="w-2/3 mx-auto h-max rounded-lg bg-slate-100 p-6 lg:col-span-2 text-center">
           <h1 className="text-lg mb-4">TẠO HỒ SƠ KHÁM BỆNH</h1>
           <hr className="w-2/3 mx-auto mt-10 border-slate-400 mb-4" />
@@ -156,6 +181,7 @@ const Add_Profile = () => {
                 value={formData.birthDate}
                 onChange={handleChange}
                 required
+                max={today}
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
               />
@@ -182,6 +208,7 @@ const Add_Profile = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
+                onKeyPress={handleKeyPress}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
@@ -240,20 +267,35 @@ const Add_Profile = () => {
             </div>
 
             <div className="rounded-lg bg-slate-100 p-1">
-              <Label className="block mb-1 text-left">Số giấy định danh</Label>
-              <Input
-                type="text"
-                name="identificationNumber"
-                value={formData.identificationNumber}
-                onChange={handleChange}
-                required
-                className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: '30px', fontSize: '14px' }}
-                placeholder="Nhập số giấy định danh"
-              />
-              {errorMessage && (
-                <p className="text-red-500 text-xs mt-1 text-left">{errorMessage}</p>
-              )}
+              <div>
+                <Label className="block mb-1 text-left">Số giấy định danh</Label>
+                <Input
+                  type="text"
+                  name="identificationNumber"
+                  value={formData.identificationNumber}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-1 border border-slate-300 rounded text-sm"
+                  style={{ height: '30px', fontSize: '14px' }}
+                  placeholder="Nhập số giấy định danh"
+                />
+                {errorMessage && (
+                  <p className="text-red-500 text-xs mt-1 text-left">{errorMessage}</p>
+                )}
+              </div>
+              <div className="rounded-lg bg-slate-100 ">
+                <Label className="block mt-5 mb-1 text-left">Triệu chứng</Label>
+                <Input
+                  type="text"
+                  name="symptom"
+                  value={formData.symptom}
+                  onChange={handleChange}
+                  required
+                  className="w-full mt-1 border border-slate-300 rounded text-sm"
+                  style={{ height: '30px', fontSize: '14px' }}
+                  placeholder="Nhập triệu chứng bệnh"
+                />
+              </div>
             </div>
 
             <div className="rounded-lg bg-slate-100 p-1">
@@ -269,7 +311,7 @@ const Add_Profile = () => {
             </div>
 
             <div className="rounded-lg w-full bg-slate-100 p-1 lg:col-span-2">
-              <Label className="block mb-1 text-left">Đường dẫn giấy tờ</Label>
+              <Label className="block mb-1 text-left">Hình ảnh bảo hiểm y tế</Label>
               <Input
                 type="file"
                 accept="image/*"
@@ -293,7 +335,7 @@ const Add_Profile = () => {
             <div className="lg:col-span-2 text-right">
               <Button
                 type="submit"
-                className="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-300 mr-2"
+                className="px-4 py-2 bg-primary text-white rounded hover:bg-blue-300 mr-2"
               >
                 <UserRoundPlus className="w-4 h-4 inline mr-1" />
                 Tạo hồ sơ
@@ -301,7 +343,7 @@ const Add_Profile = () => {
               <Button
                 type="button"
                 onClick={handleReset}
-                className="px-4 py-2 bg-slate-500 text-white rounded hover:bg-slate-400"
+                className="px-4 py-2 bg-slate-400 text-white rounded hover:bg-slate-300"
               >
                 <Eraser className="w-4 h-4 inline mr-1" />
                 Nhập lại
