@@ -33,6 +33,7 @@ const Edit_Profile = () => {
   const identificationDocumentUrl = searchParams.get('identificationDocumentUrl');
   const pastMedicalHistory = searchParams.get('pastMedicalHistory');
   const birthDate = searchParams.get('birthDate');
+  const symptom = searchParams.get('symptom');
 
   const [formData, setFormData] = useState({
     name: name || '',
@@ -44,9 +45,11 @@ const Edit_Profile = () => {
     identificationDocumentUrl: identificationDocumentUrl || '',
     pastMedicalHistory: pastMedicalHistory || '',
     birthDate: birthDate || '',
+    symptom: symptom || '',
   });
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const today = new Date().toISOString().split('T')[0];
   const [errorMessage, setErrorMessage] = useState('');
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -59,7 +62,23 @@ const Edit_Profile = () => {
       setErrorMessage('');
     }
   };
-
+  const capitalizeWords = (text: string) => {
+    return text
+      .trim()
+      .split(/\s+/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+  const capitalizeFirstLetterOfSentence = (str: string) => {
+    if (str.length === 0) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const charCode = event.key;
+    if (!/^\d$/.test(charCode)) {
+      event.preventDefault();
+    }
+  };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
@@ -83,7 +102,13 @@ const Edit_Profile = () => {
       return;
     }
 
-    const formattedBirthDate = formData.birthDate ? new Date(formData.birthDate) : null;
+    const formattedData = {
+      ...formData,
+      name: capitalizeWords(formData.name),
+      symptom: capitalizeFirstLetterOfSentence(formData.symptom),
+      pastMedicalHistory: capitalizeFirstLetterOfSentence(formData.pastMedicalHistory),
+      birthDate: formData.birthDate ? new Date(formData.birthDate) : null,
+    };
 
     try {
       const response = await fetch(`/api/profile/${session?.user?.id}`, {
@@ -93,9 +118,8 @@ const Edit_Profile = () => {
         },
         body: JSON.stringify({
           profile: {
-            ...formData,
+            ...formattedData,  
             id: id,
-            birthDate: formattedBirthDate,
           },
         }),
       });
@@ -167,6 +191,7 @@ const Edit_Profile = () => {
                     ? new Date(formData.birthDate).toISOString().slice(0, 10)
                     : ''
                 }
+                max={today}
                 onChange={handleChange}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
@@ -194,6 +219,7 @@ const Edit_Profile = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
+                onKeyPress={handleKeyPress}
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
@@ -254,6 +280,7 @@ const Edit_Profile = () => {
             </div>
 
             <div className="rounded-lg bg-slate-100 p-1">
+              <div>
               <Label className="block mb-1 text-left">Số giấy định danh</Label>
               <Input
                 type="text"
@@ -269,7 +296,20 @@ const Edit_Profile = () => {
                 <p className="text-red-500 text-xs mt-1 text-left">{errorMessage}</p>
               )}
             </div>
-
+            <div className="rounded-lg bg-slate-100 ">
+                <Label className="block mt-5 mb-1 text-left">Triệu chứng</Label>
+                <Input
+                  type="text"
+                  name="symptom"
+                  value={formData.symptom}
+                  onChange={handleChange}
+                  required
+                  className="w-full mt-1 border border-slate-300 rounded text-sm"
+                  style={{ height: '30px', fontSize: '14px' }}
+                  placeholder="Nhập triệu chứng bệnh"
+                />
+              </div>
+            </div>
             <div className="rounded-lg bg-slate-100 p-1">
               <Label className="block mb-1 text-left">Lịch sử bệnh án</Label>
               <Textarea

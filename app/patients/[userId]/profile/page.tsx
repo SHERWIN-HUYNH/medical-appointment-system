@@ -8,7 +8,6 @@ import {
   Cake,
   CircleDot,
   CircleUser,
-  FlipVertical2,
   Mails,
   PencilLine,
   Smartphone,
@@ -209,6 +208,7 @@ const Profile = () => {
                               identificationDocumentUrl:
                                 profile.identificationDocumentUrl,
                               pastMedicalHistory: profile.pastMedicalHistory,
+                              symptom: profile.symptom,
                               birthDate: profile.birthDate
                                 ? profile.birthDate.toString()
                                 : '',
