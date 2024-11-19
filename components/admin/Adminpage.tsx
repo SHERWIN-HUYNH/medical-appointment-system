@@ -1,19 +1,12 @@
 import { StatCard } from '@/components/StatCard';
 import { columns } from '@/components/table/columns';
 import { DataTable } from '@/components/table/DataTable';
-import { AppointmentRepository } from '@/repositories/appointment';
+import { getRecentAppointmentList } from '@/lib/action/appointment.actions';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 const AdminPage = async () => {
-  const appointments = await AppointmentRepository.getAllAppointments();
-  const countAppointment = await AppointmentRepository.CountAppointment();
-  const pendingCount =
-    countAppointment.find((item) => item.status === 'PENDING')?.count || 0;
-  const scheduledCount =
-    countAppointment.find((item) => item.status === 'SCHEDULED')?.count || 0;
-  const cancelledCount =
-    countAppointment.find((item) => item.status === 'CANCELLED')?.count || 0;
+  const appointments = await getRecentAppointmentList();
   if (!appointments) return <div>Something went wrong</div>;
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14 p-4 md:p-6 2xl:p-10">
@@ -40,25 +33,25 @@ const AdminPage = async () => {
         <section className="admin-stat">
           <StatCard
             type="appointments"
-            count={scheduledCount}
+            count={appointments.scheduledCount}
             label="Scheduled appointments"
             icon={'/assets/icons/appointments.svg'}
           />
           <StatCard
             type="pending"
-            count={pendingCount}
+            count={appointments.pendingCount}
             label="Pending appointments"
             icon={'/assets/icons/pending.svg'}
           />
           <StatCard
             type="cancelled"
-            count={cancelledCount}
+            count={appointments.cancelledCount}
             label="Cancelled appointments"
             icon={'/assets/icons/cancelled.svg'}
           />
         </section>
 
-        <DataTable columns={columns} data={appointments} />
+        <DataTable columns={columns} data={appointments.documents} />
       </main>
     </div>
   );
