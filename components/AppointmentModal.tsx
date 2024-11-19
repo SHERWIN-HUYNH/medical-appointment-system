@@ -6,16 +6,16 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Appointment } from '@/types/appwrite.types';
+import React from 'react';
 
 import { AppointmentForm } from './forms/AppointmentForm';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import { AppointmentSchedule } from '@/types/interface';
 
 export const AppointmentModal = ({
   patientId,
@@ -25,7 +25,7 @@ export const AppointmentModal = ({
 }: {
   patientId: string;
   userId: string;
-  appointment?: Appointment;
+  appointment?: AppointmentSchedule;
   type: 'schedule' | 'cancel' | 'Chi tiết' | 'Hủy';
   title: string;
   description: string;

@@ -11,9 +11,6 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
 } from '@tanstack/react-table';
-import Image from 'next/image';
-import { redirect } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -24,15 +21,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { decryptKey } from '@/lib/utils';
 import React from 'react';
 import { Input } from '../ui/input';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
 import { MoveLeft, MoveRight } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {

@@ -13,6 +13,7 @@ export interface Profile {
   identificationNumber: string;
   identificationDocumentUrl: string;
   pastMedicalHistory: string;
+  userId: string;
 }
 export interface UserRole {
   id: string;
@@ -28,6 +29,24 @@ export interface Appointment {
   note: string;
   status: Status;
   cancellationReason: string;
+}
+interface DoctorSchedule {
+  id: string;
+  doctorId: string;
+  scheduleId: string;
+  isAvailable: boolean;
+  schedule: Schedule; // Full schedule object
+  doctor: Doctor; // Full doctor object
+}
+export interface AppointmentSchedule {
+  id: string;
+  status: Status;
+  cancellationReason: string | null;
+  profileId: string;
+  serviceId: string;
+  doctorScheduleId: string;
+  profile: Profile; // Full profile object
+  doctorSchedule: DoctorSchedule; // Full doctor schedule object
 }
 export interface CreateAppointment {
   profileId: string;

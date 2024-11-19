@@ -87,7 +87,7 @@ model Comment {
 
 model Appointment {
   id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  status             AppointmentStatus @default(SCHEDULED)
+  status             AppointmentStatus @default(PENDING)
   cancellationReason String?
   profile            Profile   @relation(fields: [profileId], references: [id])
   profileId          String    @db.Uuid
