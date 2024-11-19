@@ -98,109 +98,115 @@ const Doctor = () => {
 
   return (
     <div>
-      <div  className="relative  mt-16 w-full h-[250px] bg-sky-100 bg-cover bg-center">
-      <div className="absolute inset-0 flex items-center ml-45 bg-opacity-25">
-        <div className="text-left text-black p-6 bg-white bg-opacity-90 rounded-xl max-w-2xl shadow-lg">
-          <h1 className="text-4xl font-semibold text-primary">ĐẶT KHÁM THEO BÁC SĨ</h1>
-          <p className="mt-2 text-xl mb-4">Chủ động chọn bác sĩ mà bạn tin tưởng, an tâm khám bệnh</p>
+      <div className="relative  mt-16 w-full h-[250px] bg-sky-100 bg-cover bg-center">
+        <div className="absolute inset-0 flex items-center ml-45 bg-opacity-25">
+          <div className="text-left text-black p-6 bg-white bg-opacity-90 rounded-xl max-w-2xl shadow-lg">
+            <h1 className="text-4xl font-semibold text-primary">ĐẶT KHÁM THEO BÁC SĨ</h1>
+            <p className="mt-2 text-xl mb-4">
+              Chủ động chọn bác sĩ mà bạn tin tưởng, an tâm khám bệnh
+            </p>
+          </div>
         </div>
-      </div>
-      <img
-        src="https://cdn.medpro.vn/prod-partner/9a085fa0-374e-4aca-9ffe-6e6d2c5c03e7-dat-kham-theo-bac-si.webp"
-        alt="Doctor and Nurse"
-        className="absolute bottom-0 right-0 w-1/4 max-w-[350px]  mr-35"
-        style={{ objectFit: 'contain' }}
-      />
-    </div>
-   
-    <DoctorLayout>
-      <div className="flex justify-center mt-2 px-2 pt-1.5 pb-4">
-        <div className="w-full bg-white p-1  rounded-2xl shadow-md">
-          <FormProvider {...formMethods}>
-            <form className="flex justify-center items-center gap-4">
-              <Input
-                type="text"
-                value={searchQuery}
-                onChange={handleSearch}
-                placeholder="Tìm kiếm bác sĩ"
-                className="p-2 w-5/6 text-sm border-white rounded-xl focus:ring-white"
-              />
-              <select
-                value={selectedTitle}
-                onChange={handleTitleFilter}
-                className="p-2 text-sm text-primary border-white focus:ring-white rounded-xl"
-              >
-                <option value="">Học hàm</option>
-                <option value="Thạc sĩ">Thạc sĩ</option>
-                <option value="Tiến sĩ">Tiến sĩ</option>
-                <option value="Giáo sư">Giáo sư</option>
-              </select>
-              <select
-                value={selectedfaculty}
-                onChange={handlefacultyFilter}
-                className="p-2 text-sm text-primary border-white focus:ring-white rounded-xl"
-              >
-                <option value="">Chuyên khoa</option>
-                {faculties.map((faculty) => (
-                  <option key={faculty.id} value={faculty.name}>
-                    {faculty.name}
-                  </option>
-                ))}
-              </select>
-            </form>
-          </FormProvider>
-        </div>
-      </div>
-
-      <div className="flex justify-center py-4">
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {displayedDoctors.length > 0 ? (
-            displayedDoctors.map((doctor) => (
-              <div
-                key={doctor.id}
-                className="bg-white p-2 rounded-lg shadow-md hover:scale-105 hover:border-primary border border-transparent"
-              >
-                <div className="flex items-center">
-                  <img
-                    src={doctor.image}
-                    alt={doctor.name}
-                    className="w-24 h-24 rounded-lg object-cover mr-4"
-                  />
-                  <div className="flex-grow">
-                    <h3 className="text-lg font-semibold text-primary">{doctor.name}</h3>
-                    <p className="text-sm text-slate-500 mt-2">
-                      <span className="font-bold">Học hàm:</span> {doctor.academicTitle}
-                    </p>
-                    <p className="text-sm text-slate-500">
-                      <span className="font-bold">Chuyên khoa:</span> {doctor.facultyName}
-                    </p>
-                    <p className="text-sm text-slate-500">
-                      <span className="font-bold">Giới thiệu:</span> {doctor.description}
-                    </p>
-                  </div>
-                </div>
-                <hr className="mt-2 text-slate-300" />
-                <div className="flex justify-end mt-2">
-                  <Button className="w-32 text-white bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] hover:from-[#67e0f3] hover:to-[#e7f1f2] rounded-3xl">
-                    Đặt khám
-                  </Button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="text-center text-slate-500">Không tìm thấy bác sĩ phù hợp.</p>
-          )}
-        </div>
-      </div>
-
-      <div className="flex  justify-center ">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
+        <img
+          src="https://cdn.medpro.vn/prod-partner/9a085fa0-374e-4aca-9ffe-6e6d2c5c03e7-dat-kham-theo-bac-si.webp"
+          alt="Doctor and Nurse"
+          className="absolute bottom-0 right-0 w-1/4 max-w-[350px]  mr-35"
+          style={{ objectFit: 'contain' }}
         />
       </div>
-    </DoctorLayout>
+
+      <DoctorLayout>
+        <div className="flex justify-center mt-2 px-2 pt-1.5 pb-4">
+          <div className="w-full bg-white p-1  rounded-2xl shadow-md">
+            <FormProvider {...formMethods}>
+              <form className="flex justify-center items-center gap-4">
+                <Input
+                  type="text"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  placeholder="Tìm kiếm bác sĩ"
+                  className="p-2 w-5/6 text-sm border-white rounded-xl focus:ring-white"
+                />
+                <select
+                  value={selectedTitle}
+                  onChange={handleTitleFilter}
+                  className="p-2 text-sm text-primary border-white focus:ring-white rounded-xl"
+                >
+                  <option value="">Học hàm</option>
+                  <option value="Thạc sĩ">Thạc sĩ</option>
+                  <option value="Tiến sĩ">Tiến sĩ</option>
+                  <option value="Giáo sư">Giáo sư</option>
+                </select>
+                <select
+                  value={selectedfaculty}
+                  onChange={handlefacultyFilter}
+                  className="p-2 text-sm text-primary border-white focus:ring-white rounded-xl"
+                >
+                  <option value="">Chuyên khoa</option>
+                  {faculties.map((faculty) => (
+                    <option key={faculty.id} value={faculty.name}>
+                      {faculty.name}
+                    </option>
+                  ))}
+                </select>
+              </form>
+            </FormProvider>
+          </div>
+        </div>
+
+        <div className="flex justify-center py-4">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {displayedDoctors.length > 0 ? (
+              displayedDoctors.map((doctor) => (
+                <div
+                  key={doctor.id}
+                  className="bg-white p-2 rounded-lg shadow-md hover:scale-105 hover:border-primary border border-transparent"
+                >
+                  <div className="flex items-center">
+                    <img
+                      src={doctor.image}
+                      alt={doctor.name}
+                      className="w-24 h-24 rounded-lg object-cover mr-4"
+                    />
+                    <div className="flex-grow">
+                      <h3 className="text-lg font-semibold text-primary">
+                        {doctor.name}
+                      </h3>
+                      <p className="text-sm text-slate-500 mt-2">
+                        <span className="font-bold">Học hàm:</span> {doctor.academicTitle}
+                      </p>
+                      <p className="text-sm text-slate-500">
+                        <span className="font-bold">Chuyên khoa:</span>{' '}
+                        {doctor.facultyName}
+                      </p>
+                      <p className="text-sm text-slate-500">
+                        <span className="font-bold">Giới thiệu:</span>{' '}
+                        {doctor.description}
+                      </p>
+                    </div>
+                  </div>
+                  <hr className="mt-2 text-slate-300" />
+                  <div className="flex justify-end mt-2">
+                    <Button className="w-32 text-white bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] hover:from-[#67e0f3] hover:to-[#e7f1f2] rounded-3xl">
+                      Đặt khám
+                    </Button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-slate-500">Không tìm thấy bác sĩ phù hợp.</p>
+            )}
+          </div>
+        </div>
+
+        <div className="flex  justify-center ">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      </DoctorLayout>
     </div>
   );
 };

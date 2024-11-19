@@ -1,14 +1,14 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Undo2, PenLine } from "lucide-react";
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+'use client';
+import { Button } from '@/components/ui/button';
+import { Undo2, PenLine } from 'lucide-react';
+import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import {
   Select,
   SelectContent,
@@ -16,8 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import Header from "@/components/homepage/Header";
-import Footer from "@/components/homepage/Footer";
+import Header from '@/components/homepage/Header';
+import Footer from '@/components/homepage/Footer';
 
 const Edit_Profile = () => {
   const { data: session } = useSession();
@@ -101,7 +101,7 @@ const Edit_Profile = () => {
       });
 
       if (response.ok) {
-        toast.success("Sửa hồ sơ khám bệnh thành công");
+        toast.success('Sửa hồ sơ khám bệnh thành công');
         router.back();
       } else {
         toast.error('Sửa hồ sơ khám bệnh thất bại. Vui lòng thử lại!');

@@ -26,8 +26,8 @@ export class DoctorRespository {
   static async getDoctores() {
     const doctors = await prisma.doctor.findMany({
       where: {
-        isDeleted: false
-      }
+        isDeleted: false,
+      },
     });
     await prisma.$disconnect();
     return doctors;
@@ -93,22 +93,22 @@ export class DoctorRespository {
   }
   static async deleteDoctor(doctorId: string) {
     if (!doctorId) {
-        throw new Error('Doctor ID is missing.');
+      throw new Error('Doctor ID is missing.');
     }
 
     const hasActiveAppointments = await this.hasAppointments(doctorId);
     if (hasActiveAppointments) {
-        throw new Error('Bác sĩ đang có lịch hẹn không thể xóa');
+      throw new Error('Bác sĩ đang có lịch hẹn không thể xóa');
     }
 
     const deletedDoctor = await prisma.doctor.update({
-        where: {
-            id: doctorId,
-        },
-        data: {
-            isDeleted: true,
-            isActive: false
-        }
+      where: {
+        id: doctorId,
+      },
+      data: {
+        isDeleted: true,
+        isActive: false,
+      },
     });
 
     await prisma.$disconnect();
@@ -117,20 +117,20 @@ export class DoctorRespository {
 
   static async hasAppointments(doctorId: string): Promise<boolean> {
     const doctorSchedule = await prisma.doctorSchedule.findFirst({
-        where: {
-            AND: [
-                { doctorId: doctorId },
-                {
-                    appointment: {
-                        status: {
-                            in: [AppointmentStatus.PENDING]
-                        }
-                    }
-                }
-            ]
-        }
+      where: {
+        AND: [
+          { doctorId: doctorId },
+          {
+            appointment: {
+              status: {
+                in: [AppointmentStatus.PENDING],
+              },
+            },
+          },
+        ],
+      },
     });
-    
+
     await prisma.$disconnect();
     return doctorSchedule !== null;
   }
@@ -155,27 +155,27 @@ export class DoctorRespository {
     const doctors = await prisma.doctor.findMany({
       where: {
         facultyId: facultyId,
-        isActive: true
+        isActive: true,
       },
       include: {
         faculty: true,
         doctorSchedule: {
           include: {
-            schedule: true
+            schedule: true,
           },
           where: {
-            isAvailable: true
-          }
-        }
-      }
+            isAvailable: true,
+          },
+        },
+      },
     });
 
     // Gom nhóm các lịch theo thứ trong tuần
-    const doctorsWithScheduleDays = doctors.map(doctor => {
+    const doctorsWithScheduleDays = doctors.map((doctor) => {
       // Tạo Map để lưu trữ ngày đại diện cho mỗi thứ trong tuần
       const daysByWeekday = new Map<string, string>();
-      
-      doctor.doctorSchedule.forEach(ds => {
+
+      doctor.doctorSchedule.forEach((ds) => {
         const weekday = getDayOfWeek(ds.schedule.date);
         // Nếu thứ này chưa có trong Map, thêm vào với ngày đầu tiên gặp
         if (!daysByWeekday.has(weekday)) {
@@ -188,7 +188,7 @@ export class DoctorRespository {
 
       return {
         ...doctor,
-        scheduleDays: uniqueDays
+        scheduleDays: uniqueDays,
       };
     });
     await prisma.$disconnect();

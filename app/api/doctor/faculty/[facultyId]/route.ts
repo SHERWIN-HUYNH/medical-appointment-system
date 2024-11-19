@@ -1,7 +1,4 @@
-import {
-  badRequestResponse,
-  successResponse,
-} from '@/helpers/response';
+import { badRequestResponse, successResponse } from '@/helpers/response';
 import { DoctorRespository } from '@/repositories/doctor';
 
 export async function GET(req: Request, context: { params: { facultyId: string } }) {

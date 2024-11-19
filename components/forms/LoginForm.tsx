@@ -21,7 +21,7 @@ export const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const { data: session } = useSession();
-  const {data,setData} = useAppointmentContext();
+  const { data, setData } = useAppointmentContext();
   const form = useForm<z.infer<typeof UserLogin>>({
     resolver: zodResolver(UserLogin),
     defaultValues: {
@@ -41,8 +41,8 @@ export const LoginForm = () => {
     }
     if (res?.ok) {
       setIsLoading(false);
-      setData({userId: session?.user.id});
-      console.log('CONTEXT USERID',data.userId)
+      setData({ userId: session?.user.id });
+      console.log('CONTEXT USERID', data.userId);
       toast.success('Đăng nhập thành công');
       if (session?.user.roleName === 'USER') {
         router.push('/');

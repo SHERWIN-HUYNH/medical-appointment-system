@@ -1,7 +1,6 @@
-import { useAppointmentContext } from "@/context/AppointmentContext";
-
+import { useAppointmentContext } from '@/context/AppointmentContext';
 
 export async function getContextValue() {
-    const {data} = useAppointmentContext();
-    return data;
+  const { data } = useAppointmentContext();
+  return data;
 }

@@ -14,7 +14,7 @@ const RequestSuccess = async ({
 }) => {
   const userId = '243rwkefskf';
   const paymentIntent = await stripe.paymentIntents.retrieve(searchParams.payment_intent);
-  console.log('PAYMENT INTENT', paymentIntent)
+  console.log('PAYMENT INTENT', paymentIntent);
   if (paymentIntent.metadata.billId == null) return <h1>NOT FOUND</h1>;
   const isSuccess = paymentIntent.status === 'succeeded';
   return (

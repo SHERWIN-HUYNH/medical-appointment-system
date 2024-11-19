@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Eraser, UserRoundPlus, Undo2 } from "lucide-react"; 
-import React, { useState } from "react";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { Button } from '@/components/ui/button';
+import { Eraser, UserRoundPlus, Undo2 } from 'lucide-react';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { useSession } from 'next-auth/react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 import {
   Select,
   SelectContent,
@@ -17,8 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import Header from "@/components/homepage/Header";
-import Footer from "@/components/homepage/Footer";
+import Header from '@/components/homepage/Header';
+import Footer from '@/components/homepage/Footer';
 
 const Add_Profile = () => {
   const initialFormData = {
@@ -88,14 +88,14 @@ const Add_Profile = () => {
         action: 'create',
         profile: {
           ...formData,
-          birthDate: formattedBirthDate, 
+          birthDate: formattedBirthDate,
         },
       }),
     });
 
     if (response.ok) {
       const data = await response.json();
-      toast.success("Thêm hồ sơ khám bệnh thành công");
+      toast.success('Thêm hồ sơ khám bệnh thành công');
       router.back();
     } else {
       const errorText = await response.text();

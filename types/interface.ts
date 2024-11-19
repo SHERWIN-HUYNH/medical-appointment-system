@@ -1,24 +1,26 @@
 declare type Gender = 'MALE' | 'FEMALE' | 'OTHER';
 declare type Status = 'PENDING' | 'SCHEDULED' | 'CANCELLED';
 export interface Profile {
-    id: string; 
-    name: string;
-    birthDate?: Date; 
-    gender: Gender;
-    email: string;
-    phone: string;
-    allergies ?:string;
-    identificationType: string;
-    identificationNumber: string;
-    identificationDocumentUrl: string; 
-    pastMedicalHistory : string; 
-  }
-  export interface UserRole {
-    id: string;
-    name: string;
-    email: string;
-    roleName: string;
-  }
+  id: string;
+  name: string;
+  birthDate?: Date;
+  gender: Gender;
+  email: string;
+  phone: string;
+  allergies?: string;
+  symptom: string;
+  identificationType: string;
+  identificationNumber: string;
+  identificationDocumentUrl: string;
+  pastMedicalHistory: string;
+  userId: string;
+}
+export interface UserRole {
+  id: string;
+  name: string;
+  email: string;
+  roleName: string;
+}
 
 export interface Appointment {
   profileId: string;
@@ -28,7 +30,25 @@ export interface Appointment {
   status: Status;
   cancellationReason: string;
 }
-export interface CreateAppointment{
+interface DoctorSchedule {
+  id: string;
+  doctorId: string;
+  scheduleId: string;
+  isAvailable: boolean;
+  schedule: Schedule; // Full schedule object
+  doctor: Doctor; // Full doctor object
+}
+export interface AppointmentSchedule {
+  id: string;
+  status: Status;
+  cancellationReason: string | null;
+  profileId: string;
+  serviceId: string;
+  doctorScheduleId: string;
+  profile: Profile; // Full profile object
+  doctorSchedule: DoctorSchedule; // Full doctor schedule object
+}
+export interface CreateAppointment {
   profileId: string;
   doctorScheduleId: string;
   serviceId: string;

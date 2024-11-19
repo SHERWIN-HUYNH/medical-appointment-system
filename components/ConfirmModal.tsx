@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -6,7 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -34,13 +34,11 @@ const ConfirmModal = ({
           <Button variant="outline" onClick={onClose} className="border-slate-300 ">
             Hủy
           </Button>
-          <Button onClick={onConfirm}>
-            Xác nhận
-          </Button>
+          <Button onClick={onConfirm}>Xác nhận</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default ConfirmModal; 
+export default ConfirmModal;

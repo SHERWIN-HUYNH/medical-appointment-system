@@ -1,24 +1,17 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-import { SelectItem } from '@/components/ui/select';
-import { Doctors } from '@/constants';
-
+import React from 'react';
 import { getAppointmentSchema } from '@/lib/validation';
-import { Appointment } from '@/types/appwrite.types';
-
-import 'react-datepicker/dist/react-datepicker.css';
-
 import CustomFormField, { FormFieldType } from '../CustomFormField';
 import SubmitButton from '../SubmitButton';
 import { Form } from '../ui/form';
-import { createAppointment, updateAppointment } from '@/lib/action/appointment.actions';
+import { createAppointment } from '@/lib/action/appointment.actions';
+import { AppointmentSchedule } from '@/types/interface';
 
 export const AppointmentForm = ({
   userId,
@@ -30,7 +23,7 @@ export const AppointmentForm = ({
   userId: string;
   patientId: string;
   type: 'create' | 'schedule' | 'cancel' | 'Chi tiết' | 'Hủy';
-  appointment?: Appointment;
+  appointment?: AppointmentSchedule;
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
@@ -40,10 +33,12 @@ export const AppointmentForm = ({
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryPhysician: appointment ? appointment?.primaryPhysician : '',
-      schedule: appointment ? new Date(appointment?.schedule!) : new Date(Date.now()),
-      reason: appointment ? appointment.reason : '',
-      note: appointment?.note || '',
+      primaryPhysician: appointment ? appointment?.doctorSchedule.doctor.name : '',
+      schedule: appointment
+        ? new Date(appointment?.doctorSchedule.schedule.date)
+        : new Date(Date.now()),
+      reason: appointment ? appointment.profile.symptom : '',
+      note: appointment?.profile.pastMedicalHistory || '',
       cancellationReason: appointment?.cancellationReason || '',
     },
   });
@@ -88,7 +83,7 @@ export const AppointmentForm = ({
         console.log('UPDATE WORKING');
         const appointmentToUpdate = {
           userId,
-          appointmentId: appointment?.$id!,
+          appointmentId: appointment?.id,
           appointment: {
             primaryPhysician: values.primaryPhysician,
             schedule: new Date(values.schedule),
@@ -98,13 +93,14 @@ export const AppointmentForm = ({
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           type,
         };
+        // Code to cancell an appointment
+        // const updatedAppointment = await updateAppointment(appointmentToUpdate);
 
-        const updatedAppointment = await updateAppointment(appointmentToUpdate);
-
-        if (updatedAppointment) {
-          setOpen && setOpen(false);
-          form.reset();
-        }
+        // if (updatedAppointment) {
+        //   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        //   setOpen && setOpen(false);
+        //   form.reset();
+        // }
       }
     } catch (error) {
       console.log(error);
@@ -121,6 +117,7 @@ export const AppointmentForm = ({
       buttonLabel = 'Schedule Appointment';
       break;
     default:
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       buttonLabel = 'Submit Apppointment';
   }
 
@@ -137,27 +134,12 @@ export const AppointmentForm = ({
         {type !== 'cancel' && (
           <>
             <CustomFormField
-              fieldType={FormFieldType.SELECT}
+              fieldType={FormFieldType.INPUT}
               control={form.control}
               name="primaryPhysician"
               label="Bác sĩ"
               placeholder="Select a doctor"
-            >
-              {Doctors.map((doctor, i) => (
-                <SelectItem key={doctor.name + i} value={doctor.name}>
-                  <div className="flex cursor-pointer items-center gap-2">
-                    <Image
-                      src={doctor.image}
-                      width={32}
-                      height={32}
-                      alt="doctor"
-                      className="rounded-full border border-dark-500"
-                    />
-                    <p>{doctor.name}</p>
-                  </div>
-                </SelectItem>
-              ))}
-            </CustomFormField>
+            ></CustomFormField>
 
             <CustomFormField
               fieldType={FormFieldType.DATE_PICKER}
@@ -206,13 +188,11 @@ export const AppointmentForm = ({
             placeholder="Họp đột xuất"
           />
         )}
-
         <SubmitButton
           isLoading={isLoading}
           className={`${type === 'cancel' ? 'shad-danger-btn' : 'shad-primary-btn'} w-full`}
         >
-          {/* //  {buttonLabel} */}
-          Xác nhận
+          Đóng
         </SubmitButton>
       </form>
     </Form>

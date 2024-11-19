@@ -173,9 +173,9 @@ const ChooseService = () => {
                     key={service.id}
                     href={{
                       pathname: '/choose-schedule',
-                      query: { 
-                        doctorName: doctorName 
-                      }
+                      query: {
+                        doctorName: doctorName,
+                      },
                     }}
                     className="p-4 border border-slate-200 rounded-lg hover:bg-slate-100"
                   >
