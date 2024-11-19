@@ -23,7 +23,10 @@ export async function DELETE(req: Request, context: any) {
   if (!doctor) {
     return notFoundResponse('NOT FOUND DOCTOR');
   }
-  const schedule = await DoctorScheduleRespository.deleteDoctorSchedule(doctor.id, schedules);
+  const schedule = await DoctorScheduleRespository.deleteDoctorSchedule(
+    doctor.id,
+    schedules,
+  );
   if (!schedule) {
     return notFoundResponse('NOT FOUND SCHEDULE');
   }

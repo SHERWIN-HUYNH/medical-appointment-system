@@ -7,11 +7,10 @@ import {
   successResponse,
   unauthorizedResponse,
 } from '@/helpers/response';
-export async function POST(req: Request, context: any) {
+
+export async function POST(req: Request, context: { params: { userId: string } }) {
   const { profile }: { profile: Profile } = await req.json();
   const { userId } = context.params;
-  console.log('PROFILE: ', profile);
-  console.log('USER ID: ', userId);
   if (!userId) {
     return unauthorizedResponse('UNAUTHENTICATED');
   }
@@ -26,9 +25,13 @@ export async function POST(req: Request, context: any) {
     return badRequestResponse('FAIL TO CREATE PROFILE');
   }
 }
-export async function PUT(req: Request, context: any) {
+
+export async function PUT(req: Request, context: { params: { userId: string } }) {
   const { profile }: { profile: Profile } = await req.json();
   const { userId } = context.params;
+  if (!userId) {
+    return unauthorizedResponse('UNAUTHENTICATED');
+  }
   const checkprofile = await ProfileRespository.getListProfileByUserId(profile.id);
   if (!checkprofile) {
     return notFoundResponse('NOT FOUND PROFILE');
@@ -44,19 +47,28 @@ export async function PUT(req: Request, context: any) {
     return badRequestResponse('FAIL TO UPDATE PROFILE');
   }
 }
+
 export async function GET(request: Request, context: { params: { userId: string } }) {
   const { userId } = context.params;
+  if (!userId) {
+    return unauthorizedResponse('UNAUTHENTICATED');
+  }
   try {
     const profiles = await ProfileRespository.getListProfileByUserId(userId);
     if (!profiles || profiles.length === 0) {
       return notFoundResponse('NOT FOUND PROFILE');
     }
     return successResponse(profiles);
-  } catch (error: any) {
-    console.error('Error fetching profiles:', error.message || error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error fetching profiles:', error.message);
+    } else {
+      console.error('Error fetching profiles:', error);
+    }
     return internalServerErrorResponse('FAIL TO GET LIST PROFILE');
   }
 }
+
 export async function DELETE(req: Request) {
   const { profileValues }: { profileValues: Profile } = await req.json();
 
@@ -67,8 +79,12 @@ export async function DELETE(req: Request) {
     }
     await ProfileRespository.deleteProfile({ profileData: profileValues });
     return successResponse('DELETE PROFILE SUCCESSFULLY');
-  } catch (error: any) {
-    console.error('Error deleting profile:', error.message || error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error deleting profile:', error.message);
+    } else {
+      console.error('Error deleting profile:', error);
+    }
     return internalServerErrorResponse('FAIL TO DELETE PROFILE');
   }
 }

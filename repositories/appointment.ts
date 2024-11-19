@@ -38,14 +38,18 @@ export class AppointmentRepository {
     }
   }
 
-  static async createAppointment({doctorScheduleId,serviceId,profileId}:CreateAppointment) {
+  static async createAppointment({
+    doctorScheduleId,
+    serviceId,
+    profileId,
+  }: CreateAppointment) {
     try {
       const newAppointment = await prisma.appointment.create({
-        data:{
+        data: {
           doctorScheduleId,
           serviceId,
-          profileId
-        }
+          profileId,
+        },
       });
       return newAppointment;
     } catch (error) {

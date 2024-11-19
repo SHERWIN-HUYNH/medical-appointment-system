@@ -108,7 +108,7 @@ const ChooseFaculty = () => {
                     key={faculty.id}
                     href={{
                       pathname: '/choose-doctor',
-                      query: { facultyName: faculty.name }
+                      query: { facultyName: faculty.name },
                     }}
                     onClick={() => handleFacultyClick(faculty.id)}
                     className="py-2 px-3 hover:bg-gray-50 text-slate-500 hover:text-primary cursor-pointer border-b border-slate-200 transition-all duration-300 ease-in-out"

@@ -7,7 +7,7 @@ export async function POST() {
     const { data, error } = await resend.emails.send({
       from: `Acme <${process.env.SENDER_EMAIL}>`,
       to: ['ngduyen946@gmail.com'],
-      subject: "Hello world",
+      subject: 'Hello world',
       react: '<h1>Send email</h1>',
     });
 

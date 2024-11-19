@@ -15,7 +15,7 @@ const ChooseService = () => {
   const searchParams = useSearchParams();
   const doctorName = searchParams.get('doctorName');
   const facultyName = searchParams.get('facultyName');
-  const doctorId = data.doctorId;
+  // const doctorId = data.doctorId;
   const facultyId = data.facultyId;
   const [isLoading, setIsLoading] = useState(false);
 
@@ -45,7 +45,7 @@ const ChooseService = () => {
     };
 
     fetchServices();
-  }, [facultyId]);
+  }, [facultyId, router]);
 
   const filteredServices = services.filter((service) =>
     String(service.name || '')
@@ -173,9 +173,9 @@ const ChooseService = () => {
                     key={service.id}
                     href={{
                       pathname: '/choose-schedule',
-                      query: { 
-                        doctorName: doctorName 
-                      }
+                      query: {
+                        doctorName: doctorName,
+                      },
                     }}
                     className="p-4 border border-slate-200 rounded-lg hover:bg-slate-100"
                   >

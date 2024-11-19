@@ -26,7 +26,7 @@ const ChooseDoctor = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data, setData } = useAppointmentContext();
-  
+
   const facultyId = data.facultyId;
   const facultyName = searchParams.get('facultyName');
 
@@ -212,17 +212,16 @@ const ChooseDoctor = () => {
                       key={doctor.id}
                       href={{
                         pathname: '/choose-service',
-                        query: { 
-                          doctorName: doctor.name, 
-                          facultyName: facultyName 
-                        }
+                        query: {
+                          doctorName: doctor.name,
+                          facultyName: facultyName,
+                        },
                       }}
                       onClick={() => {
                         handleDoctorClick(facultyId!, doctor.id);
                       }}
                       className="p-4 hover:bg-slate-50 cursor-pointer rounded-lg border border-slate-200 shadow-sm bg-white transition-all hover:shadow-md"
                     >
-                    
                       <div className="flex flex-col gap-2">
                         <div className="flex items-center gap-2">
                           <svg
@@ -314,13 +313,14 @@ const ChooseDoctor = () => {
                               <line x1="8" x2="8" y1="2" y2="6" />
                               <line x1="3" x2="21" y1="10" y2="10" />
                             </svg>
-                            <span>Lịch khám: {
-                              doctor.scheduleDays ? 
-                              sortDayOfWeek(doctor.scheduleDays)
-                                .map(day => getDayOfWeek(day))
-                                .join(', ') 
-                              : 'Chưa có lịch khám'
-                            }</span>
+                            <span>
+                              Lịch khám:{' '}
+                              {doctor.scheduleDays
+                                ? sortDayOfWeek(doctor.scheduleDays)
+                                    .map((day) => getDayOfWeek(day))
+                                    .join(', ')
+                                : 'Chưa có lịch khám'}
+                            </span>
                           </div>
                         </div>
                       </div>

@@ -1,14 +1,14 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Undo2, PenLine } from "lucide-react";
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+'use client';
+import { Button } from '@/components/ui/button';
+import { Undo2, PenLine } from 'lucide-react';
+import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import {
   Select,
   SelectContent,
@@ -16,8 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import Header from "@/components/homepage/Header";
-import Footer from "@/components/homepage/Footer";
+import Header from '@/components/homepage/Header';
+import Footer from '@/components/homepage/Footer';
 
 const Edit_Profile = () => {
   const { data: session } = useSession();
@@ -118,14 +118,14 @@ const Edit_Profile = () => {
         },
         body: JSON.stringify({
           profile: {
-            ...formattedData,  
+            ...formattedData,
             id: id,
           },
         }),
       });
 
       if (response.ok) {
-        toast.success("Sửa hồ sơ khám bệnh thành công");
+        toast.success('Sửa hồ sơ khám bệnh thành công');
         router.back();
       } else {
         toast.error('Sửa hồ sơ khám bệnh thất bại. Vui lòng thử lại!');
@@ -281,22 +281,22 @@ const Edit_Profile = () => {
 
             <div className="rounded-lg bg-slate-100 p-1">
               <div>
-              <Label className="block mb-1 text-left">Số giấy định danh</Label>
-              <Input
-                type="text"
-                name="identificationNumber"
-                value={formData.identificationNumber}
-                onChange={handleChange}
-                required
-                className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: '30px', fontSize: '14px' }}
-                placeholder="Nhập số giấy định danh"
-              />
-              {errorMessage && (
-                <p className="text-red-500 text-xs mt-1 text-left">{errorMessage}</p>
-              )}
-            </div>
-            <div className="rounded-lg bg-slate-100 ">
+                <Label className="block mb-1 text-left">Số giấy định danh</Label>
+                <Input
+                  type="text"
+                  name="identificationNumber"
+                  value={formData.identificationNumber}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-1 border border-slate-300 rounded text-sm"
+                  style={{ height: '30px', fontSize: '14px' }}
+                  placeholder="Nhập số giấy định danh"
+                />
+                {errorMessage && (
+                  <p className="text-red-500 text-xs mt-1 text-left">{errorMessage}</p>
+                )}
+              </div>
+              <div className="rounded-lg bg-slate-100 ">
                 <Label className="block mt-5 mb-1 text-left">Triệu chứng</Label>
                 <Input
                   type="text"

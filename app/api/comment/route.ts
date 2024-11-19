@@ -6,15 +6,19 @@ import {
 import { CommentRespository } from '@/repositories/comment';
 import { Comment } from '@/types/interface';
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const comments = await CommentRespository.getListComments();
     if (!comments || comments.length === 0) {
       return notFoundResponse('NOT FOUND COMMENT');
     }
     return successResponse(comments);
-  } catch (error: any) {
-    console.error('Error fetching comments:', error.message || error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error fetching comments:', error.message);
+    } else {
+      console.error('Unknown error fetching comments:', JSON.stringify(error));
+    }
     return internalServerErrorResponse('FAIL TO GET LIST COMMENT');
   }
 }
@@ -29,8 +33,12 @@ export async function DELETE(req: Request) {
     }
     await CommentRespository.deleteComment({ commentData: commentValues });
     return successResponse('DELETE PROFILE SUCCESSFULLY');
-  } catch (error: any) {
-    console.error('Error deleting profile:', error.message || error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error deleting profile:', error.message);
+    } else {
+      console.error('Unknown error deleting profile:', JSON.stringify(error));
+    }
     return internalServerErrorResponse('FAIL TO DELETE PROFILE');
   }
 }

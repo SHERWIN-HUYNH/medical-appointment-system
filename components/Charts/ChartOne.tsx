@@ -8,6 +8,8 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 });
 
+const chartTypeLine = 'line' as const;
+
 const options: ApexOptions = {
   legend: {
     show: false,
@@ -18,7 +20,7 @@ const options: ApexOptions = {
   chart: {
     fontFamily: 'Satoshi, sans-serif',
     height: 335,
-    type: 'area', // Dạng biểu đồ mặc định là "area"
+    type: chartTypeLine, // Sử dụng hằng số
     dropShadow: {
       enabled: true,
       color: '#623CEA14',
@@ -126,7 +128,7 @@ const ChartOne: React.FC = () => {
       { name: 'Năm 2022', data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45] },
       { name: 'Năm 2023', data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51] },
     ],
-    chartType: 'line' as 'line',
+    chartType: chartTypeLine, // Sử dụng hằng số
     yMax: 100, // Sử dụng biểu đồ vùng cho tháng
   };
 
@@ -136,7 +138,7 @@ const ChartOne: React.FC = () => {
     series: [
       { name: 'Doanh thu', data: [320, 450, 540, 600, 720] }, // Dữ liệu giả theo năm
     ],
-    chartType: 'line' as 'line', // Sử dụng biểu đồ đường cho năm
+    chartType: chartTypeLine, // Sử dụng biểu đồ đường cho năm
     yMax: 1000, // Giá trị tối đa của trục y cho năm
   };
 

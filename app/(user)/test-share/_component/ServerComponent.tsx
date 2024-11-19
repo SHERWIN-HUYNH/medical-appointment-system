@@ -1,10 +1,7 @@
+import React from 'react';
 
-import React from 'react'
+const ServerComponent = ({ userId }: { userId: string }) => {
+  return <div>ServerComponent {userId}</div>;
+};
 
-const ServerComponent =({userId}:{userId:string}) => {
-  return (
-    <div>ServerComponent {userId}</div>
-  )
-}
-
-export default ServerComponent
+export default ServerComponent;

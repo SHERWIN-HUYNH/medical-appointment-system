@@ -12,8 +12,11 @@ export async function GET() {
       return notFoundResponse('NOT FOUND DOCTOR');
     }
     return successResponse(doctors);
-  } catch (error: any) {
-    console.error('Error fetching doctors:', error.message || error);
+  } catch (error: unknown) {
+    console.error(
+      'Error fetching doctors:',
+      error instanceof Error ? error.message : error,
+    );
     return internalServerErrorResponse('FAIL TO GET LIST DOCTORS');
   }
 }

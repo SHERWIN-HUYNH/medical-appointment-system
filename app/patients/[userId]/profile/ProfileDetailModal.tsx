@@ -86,7 +86,7 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
             </p>
           </div>
           <div className="space-y-2">
-          <p className="flex items-center gap-2">
+            <p className="flex items-center gap-2">
               <Cable className="w-5 h-5 text-slate-400" />
               <span className="text-slate-400">Triệu chứng:</span>{' '}
               {profile.symptom || 'Không có'}

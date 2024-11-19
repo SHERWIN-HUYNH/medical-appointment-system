@@ -1,7 +1,5 @@
 import React from 'react';
 import { Input } from './ui/input';
-import { Search } from 'lucide-react';
-import { Button } from './ui/button';
 
 type TableSearchProps = {
   searchTerm: string;
