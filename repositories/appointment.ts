@@ -59,7 +59,6 @@ export class AppointmentRepository {
       await prisma.$disconnect();
     }
   }
-
   static async getAllAppointments() {
     try {
       const appointments = await prisma.appointment.findMany({
@@ -101,7 +100,7 @@ export class AppointmentRepository {
       await prisma.$disconnect();
     }
   }
-  
+
   static async getAppointmentsByProfileId(profileId: string) {
     try {
       const appointments = await prisma.appointment.findMany({
