@@ -115,20 +115,18 @@ export class DoctorScheduleRespository {
     }
     return doctorSchedule;
   }
-  static async updateStateSchedule(id:string){
-   
+  static async updateStateSchedule(id: string) {
     const doctorSchedule = await prisma.doctorSchedule.update({
       where: {
-        id: id
+        id: id,
       },
       data: {
-        isAvailable: false
-      }
+        isAvailable: false,
+      },
     });
     if (!doctorSchedule) {
       throw new Error('No Doctor Schedule found');
     }
     return doctorSchedule;
   }
-
 }

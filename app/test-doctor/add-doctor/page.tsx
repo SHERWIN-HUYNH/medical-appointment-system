@@ -13,7 +13,7 @@ import { z } from 'zod';
 import { DoctorFormValidation } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const AddDoctorPage = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([]);
@@ -139,7 +139,9 @@ const AddDoctorPage = () => {
                       {...register('name')}
                     />
                     {errors.name && (
-                      <span className="mt-1 text-sm text-red-500">{errors.name.message}</span>
+                      <span className="mt-1 text-sm text-red-500">
+                        {errors.name.message}
+                      </span>
                     )}
                   </div>
 
@@ -150,7 +152,9 @@ const AddDoctorPage = () => {
                       fieldName="faculty"
                     />
                     {errors.faculty && (
-                      <span className="mt-10 text-sm text-red-500">{errors.faculty.message}</span>
+                      <span className="mt-10 text-sm text-red-500">
+                        {errors.faculty.message}
+                      </span>
                     )}
                   </div>
 
@@ -165,7 +169,9 @@ const AddDoctorPage = () => {
                       {...register('description')}
                     />
                     {errors.description && (
-                      <span className="mt-1 text-sm text-red-500">{errors.description.message}</span>
+                      <span className="mt-1 text-sm text-red-500">
+                        {errors.description.message}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -176,9 +182,9 @@ const AddDoctorPage = () => {
                       Giới tính
                     </Label>
                     <RadioGroup
-                      defaultValue={form.getValues("gender") ? "true" : "false"}
+                      defaultValue={form.getValues('gender') ? 'true' : 'false'}
                       className="flex gap-4"
-                      onValueChange={(value) => form.setValue("gender", value === "true")}
+                      onValueChange={(value) => form.setValue('gender', value === 'true')}
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="true" id="male" />
@@ -190,7 +196,9 @@ const AddDoctorPage = () => {
                       </div>
                     </RadioGroup>
                     {errors.gender && (
-                      <span className="mt-1 text-sm text-red-500">{errors.gender.message}</span>
+                      <span className="mt-1 text-sm text-red-500">
+                        {errors.gender.message}
+                      </span>
                     )}
                   </div>
 
@@ -201,7 +209,9 @@ const AddDoctorPage = () => {
                       fieldName="academicTitle"
                     />
                     {errors.academicTitle && (
-                      <span className="mt-10 text-sm text-red-500">{errors.academicTitle.message}</span>
+                      <span className="mt-10 text-sm text-red-500">
+                        {errors.academicTitle.message}
+                      </span>
                     )}
                   </div>
 
@@ -216,7 +226,9 @@ const AddDoctorPage = () => {
                       onChange={handleImageChange}
                     />
                     {errors.image && (
-                      <span className="mt-1 text-sm text-red-500">{errors.image.message}</span>
+                      <span className="mt-1 text-sm text-red-500">
+                        {errors.image.message}
+                      </span>
                     )}
                     {imagePreview && (
                       <Image

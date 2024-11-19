@@ -8,7 +8,6 @@ export const academicTitles = [
   { id: 'acd07', name: 'Giáo sư' },
 ];
 
-
 export const bills = [
   {
     id: 1,

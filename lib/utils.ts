@@ -83,7 +83,7 @@ export const shortenTitle = (title: string) => {
     'Phó Giáo sư': 'PGS',
     'Tiến sĩ': 'TS BS',
     'Thạc sĩ': 'ThS BS',
-    'Bác sĩ Chuyên khoa I': 'BSCK I', 
+    'Bác sĩ Chuyên khoa I': 'BSCK I',
     'Bác sĩ Chuyên khoa II': 'BSCK II',
     'Bác sĩ Đa khoa': 'BSĐK',
   };
@@ -92,16 +92,16 @@ export const shortenTitle = (title: string) => {
 
 export const getDayOfWeek = (dateStr: string) => {
   const daysInVietnamese: { [key: string]: string } = {
-    'Mon': 'Thứ 2',
-    'Tue': 'Thứ 3',
-    'Wed': 'Thứ 4',
-    'Thu': 'Thứ 5',
-    'Fri': 'Thứ 6',
-    'Sat': 'Thứ 7',
-    'Sun': 'Chủ nhật'
+    Mon: 'Thứ 2',
+    Tue: 'Thứ 3',
+    Wed: 'Thứ 4',
+    Thu: 'Thứ 5',
+    Fri: 'Thứ 6',
+    Sat: 'Thứ 7',
+    Sun: 'Chủ nhật',
   };
-  
-  const [year, month, day] = dateStr.split('-').map(num => parseInt(num));
+
+  const [year, month, day] = dateStr.split('-').map((num) => parseInt(num));
   const date = new Date(year, month - 1, day);
   const dayOfWeek = date.toLocaleString('en-US', { weekday: 'short' });
   return daysInVietnamese[dayOfWeek] || dayOfWeek;
@@ -114,7 +114,7 @@ const dayOrder: { [key: string]: number } = {
   'Thứ 5': 4,
   'Thứ 6': 5,
   'Thứ 7': 6,
-  'Chủ nhật': 7
+  'Chủ nhật': 7,
 };
 
 export const sortDayOfWeek = (days: string[]) => {

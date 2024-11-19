@@ -14,7 +14,6 @@ import { Schedule } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { set } from 'zod';
 
-
 type ChooseScheduleProps = {
   doctorId: string;
   setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
@@ -26,7 +25,7 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
   const [morningTimeslot, setMorningTimeslot] = useState<TimeSlot[]>([]);
   const [eveningTimeslot, setEveningTimeslot] = useState<TimeSlot[]>([]);
   const [availableDates, setAvailableDates] = useState<string[]>([]);
-  const [apiData,setApiData] = useState<DoctorScheduleResult[]>();
+  const [apiData, setApiData] = useState<DoctorScheduleResult[]>();
   const updateAvailableDate = (date: string[]) => {
     setAvailableDates(date);
   };
@@ -51,7 +50,6 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
         .filter((item) => item.isAvailable)
         .map((item) => item.schedule.date);
       updateAvailableDate(dateFromApi);
-      
     }
     loadEvents();
   }, []);
@@ -63,20 +61,20 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
     const month = String(dateStr.getMonth() + 1).padStart(2, '0'); // Months are 0-based
     const day = String(dateStr.getDate()).padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`;
-  
+
     if (renderProps.isPast || !availableDates.includes(formattedDate)) {
-        return ['text-[#cfd9df]'];
-    } 
-    
+      return ['text-[#cfd9df]'];
+    }
+
     return ['valid-date-class'];
   };
   const handleDateClick = (info: DateClickArg) => {
     setSelectedDate(info.dateStr);
     const date = info.dateStr;
     const schedules = apiData?.filter((schedule) => schedule.schedule.date === date);
-    
+
     console.log('schedules', schedules);
-    if(availableDates.includes(date) && schedules) {
+    if (availableDates.includes(date) && schedules) {
       const morningSchedules = schedules
         .filter(({ schedule }) => {
           const [startHour] = schedule.timeSlot.split('-')[0].split(':').map(Number);
@@ -103,7 +101,7 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
     }
   };
   const router = useRouter();
-  const {data:session} = useSession();
+  const { data: session } = useSession();
 
   const handleSelectTimeSlot = (item: Schedule) => {
     const scheduleId = item.id;
@@ -112,8 +110,10 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
     const serviceId = 'cb407f19-b77e-493f-bd01-185991811840';
 
     // Set gia tri tam thoi de thuc hien goi du lieu
-    const profileId = 'dfb8c741-dedc-44d7-a734-23b16812ebe2'
-    router.push(`/appointment?date=${item.date}&timeSlot=${item.timeSlot}&doctorId=${doctorId}&userId=${userId}&serviceId=${serviceId}&scheduleId=${scheduleId}&facultyId=${facultyId}&profileId=${profileId}`);
+    const profileId = 'dfb8c741-dedc-44d7-a734-23b16812ebe2';
+    router.push(
+      `/appointment?date=${item.date}&timeSlot=${item.timeSlot}&doctorId=${doctorId}&userId=${userId}&serviceId=${serviceId}&scheduleId=${scheduleId}&facultyId=${facultyId}&profileId=${profileId}`,
+    );
   };
   return (
     <div>
