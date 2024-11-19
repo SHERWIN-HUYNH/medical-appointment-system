@@ -6,7 +6,7 @@ import {
 import { CommentRespository } from '@/repositories/comment';
 import { Comment } from '@/types/interface';
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const comments = await CommentRespository.getListComments();
     if (!comments || comments.length === 0) {

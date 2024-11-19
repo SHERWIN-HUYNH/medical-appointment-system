@@ -38,14 +38,18 @@ export class AppointmentRepository {
     }
   }
 
-  static async createAppointment({doctorScheduleId,serviceId,profileId}:CreateAppointment) {
+  static async createAppointment({
+    doctorScheduleId,
+    serviceId,
+    profileId,
+  }: CreateAppointment) {
     try {
       const newAppointment = await prisma.appointment.create({
-        data:{
+        data: {
           doctorScheduleId,
           serviceId,
-          profileId
-        }
+          profileId,
+        },
       });
       return newAppointment;
     } catch (error) {
@@ -56,6 +60,48 @@ export class AppointmentRepository {
     }
   }
 
+  static async getAllAppointments() {
+    try {
+      const appointments = await prisma.appointment.findMany({
+        include: {
+          profile: true,
+          doctorSchedule: {
+            include: {
+              schedule: true,
+              doctor: true,
+            },
+          },
+        },
+      });
+      return appointments;
+    } catch (error) {
+      console.error('Error retrieving appointments:', error);
+      throw error;
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+  static async CountAppointment() {
+    try {
+      const appointmentCounts = await prisma.appointment.groupBy({
+        by: ['status'],
+        _count: {
+          id: true,
+        },
+      });
+      const result = appointmentCounts.map((group) => ({
+        status: group.status,
+        count: group._count.id,
+      }));
+      return result;
+    } catch (error) {
+      console.error('Error retrieving appointments:', error);
+      throw error;
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+  
   static async getAppointmentsByProfileId(profileId: string) {
     try {
       const appointments = await prisma.appointment.findMany({
@@ -102,6 +148,8 @@ export class AppointmentRepository {
     } catch (error) {
       console.error('Error retrieving appointments:', error);
       throw error;
+    } finally {
+      await prisma.$disconnect();
     }
   }
 }
