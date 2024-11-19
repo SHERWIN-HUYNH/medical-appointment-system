@@ -1,57 +1,53 @@
-import {
-  badRequestResponse,
-  notFoundResponse,
-  successResponse,
-} from '@/helpers/response';
-import { FacultyRepository } from '@/repositories/faculty';
+import { badRequestResponse, notFoundResponse, successResponse } from '@/helpers/response'
+import { FacultyRepository } from '@/repositories/faculty'
 
 // Xử lý GET request - Lấy một hoặc tất cả chuyên khoa
 export async function GET() {
   try {
-    const faculties = await FacultyRepository.getFaculties();
-    return successResponse(faculties);
+    const faculties = await FacultyRepository.getFaculties()
+    return successResponse(faculties)
   } catch (error) {
-    console.log(error);
-    return badRequestResponse('Failed to fetch faculties');
+    console.log(error)
+    return badRequestResponse('Failed to fetch faculties')
   }
 }
 
 // Xử lý POST request - Tạo chuyên khoa mới
 export async function POST(req: Request) {
-  const faculty = await req.json();
+  const faculty = await req.json()
 
   if (!faculty) {
-    return badRequestResponse('MISSING SERVICE DATA');
+    return badRequestResponse('MISSING SERVICE DATA')
   }
 
-  const newFaculty = await FacultyRepository.createFaculty(faculty);
+  const newFaculty = await FacultyRepository.createFaculty(faculty)
 
   if (!newFaculty) {
-    return badRequestResponse('FAIL TO CREATE Faculty');
+    return badRequestResponse('FAIL TO CREATE Faculty')
   }
 
-  return successResponse(newFaculty);
+  return successResponse(newFaculty)
 }
 
 export async function PUT(req: Request) {
-  const { faculty } = await req.json();
-  const facultyData = await FacultyRepository.getFacultyById(faculty.id);
+  const { faculty } = await req.json()
+  const facultyData = await FacultyRepository.getFacultyById(faculty.id)
   if (!facultyData) {
-    return notFoundResponse('NOT FOUND FACULTY');
+    return notFoundResponse('NOT FOUND FACULTY')
   }
-  const updatedFaculty = await FacultyRepository.updateFaculty(faculty, facultyData.id);
+  const updatedFaculty = await FacultyRepository.updateFaculty(faculty, facultyData.id)
   if (!updatedFaculty) {
-    return badRequestResponse('FAIL TO UPDATE FACULTY');
+    return badRequestResponse('FAIL TO UPDATE FACULTY')
   }
-  return successResponse(updatedFaculty);
+  return successResponse(updatedFaculty)
 }
 
 // Xử lý DELETE request - Xóa chuyên khoa
 export async function DELETE(req: Request) {
-  const { faculty } = await req.json();
-  const deletedFaculty = await FacultyRepository.deleteFaculty(faculty);
+  const { faculty } = await req.json()
+  const deletedFaculty = await FacultyRepository.deleteFaculty(faculty)
   if (!deletedFaculty) {
-    return badRequestResponse('FAIL TO DELETE FACULTY');
+    return badRequestResponse('FAIL TO DELETE FACULTY')
   }
-  return successResponse(deletedFaculty);
+  return successResponse(deletedFaculty)
 }

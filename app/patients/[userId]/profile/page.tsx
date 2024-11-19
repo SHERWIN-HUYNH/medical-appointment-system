@@ -1,9 +1,9 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { RiEmpathizeFill, RiMoneyDollarCircleLine } from 'react-icons/ri';
-import { Button } from '@/components/ui/button';
-import { FaBookMedical, FaNewspaper, FaVenusMars } from 'react-icons/fa';
+'use client'
+import React, { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { RiEmpathizeFill, RiMoneyDollarCircleLine } from 'react-icons/ri'
+import { Button } from '@/components/ui/button'
+import { FaBookMedical, FaNewspaper, FaVenusMars } from 'react-icons/fa'
 import {
   Cake,
   CircleDot,
@@ -12,26 +12,26 @@ import {
   PencilLine,
   Smartphone,
   Trash2,
-} from 'lucide-react';
-import Link from 'next/link';
-import MedicalRecord from './MedicalRecord';
-import PaymentHistory from './PaymentHistory';
+} from 'lucide-react'
+import Link from 'next/link'
+import MedicalRecord from './MedicalRecord'
+import PaymentHistory from './PaymentHistory'
 
-import Modal from '@/components/Modal';
-import { toast } from 'sonner';
-import ProfileDetailModal from '@/app/patients/[userId]/profile/ProfileDetailModal';
-import type { Profile } from '@/types/interface';
-import Header from '@/components/homepage/Header';
-import Footer from '@/components/homepage/Footer';
+import Modal from '@/components/Modal'
+import { toast } from 'sonner'
+import ProfileDetailModal from '@/app/patients/[userId]/profile/ProfileDetailModal'
+import type { Profile } from '@/types/interface'
+import Header from '@/components/homepage/Header'
+import Footer from '@/components/homepage/Footer'
 
 const Profile = () => {
-  const [selectedOption, setSelectedOption] = useState(1);
-  const [profiles, setProfiles] = useState<Profile[]>([]);
-  const { data: session } = useSession();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [profileToDelete, setProfileToDelete] = useState<string | null>(null);
-  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
+  const [selectedOption, setSelectedOption] = useState(1)
+  const [profiles, setProfiles] = useState<Profile[]>([])
+  const { data: session } = useSession()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [profileToDelete, setProfileToDelete] = useState<string | null>(null)
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null)
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -41,24 +41,24 @@ const Profile = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-        });
+        })
         if (!response.ok) {
-          throw new Error('Lỗi khi lấy dữ liệu hồ sơ');
+          throw new Error('Lỗi khi lấy dữ liệu hồ sơ')
         }
-        const profiles = await response.json();
-        setProfiles(profiles);
+        const profiles = await response.json()
+        setProfiles(profiles)
       } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu hồ sơ:', error);
+        console.error('Lỗi khi lấy dữ liệu hồ sơ:', error)
       }
-    };
+    }
 
     if (session?.user?.id) {
-      fetchProfiles();
+      fetchProfiles()
     }
-  }, [session]);
+  }, [session])
 
   const handleDeleteProfile = async () => {
-    if (profileToDelete === null) return;
+    if (profileToDelete === null) return
 
     try {
       const response = await fetch(`/api/profile/${session?.user?.id}`, {
@@ -69,27 +69,27 @@ const Profile = () => {
         body: JSON.stringify({
           profileValues: { id: profileToDelete },
         }),
-      });
+      })
 
       if (!response.ok) {
-        toast.error('Lỗi khi xóa hồ sơ');
+        toast.error('Lỗi khi xóa hồ sơ')
       }
 
       setProfiles((prevProfiles) =>
         prevProfiles.filter((profile) => profile.id !== profileToDelete),
-      );
-      toast.success('Xóa hồ sơ thành công');
+      )
+      toast.success('Xóa hồ sơ thành công')
     } catch (error) {
-      toast.error('Lỗi khi xóa hồ sơ');
+      toast.error('Lỗi khi xóa hồ sơ')
     } finally {
-      setIsModalOpen(false);
-      setProfileToDelete(null);
+      setIsModalOpen(false)
+      setProfileToDelete(null)
     }
-  };
+  }
   const handleShowProfile = (profile: Profile) => {
-    setSelectedProfile(profile);
-    setIsDetailModalOpen(true);
-  };
+    setSelectedProfile(profile)
+    setIsDetailModalOpen(true)
+  }
 
   const Buttons = [
     { id: 1, name: 'Hồ sơ bệnh nhân', icon: <FaBookMedical /> },
@@ -99,7 +99,7 @@ const Profile = () => {
       name: 'Lịch sử thanh toán viện phí',
       icon: <RiMoneyDollarCircleLine />,
     },
-  ];
+  ]
 
   return (
     <div>
@@ -187,8 +187,8 @@ const Profile = () => {
                         <Button
                           className="bg-white text-red-400 hover:bg-red-400 hover:text-white text-sm"
                           onClick={() => {
-                            setProfileToDelete(profile.id);
-                            setIsModalOpen(true);
+                            setProfileToDelete(profile.id)
+                            setIsModalOpen(true)
                           }}
                         >
                           <Trash2 className="w-4 h-4 inline mr-1" />
@@ -277,7 +277,7 @@ const Profile = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Profile;
+export default Profile

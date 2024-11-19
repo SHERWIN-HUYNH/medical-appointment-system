@@ -1,7 +1,7 @@
-'use client';
+'use client'
 
-import React, { useState, useEffect } from 'react';
-import { Brain, Ear, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react'
+import { Brain, Ear, Search } from 'lucide-react'
 import {
   FaAllergies,
   FaAppleAlt,
@@ -19,50 +19,52 @@ import {
   FaWater,
   FaWheelchair,
   FaXRay,
-} from 'react-icons/fa';
-import { FaUserDoctor } from 'react-icons/fa6';
-import { GiBrain, GiBrokenBone, GiMuscleUp } from 'react-icons/gi';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
+} from 'react-icons/fa'
+import { FaUserDoctor } from 'react-icons/fa6'
+import { GiBrain, GiBrokenBone, GiMuscleUp } from 'react-icons/gi'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 
 // Định nghĩa type Faculty
 type Faculty = {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-};
+  id: string
+  name: string
+  description: string
+  image: string
+}
 
 const CategorySearch = () => {
   // State để lưu trữ danh sách faculty
-  const [faculties, setFaculties] = useState<Faculty[]>([]);
-  const [showAllCategories, setShowAllCategories] = useState<boolean>(false);
+  const [faculties, setFaculties] = useState<Faculty[]>([])
+  const [showAllCategories, setShowAllCategories] = useState<boolean>(false)
 
   // Fetch dữ liệu faculty khi component mount
   useEffect(() => {
     const fetchFaculties = async () => {
       try {
-        const response = await fetch('/api/faculty');
-        const data = await response.json();
-        setFaculties(data);
+        const response = await fetch('/api/faculty')
+        const data = await response.json()
+        setFaculties(data)
       } catch (error) {
-        console.error('Failed to fetch faculties:', error);
+        console.error('Failed to fetch faculties:', error)
       }
-    };
+    }
 
-    fetchFaculties();
-  }, []);
+    fetchFaculties()
+  }, [])
 
   // Thêm console.log để kiểm tra state
-  console.log('Current faculties:', faculties);
+  console.log('Current faculties:', faculties)
 
   const toggleShowAllCategories = () => {
-    setShowAllCategories(!showAllCategories);
-  };
+    setShowAllCategories(!showAllCategories)
+  }
 
   // Hiển thị danh sách các faculty dựa vào trạng thái showAllCategories
-  const displayFaculties = showAllCategories ? faculties.slice(0, 12) : faculties.slice(0, 6);
+  const displayFaculties = showAllCategories
+    ? faculties.slice(0, 12)
+    : faculties.slice(0, 6)
 
   return (
     <div className="mb-10 items-center px-5 flex flex-col gap-2">
@@ -84,8 +86,8 @@ const CategorySearch = () => {
           <div key={faculty.id}>
             <div className="flex flex-col text-center items-center p-5 bg-white border-2 border-slate-400 m-2 rounded-lg cursor-pointer hover:scale-105 transition-all ease-in-out gap-2">
               <div className="p-4 rounded-3xl bg-primary">
-                <Image 
-                  src={`/assets/icons/${faculty.image}`} 
+                <Image
+                  src={`/assets/icons/${faculty.image}`}
                   alt={faculty.name}
                   width={24}
                   height={24}
@@ -104,7 +106,7 @@ const CategorySearch = () => {
         {showAllCategories ? 'Thu gọn' : 'Xem thêm'}
       </Button>
     </div>
-  );
-};
+  )
+}
 
-export default CategorySearch;
+export default CategorySearch

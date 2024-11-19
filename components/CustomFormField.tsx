@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { E164Number } from 'libphonenumber-js/core';
-import Image from 'next/image';
-import ReactDatePicker from 'react-datepicker';
-import { Control } from 'react-hook-form';
-import PhoneInput from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
-import { Checkbox } from './ui/checkbox';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
-import { Input } from './ui/input';
-import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select';
-import { Textarea } from './ui/textarea';
-import React, { useState } from 'react';
-import { formatPrice } from '@/helpers/formatCurrency';
+import { E164Number } from 'libphonenumber-js/core'
+import Image from 'next/image'
+import ReactDatePicker from 'react-datepicker'
+import { Control } from 'react-hook-form'
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css'
+import { Checkbox } from './ui/checkbox'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
+import { Input } from './ui/input'
+import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select'
+import { Textarea } from './ui/textarea'
+import React, { useState } from 'react'
+import { formatPrice } from '@/helpers/formatCurrency'
 
 export enum FormFieldType {
   INPUT = 'input',
@@ -28,19 +28,19 @@ export enum FormFieldType {
 }
 
 interface CustomProps {
-  control: Control<any>;
-  name: string;
-  label?: string;
-  placeholder?: string;
-  iconSrc?: string;
-  iconAlt?: string;
-  disabled?: boolean;
-  dateFormat?: string;
-  showTimeSelect?: boolean;
-  children?: React.ReactNode;
-  renderSkeleton?: (field: any) => React.ReactNode;
-  fieldType: FormFieldType;
-  currentPassword?: string;
+  control: Control<any>
+  name: string
+  label?: string
+  placeholder?: string
+  iconSrc?: string
+  iconAlt?: string
+  disabled?: boolean
+  dateFormat?: string
+  showTimeSelect?: boolean
+  children?: React.ReactNode
+  renderSkeleton?: (field: any) => React.ReactNode
+  fieldType: FormFieldType
+  currentPassword?: string
 }
 
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
@@ -65,7 +65,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             />
           </FormControl>
         </div>
-      );
+      )
     case FormFieldType.TEXTAREA:
       return (
         <FormControl>
@@ -76,7 +76,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             disabled={props.disabled}
           />
         </FormControl>
-      );
+      )
     case FormFieldType.PHONE_INPUT:
       return (
         <FormControl className="bg-white">
@@ -90,7 +90,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             className="input-phone"
           />
         </FormControl>
-      );
+      )
     case FormFieldType.CHECKBOX:
       return (
         <FormControl>
@@ -105,7 +105,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             </label>
           </div>
         </FormControl>
-      );
+      )
     case FormFieldType.DATE_PICKER:
       return (
         <div className="flex rounded-md border border-dark-500 bg-white">
@@ -127,7 +127,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             />
           </FormControl>
         </div>
-      );
+      )
     case FormFieldType.SELECT:
       return (
         <FormControl>
@@ -142,29 +142,29 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             </SelectContent>
           </Select>
         </FormControl>
-      );
+      )
     case FormFieldType.SKELETON:
-      return props.renderSkeleton ? props.renderSkeleton(field) : null;
+      return props.renderSkeleton ? props.renderSkeleton(field) : null
     case FormFieldType.PRICE: {
-      const [isFocused, setIsFocused] = useState(false);
+      const [isFocused, setIsFocused] = useState(false)
 
       const formatInputValue = (value: string) => {
-        const numbers = value.replace(/\D/g, '');
+        const numbers = value.replace(/\D/g, '')
 
-        const digits = numbers.split('').reverse();
+        const digits = numbers.split('').reverse()
 
-        const groups = [];
+        const groups = []
         for (let i = 0; i < digits.length; i += 3) {
           groups.push(
             digits
               .slice(i, i + 3)
               .reverse()
               .join(''),
-          );
+          )
         }
 
-        return groups.reverse().join('.');
-      };
+        return groups.reverse().join('.')
+      }
 
       return (
         <div className="flex rounded-md border bg-white">
@@ -179,27 +179,27 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
               }
               onFocus={() => setIsFocused(true)}
               onBlur={(e) => {
-                setIsFocused(false);
-                field.onChange(e.target.value.replace(/\D/g, ''));
+                setIsFocused(false)
+                field.onChange(e.target.value.replace(/\D/g, ''))
               }}
               onChange={(e) => {
-                const formattedValue = formatInputValue(e.target.value);
-                e.target.value = formattedValue;
-                field.onChange(e.target.value.replace(/\D/g, ''));
+                const formattedValue = formatInputValue(e.target.value)
+                e.target.value = formattedValue
+                field.onChange(e.target.value.replace(/\D/g, ''))
               }}
               className="shad-input border-0"
             />
           </FormControl>
         </div>
-      );
+      )
     }
     default:
-      return null;
+      return null
   }
-};
+}
 
 const CustomFormField = (props: CustomProps) => {
-  const { control, name, label } = props;
+  const { control, name, label } = props
   return (
     <FormField
       control={control}
@@ -215,7 +215,7 @@ const CustomFormField = (props: CustomProps) => {
         </FormItem>
       )}
     />
-  );
-};
+  )
+}
 
-export default CustomFormField;
+export default CustomFormField

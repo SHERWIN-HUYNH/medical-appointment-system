@@ -1,13 +1,8 @@
-'use client';
-import React, { FormEvent, useEffect, useState } from 'react';
-import {
-  Elements,
-  PaymentElement,
-  useElements,
-  useStripe,
-} from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import { UserRound } from 'lucide-react';
+'use client'
+import React, { FormEvent, useEffect, useState } from 'react'
+import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+import { UserRound } from 'lucide-react'
 import {
   Card,
   CardContent,
@@ -15,24 +10,24 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from './ui/card';
-import { Button } from './ui/button';
+} from './ui/card'
+import { Button } from './ui/button'
 // import { useParams, useSearchParams } from 'next/navigation';
-import { formatPrice } from '@/helpers/formatCurrency';
-import { useAppointmentContext } from '@/context/AppointmentContext';
-import { useSession } from 'next-auth/react';
+import { formatPrice } from '@/helpers/formatCurrency'
+import { useAppointmentContext } from '@/context/AppointmentContext'
+import { useSession } from 'next-auth/react'
 
 type CheckoutFormProps = {
-  clientSecret: string;
-  product: object;
-  timeSlot: string;
-  date: string;
-};
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY as string);
+  clientSecret: string
+  product: object
+  timeSlot: string
+  date: string
+}
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY as string)
 export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps) {
-  const { data } = useAppointmentContext();
-  console.log('CONTEXT DATA', data);
-  if (clientSecret == '') return <h1>Chưa có sản phẩm</h1>;
+  const { data } = useAppointmentContext()
+  console.log('CONTEXT DATA', data)
+  if (clientSecret == '') return <h1>Chưa có sản phẩm</h1>
 
   return (
     <div className="mx-auto card-container animation">
@@ -301,23 +296,23 @@ export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 function Form({ price }: { price: string }) {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string>();
+  const stripe = useStripe()
+  const elements = useElements()
+  const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string>()
   // const { userId } = useParams();
   const handleSumit = (e: FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!stripe || !elements) {
-      return;
+      return
     }
-    setIsLoading(true);
+    setIsLoading(true)
     // Check infor
-    console.log('NEXT PUBLIC', process.env.NEXT_PUBLIC_SERVER_URL);
+    console.log('NEXT PUBLIC', process.env.NEXT_PUBLIC_SERVER_URL)
     stripe
       .confirmPayment({
         elements,
@@ -327,13 +322,13 @@ function Form({ price }: { price: string }) {
       })
       .then(({ error }) => {
         if (error.type === 'card_error' || error.type === 'validation_error') {
-          setErrorMessage(error.message);
+          setErrorMessage(error.message)
         } else {
-          setErrorMessage('An unknown error occurred');
+          setErrorMessage('An unknown error occurred')
         }
       })
-      .finally(() => setIsLoading(false));
-  };
+      .finally(() => setIsLoading(false))
+  }
   return (
     <form onSubmit={handleSumit}>
       <Card className="mb-3 rounded-lg border border-solid border-[#00e0ff]">
@@ -356,5 +351,5 @@ function Form({ price }: { price: string }) {
         </CardFooter>
       </Card>
     </form>
-  );
+  )
 }

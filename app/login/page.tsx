@@ -1,10 +1,10 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { PasskeyModal } from '@/components/PasskeyModal';
+import Image from 'next/image'
+import Link from 'next/link'
+import { PasskeyModal } from '@/components/PasskeyModal'
 
-import { PatientForm } from '@/components/forms/PatientForm';
-import { LoginForm } from '@/components/forms/LoginForm';
-import React from 'react';
+import { PatientForm } from '@/components/forms/PatientForm'
+import { LoginForm } from '@/components/forms/LoginForm'
+import React from 'react'
 const Home = async ({ searchParams }: SearchParamProps) => {
   return (
     <div className="flex h-screen max-h-screen bg-[#f1eff2]">
@@ -31,7 +31,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
         className="side-img max-w-[50%]"
       />
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import Link from 'next/link';
-import ClickOutside from '@/components/ClickOutside';
-import { signOut, useSession } from 'next-auth/react';
-import { BellRing, BookPlus, CreditCard, LogOut } from 'lucide-react';
+import { useState } from 'react'
+import Link from 'next/link'
+import ClickOutside from '@/components/ClickOutside'
+import { signOut, useSession } from 'next-auth/react'
+import { BellRing, BookPlus, CreditCard, LogOut } from 'lucide-react'
 
 const Dropdown = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { data: session } = useSession();
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const { data: session } = useSession()
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
       <Link
@@ -74,7 +74,7 @@ const Dropdown = () => {
       )}
       {/* Dropdown End */}
     </ClickOutside>
-  );
-};
+  )
+}
 
-export default Dropdown;
+export default Dropdown

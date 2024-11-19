@@ -1,17 +1,17 @@
-import React from 'react';
-import { Input } from './ui/input';
-import { Search } from 'lucide-react';
-import { Button } from './ui/button';
+import React from 'react'
+import { Input } from './ui/input'
+import { Search } from 'lucide-react'
+import { Button } from './ui/button'
 
 type TableSearchProps = {
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
-};
+  searchTerm: string
+  setSearchTerm: (term: string) => void
+}
 
 const TableSearch = ({ searchTerm, setSearchTerm }: TableSearchProps) => {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
+    setSearchTerm(event.target.value)
+  }
 
   return (
     <div className="flex w-full max-w-sm items-center">
@@ -23,7 +23,7 @@ const TableSearch = ({ searchTerm, setSearchTerm }: TableSearchProps) => {
         className="w-230 rounded-full bg-transparent border-slate-300 shadow-inner shadow-slate-100"
       />
     </div>
-  );
-};
+  )
+}
 
-export default TableSearch;
+export default TableSearch

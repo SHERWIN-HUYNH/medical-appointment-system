@@ -1,15 +1,15 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
+import React from 'react'
+import { Button } from '@/components/ui/button'
 
 interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void; // Type for the function that handles page changes
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void // Type for the function that handles page changes
 }
 
 const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
   const renderPageNumbers = () => {
-    const pages = [];
+    const pages = []
 
     // Luôn hiển thị trang đầu
     if (currentPage > 3) {
@@ -25,7 +25,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         >
           1
         </Button>,
-      );
+      )
 
       // Thêm dấu ...
       if (currentPage > 4) {
@@ -33,7 +33,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
           <span key="ellipsis1" className="px-3 w-8 h-8">
             ...
           </span>,
-        );
+        )
       }
     }
 
@@ -55,7 +55,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         >
           {i}
         </Button>,
-      );
+      )
     }
 
     // Hiển thị dấu ... và trang cuối
@@ -65,7 +65,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
           <span key="ellipsis2" className="px-2">
             ...
           </span>,
-        );
+        )
       }
       pages.push(
         <Button
@@ -79,11 +79,11 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         >
           {totalPages}
         </Button>,
-      );
+      )
     }
 
-    return pages;
-  };
+    return pages
+  }
 
   return (
     <div className="p-4 flex items-center justify-center gap-2 relative min-w-[300px]">
@@ -105,7 +105,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         &gt;
       </Button>
     </div>
-  );
-};
+  )
+}
 
-export default Pagination;
+export default Pagination

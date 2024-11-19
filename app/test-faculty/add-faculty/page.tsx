@@ -1,24 +1,24 @@
-'use client';
-import React from 'react';
-import DefaultLayout from '@/components/Layouts/defaultLayout';
-import { FacultyFormValidation } from '@/lib/validation';
-import { z } from 'zod';
-import { toast } from 'sonner';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import CustomFormField, { FormFieldType } from '@/components/CustomFormField';
-import { Form } from '@/components/ui/form';
-import { ArrowLeft } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import { Label } from '@/components/ui/label';
+'use client'
+import React from 'react'
+import DefaultLayout from '@/components/Layouts/defaultLayout'
+import { FacultyFormValidation } from '@/lib/validation'
+import { z } from 'zod'
+import { toast } from 'sonner'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
+import CustomFormField, { FormFieldType } from '@/components/CustomFormField'
+import { Form } from '@/components/ui/form'
+import { ArrowLeft } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import Image from 'next/image'
+import { Label } from '@/components/ui/label'
 
 const AddFaculty = () => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const form = useForm<z.infer<typeof FacultyFormValidation>>({
     resolver: zodResolver(FacultyFormValidation),
@@ -27,33 +27,33 @@ const AddFaculty = () => {
       description: '',
       image: '',
     },
-  });
+  })
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[0]
 
     if (!file) {
-      toast.error('Vui lòng tải lên một tệp hình ảnh');
-      return;
+      toast.error('Vui lòng tải lên một tệp hình ảnh')
+      return
     }
 
     if (!file.type.startsWith('image/')) {
-      toast.error('Chỉ cho phép tải lên các tệp hình ảnh');
-      event.target.value = '';
-      return;
+      toast.error('Chỉ cho phép tải lên các tệp hình ảnh')
+      event.target.value = ''
+      return
     }
 
     // Lưu tên file
-    const fileName = file.name;
-    form.setValue('image', fileName);
+    const fileName = file.name
+    form.setValue('image', fileName)
 
     // Tạo preview
-    setImagePreview(URL.createObjectURL(file));
-    form.clearErrors('image');
-  };
+    setImagePreview(URL.createObjectURL(file))
+    form.clearErrors('image')
+  }
 
   const onSubmit = async (values: z.infer<typeof FacultyFormValidation>) => {
-    setLoading(true);
+    setLoading(true)
     try {
       const response = await fetch('/api/faculty', {
         method: 'POST',
@@ -61,20 +61,20 @@ const AddFaculty = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(values),
-      });
+      })
 
       if (!response.ok) {
-        throw new Error('Failed to create faculty');
+        throw new Error('Failed to create faculty')
       }
 
-      toast.success('Thêm chuyên khoa thành công!');
+      toast.success('Thêm chuyên khoa thành công!')
     } catch (error) {
-      console.log(error);
-      toast.error('Không thể thêm chuyên khoa');
+      console.log(error)
+      toast.error('Không thể thêm chuyên khoa')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <DefaultLayout>
@@ -160,7 +160,7 @@ const AddFaculty = () => {
         </Form>
       </div>
     </DefaultLayout>
-  );
-};
+  )
+}
 
-export default AddFaculty;
+export default AddFaculty

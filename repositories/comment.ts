@@ -1,6 +1,6 @@
-import { Comment, PrismaClient } from '@prisma/client';
+import { Comment, PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export class CommentRespository {
   static async getListComments() {
@@ -14,19 +14,19 @@ export class CommentRespository {
             select: { name: true },
           },
         },
-      });
+      })
       const formattedComments = comments.map((comment) => ({
         ...comment,
         doctorName: comment.doctor?.name || 'Không xác định',
         userName: comment.user?.name || 'Không xác định',
-      }));
+      }))
 
-      return formattedComments;
+      return formattedComments
     } catch (error) {
-      console.error('Lỗi khi truy xuất đánh giá của bệnh nhân: ', error);
-      throw error;
+      console.error('Lỗi khi truy xuất đánh giá của bệnh nhân: ', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
   static async getCommentsByUserDoctor(name: string) {
@@ -44,11 +44,11 @@ export class CommentRespository {
             },
           },
         },
-      });
-      return comments;
+      })
+      return comments
     } catch (error) {
-      console.error('Lỗi truy xuất đánh gia theo tên bác sĩ', error);
-      throw error;
+      console.error('Lỗi truy xuất đánh gia theo tên bác sĩ', error)
+      throw error
     }
   }
   static async getCommentById(id: string) {
@@ -57,13 +57,13 @@ export class CommentRespository {
         where: {
           id: id,
         },
-      });
-      return comment;
+      })
+      return comment
     } catch (error) {
-      console.error('Lỗi khi truy xuất đánh giá: ', error);
-      throw error;
+      console.error('Lỗi khi truy xuất đánh giá: ', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
   static async deleteComment({ commentData }: { commentData: Comment }) {
@@ -72,17 +72,17 @@ export class CommentRespository {
         where: {
           id: commentData.id,
         },
-      });
-      return deletedComment;
+      })
+      return deletedComment
     } catch (error) {
-      console.error('Lỗi khi xóa đánh giá:', error);
-      throw new Error('Không thể xóa đánh giá với id đã cho');
+      console.error('Lỗi khi xóa đánh giá:', error)
+      throw new Error('Không thể xóa đánh giá với id đã cho')
     }
   }
 
   static async createComment(commentData: Comment) {
     try {
-      const currentDate = new Date().toISOString().split('T')[0]; // Lấy chỉ phần ngày YYYY-MM-DD
+      const currentDate = new Date().toISOString().split('T')[0] // Lấy chỉ phần ngày YYYY-MM-DD
 
       const comment = await prisma.comment.create({
         data: {
@@ -92,13 +92,13 @@ export class CommentRespository {
           userId: commentData.userId,
           createdAt: new Date(currentDate), // Lưu chỉ ngày không có giờ
         },
-      });
-      return comment;
+      })
+      return comment
     } catch (error) {
-      console.error('Lỗi khi tạo đánh giá:', error);
-      throw error;
+      console.error('Lỗi khi tạo đánh giá:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 }

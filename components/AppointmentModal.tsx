@@ -1,21 +1,21 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
+import { useState } from 'react'
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import React from 'react';
+} from '@/components/ui/dialog'
+import React from 'react'
 
-import { AppointmentForm } from './forms/AppointmentForm';
+import { AppointmentForm } from './forms/AppointmentForm'
 
-import 'react-datepicker/dist/react-datepicker.css';
-import { AppointmentSchedule } from '@/types/interface';
+import 'react-datepicker/dist/react-datepicker.css'
+import { AppointmentSchedule } from '@/types/interface'
 
 export const AppointmentModal = ({
   patientId,
@@ -23,14 +23,14 @@ export const AppointmentModal = ({
   appointment,
   type,
 }: {
-  patientId: string;
-  userId: string;
-  appointment?: AppointmentSchedule;
-  type: 'schedule' | 'cancel' | 'Chi tiết' | 'Hủy';
-  title: string;
-  description: string;
+  patientId: string
+  userId: string
+  appointment?: AppointmentSchedule
+  type: 'schedule' | 'cancel' | 'Chi tiết' | 'Hủy'
+  title: string
+  description: string
 }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -59,5 +59,5 @@ export const AppointmentModal = ({
         />
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

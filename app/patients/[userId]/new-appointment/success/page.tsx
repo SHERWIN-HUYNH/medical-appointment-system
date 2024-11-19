@@ -1,22 +1,22 @@
-'use client';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import React from 'react';
-import { User } from 'lucide-react';
-import Stripe from 'stripe';
-import { notFound, useParams } from 'next/navigation';
+'use client'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import React from 'react'
+import { User } from 'lucide-react'
+import Stripe from 'stripe'
+import { notFound, useParams } from 'next/navigation'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 const RequestSuccess = async ({
   searchParams,
 }: {
-  searchParams: { payment_intent: string };
+  searchParams: { payment_intent: string }
 }) => {
-  const { userId } = useParams();
-  const paymentIntent = await stripe.paymentIntents.retrieve(searchParams.payment_intent);
-  if (paymentIntent.metadata.billId == null) return notFound();
-  const isSuccess = paymentIntent.status === 'succeeded';
+  const { userId } = useParams()
+  const paymentIntent = await stripe.paymentIntents.retrieve(searchParams.payment_intent)
+  if (paymentIntent.metadata.billId == null) return notFound()
+  const isSuccess = paymentIntent.status === 'succeeded'
   return (
     <div className=" flex h-screen max-h-screen px-[5%] bg-[#4158D0] bg-[linear-gradient(43deg,#4158D0_0%,#C850C0_46%,#FFCC70_100%)]">
       <div className="success-img max-w-[800px] bg-white">
@@ -85,7 +85,7 @@ const RequestSuccess = async ({
         <p className="copyright">© 2024 CarePluse</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default RequestSuccess;
+export default RequestSuccess

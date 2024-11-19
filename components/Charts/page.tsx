@@ -1,13 +1,13 @@
-'use client';
-import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
-import ChartOne from '@/components/Charts/ChartOne';
-import ChartTwo from '@/components/Charts/ChartTwo';
-import dynamic from 'next/dynamic';
-import React from 'react';
+'use client'
+import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb'
+import ChartOne from '@/components/Charts/ChartOne'
+import ChartTwo from '@/components/Charts/ChartTwo'
+import dynamic from 'next/dynamic'
+import React from 'react'
 
 const ChartThree = dynamic(() => import('@/components/Charts/ChartThree'), {
   ssr: false,
-});
+})
 
 const Chart: React.FC = () => {
   const statistics = [
@@ -15,14 +15,13 @@ const Chart: React.FC = () => {
     { specialty: 'Ngoại khoa', appointments: 90, revenue: '$12,000' },
     { specialty: 'Nhi khoa', appointments: 75, revenue: '$9,000' },
     { specialty: 'Khác', appointments: 50, revenue: '$5,000' },
-  ];
+  ]
 
   return (
     <>
-      <Breadcrumb pageName={[["Thống kê"]]}  />
+      <Breadcrumb pageName={[['Thống kê']]} />
 
       <div className="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5">
-        
         <div className="col-span-8">
           <div className="h-full bg-white rounded-lg shadow">
             <ChartOne />
@@ -84,7 +83,7 @@ const Chart: React.FC = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Chart;
+export default Chart

@@ -1,14 +1,14 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { Profile } from '@/types/interface';
-import { ProfileRespository } from '@/repositories/profile';
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { Profile } from '@/types/interface'
+import { ProfileRespository } from '@/repositories/profile'
 
 export async function POST(req: Request, res: Response) {
-  const { profile, userId }: { profile: Profile; userId: string } = await req.json();
-  console.log('PROFILE: ', profile);
+  const { profile, userId }: { profile: Profile; userId: string } = await req.json()
+  console.log('PROFILE: ', profile)
   const newProfile = await ProfileRespository.createProfile({
     profileData: profile,
     userId,
-  });
+  })
 
   if (newProfile) {
     return new Response(
@@ -16,13 +16,13 @@ export async function POST(req: Request, res: Response) {
         message: 'CREATE PROFILE SUCCESSFULLY',
         status: 200,
       }),
-    );
+    )
   } else {
     return new Response(
       JSON.stringify({
         message: 'CREATE PROFILE FAILED',
         status: 400,
       }),
-    );
+    )
   }
 }

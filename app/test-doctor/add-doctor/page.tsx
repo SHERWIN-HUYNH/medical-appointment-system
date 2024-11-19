@@ -1,24 +1,24 @@
-'use client';
-import DefaultLayout from '@/components/Layouts/defaultLayout';
-import SelectGroup from '@/components/SelectGroup';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { academicTitles } from '@/lib/data';
-import { Faculty } from '@prisma/client';
-import React, { useState, useEffect } from 'react';
-import { toast } from 'sonner';
-import { useForm, FormProvider } from 'react-hook-form';
-import { z } from 'zod';
-import { DoctorFormValidation } from '@/lib/validation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Image from 'next/image';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+'use client'
+import DefaultLayout from '@/components/Layouts/defaultLayout'
+import SelectGroup from '@/components/SelectGroup'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { academicTitles } from '@/lib/data'
+import { Faculty } from '@prisma/client'
+import React, { useState, useEffect } from 'react'
+import { toast } from 'sonner'
+import { useForm, FormProvider } from 'react-hook-form'
+import { z } from 'zod'
+import { DoctorFormValidation } from '@/lib/validation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import Image from 'next/image'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 const AddDoctorPage = () => {
-  const [facultyData, setFacultyData] = useState<Faculty[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [facultyData, setFacultyData] = useState<Faculty[]>([])
+  const [loading, setLoading] = useState(false)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const form = useForm<z.infer<typeof DoctorFormValidation>>({
     resolver: zodResolver(DoctorFormValidation),
     defaultValues: {
@@ -30,37 +30,37 @@ const AddDoctorPage = () => {
       isActive: true,
       gender: true,
     },
-  });
+  })
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = form;
+  } = form
 
   const fetchFacultyData = async () => {
     try {
-      const response = await fetch(`/api/faculty`);
+      const response = await fetch(`/api/faculty`)
       if (!response.ok) {
-        throw new Error('Failed to fetch faculty data');
+        throw new Error('Failed to fetch faculty data')
       }
-      const data = await response.json();
-      setFacultyData(data);
+      const data = await response.json()
+      setFacultyData(data)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchFacultyData();
-  }, []);
+    fetchFacultyData()
+  }, [])
 
   const onSubmit = async (values: z.infer<typeof DoctorFormValidation>) => {
-    setLoading(true);
+    setLoading(true)
     try {
       const academicTitleName =
         academicTitles.find((title) => title.id === values.academicTitle)?.name ||
-        values.academicTitle;
+        values.academicTitle
 
       const response = await fetch(`/api/doctor`, {
         method: 'POST',
@@ -76,47 +76,47 @@ const AddDoctorPage = () => {
           isActive: values.isActive,
           gender: values.gender,
         }),
-      });
+      })
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create doctor');
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Failed to create doctor')
       }
 
-      toast.success('Bác sĩ đã được thêm thành công');
+      toast.success('Bác sĩ đã được thêm thành công')
       // Reset form or redirect to doctor list page
-      form.reset();
-      setImagePreview(null);
+      form.reset()
+      setImagePreview(null)
     } catch (error) {
-      console.log(error);
-      toast.error('Có lỗi xảy ra');
+      console.log(error)
+      toast.error('Có lỗi xảy ra')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[0]
 
     if (!file) {
-      toast.error('Vui lòng tải lên một tệp hình ảnh');
-      return;
+      toast.error('Vui lòng tải lên một tệp hình ảnh')
+      return
     }
 
     if (!file.type.startsWith('image/')) {
-      toast.error('Chỉ cho phép tải lên các tệp hình ảnh');
-      event.target.value = '';
-      return;
+      toast.error('Chỉ cho phép tải lên các tệp hình ảnh')
+      event.target.value = ''
+      return
     }
 
     // Lưu tên file
-    const fileName = file.name;
-    form.setValue('image', fileName);
+    const fileName = file.name
+    form.setValue('image', fileName)
 
     // Tạo preview
-    setImagePreview(URL.createObjectURL(file));
-    form.clearErrors('image');
-  };
+    setImagePreview(URL.createObjectURL(file))
+    form.clearErrors('image')
+  }
 
   return (
     <FormProvider {...form}>
@@ -258,7 +258,7 @@ const AddDoctorPage = () => {
         </div>
       </DefaultLayout>
     </FormProvider>
-  );
-};
+  )
+}
 
-export default AddDoctorPage;
+export default AddDoctorPage

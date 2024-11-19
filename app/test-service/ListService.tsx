@@ -1,26 +1,26 @@
-'use client';
-import ModalDelete from '@/components/ModalDelete';
-import Pagination from '@/components/Pagination';
-import Table from '@/components/Table';
-import TableSearch from '@/components/TableSearch';
-import { Button } from '@/components/ui/button';
-import { ArrowDownNarrowWide, Pencil, Trash2 } from 'lucide-react';
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+'use client'
+import ModalDelete from '@/components/ModalDelete'
+import Pagination from '@/components/Pagination'
+import Table from '@/components/Table'
+import TableSearch from '@/components/TableSearch'
+import { Button } from '@/components/ui/button'
+import { ArrowDownNarrowWide, Pencil, Trash2 } from 'lucide-react'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 type Service = {
-  id: string;
-  name: string;
-  price: number;
-  facultyId: string;
-  description: string;
-};
+  id: string
+  name: string
+  price: number
+  facultyId: string
+  description: string
+}
 
 type Faculty = {
-  id: string;
-  name: string;
-};
+  id: string
+  name: string
+}
 
 const columns = [
   {
@@ -53,76 +53,76 @@ const columns = [
     accessor: 'actions',
     className: 'w-[20%] text-left pl-7 hidden md:table-cell',
   },
-];
+]
 
 const ListService = () => {
-  const [facultyData, setFacultyData] = useState<Faculty[]>([]);
-  const [serviceData, setServiceData] = useState<Service[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null);
-  const [showModal, setShowModal] = useState(false);
+  const [facultyData, setFacultyData] = useState<Faculty[]>([])
+  const [serviceData, setServiceData] = useState<Service[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null)
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
     const fetchServiceData = async () => {
-      const response = await fetch(`/api/service`);
+      const response = await fetch(`/api/service`)
 
       if (response.ok) {
-        const data = await response.json();
-        setServiceData(data);
+        const data = await response.json()
+        setServiceData(data)
       }
-    };
+    }
 
     const fetchFacultyData = async () => {
-      const response = await fetch(`/api/faculty`);
+      const response = await fetch(`/api/faculty`)
       if (response.ok) {
-        const data = await response.json();
-        setFacultyData(data);
+        const data = await response.json()
+        setFacultyData(data)
       }
-    };
-    
-    fetchServiceData();
-    fetchFacultyData();
-  }, []);
+    }
+
+    fetchServiceData()
+    fetchFacultyData()
+  }, [])
 
   // Lọc dữ liệu dựa trên searchTerm
   const searchData = serviceData.filter((service) =>
     service.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  )
   // Phân trang
-  const itemsPerPage = 5;
-  const totalPages = Math.ceil(searchData.length / itemsPerPage);
+  const itemsPerPage = 5
+  const totalPages = Math.ceil(searchData.length / itemsPerPage)
 
   const displayedData = searchData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
-  );
+  )
 
   // Hàm tìm tên chuyên khoa từ facultyId
   const getFacultyName = (facultyId: string) => {
     // Tìm đối tượng chuyên khoa có id khớp với facultyId
-    const faculty = facultyData.find((f) => f.id === facultyId);
+    const faculty = facultyData.find((f) => f.id === facultyId)
 
     // Kiểm tra nếu faculty tồn tại
     if (faculty) {
-      return faculty.name; // Trả về tên của chuyên khoa nếu tìm thấy
+      return faculty.name // Trả về tên của chuyên khoa nếu tìm thấy
     } else {
-      return 'NULL'; // Trả về "NULL" nếu không tìm thấy chuyên khoa
+      return 'NULL' // Trả về "NULL" nếu không tìm thấy chuyên khoa
     }
-  };
+  }
   // Tính toán số thứ tự dựa trên trang hiện tại
   const getSequentialNumber = (index: number) => {
-    return (currentPage - 1) * itemsPerPage + index + 1;
-  };
+    return (currentPage - 1) * itemsPerPage + index + 1
+  }
 
   // Thêm dữ liệu STT vào displayedData
   const dataWithIndex = displayedData.map((item, index) => ({
     ...item,
     index: getSequentialNumber(index),
-  }));
+  }))
 
   const confirmDelete = async () => {
-    if (!serviceToDelete) return;
+    if (!serviceToDelete) return
 
     try {
       const response = await fetch(`/api/service`, {
@@ -131,25 +131,25 @@ const ListService = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ id: serviceToDelete.id }),
-      });
+      })
 
       if (response.ok) {
-        setServiceData((prevData) => 
-          prevData.filter((service) => service.id !== serviceToDelete.id)
-        );
-        toast.success(`Dịch vụ ${serviceToDelete.name} đã xóa thành công!`);
+        setServiceData((prevData) =>
+          prevData.filter((service) => service.id !== serviceToDelete.id),
+        )
+        toast.success(`Dịch vụ ${serviceToDelete.name} đã xóa thành công!`)
       } else {
-        const message = await response.json();
-        toast.error(message.error);
+        const message = await response.json()
+        toast.error(message.error)
       }
     } catch (error) {
-      console.error('Error deleting service:', error);
-      toast.error('Đã xảy ra lỗi khi xóa dịch vụ!');
+      console.error('Error deleting service:', error)
+      toast.error('Đã xảy ra lỗi khi xóa dịch vụ!')
     } finally {
-      setServiceToDelete(null);
-      setShowModal(false);
+      setServiceToDelete(null)
+      setShowModal(false)
     }
-  };
+  }
 
   const renderRow = (item: Service & { index: number }) => {
     return (
@@ -174,8 +174,8 @@ const ListService = () => {
             <Button
               className="w-12 h-10 flex items-center justify-center rounded-full bg-purple-300"
               onClick={() => {
-                setServiceToDelete(item);
-                setShowModal(true);
+                setServiceToDelete(item)
+                setShowModal(true)
               }}
             >
               <Trash2 size={28} strokeWidth={3} color="white" />
@@ -183,8 +183,8 @@ const ListService = () => {
           </div>
         </td>
       </tr>
-    );
-  };
+    )
+  }
   return (
     <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0 h-screen">
       {/* TOP */}
@@ -225,7 +225,7 @@ const ListService = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ListService;
+export default ListService

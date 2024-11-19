@@ -1,12 +1,12 @@
-'use client';
-import React from 'react';
-import { useSession } from 'next-auth/react';
-import Image from 'next/image';
-import Link from 'next/link';
-import DropDown from './DropDown';
+'use client'
+import React from 'react'
+import { useSession } from 'next-auth/react'
+import Image from 'next/image'
+import Link from 'next/link'
+import DropDown from './DropDown'
 
 function Header() {
-  const { data: session } = useSession();
+  const { data: session } = useSession()
   const Menu = [
     {
       id: 1,
@@ -33,7 +33,7 @@ function Header() {
       name: 'Đội ngũ bác sĩ',
       path: '/doctor',
     },
-  ];
+  ]
   return (
     <header className="bg-blue-100 dark:bg-gray-900 fixed top-0 left-0 w-full z-50">
       <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
@@ -107,7 +107,7 @@ function Header() {
         </div>
       </div>
     </header>
-  );
+  )
 }
 
-export default Header;
+export default Header

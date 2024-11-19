@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   getPaginationRowModel,
@@ -10,9 +10,9 @@ import {
   ColumnFiltersState,
   getSortedRowModel,
   getFilteredRowModel,
-} from '@tanstack/react-table';
+} from '@tanstack/react-table'
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -20,22 +20,22 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import React from 'react';
-import { Input } from '../ui/input';
-import { MoveLeft, MoveRight } from 'lucide-react';
+} from '@/components/ui/table'
+import React from 'react'
+import { Input } from '../ui/input'
+import { MoveLeft, MoveRight } from 'lucide-react'
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 
   const table = useReactTable({
     data,
@@ -49,7 +49,7 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
-  });
+  })
   return (
     <div className="data-table">
       <div className="table-header flex items-center justify-between mb-3">
@@ -97,7 +97,7 @@ export function DataTable<TData, TValue>({
                       ? null
                       : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
-                );
+                )
               })}
             </TableRow>
           ))}
@@ -147,5 +147,5 @@ export function DataTable<TData, TValue>({
         </Button>
       </div>
     </div>
-  );
+  )
 }

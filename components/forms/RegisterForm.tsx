@@ -1,26 +1,26 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Form } from '@/components/ui/form';
-import { RegisterFormValidation, UserFormValidation } from '@/lib/validation';
-import { signIn } from 'next-auth/react';
-import 'react-phone-number-input/style.css';
-import CustomFormField, { FormFieldType } from '../CustomFormField';
-import SubmitButton from '../SubmitButton';
-import { createUser } from '@/lib/action/patient.actions';
-import { toast } from 'sonner';
-import { Label } from '../ui/label';
-import { PasswordInput } from '../PasswordInput';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { Form } from '@/components/ui/form'
+import { RegisterFormValidation, UserFormValidation } from '@/lib/validation'
+import { signIn } from 'next-auth/react'
+import 'react-phone-number-input/style.css'
+import CustomFormField, { FormFieldType } from '../CustomFormField'
+import SubmitButton from '../SubmitButton'
+import { createUser } from '@/lib/action/patient.actions'
+import { toast } from 'sonner'
+import { Label } from '../ui/label'
+import { PasswordInput } from '../PasswordInput'
 
 export const RegisterForm = () => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState('');
-  console.log('ENV', process.env.DATABASE_URL);
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState('')
+  console.log('ENV', process.env.DATABASE_URL)
   const form = useForm<z.infer<typeof RegisterFormValidation>>({
     resolver: zodResolver(RegisterFormValidation),
     defaultValues: {
@@ -28,12 +28,12 @@ export const RegisterForm = () => {
       email: '',
       phone: '',
     },
-  });
+  })
   const onSubmit = async (values: z.infer<typeof RegisterFormValidation>) => {
-    console.log('IS LOADING', isLoading);
-    setIsLoading(true);
+    console.log('IS LOADING', isLoading)
+    setIsLoading(true)
     try {
-      console.log('VALUES FROM REGISTER', values);
+      console.log('VALUES FROM REGISTER', values)
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
@@ -45,26 +45,26 @@ export const RegisterForm = () => {
           name: values.name,
           phone: values.phone,
         }),
-      });
-      console.log('RES', res);
-      const responseData = await res.json();
+      })
+      console.log('RES', res)
+      const responseData = await res.json()
 
       if (!res.ok) {
-        console.log('RESPOND DATA', responseData.error);
-        throw new Error(responseData.error);
+        console.log('RESPOND DATA', responseData.error)
+        throw new Error(responseData.error)
       }
 
-      toast.success('Registered successfully');
-      router.push('/login');
+      toast.success('Registered successfully')
+      router.push('/login')
     } catch (error) {
       if (error instanceof Error) {
-        console.log('ERROR HAPPEN');
-        toast.error(error.message);
+        console.log('ERROR HAPPEN')
+        toast.error(error.message)
       }
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <Form {...form}>
@@ -117,5 +117,5 @@ export const RegisterForm = () => {
         <SubmitButton isLoading={isLoading}>Đăng ký tài khoản </SubmitButton>
       </form>
     </Form>
-  );
-};
+  )
+}

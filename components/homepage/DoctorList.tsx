@@ -1,43 +1,43 @@
-'use client';
+'use client'
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
+import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
+import { Button } from '@/components/ui/button'
 
 type Doctor = {
-  id: string;
-  name: string;
-  facultyId: string;
+  id: string
+  name: string
+  facultyId: string
   faculty: {
-    name: string;
-  };
-  image: string;
-  academicTitle: string;
-  gender: boolean;
-  isActive: boolean;
-};
+    name: string
+  }
+  image: string
+  academicTitle: string
+  gender: boolean
+  isActive: boolean
+}
 
 function DoctorList() {
-  const [showAll, setShowAll] = useState(false);
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [showAll, setShowAll] = useState(false)
+  const [doctors, setDoctors] = useState<Doctor[]>([])
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await fetch('/api/doctor');
-        const data = await response.json();
+        const response = await fetch('/api/doctor')
+        const data = await response.json()
         // Lọc chỉ lấy các bác sĩ đang active
-        const activeDoctors = data.filter((doctor: Doctor) => doctor.isActive);
-        setDoctors(activeDoctors);
+        const activeDoctors = data.filter((doctor: Doctor) => doctor.isActive)
+        setDoctors(activeDoctors)
       } catch (error) {
-        console.error('Failed to fetch doctors:', error);
+        console.error('Failed to fetch doctors:', error)
       }
-    };
+    }
 
-    fetchDoctors();
-  }, []);
+    fetchDoctors()
+  }, [])
 
-  const displayedDoctors = showAll ? doctors : doctors.slice(0, 4);
+  const displayedDoctors = showAll ? doctors : doctors.slice(0, 4)
 
   return (
     <div className="mb-10 px-8">
@@ -60,9 +60,9 @@ function DoctorList() {
                 Bác sĩ
               </h2>
               <h2 className="font-semibold">{doctor.name}</h2>
-              <h2 className='text-sm'>Chuyên khoa: {doctor.faculty.name}</h2>
-              <h2 className='text-sm'>Học hàm/học vị: {doctor.academicTitle}</h2>
-              <h2 className='text-sm'>Giới tính: {doctor.gender ? 'Nam' : 'Nữ'}</h2>
+              <h2 className="text-sm">Chuyên khoa: {doctor.faculty.name}</h2>
+              <h2 className="text-sm">Học hàm/học vị: {doctor.academicTitle}</h2>
+              <h2 className="text-sm">Giới tính: {doctor.gender ? 'Nam' : 'Nữ'}</h2>
               <h2
                 className="p-2 px-3 border-[1px] border-primary text-primary rounded-full 
                 w-full text-center text-[14px] mt-2 cursor-pointer hover:bg-primary hover:text-white"
@@ -84,7 +84,7 @@ function DoctorList() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default DoctorList;
+export default DoctorList

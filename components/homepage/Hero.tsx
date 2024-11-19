@@ -1,11 +1,11 @@
-"use client"
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import React from 'react';
+'use client'
+import { Button } from '@/components/ui/button'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import React from 'react'
 
 function Hero() {
-  const router = useRouter();
+  const router = useRouter()
 
   return (
     <section className="mt-[80px]">
@@ -31,7 +31,7 @@ function Hero() {
               sức khỏe
             </p>
 
-            <Button 
+            <Button
               className="mt-10 bg-primary hover:bg-[#56c2e6] text-white"
               onClick={() => router.push('/choose-profile')}
             >
@@ -41,7 +41,7 @@ function Hero() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
-export default Hero;
+export default Hero

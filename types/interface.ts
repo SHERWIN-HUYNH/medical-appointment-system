@@ -1,112 +1,112 @@
-declare type Gender = 'MALE' | 'FEMALE' | 'OTHER';
-declare type Status = 'PENDING' | 'SCHEDULED' | 'CANCELLED';
+declare type Gender = 'MALE' | 'FEMALE' | 'OTHER'
+declare type Status = 'PENDING' | 'SCHEDULED' | 'CANCELLED'
 export interface Profile {
-  id: string;
-  name: string;
-  birthDate?: Date;
-  gender: Gender;
-  email: string;
-  phone: string;
-  allergies?: string;
-  symptom: string;
-  identificationType: string;
-  identificationNumber: string;
-  identificationDocumentUrl: string;
-  pastMedicalHistory: string;
-  userId: string;
+  id: string
+  name: string
+  birthDate?: Date
+  gender: Gender
+  email: string
+  phone: string
+  allergies?: string
+  symptom: string
+  identificationType: string
+  identificationNumber: string
+  identificationDocumentUrl: string
+  pastMedicalHistory: string
+  userId: string
 }
 export interface UserRole {
-  id: string;
-  name: string;
-  email: string;
-  roleName: string;
+  id: string
+  name: string
+  email: string
+  roleName: string
 }
 
 export interface Appointment {
-  profileId: string;
-  doctorScheduleId: string;
-  serviceId: string;
-  note: string;
-  status: Status;
-  cancellationReason: string;
+  profileId: string
+  doctorScheduleId: string
+  serviceId: string
+  note: string
+  status: Status
+  cancellationReason: string
 }
 interface DoctorSchedule {
-  id: string;
-  doctorId: string;
-  scheduleId: string;
-  isAvailable: boolean;
-  schedule: Schedule; // Full schedule object
-  doctor: Doctor; // Full doctor object
+  id: string
+  doctorId: string
+  scheduleId: string
+  isAvailable: boolean
+  schedule: Schedule // Full schedule object
+  doctor: Doctor // Full doctor object
 }
 export interface AppointmentSchedule {
-  id: string;
-  status: Status;
-  cancellationReason: string | null;
-  profileId: string;
-  serviceId: string;
-  doctorScheduleId: string;
-  profile: Profile; // Full profile object
-  doctorSchedule: DoctorSchedule; // Full doctor schedule object
+  id: string
+  status: Status
+  cancellationReason: string | null
+  profileId: string
+  serviceId: string
+  doctorScheduleId: string
+  profile: Profile // Full profile object
+  doctorSchedule: DoctorSchedule // Full doctor schedule object
 }
 export interface CreateAppointment {
-  profileId: string;
-  doctorScheduleId: string;
-  serviceId: string;
+  profileId: string
+  doctorScheduleId: string
+  serviceId: string
 }
 
 export interface Faculty {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
+  id: string
+  name: string
+  description: string
+  image: string
 }
 
 export interface Service {
-  id: string;
-  name: string;
-  price: number;
-  facultyId: string;
-  description: string;
+  id: string
+  name: string
+  price: number
+  facultyId: string
+  description: string
 }
 export interface Schedule {
-  id: string;
-  date: string;
-  timeSlot: string;
-  isAvailable: boolean;
-  doctorScheduleId: string;
+  id: string
+  date: string
+  timeSlot: string
+  isAvailable: boolean
+  doctorScheduleId: string
 }
 
 export interface Comment {
-  id: string;
-  date: string;
-  content: string;
-  rating: number;
-  doctorId: string;
-  userId: string;
+  id: string
+  date: string
+  content: string
+  rating: number
+  doctorId: string
+  userId: string
 }
 
 export interface Doctor {
-  id: string;
-  name: string;
-  academicTitle: string;
-  description?: string;
-  image?: string;
-  facultyId: string;
-  isActive: boolean;
+  id: string
+  name: string
+  academicTitle: string
+  description?: string
+  image?: string
+  facultyId: string
+  isActive: boolean
   faculty?: {
-    name: string;
-  };
-  comments: Comment[];
-  doctorSchedule: Schedule[];
+    name: string
+  }
+  comments: Comment[]
+  doctorSchedule: Schedule[]
 }
 export interface Bill {
-  id?: string;
-  price: number;
-  appointmentId: string;
-  userId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  status: string;
-  paymentMethod?: string;
-  note?: string;
+  id?: string
+  price: number
+  appointmentId: string
+  userId: string
+  createdAt?: Date
+  updatedAt?: Date
+  status: string
+  paymentMethod?: string
+  note?: string
 }

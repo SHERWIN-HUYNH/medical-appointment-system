@@ -1,18 +1,18 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import React from 'react'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 
 interface ReviewModalProps {
-  rating: number;
-  setRating: (rating: number) => void;
-  comment: string;
-  setComment: (comment: string) => void;
-  onSubmit: () => void;
-  onClose: () => void;
+  rating: number
+  setRating: (rating: number) => void
+  comment: string
+  setComment: (comment: string) => void
+  onSubmit: () => void
+  onClose: () => void
 }
 
 const ReviewModal = (props: ReviewModalProps) => {
-  const { rating, setRating, comment, setComment, onSubmit, onClose } = props;
+  const { rating, setRating, comment, setComment, onSubmit, onClose } = props
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -45,19 +45,14 @@ const ReviewModal = (props: ReviewModalProps) => {
           onChange={(e) => setComment(e.target.value)}
         />
         <div className="mt-4 flex justify-end gap-2">
-          <Button 
-            onClick={onClose} 
-            className="bg-gray-300 text-black hover:bg-gray-400"
-          >
+          <Button onClick={onClose} className="bg-gray-300 text-black hover:bg-gray-400">
             Hủy
           </Button>
           <Button
             onClick={onSubmit}
             disabled={rating === 0}
             className={`bg-blue-800 text-white ${
-              rating === 0 
-                ? 'opacity-50 cursor-not-allowed' 
-                : 'hover:bg-blue-700'
+              rating === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
             }`}
           >
             Gửi đánh giá
@@ -65,7 +60,7 @@ const ReviewModal = (props: ReviewModalProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ReviewModal;
+export default ReviewModal

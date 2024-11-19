@@ -1,13 +1,13 @@
-'use client';
-import React from 'react';
-import DefaultLayout from '@/components/Layouts/defaultLayout';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import EditServiceForm from '@/components/forms/EditServiceForm';
+'use client'
+import React from 'react'
+import DefaultLayout from '@/components/Layouts/defaultLayout'
+import { Button } from '@/components/ui/button'
+import { ArrowLeft } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import EditServiceForm from '@/components/forms/EditServiceForm'
 
 const EditService = () => {
-  const router = useRouter();
+  const router = useRouter()
   return (
     <DefaultLayout>
       <div>
@@ -30,7 +30,7 @@ const EditService = () => {
         </section>
       </div>
     </DefaultLayout>
-  );
-};
+  )
+}
 
-export default EditService;
+export default EditService

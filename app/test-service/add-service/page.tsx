@@ -1,13 +1,13 @@
-'use client';
-import React from 'react';
-import CreateServiceForm from '@/components/forms/CreateServiceForm';
-import DefaultLayout from '@/components/Layouts/defaultLayout';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+'use client'
+import React from 'react'
+import CreateServiceForm from '@/components/forms/CreateServiceForm'
+import DefaultLayout from '@/components/Layouts/defaultLayout'
+import { Button } from '@/components/ui/button'
+import { ArrowLeft } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 const AddService = () => {
-  const router = useRouter();
+  const router = useRouter()
   return (
     <DefaultLayout>
       <div>
@@ -30,7 +30,7 @@ const AddService = () => {
         </section>
       </div>
     </DefaultLayout>
-  );
-};
+  )
+}
 
-export default AddService;
+export default AddService

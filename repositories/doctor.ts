@@ -1,12 +1,12 @@
-import { AppointmentStatus, Doctor, PrismaClient } from '@prisma/client';
-import { getDayOfWeek } from '@/lib/utils';
+import { AppointmentStatus, Doctor, PrismaClient } from '@prisma/client'
+import { getDayOfWeek } from '@/lib/utils'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export class DoctorRespository {
   static async createDoctor(doctorData: Doctor) {
     if (!doctorData) {
-      throw new Error('Doctor data is missing.');
+      throw new Error('Doctor data is missing.')
     }
     const newDoctor = await prisma.doctor.create({
       data: {
@@ -18,9 +18,9 @@ export class DoctorRespository {
         isActive: true,
         gender: doctorData.gender,
       },
-    });
-    await prisma.$disconnect();
-    return newDoctor;
+    })
+    await prisma.$disconnect()
+    return newDoctor
   }
 
   static async getDoctores() {
@@ -30,14 +30,14 @@ export class DoctorRespository {
           isDeleted: false,
         },
         include: {
-          faculty: true
-        }
-      });
-      await prisma.$disconnect();
-      return doctors;
+          faculty: true,
+        },
+      })
+      await prisma.$disconnect()
+      return doctors
     } catch (error) {
-      await prisma.$disconnect();
-      throw error;
+      await prisma.$disconnect()
+      throw error
     }
   }
 
@@ -46,18 +46,18 @@ export class DoctorRespository {
       where: {
         id: doctorId,
       },
-    });
-    await prisma.$disconnect();
-    return doctor;
+    })
+    await prisma.$disconnect()
+    return doctor
   }
 
   static async updateDoctor(doctorId: string, doctorData: Doctor) {
     if (!doctorId) {
-      throw new Error('Doctor ID is missing.');
+      throw new Error('Doctor ID is missing.')
     }
 
     if (!doctorData) {
-      throw new Error('Doctor data is missing.');
+      throw new Error('Doctor data is missing.')
     }
 
     const updatedDoctor = await prisma.doctor.update({
@@ -72,10 +72,10 @@ export class DoctorRespository {
         facultyId: doctorData.facultyId,
         isActive: doctorData.isActive,
       },
-    });
+    })
 
-    await prisma.$disconnect();
-    return updatedDoctor;
+    await prisma.$disconnect()
+    return updatedDoctor
   }
 
   static async getListDoctorsIsActive() {
@@ -90,23 +90,23 @@ export class DoctorRespository {
           },
         },
       },
-    });
+    })
 
     const formattedDoctors = doctors.map((doctor) => ({
       ...doctor,
       facultyName: doctor.faculty?.name,
-    }));
-    await prisma.$disconnect();
-    return formattedDoctors;
+    }))
+    await prisma.$disconnect()
+    return formattedDoctors
   }
   static async deleteDoctor(doctorId: string) {
     if (!doctorId) {
-      throw new Error('Doctor ID is missing.');
+      throw new Error('Doctor ID is missing.')
     }
 
-    const hasActiveAppointments = await this.hasAppointments(doctorId);
+    const hasActiveAppointments = await this.hasAppointments(doctorId)
     if (hasActiveAppointments) {
-      throw new Error('Bác sĩ đang có lịch hẹn không thể xóa');
+      throw new Error('Bác sĩ đang có lịch hẹn không thể xóa')
     }
 
     const deletedDoctor = await prisma.doctor.update({
@@ -117,10 +117,10 @@ export class DoctorRespository {
         isDeleted: true,
         isActive: false,
       },
-    });
+    })
 
-    await prisma.$disconnect();
-    return deletedDoctor;
+    await prisma.$disconnect()
+    return deletedDoctor
   }
 
   static async hasAppointments(doctorId: string): Promise<boolean> {
@@ -137,10 +137,10 @@ export class DoctorRespository {
           },
         ],
       },
-    });
+    })
 
-    await prisma.$disconnect();
-    return doctorSchedule !== null;
+    await prisma.$disconnect()
+    return doctorSchedule !== null
   }
 
   static async getFacultyByDoctorId(doctorId: string) {
@@ -152,10 +152,10 @@ export class DoctorRespository {
         include: {
           faculty: true,
         },
-      });
-      return doctor;
+      })
+      return doctor
     } catch (error) {
-      throw new Error('Error getting faculty by doctor ID', error as Error);
+      throw new Error('Error getting faculty by doctor ID', error as Error)
     }
   }
 
@@ -176,30 +176,30 @@ export class DoctorRespository {
           },
         },
       },
-    });
+    })
 
     // Gom nhóm các lịch theo thứ trong tuần
     const doctorsWithScheduleDays = doctors.map((doctor) => {
       // Tạo Map để lưu trữ ngày đại diện cho mỗi thứ trong tuần
-      const daysByWeekday = new Map<string, string>();
+      const daysByWeekday = new Map<string, string>()
 
       doctor.doctorSchedule.forEach((ds) => {
-        const weekday = getDayOfWeek(ds.schedule.date);
+        const weekday = getDayOfWeek(ds.schedule.date)
         // Nếu thứ này chưa có trong Map, thêm vào với ngày đầu tiên gặp
         if (!daysByWeekday.has(weekday)) {
-          daysByWeekday.set(weekday, ds.schedule.date);
+          daysByWeekday.set(weekday, ds.schedule.date)
         }
-      });
+      })
 
       // Chuyển Map thành mảng các ngày đại diện
-      const uniqueDays = Array.from(daysByWeekday.values());
+      const uniqueDays = Array.from(daysByWeekday.values())
 
       return {
         ...doctor,
         scheduleDays: uniqueDays,
-      };
-    });
-    await prisma.$disconnect();
-    return doctorsWithScheduleDays;
+      }
+    })
+    await prisma.$disconnect()
+    return doctorsWithScheduleDays
   }
 }

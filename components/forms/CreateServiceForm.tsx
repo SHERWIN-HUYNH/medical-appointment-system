@@ -1,34 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { createService } from '@/lib/validation';
-import { Form } from '../ui/form';
-import CustomFormField, { FormFieldType } from '../CustomFormField';
-import { SelectItem } from '../ui/select';
-import { Button } from '../ui/button';
-import { toast } from 'sonner';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { createService } from '@/lib/validation'
+import { Form } from '../ui/form'
+import CustomFormField, { FormFieldType } from '../CustomFormField'
+import { SelectItem } from '../ui/select'
+import { Button } from '../ui/button'
+import { toast } from 'sonner'
 
 type Faculty = {
-  id: string;
-  name: string;
-};
+  id: string
+  name: string
+}
 const CreateServiceForm = () => {
-  const [facultyData, setFacultyData] = useState<Faculty[]>([]);
+  const [facultyData, setFacultyData] = useState<Faculty[]>([])
 
   useEffect(() => {
     const fetchFacultyData = async () => {
-      const response = await fetch(`/api/faculty`);
+      const response = await fetch(`/api/faculty`)
       if (response.ok) {
-        const data = await response.json();
-        setFacultyData(data);
+        const data = await response.json()
+        setFacultyData(data)
       }
-    };
+    }
 
-    fetchFacultyData();
-  });
+    fetchFacultyData()
+  })
   const form = useForm<z.infer<typeof createService>>({
     resolver: zodResolver(createService),
     defaultValues: {
@@ -37,13 +37,13 @@ const CreateServiceForm = () => {
       description: '',
       facultyId: '',
     },
-  });
+  })
 
   const onSubmit = async (values: z.infer<typeof createService>) => {
     const serviceData = {
       ...values,
       price: Number(values.price.replace(/\D/g, '')),
-    };
+    }
 
     const response = await fetch(`/api/service`, {
       method: 'POST',
@@ -51,14 +51,14 @@ const CreateServiceForm = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(serviceData),
-    });
+    })
 
     if (response.ok) {
-      toast.success('Thêm dịch vụ thành công!');
+      toast.success('Thêm dịch vụ thành công!')
     } else {
-      toast.error('Không thể thêm dịch vụ');
+      toast.error('Không thể thêm dịch vụ')
     }
-  };
+  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -126,7 +126,7 @@ const CreateServiceForm = () => {
         </div>
       </form>
     </Form>
-  );
-};
+  )
+}
 
-export default CreateServiceForm;
+export default CreateServiceForm

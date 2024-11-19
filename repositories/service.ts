@@ -1,8 +1,8 @@
-import { Service } from '@/types/interface';
-import { PrismaClient } from '@prisma/client';
-import { FacultyRepository } from './faculty';
+import { Service } from '@/types/interface'
+import { PrismaClient } from '@prisma/client'
+import { FacultyRepository } from './faculty'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export class ServiceRepository {
   static async getServicesById(serviceId: string) {
@@ -11,13 +11,13 @@ export class ServiceRepository {
         where: {
           id: serviceId,
         },
-      });
-      return services;
+      })
+      return services
     } catch (error) {
-      console.error('Error retrieving services:', error);
-      throw error;
+      console.error('Error retrieving services:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 
@@ -30,31 +30,31 @@ export class ServiceRepository {
         include: {
           faculty: true,
         },
-      });
-      return services;
+      })
+      return services
     } catch (error) {
-      console.error('Error retrieving services:', error);
-      throw error;
+      console.error('Error retrieving services:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 
   static async getAllServices() {
     try {
-      const services = await prisma.service.findMany();
-      return services;
+      const services = await prisma.service.findMany()
+      return services
     } catch (error) {
-      console.error('Error retrieving services:', error);
-      throw error;
+      console.error('Error retrieving services:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
   static async createService(serviceData: Service) {
     try {
-      const faculty = await FacultyRepository.getFacultyById(serviceData.facultyId);
-      if (!faculty) throw new Error('Faculty not found');
+      const faculty = await FacultyRepository.getFacultyById(serviceData.facultyId)
+      if (!faculty) throw new Error('Faculty not found')
       const newService = await prisma.service.create({
         data: {
           name: serviceData.name,
@@ -62,13 +62,13 @@ export class ServiceRepository {
           price: serviceData.price,
           facultyId: faculty.id,
         },
-      });
-      return newService;
+      })
+      return newService
     } catch (error) {
-      console.error('Error creating service:', error);
-      throw error;
+      console.error('Error creating service:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
   static async updateService(serviceData: Service) {
@@ -77,8 +77,8 @@ export class ServiceRepository {
         id: serviceData.id,
       },
       data: serviceData,
-    });
-    return updatedService;
+    })
+    return updatedService
   }
   static async deleteService(serviceId: string) {
     try {
@@ -88,24 +88,24 @@ export class ServiceRepository {
           where: {
             serviceId: serviceId,
             NOT: {
-              status: 'PENDING'
-            }
-          }
-        });
+              status: 'PENDING',
+            },
+          },
+        })
 
         // Xóa service
         const deletedService = await tx.service.delete({
           where: {
             id: serviceId,
           },
-        });
-        return deletedService;
-      });
+        })
+        return deletedService
+      })
     } catch (error) {
-      console.error('Error deleting service:', error);
-      throw error;
+      console.error('Error deleting service:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 }

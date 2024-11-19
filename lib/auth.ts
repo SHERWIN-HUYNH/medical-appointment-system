@@ -1,11 +1,11 @@
-import { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import prisma from './prisma';
-import { UserRepository } from '@/repositories/user';
-import { compare } from 'bcrypt';
-import { JWT } from 'next-auth/jwt';
-import { AdapterUser } from 'next-auth/adapters';
+import { NextAuthOptions } from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import prisma from './prisma'
+import { UserRepository } from '@/repositories/user'
+import { compare } from 'bcrypt'
+import { JWT } from 'next-auth/jwt'
+import { AdapterUser } from 'next-auth/adapters'
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
@@ -25,24 +25,24 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Lack Email or Password');
+          throw new Error('Lack Email or Password')
         } else {
-          console.log(credentials);
+          console.log(credentials)
         }
-        const user = await UserRepository.getUserByEmail(credentials.email);
+        const user = await UserRepository.getUserByEmail(credentials.email)
         if (!user) {
-          throw new Error('User not found');
+          throw new Error('User not found')
         }
-        const isPasswordCorrect = await compare(credentials.password, user.password);
+        const isPasswordCorrect = await compare(credentials.password, user.password)
         if (!isPasswordCorrect) {
-          throw new Error('Wrong Password');
+          throw new Error('Wrong Password')
         }
         return {
           id: `${user.id}`,
           name: user.name,
           email: user.email,
           roleName: user.roleName,
-        };
+        }
       },
     }),
   ],
@@ -50,16 +50,16 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        console.log('token', token, user);
+        console.log('token', token, user)
         return {
           ...token,
           id: user.id,
           name: user.name,
           email: user.email,
           roleName: user.roleName,
-        };
+        }
       }
-      return token;
+      return token
     },
 
     async session({ session, token }) {
@@ -71,10 +71,10 @@ export const authOptions: NextAuthOptions = {
           roleName: token.roleName,
         },
         infor: { token },
-      };
+      }
     },
     async redirect({ url, baseUrl }) {
-      return url.startsWith(baseUrl) ? url : baseUrl;
+      return url.startsWith(baseUrl) ? url : baseUrl
     },
   },
-};
+}

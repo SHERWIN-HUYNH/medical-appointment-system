@@ -1,6 +1,6 @@
-import AdminPage from '@/components/admin/Adminpage';
-import DefaultLayout from '@/components/Layouts/defaultLayout';
-import React from 'react';
+import AdminPage from '@/components/admin/Adminpage'
+import DefaultLayout from '@/components/Layouts/defaultLayout'
+import React from 'react'
 
 const TestAdmin = () => {
   return (
@@ -9,7 +9,7 @@ const TestAdmin = () => {
         <AdminPage />
       </div>
     </DefaultLayout>
-  );
-};
+  )
+}
 
-export default TestAdmin;
+export default TestAdmin

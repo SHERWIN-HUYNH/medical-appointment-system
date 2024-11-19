@@ -1,20 +1,20 @@
-'use client';
-import React from 'react';
-import { useFormContext } from 'react-hook-form';
+'use client'
+import React from 'react'
+import { useFormContext } from 'react-hook-form'
 
 interface Option {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 interface SelectGroupProps {
-  label: string;
-  options: Option[];
-  fieldName: string;
+  label: string
+  options: Option[]
+  fieldName: string
 }
 
 const SelectGroup: React.FC<SelectGroupProps> = ({ label, options = [], fieldName }) => {
-  const { register } = useFormContext();
+  const { register } = useFormContext()
 
   return (
     <div>
@@ -39,7 +39,7 @@ const SelectGroup: React.FC<SelectGroupProps> = ({ label, options = [], fieldNam
         </select>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SelectGroup;
+export default SelectGroup

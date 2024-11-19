@@ -1,27 +1,27 @@
-'use client';
-import { createService } from '@/lib/validation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { z } from 'zod';
-import { Button } from '../ui/button';
-import { useForm } from 'react-hook-form';
-import { Form } from '../ui/form';
-import CustomFormField, { FormFieldType } from '../CustomFormField';
-import { SelectItem } from '../ui/select';
-import { useSearchParams, useRouter } from 'next/navigation';
+'use client'
+import { createService } from '@/lib/validation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { z } from 'zod'
+import { Button } from '../ui/button'
+import { useForm } from 'react-hook-form'
+import { Form } from '../ui/form'
+import CustomFormField, { FormFieldType } from '../CustomFormField'
+import { SelectItem } from '../ui/select'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 type Faculty = {
-  id: string;
-  name: string;
-};
+  id: string
+  name: string
+}
 
 const EditServiceForm = () => {
-  const [loading, setLoading] = useState(false);
-  const [facultyData, setFacultyData] = useState<Faculty[]>([]);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
+  const [loading, setLoading] = useState(false)
+  const [facultyData, setFacultyData] = useState<Faculty[]>([])
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
 
   const form = useForm<z.infer<typeof createService>>({
     resolver: zodResolver(createService),
@@ -31,61 +31,61 @@ const EditServiceForm = () => {
       description: '',
       facultyId: '',
     },
-  });
+  })
 
   const fetchFacultyData = async () => {
-    const response = await fetch(`/api/faculty`);
+    const response = await fetch(`/api/faculty`)
     if (response.ok) {
-      const data = await response.json();
-      setFacultyData(data);
+      const data = await response.json()
+      setFacultyData(data)
     }
-  };
+  }
 
   const fetchServiceData = async () => {
-    const response = await fetch(`/api/service/${id}`);
+    const response = await fetch(`/api/service/${id}`)
     if (response.ok) {
-      const service = await response.json();
+      const service = await response.json()
       form.reset({
         name: service.name,
         price: service.price.toString(),
         description: service.description,
         facultyId: service.facultyId,
-      });
+      })
     } else {
-      toast.error('Failed to fetch service details.');
+      toast.error('Failed to fetch service details.')
     }
-  };
+  }
 
   useEffect(() => {
-    fetchFacultyData();
+    fetchFacultyData()
     if (id) {
-      fetchServiceData();
+      fetchServiceData()
     }
-  }, [id]);
+  }, [id])
 
   const onSubmit = async (values: z.infer<typeof createService>) => {
     try {
-      setLoading(true);
+      setLoading(true)
       const response = await fetch(`/api/service/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
-      });
+      })
 
-      const { error } = await response.json();
+      const { error } = await response.json()
 
       if (response.ok) {
-        toast.success('Service updated successfully!');
-        router.push('/test-service');
+        toast.success('Service updated successfully!')
+        router.push('/test-service')
       } else {
-        toast.error(error);
+        toast.error(error)
       }
     } catch {
-      toast.error('An error occurred while updating the service');
+      toast.error('An error occurred while updating the service')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <Form {...form}>
@@ -155,7 +155,7 @@ const EditServiceForm = () => {
         </div>
       </form>
     </Form>
-  );
-};
+  )
+}
 
-export default EditServiceForm;
+export default EditServiceForm

@@ -1,91 +1,91 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import UserLayout from '@/components/Layouts/userLayout';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { academicTitles } from '@/lib/data';
-import { shortenTitle } from '@/lib/utils';
-import { getDayOfWeek, sortDayOfWeek } from '@/lib/utils';
-import { useAppointmentContext } from '@/context/AppointmentContext';
-import Link from 'next/link';
+'use client'
+import React, { useState, useEffect } from 'react'
+import UserLayout from '@/components/Layouts/userLayout'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { academicTitles } from '@/lib/data'
+import { shortenTitle } from '@/lib/utils'
+import { getDayOfWeek, sortDayOfWeek } from '@/lib/utils'
+import { useAppointmentContext } from '@/context/AppointmentContext'
+import Link from 'next/link'
 
 interface Doctor {
-  id: string;
-  name: string;
-  academicTitle: string;
-  description?: string;
-  image?: string;
+  id: string
+  name: string
+  academicTitle: string
+  description?: string
+  image?: string
   faculty?: {
-    name: string;
-  };
-  gender?: boolean;
-  scheduleDays?: string[];
+    name: string
+  }
+  gender?: boolean
+  scheduleDays?: string[]
 }
 
 const ChooseDoctor = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { data, setData } = useAppointmentContext();
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const { data, setData } = useAppointmentContext()
 
-  const facultyId = data.facultyId;
-  const facultyName = searchParams.get('facultyName');
+  const facultyId = data.facultyId
+  const facultyName = searchParams.get('facultyName')
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [selectedTitle, setSelectedTitle] = useState('');
-  const [selectedGender, setSelectedGender] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState('')
+  const [doctors, setDoctors] = useState<Doctor[]>([])
+  const [selectedTitle, setSelectedTitle] = useState('')
+  const [selectedGender, setSelectedGender] = useState<string>('')
 
   useEffect(() => {
     if (!facultyId) {
-      router.push('/choose-faculty');
-      return;
+      router.push('/choose-faculty')
+      return
     }
 
     const fetchDoctors = async () => {
       try {
-        const res = await fetch(`/api/doctor/faculty/${facultyId}`);
-        const doctorsData = await res.json();
+        const res = await fetch(`/api/doctor/faculty/${facultyId}`)
+        const doctorsData = await res.json()
 
         if (Array.isArray(doctorsData)) {
-          setDoctors(doctorsData);
+          setDoctors(doctorsData)
         }
       } catch (error) {
-        console.error('Error fetching doctors:', error);
+        console.error('Error fetching doctors:', error)
       }
-    };
+    }
 
-    fetchDoctors();
-  }, [facultyId]);
+    fetchDoctors()
+  }, [facultyId])
 
   const filteredDoctors = doctors.filter((doctor) => {
-    const matchesSearch = doctor.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTitle = selectedTitle ? doctor.academicTitle === selectedTitle : true;
+    const matchesSearch = doctor.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesTitle = selectedTitle ? doctor.academicTitle === selectedTitle : true
     const matchesGender = selectedGender
       ? selectedGender === 'true'
         ? doctor.gender
         : !doctor.gender
-      : true;
-    return matchesSearch && matchesTitle && matchesGender;
-  });
+      : true
+    return matchesSearch && matchesTitle && matchesGender
+  })
 
   const getDisplayText = () => {
     if (selectedTitle === '') {
-      return 'Học hàm/học vị';
+      return 'Học hàm/học vị'
     }
-    return shortenTitle(selectedTitle);
-  };
+    return shortenTitle(selectedTitle)
+  }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedTitle(e.target.value);
-  };
+    setSelectedTitle(e.target.value)
+  }
 
   const handleGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedGender(e.target.value);
-  };
+    setSelectedGender(e.target.value)
+  }
 
   const handleDoctorClick = (facultyId: string, doctorId: string) => {
-    setData({ facultyId, doctorId });
-  };
+    setData({ facultyId, doctorId })
+  }
 
   return (
     <div className="bg-[#e8f2f7] w-full h-min flex flex-col items-center justify-center">
@@ -218,7 +218,7 @@ const ChooseDoctor = () => {
                         },
                       }}
                       onClick={() => {
-                        handleDoctorClick(facultyId!, doctor.id);
+                        handleDoctorClick(facultyId!, doctor.id)
                       }}
                       className="p-4 hover:bg-slate-50 cursor-pointer rounded-lg border border-slate-200 shadow-sm bg-white transition-all hover:shadow-md"
                     >
@@ -360,7 +360,7 @@ const ChooseDoctor = () => {
         </section>
       </UserLayout>
     </div>
-  );
-};
+  )
+}
 
-export default ChooseDoctor;
+export default ChooseDoctor

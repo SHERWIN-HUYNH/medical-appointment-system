@@ -1,7 +1,7 @@
-import { CreateAppointment } from '@/types/interface';
-import { PrismaClient } from '@prisma/client';
+import { CreateAppointment } from '@/types/interface'
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export class AppointmentRepository {
   static async getAppointmentByUserId(profileId: string) {
@@ -10,13 +10,13 @@ export class AppointmentRepository {
         where: {
           profileId: profileId,
         },
-      });
-      return appointments;
+      })
+      return appointments
     } catch (error) {
-      console.error('Error retrieving appointments:', error);
-      throw error;
+      console.error('Error retrieving appointments:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
   static async getAppointmentByServiceId(serviceId: string) {
@@ -28,13 +28,13 @@ export class AppointmentRepository {
             id: serviceId,
           },
         },
-      });
-      return appointments;
+      })
+      return appointments
     } catch (error) {
-      console.error('Error retrieving appointments:', error);
-      throw error;
+      console.error('Error retrieving appointments:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 
@@ -50,13 +50,13 @@ export class AppointmentRepository {
           serviceId,
           profileId,
         },
-      });
-      return newAppointment;
+      })
+      return newAppointment
     } catch (error) {
-      console.error('Error creating appointment:', error);
-      throw error;
+      console.error('Error creating appointment:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
   static async getAllAppointments() {
@@ -71,13 +71,13 @@ export class AppointmentRepository {
             },
           },
         },
-      });
-      return appointments;
+      })
+      return appointments
     } catch (error) {
-      console.error('Error retrieving appointments:', error);
-      throw error;
+      console.error('Error retrieving appointments:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
   static async CountAppointment() {
@@ -87,17 +87,17 @@ export class AppointmentRepository {
         _count: {
           id: true,
         },
-      });
+      })
       const result = appointmentCounts.map((group) => ({
         status: group.status,
         count: group._count.id,
-      }));
-      return result;
+      }))
+      return result
     } catch (error) {
-      console.error('Error retrieving appointments:', error);
-      throw error;
+      console.error('Error retrieving appointments:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 
@@ -142,13 +142,13 @@ export class AppointmentRepository {
             },
           },
         },
-      });
-      return appointments;
+      })
+      return appointments
     } catch (error) {
-      console.error('Error retrieving appointments:', error);
-      throw error;
+      console.error('Error retrieving appointments:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 }

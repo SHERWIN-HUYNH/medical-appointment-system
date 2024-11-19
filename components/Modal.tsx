@@ -1,14 +1,14 @@
-import React from 'react';
+import React from 'react'
 
 interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  message: string;
+  isOpen: boolean
+  onClose: () => void
+  onConfirm: () => void
+  message: string
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, message }) => {
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -32,7 +32,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, message }) =>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Modal;
+export default Modal
