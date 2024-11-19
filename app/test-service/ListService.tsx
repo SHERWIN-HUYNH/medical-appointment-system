@@ -1,4 +1,5 @@
 'use client';
+import ModalDelete from '@/components/ModalDelete';
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
 import TableSearch from '@/components/TableSearch';
@@ -6,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowDownNarrowWide, Pencil, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 type Service = {
   id: string;
@@ -58,6 +60,8 @@ const ListService = () => {
   const [serviceData, setServiceData] = useState<Service[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
+  const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchServiceData = async () => {
@@ -76,7 +80,7 @@ const ListService = () => {
         setFacultyData(data);
       }
     };
-
+    
     fetchServiceData();
     fetchFacultyData();
   }, []);
@@ -117,6 +121,36 @@ const ListService = () => {
     index: getSequentialNumber(index),
   }));
 
+  const confirmDelete = async () => {
+    if (!serviceToDelete) return;
+
+    try {
+      const response = await fetch(`/api/service`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: serviceToDelete.id }),
+      });
+
+      if (response.ok) {
+        setServiceData((prevData) => 
+          prevData.filter((service) => service.id !== serviceToDelete.id)
+        );
+        toast.success(`Dịch vụ ${serviceToDelete.name} đã xóa thành công!`);
+      } else {
+        const message = await response.json();
+        toast.error(message.error);
+      }
+    } catch (error) {
+      console.error('Error deleting service:', error);
+      toast.error('Đã xảy ra lỗi khi xóa dịch vụ!');
+    } finally {
+      setServiceToDelete(null);
+      setShowModal(false);
+    }
+  };
+
   const renderRow = (item: Service & { index: number }) => {
     return (
       <tr
@@ -137,7 +171,13 @@ const ListService = () => {
                 <Pencil size={28} strokeWidth={3} color="white" />
               </Button>
             </Link>
-            <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-purple-300">
+            <Button
+              className="w-12 h-10 flex items-center justify-center rounded-full bg-purple-300"
+              onClick={() => {
+                setServiceToDelete(item);
+                setShowModal(true);
+              }}
+            >
               <Trash2 size={28} strokeWidth={3} color="white" />
             </Button>
           </div>
@@ -176,6 +216,14 @@ const ListService = () => {
           onPageChange={setCurrentPage} // Pass the function to update current page
         />
       </div>
+      {showModal && (
+        <ModalDelete
+          showModal={showModal}
+          onClose={() => setShowModal(false)}
+          onConfirm={confirmDelete}
+          label={`dịch vụ ${serviceToDelete?.name}`}
+        />
+      )}
     </div>
   );
 };

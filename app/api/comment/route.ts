@@ -34,3 +34,10 @@ export async function DELETE(req: Request) {
     return internalServerErrorResponse('FAIL TO DELETE PROFILE');
   }
 }
+
+export async function POST(req: Request) {
+  const commentData = await req.json();
+
+  const comment = await CommentRespository.createComment(commentData);
+  return successResponse(comment);
+}

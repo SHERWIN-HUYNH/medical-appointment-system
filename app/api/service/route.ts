@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   badRequestResponse,
+  forbiddenResponse,
   notFoundResponse,
   successResponse,
 } from '@/helpers/response';
+import { AppointmentRepository } from '@/repositories/appointment';
 import { ServiceRepository } from '@/repositories/service';
 import { Service } from '@/types/interface';
 
@@ -25,30 +27,16 @@ export async function POST(req: Request) {
   return successResponse(newService);
 }
 
-export async function PUT(req: Request) {
-  const serviceData = await req.json();
-  console.log('SERVICE DATA', serviceData);
-  // const appointment = await AppointmentRepository.getAppointmentByServiceId(service.id);
-  // if (appointment) {
-  //     return forbiddenResponse("SERVICE HAS A PENDING APPOINTMENT");
-  // }
-
-  const updatedService = await ServiceRepository.updateService(serviceData);
-  if (!updatedService) {
-    return badRequestResponse('FAIL TO UPDATE SERVICE');
-  }
-  return successResponse(updatedService);
-}
-
 export async function DELETE(req: Request) {
   const { id } = await req.json();
-  // const appointment = await AppointmentRepository.getAppointmentByServiceId(id);
-  // if (appointment) {
-  //     return forbiddenResponse("SERVICE HAS A PENDING APPOINTMENT");
-  // }
+  const appointment = await AppointmentRepository.getAppointmentByServiceId(id);
+  console.log('Appointments found:', appointment);
+  if (appointment?.length > 0) {
+    return forbiddenResponse("Dịch vụ đang có lịch hẹn đang chờ xử lý");
+  }
   const deletedService = await ServiceRepository.deleteService(id);
   if (!deletedService) {
-    return badRequestResponse('FAIL TO DELETE SERVICE');
+    return badRequestResponse('Xóa dịch vụ thất bại');
   }
   return successResponse(deletedService);
 }

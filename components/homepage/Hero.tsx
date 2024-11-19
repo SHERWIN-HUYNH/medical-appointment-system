@@ -1,8 +1,12 @@
+"use client"
+import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React from 'react';
-import { Button } from '../../components/ui/button';
 
 function Hero() {
+  const router = useRouter();
+
   return (
     <section className="mt-[80px]">
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
@@ -27,8 +31,11 @@ function Hero() {
               sức khỏe
             </p>
 
-            <Button className="mt-10 bg-primary hover:bg-[#56c2e6] text-white">
-              Khám phá
+            <Button 
+              className="mt-10 bg-primary hover:bg-[#56c2e6] text-white"
+              onClick={() => router.push('/choose-profile')}
+            >
+              Đặt lịch ngay
             </Button>
           </div>
         </div>

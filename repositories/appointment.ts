@@ -1,4 +1,4 @@
-import { Appointment, CreateAppointment } from '@/types/interface';
+import { CreateAppointment } from '@/types/interface';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -53,6 +53,55 @@ export class AppointmentRepository {
       throw error;
     } finally {
       await prisma.$disconnect();
+    }
+  }
+
+  static async getAppointmentsByProfileId(profileId: string) {
+    try {
+      const appointments = await prisma.appointment.findMany({
+        where: {
+          profileId: profileId,
+        },
+        include: {
+          profile: {
+            select: {
+              name: true,
+            },
+          },
+          Service: {
+            select: {
+              name: true,
+              price: true,
+            },
+          },
+          doctorSchedule: {
+            include: {
+              doctor: {
+                select: {
+                  id: true,
+                  name: true,
+                  academicTitle: true,
+                  faculty: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                },
+              },
+              schedule: {
+                select: {
+                  date: true,
+                  timeSlot: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      return appointments;
+    } catch (error) {
+      console.error('Error retrieving appointments:', error);
+      throw error;
     }
   }
 }

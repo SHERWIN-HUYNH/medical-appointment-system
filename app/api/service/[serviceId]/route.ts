@@ -23,34 +23,27 @@ export async function GET(req: Request, { params }: { params: { serviceId: strin
 }
 
 export async function PUT(req: Request, { params }: { params: { serviceId: string } }) {
-  try {
-    const { serviceId } = params;
-    const serviceData = await req.json();
+  const { serviceId } = params;
+  const serviceData = await req.json();
 
-    // Kiểm tra xem có lịch hẹn PENDING không
-    const pendingAppointments =
-      await AppointmentRepository.getAppointmentByServiceId(serviceId);
-    if (pendingAppointments?.length > 0) {
-      return forbiddenResponse('Không thể cập nhật dịch vụ đang có lịch hẹn chờ duyệt');
-    }
-
-    const updateData = {
-      id: serviceId,
-      name: serviceData.name,
-      description: serviceData.description,
-      price: Number(serviceData.price.replace(/\D/g, '')),
-      facultyId: serviceData.facultyId,
-    };
-
-    const updatedService = await ServiceRepository.updateService(updateData);
-
-    if (!updatedService) {
-      return badRequestResponse('Không thể cập nhật dịch vụ');
-    }
-
-    return successResponse(updatedService);
-  } catch (error) {
-    console.error('Error updating service:', error);
-    return badRequestResponse('Đã xảy ra lỗi khi cập nhật dịch vụ');
+  const pendingAppointments = await AppointmentRepository.getAppointmentByServiceId(serviceId);
+  if (pendingAppointments?.length > 0) {
+    return forbiddenResponse('Không thể cập nhật dịch vụ đang có lịch hẹn chờ duyệt');
   }
+
+  const updateData = {
+    id: serviceId,
+    name: serviceData.name,
+    description: serviceData.description,
+    price: Number(serviceData.price.replace(/\D/g, '')),
+    facultyId: serviceData.facultyId,
+  };
+
+  const updatedService = await ServiceRepository.updateService(updateData);
+  if (!updatedService) {
+    return badRequestResponse('Không thể cập nhật dịch vụ');
+  }
+
+  return successResponse(updatedService);
 }
+

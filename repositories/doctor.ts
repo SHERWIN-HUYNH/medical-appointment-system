@@ -24,13 +24,21 @@ export class DoctorRespository {
   }
 
   static async getDoctores() {
-    const doctors = await prisma.doctor.findMany({
-      where: {
-        isDeleted: false,
-      },
-    });
-    await prisma.$disconnect();
-    return doctors;
+    try {
+      const doctors = await prisma.doctor.findMany({
+        where: {
+          isDeleted: false,
+        },
+        include: {
+          faculty: true
+        }
+      });
+      await prisma.$disconnect();
+      return doctors;
+    } catch (error) {
+      await prisma.$disconnect();
+      throw error;
+    }
   }
 
   static async getDoctorById(doctorId: string) {

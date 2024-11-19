@@ -64,22 +64,27 @@ const EditServiceForm = () => {
   }, [id]);
 
   const onSubmit = async (values: z.infer<typeof createService>) => {
-    setLoading(true);
-    const response = await fetch(`/api/service/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-    });
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/service/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
 
-    if (response.ok) {
-      toast.success('Service updated successfully!');
-      router.push('/test-service');
-    } else {
-      toast.error('Failed to update service.');
+      const { error } = await response.json();
+
+      if (response.ok) {
+        toast.success('Service updated successfully!');
+        router.push('/test-service');
+      } else {
+        toast.error(error);
+      }
+    } catch {
+      toast.error('An error occurred while updating the service');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

@@ -1,270 +1,214 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { FilePen, InfoIcon, TrashIcon, X } from 'lucide-react';
-import React, { useState } from 'react';
+import { FilePen, InfoIcon, TrashIcon } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import ReviewModal from './ReviewModal';
-
-// Define types for the status and medical record
-type Status = {
-  id: number;
-  label: string;
-};
 
 type MedicalRecord = {
   id: string;
   patientName: string;
-  department: string;
+  faculty: string;
+  doctorName: string;
+  serviceName: string;
+  price: number;
   time: string;
   hour: string;
-  statusId: number;
+  status: 'SCHEDULED' | 'PENDING' | 'CANCELLED';
+  doctorId: string;
+  cancellationReason: string | null;
 };
 
-// Array of statuses
-const statuses: Status[] = [
-  { id: 1, label: 'Chưa khám' },
-  { id: 2, label: 'Đã khám' },
-  { id: 3, label: 'Đã hủy' },
+const statuses = [
+  { value: 'PENDING', label: 'Đang chờ khám' },
+  { value: 'SCHEDULED', label: 'Đã khám' },
+  { value: 'CANCELLED', label: 'Đã hủy' },
 ];
-
-// Array of medical records
-const medicalRecordsData: MedicalRecord[] = [
-  {
-    id: 'A2111260001',
-    patientName: 'NGUYỄN THÚY QUỲNH',
-    department: 'Chấn thương chỉnh hình',
-    time: '29/11/2021',
-    hour: '13:00 (Buổi Chiều)',
-    statusId: 2, // Đã khám
-  },
-  {
-    id: 'A2111260002',
-    patientName: 'NGÔ THỊ DUYÊN',
-    department: 'Da Liễu',
-    time: '01/12/2021',
-    hour: '10:00 (Buổi Sáng)',
-    statusId: 1, // Chưa khám
-  },
-  {
-    id: 'A2111260003',
-    patientName: 'HUỲNH CHÍ TRUNG',
-    department: 'Nội tiết',
-    time: '05/12/2021',
-    hour: '14:00 (Buổi Chiều)',
-    statusId: 3, // Đã hủy
-  },
-  {
-    id: 'A2111260004',
-    patientName: 'NGUYỄN THÚY QUỲNH',
-    department: 'Tâm lý',
-    time: '10/12/2021',
-    hour: '10:00 (Buổi Sáng)',
-    statusId: 1, // Chưa khám
-  },
-];
-
-// Modal để in ra chi tiết phiếu khám bệnh
-const MedicalRecordDetail = ({
-  record,
-  onClose,
-}: {
-  record: MedicalRecord;
-  onClose: () => void;
-}) => (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-6 rounded-lg w-full max-w-lg">
-      <div className="flex justify-between items-center">
-        <h2 className="text-lg font-bold">Chi tiết hồ sơ</h2>
-        <button onClick={onClose}>
-          <X className="w-6 h-6 text-gray-500" />
-        </button>
-      </div>
-      <div className="mt-4 space-y-3">
-        <div className="flex justify-between">
-          <span className="font-semibold">Họ và tên:</span>
-          <span>{record.patientName}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="font-semibold">Chuyên khoa:</span>
-          <span>{record.department}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="font-semibold">Thời gian khám:</span>
-          <span>{record.time}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="font-semibold">Giờ khám:</span>
-          <span>{record.hour}</span>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-// Modal for confirmation of cancellation
-const ConfirmationModal = ({
-  onConfirm,
-  onCancel,
-}: {
-  onConfirm: () => void;
-  onCancel: () => void;
-}) => (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-6 rounded-lg w-full max-w-sm">
-      <h2 className="text-lg font-bold">Xác nhận hủy phiếu khám</h2>
-      <p className="mt-4">Bạn có muốn hủy phiếu khám này không?</p>
-      <div className="mt-4 flex justify-end gap-2">
-        <Button onClick={onCancel} className="bg-gray-300 text-black">
-          Hủy
-        </Button>
-        <Button onClick={onConfirm} className="bg-red-500 text-white">
-          Xác nhận
-        </Button>
-      </div>
-    </div>
-  </div>
-);
 
 const MedicalRecord = () => {
-  const [selectedStatusId, setSelectedStatusId] = useState<number>(1);
-  const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>(null);
-  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
-  const [recordToCancel, setRecordToCancel] = useState<MedicalRecord | null>(null);
-  const [showReviewModal, setShowReviewModal] = useState<boolean>(false);
-  const [rating, setRating] = useState<number>(0);
-  const [comment, setComment] = useState<string>('');
+  const params = useParams();
+  const [selectedStatus, setSelectedStatus] = useState<'SCHEDULED' | 'PENDING' | 'CANCELLED'>('SCHEDULED');
+  const [appointments, setAppointments] = useState<MedicalRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
+  const [selectedAppointment, setSelectedAppointment] = useState<MedicalRecord | null>(null);
 
-  // Filter medical records based on selected status
-  const filteredRecords = medicalRecordsData.filter(
-    (record) => record.statusId === selectedStatusId,
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await fetch(`/api/appointments/${params.userId}`);
+        if (!response.ok) throw new Error('Failed to fetch');
+        const data = await response.json();
+        setAppointments(data);
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAppointments();
+  }, [params.userId]);
+
+  const filteredRecords = appointments.filter(
+    (record) => record.status === selectedStatus
   );
 
-  const handleCancelRecord = (record: MedicalRecord) => {
-    setRecordToCancel(record);
-    setShowConfirmation(true);
+  const handleReviewClick = (record: MedicalRecord) => {
+    setSelectedAppointment(record);
+    setShowReviewModal(true);
   };
 
-  const confirmCancelRecord = () => {
-    if (recordToCancel) {
-      // Cap nhat trang thai "Đã hủy" (3)
-      recordToCancel.statusId = 3;
-      setShowConfirmation(false);
-      setSelectedRecord(null);
-      alert('Phiếu khám đã được hủy.');
+  const handleSubmitReview = async () => {
+    if (rating === 0) {
+      alert('Vui lòng chọn số sao đánh giá');
+      return;
+    }
+
+    if (!selectedAppointment) return;
+
+    try {
+      const response = await fetch('/api/comment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: comment,
+          rating: rating,
+          doctorId: selectedAppointment.doctorId,
+          userId: params.userId,
+        }),
+      });
+
+      if (response.ok) {
+        alert('Đánh giá thành công!');
+        setShowReviewModal(false);
+        setSelectedAppointment(null);
+        setRating(0);
+        setComment('');
+      } else {
+        throw new Error('Failed to submit review');
+      }
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert('Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại sau.');
     }
   };
 
-  const handleReview = () => {
-    console.log('Rating:', rating);
-    console.log('Comment:', comment);
-    setShowReviewModal(false);
-  };
+  if (loading) {
+    return <div>Đang tải...</div>;
+  }
 
   return (
     <div>
-      <div className="flex gap-5 ">
+      <div className="flex gap-3">
         {statuses.map((status) => (
           <Button
-            key={status.id}
-            className={`button hover:bg-slate-300 ${
-              selectedStatusId === status.id ? 'button-selected' : ''
+            key={status.value}
+            className={`text-sm px-4 py-1.5 rounded-full ${
+              selectedStatus === status.value 
+                ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
-            onClick={() => setSelectedStatusId(status.id)}
+            onClick={() => setSelectedStatus(status.value as 'SCHEDULED' | 'PENDING' | 'CANCELLED')}
           >
             {status.label}
           </Button>
         ))}
       </div>
-      <div className="mt-5 ">
+      <div className="mt-5">
         {filteredRecords.length > 0 ? (
           filteredRecords.map((record) => (
             <div
               key={record.id}
-              className="p-4 border-slate-500 rounded-lg shadow-lg bg-white mb-4 flex flex-col gap-4"
+              className="p-4 border-[0.5px] border-slate-50 rounded-lg shadow-[0_2px_8px_rgb(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgb(0,0,0,0.06)] transition-shadow bg-white mb-4"
             >
-              <div className="flex justify-between items-center">
-                <p className="text-slate-500">
-                  Mã phiếu: <span className="text-lg font-semibold">{record.id}</span>
-                </p>
+              <div className="flex justify-between items-center mb-2">
+                <div className="text-sm font-semibold text-primary">{record.patientName}</div>
                 <span
-                  className={`px-4 py-1 rounded-full text-sm ${
-                    record.statusId === 1
-                      ? 'bg-red-100 text-red-600'
-                      : record.statusId === 2
-                        ? 'bg-green-100 text-green-600'
-                        : 'bg-gray-200 text-gray-600'
+                  className={`px-2 py-0.5 text-xs rounded-full ${
+                    record.status === 'PENDING'
+                      ? 'bg-yellow-50 text-yellow-600'
+                      : record.status === 'SCHEDULED'
+                        ? 'bg-green-50 text-green-600'
+                        : 'bg-gray-100 text-gray-600'
                   }`}
                 >
-                  {statuses.find((status) => status.id === record.statusId)?.label}
+                  {statuses.find((status) => status.value === record.status)?.label}
                 </span>
               </div>
-              <div className="flex flex-col gap-1">
-                <p className="font-bold text-xl">{record.patientName}</p>
-                <hr className="border-t border-dashed border-gray-300 w-full my-2" />
-                <div className="flex flex-1 gap-6 font-semi text-slate-700 my-1">
-                  <span>Chuyên Khoa:</span>
-                  <p>{record.department}</p>
+              
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs mb-3">
+                <div className="flex items-center">
+                  <span className="text-gray-500 w-16">Khoa:</span>
+                  <span>{record.faculty}</span>
                 </div>
-                <div className="flex flex-1 gap-4 font-semi text-slate-700 my-1">
-                  <span>Thời gan khám:</span>
-                  <p>{record.time}</p>
+                <div className="flex items-center">
+                  <span className="text-gray-500 w-16">Dịch vụ:</span>
+                  <span>{record.serviceName}</span>
                 </div>
-                <div className="flex flex-1 gap-14 font-semi text-slate-700 my-1">
-                  <span>Giờ khám:</span>
-                  <p>{record.hour}</p>
+                <div className="flex items-center">
+                  <span className="text-gray-500 w-16">Bác sĩ:</span>
+                  <span>{record.doctorName}</span>
+                </div>
+                <div className="flex items-center">
+                  <span className="text-gray-500 w-16">Thời gian:</span>
+                  <span>{record.time}</span>
+                </div>
+                <div className="flex items-center">
+                  <span className="text-gray-500 w-16">Giờ khám:</span>
+                  <span>{record.hour}</span>
                 </div>
               </div>
-              <div className="flex justify-end gap-4 mt-2">
-                {record.statusId === 1 && (
+
+              <div className="flex justify-end gap-2">
+                {record.status === 'PENDING' && (
                   <Button
-                    className="text-red-500 flex items-center bg-white hover:bg-slate-50"
-                    onClick={() => handleCancelRecord(record)}
+                    size="sm"
+                    className="text-red-500 text-xs flex items-center bg-transparent"
                   >
-                    <TrashIcon className="mr-1" /> Hủy phiếu khám
+                    <TrashIcon className="w-3 h-3 mr-1" /> Hủy lịch hẹn
                   </Button>
                 )}
-                {record.statusId === 2 && (
+                {record.status === 'SCHEDULED' && (
                   <Button
-                    className="text-yellow-500 flex items-center bg-white hover:bg-slate-50"
-                    onClick={() => setShowReviewModal(true)} // Hien thi Modal danh gia
+                    size="sm"
+                    className="text-yellow-500 text-xs flex items-center bg-transparent"
+                    onClick={() => handleReviewClick(record)}
                   >
-                    <FilePen className="mr-1" /> Đánh giá
+                    <FilePen className="w-3 h-3 mr-1" /> Đánh giá
                   </Button>
                 )}
                 <Button
-                  className="text-gray-600 flex items-center bg-white hover:bg-slate-50"
-                  onClick={() => setSelectedRecord(record)}
+                  size="sm"
+                  className="text-gray-600 text-xs flex items-center bg-transparent"
                 >
-                  <InfoIcon className="mr-1" /> Chi tiết
+                  <InfoIcon className="w-3 h-3 mr-1" /> Chi tiết
                 </Button>
               </div>
-              {/* Review Modal */}
-              {showReviewModal && (
-                <ReviewModal
-                  rating={rating}
-                  setRating={setRating}
-                  comment={comment}
-                  setComment={setComment}
-                  onSubmit={handleReview}
-                  onClose={() => setShowReviewModal(false)}
-                />
-              )}
             </div>
           ))
         ) : (
           <p>Bạn không có phiếu khám nào trong trạng thái này.</p>
         )}
       </div>
-      {/* Display the modal if a record is selected */}
-      {selectedRecord && (
-        <MedicalRecordDetail
-          record={selectedRecord}
-          onClose={() => setSelectedRecord(null)}
-        />
-      )}
-      {showConfirmation && (
-        <ConfirmationModal
-          onConfirm={confirmCancelRecord}
-          onCancel={() => setShowConfirmation(false)}
+      
+      {showReviewModal && (
+        <ReviewModal
+          rating={rating}
+          setRating={setRating}
+          comment={comment}
+          setComment={setComment}
+          onSubmit={handleSubmitReview}
+          onClose={() => {
+            setShowReviewModal(false);
+            setSelectedAppointment(null);
+            setRating(0);
+            setComment('');
+          }}
         />
       )}
     </div>

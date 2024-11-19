@@ -18,30 +18,48 @@ const ReviewModal = (props: ReviewModalProps) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg w-full max-w-2xl h-auto">
         <h3 className="font-bold text-lg">Đánh giá</h3>
-        <div className="flex justify-center gap-2 mt-4">
-          {[...Array(5)].map((_, index) => (
-            <span
-              key={index}
-              className={`cursor-pointer text-3xl ${
-                index < rating ? 'text-yellow-500' : 'text-slate-300'
-              }`}
-              onClick={() => setRating(index + 1)}
-            >
-              ★
+        <div className="flex flex-col items-center mt-4">
+          <div className="flex gap-2">
+            {[...Array(5)].map((_, index) => (
+              <span
+                key={index}
+                className={`cursor-pointer text-3xl ${
+                  index < rating ? 'text-yellow-500' : 'text-slate-300'
+                } hover:scale-110 transition-transform`}
+                onClick={() => setRating(index + 1)}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+          {rating === 0 && (
+            <span className="text-xs text-red-500 mt-1">
+              Vui lòng chọn số sao đánh giá
             </span>
-          ))}
+          )}
         </div>
         <Textarea
           className="mt-4 w-full p-2 rounded h-32 border border-slate-300 focus:ring-0"
-          placeholder="Nhập nhận xét của bạn..."
+          placeholder="Nhập nhận xét của bạn (không bắt buộc)..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
         <div className="mt-4 flex justify-end gap-2">
-          <Button onClick={onClose} className="bg-gray-300 text-black">
+          <Button 
+            onClick={onClose} 
+            className="bg-gray-300 text-black hover:bg-gray-400"
+          >
             Hủy
           </Button>
-          <Button onClick={onSubmit} className="bg-blue-800 hover:bg-blue-700 text-white">
+          <Button
+            onClick={onSubmit}
+            disabled={rating === 0}
+            className={`bg-blue-800 text-white ${
+              rating === 0 
+                ? 'opacity-50 cursor-not-allowed' 
+                : 'hover:bg-blue-700'
+            }`}
+          >
             Gửi đánh giá
           </Button>
         </div>

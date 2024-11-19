@@ -9,7 +9,7 @@ import { FacultyRepository } from '@/repositories/faculty';
 export async function GET() {
   try {
     const faculties = await FacultyRepository.getFaculties();
-    return successResponse(faculties || []);
+    return successResponse(faculties);
   } catch (error) {
     console.log(error);
     return badRequestResponse('Failed to fetch faculties');
