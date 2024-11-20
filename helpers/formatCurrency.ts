@@ -9,3 +9,4 @@ export const formatPrice = (value: string | number): string => {
   //   const numericValue = parseFloat(value.replace(/\D/g, ''));
   //   return numericValue.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
 }
+

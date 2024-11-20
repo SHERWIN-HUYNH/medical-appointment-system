@@ -1,22 +1,18 @@
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
+import { internalServerErrorResponse, successResponse } from '@/helpers/response';
+import { sendMail } from '@/lib/send-email';
+import { createAppointmentEmailContent } from '@/lib/successful-appointment';
 export async function POST() {
   try {
-    const { data, error } = await resend.emails.send({
-      from: `Acme <${process.env.SENDER_EMAIL}>`,
-      to: ['ngduyen946@gmail.com'],
-      subject: 'Hello world',
-      react: '<h1>Send email</h1>',
-    });
-
-    if (error) {
-      return Response.json({ error }, { status: 500 });
-    }
-
-    return Response.json({ data });
+    sendMail({
+      sendTo: 'n21dccn191@student.ptithcm.edu.vn',
+      subject: 'Test email',
+      text: 'This is a test email.',
+      html: createAppointmentEmailContent('Nguyen Van A', 'Test', 'Nguyen Van B', '2023-06-01', '10:00', '0123456789', 'n21dccn191@student.ptithcm.edu.vn'),
+    })
+  
+    return successResponse('Email sent successfully')
   } catch (error) {
-    return Response.json({ error }, { status: 500 });
+    console.error('Error sending email:', error);
+    return internalServerErrorResponse('Error sending email')
   }
 }
