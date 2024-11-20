@@ -13,4 +13,15 @@ export class ScheduleRespository {
     }
     return schedule
   }
+  static async getScheduleById(id: string) {
+    const schedule = await prisma.schedule.findFirst({
+      where: {
+        id,
+      },
+    })
+    if (!schedule) {
+      throw new Error('Schedule not found')
+    }
+    return schedule
+  }
 }
