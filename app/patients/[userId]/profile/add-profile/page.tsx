@@ -1,24 +1,24 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { Eraser, UserRoundPlus, Undo2 } from 'lucide-react';
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { useSession } from 'next-auth/react';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button'
+import { Eraser, UserRoundPlus, Undo2 } from 'lucide-react'
+import React, { useState } from 'react'
+import Image from 'next/image'
+import { useSession } from 'next-auth/react'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import Header from '@/components/homepage/Header';
-import Footer from '@/components/homepage/Footer';
+} from '@/components/ui/select'
+import Header from '@/components/homepage/Header'
+import Footer from '@/components/homepage/Footer'
 
 const Add_Profile = () => {
   const initialFormData = {
@@ -32,72 +32,72 @@ const Add_Profile = () => {
     pastMedicalHistory: '',
     birthDate: '',
     symptom: '',
-  };
+  }
 
-  const [formData, setFormData] = useState(initialFormData);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [errorMessage, setErrorMessage] = useState('');
-  const { data: session } = useSession();
-  const router = useRouter();
-  const today = new Date().toISOString().split('T')[0];
+  const [formData, setFormData] = useState(initialFormData)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [errorMessage, setErrorMessage] = useState('')
+  const { data: session } = useSession()
+  const router = useRouter()
+  const today = new Date().toISOString().split('T')[0]
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData({
       ...formData,
       [name]: value,
-    });
+    })
 
     if (name === 'identificationNumber' && isValidIdentificationNumber(value)) {
-      setErrorMessage('');
+      setErrorMessage('')
     }
-  };
+  }
 
   const capitalizeWords = (text: string) => {
     return text
       .trim()
       .split(/\s+/)
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
-  };
+      .join(' ')
+  }
   const capitalizeFirstLetterOfSentence = (str: string) => {
-    if (str.length === 0) return str;
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
+    if (str.length === 0) return str
+    return str.charAt(0).toUpperCase() + str.slice(1)
+  }
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const charCode = event.key;
+    const charCode = event.key
     if (!/^\d$/.test(charCode)) {
-      event.preventDefault();
+      event.preventDefault()
     }
-  };
+  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setSelectedFile(e.target.files[0]);
+      setSelectedFile(e.target.files[0])
       setFormData({
         ...formData,
         identificationDocumentUrl: URL.createObjectURL(e.target.files[0]),
-      });
+      })
     }
-  };
+  }
 
   const handleReset = () => {
-    setFormData(initialFormData);
-    setSelectedFile(null);
-    setErrorMessage('');
-  };
+    setFormData(initialFormData)
+    setSelectedFile(null)
+    setErrorMessage('')
+  }
 
   const isValidIdentificationNumber = (identificationNumber: string) => {
-    const idPattern = /^[0-9]{9,12}$/;
-    return idPattern.test(identificationNumber);
-  };
+    const idPattern = /^[0-9]{9,12}$/
+    return idPattern.test(identificationNumber)
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!isValidIdentificationNumber(formData.identificationNumber)) {
-      setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.');
-      return;
+      setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.')
+      return
     }
     const formattedData = {
       ...formData,
@@ -105,7 +105,7 @@ const Add_Profile = () => {
       symptom: capitalizeFirstLetterOfSentence(formData.symptom),
       pastMedicalHistory: capitalizeFirstLetterOfSentence(formData.pastMedicalHistory),
       birthDate: formData.birthDate ? new Date(formData.birthDate) : null,
-    };
+    }
 
     const response = await fetch(`/api/profile/${session?.user?.id}`, {
       method: 'POST',
@@ -116,17 +116,17 @@ const Add_Profile = () => {
         action: 'create',
         profile: formattedData,
       }),
-    });
+    })
 
     if (response.ok) {
-      const data = await response.json();
-      toast.success('Thêm hồ sơ khám bệnh thành công');
-      router.back();
+      const data = await response.json()
+      toast.success('Thêm hồ sơ khám bệnh thành công')
+      router.back()
     } else {
-      const errorText = await response.text();
-      toast.error('Thêm hồ sơ khám bệnh thất bại. Vui lòng thử lại!');
+      const errorText = await response.text()
+      toast.error('Thêm hồ sơ khám bệnh thất bại. Vui lòng thử lại!')
     }
-  };
+  }
 
   return (
     <div>
@@ -354,7 +354,7 @@ const Add_Profile = () => {
       </div>
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default Add_Profile;
+export default Add_Profile

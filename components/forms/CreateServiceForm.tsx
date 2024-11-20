@@ -1,23 +1,23 @@
-import React from 'react';
+import React from 'react'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { createService, UserLogin } from '@/lib/validation';
-import { Form } from '../ui/form';
-import CustomFormField, { FormFieldType } from '../CustomFormField';
-import { Label } from '../ui/label';
-import SubmitButton from '../SubmitButton';
-import { faculty2, facultyData } from '@/lib/data';
-import { SelectItem } from '../ui/select';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { createService, UserLogin } from '@/lib/validation'
+import { Form } from '../ui/form'
+import CustomFormField, { FormFieldType } from '../CustomFormField'
+import { Label } from '../ui/label'
+import SubmitButton from '../SubmitButton'
+import { faculty2, facultyData } from '@/lib/data'
+import { SelectItem } from '../ui/select'
 
 const CreateServiceForm = () => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [passwordConfirmation, setPasswordConfirmation] = useState('')
   const form = useForm<z.infer<typeof createService>>({
     resolver: zodResolver(createService),
     defaultValues: {
@@ -26,10 +26,10 @@ const CreateServiceForm = () => {
       description: '',
       faculty: '',
     },
-  });
+  })
   const onSubmit = async (values: z.infer<typeof createService>) => {
-    setIsLoading(true);
-  };
+    setIsLoading(true)
+  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
@@ -84,7 +84,7 @@ const CreateServiceForm = () => {
         <SubmitButton isLoading={isLoading}>Tạo</SubmitButton>
       </form>
     </Form>
-  );
-};
+  )
+}
 
-export default CreateServiceForm;
+export default CreateServiceForm

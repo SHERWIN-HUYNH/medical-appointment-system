@@ -1,11 +1,9 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { PasskeyModal } from '@/components/PasskeyModal';
+import Image from 'next/image'
+import Link from 'next/link'
 
-import { PatientForm } from '@/components/forms/PatientForm';
-import { LoginForm } from '@/components/forms/LoginForm';
-import React from 'react';
-const Home = async ({ searchParams }: SearchParamProps) => {
+import { LoginForm } from '@/components/forms/LoginForm'
+import React from 'react'
+const Home = async () => {
   return (
     <div className="flex h-screen max-h-screen bg-[#f1eff2]">
       <section className="remove-scrollbar container my-auto ">
@@ -31,7 +29,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
         className="side-img max-w-[50%]"
       />
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

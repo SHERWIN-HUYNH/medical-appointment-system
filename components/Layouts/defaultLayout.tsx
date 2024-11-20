@@ -1,10 +1,10 @@
-'use client';
-import React, { useState } from 'react';
-import Header from '../Header/page';
-import Sidebar from '../SideBar/page';
+'use client'
+import React, { useState } from 'react'
+import Header from '../Header/page'
+import Sidebar from '../SideBar/page'
 
 const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   return (
     <div>
       {/* <!-- ===== Page Wrapper Start ===== --> */}
@@ -29,7 +29,7 @@ const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
       </div>
       {/* <!-- ===== Page Wrapper End ===== --> */}
     </div>
-  );
-};
+  )
+}
 
-export default DefaultLayout;
+export default DefaultLayout

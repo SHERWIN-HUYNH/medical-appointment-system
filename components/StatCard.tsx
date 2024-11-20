@@ -1,12 +1,12 @@
-import clsx from 'clsx';
-import Image from 'next/image';
-import React from 'react';
+import clsx from 'clsx'
+import Image from 'next/image'
+import React from 'react'
 type StatCardProps = {
-  type: 'appointments' | 'pending' | 'cancelled';
-  count: number;
-  label: string;
-  icon: string;
-};
+  type: 'appointments' | 'pending' | 'cancelled'
+  count: number
+  label: string
+  icon: string
+}
 
 export const StatCard = ({ count = 0, label, icon, type }: StatCardProps) => {
   return (
@@ -30,5 +30,5 @@ export const StatCard = ({ count = 0, label, icon, type }: StatCardProps) => {
 
       <p className=" text-[#000000d9] font-medium text-lg">{label}</p>
     </div>
-  );
-};
+  )
+}

@@ -1,11 +1,11 @@
-import Image from 'next/image';
+import Image from 'next/image'
 
-import { Button } from './ui/button';
+import { Button } from './ui/button'
 
 interface ButtonProps {
-  isLoading: boolean;
-  className?: string;
-  children: React.ReactNode;
+  isLoading: boolean
+  className?: string
+  children: React.ReactNode
 }
 
 const SubmitButton = ({ isLoading, className, children }: ButtonProps) => {
@@ -30,7 +30,7 @@ const SubmitButton = ({ isLoading, className, children }: ButtonProps) => {
         children
       )}
     </Button>
-  );
-};
+  )
+}
 
-export default SubmitButton;
+export default SubmitButton

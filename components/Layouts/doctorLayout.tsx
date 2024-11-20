@@ -1,8 +1,8 @@
-'use client';
+'use client'
 
-import React from 'react';
-import Header from '../homepage/Header';
-import Footer from '../homepage/Footer';
+import React from 'react'
+import Header from '../homepage/Header'
+import Footer from '../homepage/Footer'
 
 const DoctorLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -17,7 +17,7 @@ const DoctorLayout = ({ children }: { children: React.ReactNode }) => {
         <Footer />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DoctorLayout;
+export default DoctorLayout

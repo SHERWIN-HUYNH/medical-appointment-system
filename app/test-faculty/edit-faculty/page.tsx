@@ -1,22 +1,22 @@
-'use client';
-import CustomFormField, { FormFieldType } from '@/components/CustomFormField';
-import DefaultLayout from '@/components/Layouts/defaultLayout';
-import { Button } from '@/components/ui/button';
-import { Form } from '@/components/ui/form';
-import { FacultyFormValidation } from '@/lib/validation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { toast } from 'sonner';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
-import { Label } from '@/components/ui/label';
+'use client'
+import CustomFormField, { FormFieldType } from '@/components/CustomFormField'
+import DefaultLayout from '@/components/Layouts/defaultLayout'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
+import { FacultyFormValidation } from '@/lib/validation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { toast } from 'sonner'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Image from 'next/image'
+import { Label } from '@/components/ui/label'
 
 const EditFaculty = () => {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [fileName, setFileName] = useState<string>('');
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [fileName, setFileName] = useState<string>('')
   // Khởi tạo form với validation schema và giá trị mặc định
   const form = useForm<z.infer<typeof FacultyFormValidation>>({
     resolver: zodResolver(FacultyFormValidation),
@@ -25,53 +25,53 @@ const EditFaculty = () => {
       description: '',
       image: '',
     },
-  });
+  })
 
   // Khởi tạo router và lấy id từ URL params
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
 
   // Hook useEffect để fetch dữ liệu chuyên khoa khi component được mount
   useEffect(() => {
     const fetchFacultyData = async () => {
-      const response = await fetch(`/api/faculty/${id}`);
+      const response = await fetch(`/api/faculty/${id}`)
 
       if (response.ok) {
         // Nếu fetch thành công, cập nhật form với dữ liệu từ server
-        const facultyData = await response.json();
+        const facultyData = await response.json()
         form.reset({
           name: facultyData.name,
           description: facultyData.description,
           image: facultyData.image,
-        });
-        setImagePreview(facultyData.image);
-        setFileName(facultyData.image || '');
+        })
+        setImagePreview(facultyData.image)
+        setFileName(facultyData.image || '')
       } else {
         // Hiển thị thông báo lỗi nếu fetch thất bại
-        toast.error('Failed to fetch faculty details.');
+        toast.error('Failed to fetch faculty details.')
       }
-    };
+    }
 
-    if (id) fetchFacultyData();
-  }, [id, form]);
+    if (id) fetchFacultyData()
+  }, [id, form])
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[0]
 
     if (!file) {
-      toast.error('Vui lòng tải lên một tệp hình ảnh');
-      return;
+      toast.error('Vui lòng tải lên một tệp hình ảnh')
+      return
     }
     if (!file.type.startsWith('image/')) {
-      toast.error('Chỉ cho phép tải lên các tệp hình ảnh');
-      event.target.value = '';
-      return;
+      toast.error('Chỉ cho phép tải lên các tệp hình ảnh')
+      event.target.value = ''
+      return
     }
-    setImageFile(file);
-    form.setValue('image', file.name);
-    setImagePreview(file.name);
-    setFileName(file.name);
-  };
+    setImageFile(file)
+    form.setValue('image', file.name)
+    setImagePreview(file.name)
+    setFileName(file.name)
+  }
 
   // Xử lý khi form được submit
   const onSubmit = async (values: z.infer<typeof FacultyFormValidation>) => {
@@ -79,17 +79,17 @@ const EditFaculty = () => {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ faculty: { id, ...values } }),
-    });
+    })
 
     if (response.ok) {
       // Hiển thị thông báo thành công và chuyển hướng
-      toast.success('Faculty updated successfully!');
-      router.push('/test-faculty');
+      toast.success('Faculty updated successfully!')
+      router.push('/test-faculty')
     } else {
       // Hiển thị thông báo lỗi nếu cập nhật thất bại
-      toast.error('Failed to update faculty.');
+      toast.error('Failed to update faculty.')
     }
-  };
+  }
 
   // Render giao diện form chỉnh sửa
   return (
@@ -175,7 +175,7 @@ const EditFaculty = () => {
         </Form>
       </div>
     </DefaultLayout>
-  );
-};
+  )
+}
 
-export default EditFaculty;
+export default EditFaculty

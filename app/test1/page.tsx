@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import React from 'react';
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import React from 'react'
 
 const test1 = () => {
   return (
@@ -16,7 +16,7 @@ const test1 = () => {
         <Button>Click me</Button>
       </Link>
     </div>
-  );
-};
+  )
+}
 
-export default test1;
+export default test1

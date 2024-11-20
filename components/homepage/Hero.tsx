@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import React from 'react';
-import { Button } from '../../components/ui/button';
+import Image from 'next/image'
+import React from 'react'
+import { Button } from '../../components/ui/button'
 
 function Hero() {
   return (
@@ -34,7 +34,7 @@ function Hero() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
-export default Hero;
+export default Hero

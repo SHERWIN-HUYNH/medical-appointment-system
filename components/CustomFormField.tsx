@@ -1,20 +1,16 @@
 /* eslint-disable no-unused-vars */
-import { E164Number } from 'libphonenumber-js/core';
-import Image from 'next/image';
-import ReactDatePicker from 'react-datepicker';
-import { Control } from 'react-hook-form';
-import PhoneInput from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
-import { Checkbox } from './ui/checkbox';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
-import { Input } from './ui/input';
-import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select';
-import { Textarea } from './ui/textarea';
-import { date } from 'zod';
-import React, { useState } from 'react';
-import { Button } from './ui/button';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
-
+import { E164Number } from 'libphonenumber-js/core'
+import Image from 'next/image'
+import ReactDatePicker from 'react-datepicker'
+import { Control } from 'react-hook-form'
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css'
+import { Checkbox } from './ui/checkbox'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
+import { Input } from './ui/input'
+import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select'
+import { Textarea } from './ui/textarea'
+import React from 'react'
 export enum FormFieldType {
   INPUT = 'input',
   TEXTAREA = 'textarea',
@@ -27,19 +23,21 @@ export enum FormFieldType {
 }
 
 interface CustomProps {
-  control: Control<any>;
-  name: string;
-  label?: string;
-  placeholder?: string;
-  iconSrc?: string;
-  iconAlt?: string;
-  disabled?: boolean;
-  dateFormat?: string;
-  showTimeSelect?: boolean;
-  children?: React.ReactNode;
-  renderSkeleton?: (field: any) => React.ReactNode;
-  fieldType: FormFieldType;
-  currentPassword?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: Control<any>
+  name: string
+  label?: string
+  placeholder?: string
+  iconSrc?: string
+  iconAlt?: string
+  disabled?: boolean
+  dateFormat?: string
+  showTimeSelect?: boolean
+  children?: React.ReactNode
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renderSkeleton?: (field: any) => React.ReactNode
+  fieldType: FormFieldType
+  currentPassword?: string
 }
 
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
@@ -64,7 +62,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             />
           </FormControl>
         </div>
-      );
+      )
     case FormFieldType.TEXTAREA:
       return (
         <FormControl>
@@ -75,7 +73,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             disabled={props.disabled}
           />
         </FormControl>
-      );
+      )
     case FormFieldType.PHONE_INPUT:
       return (
         <FormControl className="bg-white">
@@ -89,7 +87,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             className="input-phone"
           />
         </FormControl>
-      );
+      )
     case FormFieldType.CHECKBOX:
       return (
         <FormControl>
@@ -104,7 +102,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             </label>
           </div>
         </FormControl>
-      );
+      )
     case FormFieldType.DATE_PICKER:
       return (
         <div className="flex rounded-md border border-dark-500 bg-white">
@@ -126,7 +124,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             />
           </FormControl>
         </div>
-      );
+      )
     case FormFieldType.SELECT:
       return (
         <FormControl>
@@ -141,16 +139,16 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             </SelectContent>
           </Select>
         </FormControl>
-      );
+      )
     case FormFieldType.SKELETON:
-      return props.renderSkeleton ? props.renderSkeleton(field) : null;
+      return props.renderSkeleton ? props.renderSkeleton(field) : null
     default:
-      return null;
+      return null
   }
-};
+}
 
 const CustomFormField = (props: CustomProps) => {
-  const { control, name, label } = props;
+  const { control, name, label } = props
   return (
     <FormField
       control={control}
@@ -166,7 +164,7 @@ const CustomFormField = (props: CustomProps) => {
         </FormItem>
       )}
     />
-  );
-};
+  )
+}
 
-export default CustomFormField;
+export default CustomFormField

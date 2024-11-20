@@ -1,19 +1,19 @@
-'use client';
-import React from 'react';
-import ModalDelete from '@/components/ModalDelete';
-import Pagination from '@/components/Pagination';
-import Table from '@/components/Table';
-import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
-import { Pencil, Trash2 } from 'lucide-react';
-import Link from 'next/link';
-import TableSearch from '@/components/TableSearch';
+'use client'
+import React from 'react'
+import ModalDelete from '@/components/ModalDelete'
+import Pagination from '@/components/Pagination'
+import Table from '@/components/Table'
+import { Button } from '@/components/ui/button'
+import { useEffect, useState } from 'react'
+import { Pencil, Trash2 } from 'lucide-react'
+import Link from 'next/link'
+import TableSearch from '@/components/TableSearch'
 
 type Faculty = {
-  id: string;
-  name: string;
-  description: string;
-};
+  id: string
+  name: string
+  description: string
+}
 
 const columns = [
   {
@@ -34,108 +34,108 @@ const columns = [
     header: 'Thao tác',
     accessor: 'actions',
   },
-];
+]
 
 const ListFaculty = () => {
-  const [facultyData, setFacultyData] = useState<Faculty[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const [showModal, setShowModal] = useState(false);
-  const [facultyToDelete, setFacultyToDelete] = useState<Faculty | null>(null);
-  const [message, setMessage] = useState('');
-  const [fadeOut, setFadeOut] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [facultyData, setFacultyData] = useState<Faculty[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
+  const [showModal, setShowModal] = useState(false)
+  const [facultyToDelete, setFacultyToDelete] = useState<Faculty | null>(null)
+  const [message, setMessage] = useState('')
+  const [fadeOut, setFadeOut] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     const fetchFaculties = async () => {
-      setLoading(true);
-      const response = await fetch(`api/faculty`);
+      setLoading(true)
+      const response = await fetch(`api/faculty`)
 
       if (response.ok) {
-        const data = await response.json();
-        setFacultyData(data);
+        const data = await response.json()
+        setFacultyData(data)
       } else {
-        setError('Failed to fetch faculties');
+        setError('Failed to fetch faculties')
       }
-      setLoading(false);
-    };
+      setLoading(false)
+    }
 
-    fetchFaculties();
-  }, []);
+    fetchFaculties()
+  }, [])
 
   // Lọc dữ liệu dựa trên searchTerm
   const searchData = facultyData.filter(
     (faculty) =>
       faculty.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       faculty.description.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  )
 
   // Tính toán số trang dựa trên dữ liệu đã tìm kiếm
-  const totalPages = Math.ceil(searchData.length / itemsPerPage);
+  const totalPages = Math.ceil(searchData.length / itemsPerPage)
 
   // Lấy dữ liệu cho trang hiện tại từ dữ liệu đã tìm kiếm
   const displayedData = searchData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
-  );
+  )
 
   // Reset về trang 1 khi searchTerm thay đổi
   useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm]);
+    setCurrentPage(1)
+  }, [searchTerm])
 
   // Xử lý hiển thị thông báo
   const showMessage = (msg: string) => {
-    setMessage(msg);
-    setFadeOut(false);
+    setMessage(msg)
+    setFadeOut(false)
     setTimeout(() => {
-      setFadeOut(true);
-    }, 2000);
-  };
+      setFadeOut(true)
+    }, 2000)
+  }
 
   // Xử lý xóa chuyên khoa
   const handleDelete = (faculty: Faculty) => {
-    setFacultyToDelete(faculty);
-    setShowModal(true);
-  };
+    setFacultyToDelete(faculty)
+    setShowModal(true)
+  }
 
   // Xử lý xác nhận xóa
   const confirmDelete = async () => {
-    if (!facultyToDelete) return;
+    if (!facultyToDelete) return
 
     const response = await fetch(`/api/faculty`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ faculty: facultyToDelete }),
-    });
+    })
 
     if (response.ok) {
       // Cập nhật state sau khi xóa thành công
       setFacultyData((prevData) =>
         prevData.filter((faculty) => faculty.id !== facultyToDelete.id),
-      );
-      showMessage(`Chuyên khoa ${facultyToDelete.name} đã xóa thành công!`);
+      )
+      showMessage(`Chuyên khoa ${facultyToDelete.name} đã xóa thành công!`)
     } else {
-      showMessage('Không thể xóa chuyên khoa!');
+      showMessage('Không thể xóa chuyên khoa!')
     }
 
     // Reset trạng thái
-    setFacultyToDelete(null);
-    setShowModal(false);
-  };
+    setFacultyToDelete(null)
+    setShowModal(false)
+  }
 
   // Tính toán số thứ tự dựa trên trang hiện tại
   const getSequentialNumber = (index: number) => {
-    return (currentPage - 1) * itemsPerPage + index + 1;
-  };
+    return (currentPage - 1) * itemsPerPage + index + 1
+  }
 
   // Thêm dữ liệu STT vào displayedData
   const dataWithIndex = displayedData.map((item, index) => ({
     ...item,
     index: getSequentialNumber(index),
-  }));
+  }))
 
   // Render hàng trong bảng
   const renderRow = (item: Faculty & { index: number }) => (
@@ -163,14 +163,14 @@ const ListFaculty = () => {
         </div>
       </td>
     </tr>
-  );
+  )
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Error: {error}</div>
   }
 
   return (
@@ -212,7 +212,7 @@ const ListFaculty = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ListFaculty;
+export default ListFaculty

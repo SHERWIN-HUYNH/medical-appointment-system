@@ -1,23 +1,23 @@
-'use client';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from 'sonner';
-import Providers from '@/providers/Providers';
-import React, { useEffect, useState } from 'react';
-import Loader from '@/components/common/Loader';
-import { AppointmentProvider } from '@/context/AppointmentContext';
-const inter = Inter({ subsets: ['latin'] });
+'use client'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from 'sonner'
+import Providers from '@/providers/Providers'
+import React, { useEffect, useState } from 'react'
+import Loader from '@/components/common/Loader'
+import { AppointmentProvider } from '@/context/AppointmentContext'
+const inter = Inter({ subsets: ['latin'] })
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true)
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
-  }, []);
+    setTimeout(() => setLoading(false), 1000)
+  }, [])
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <head>
@@ -50,5 +50,5 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

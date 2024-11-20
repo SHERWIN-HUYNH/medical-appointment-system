@@ -1,17 +1,17 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import React from 'react';
-import { getAppointmentSchema } from '@/lib/validation';
-import CustomFormField, { FormFieldType } from '../CustomFormField';
-import SubmitButton from '../SubmitButton';
-import { Form } from '../ui/form';
-import { createAppointment } from '@/lib/action/appointment.actions';
-import { AppointmentSchedule } from '@/types/interface';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import React from 'react'
+import { getAppointmentSchema } from '@/lib/validation'
+import CustomFormField, { FormFieldType } from '../CustomFormField'
+import SubmitButton from '../SubmitButton'
+import { Form } from '../ui/form'
+import { createAppointment } from '@/lib/action/appointment.actions'
+import { AppointmentSchedule } from '@/types/interface'
 
 export const AppointmentForm = ({
   userId,
@@ -20,16 +20,16 @@ export const AppointmentForm = ({
   appointment,
   setOpen,
 }: {
-  userId: string;
-  patientId: string;
-  type: 'create' | 'schedule' | 'cancel' | 'Chi tiết' | 'Hủy';
-  appointment?: AppointmentSchedule;
-  setOpen?: Dispatch<SetStateAction<boolean>>;
+  userId: string
+  patientId: string
+  type: 'create' | 'schedule' | 'cancel' | 'Chi tiết' | 'Hủy'
+  appointment?: AppointmentSchedule
+  setOpen?: Dispatch<SetStateAction<boolean>>
 }) => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  console.log('appointment type', type);
-  const AppointmentFormValidation = getAppointmentSchema(type);
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  console.log('appointment type', type)
+  const AppointmentFormValidation = getAppointmentSchema(type)
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
@@ -41,23 +41,23 @@ export const AppointmentForm = ({
       note: appointment?.profile.pastMedicalHistory || '',
       cancellationReason: appointment?.cancellationReason || '',
     },
-  });
+  })
 
   const onSubmit = async (values: z.infer<typeof AppointmentFormValidation>) => {
-    setIsLoading(true);
+    setIsLoading(true)
 
-    let status;
+    let status
     switch (type) {
       case 'schedule':
-        status = 'scheduled';
-        break;
+        status = 'scheduled'
+        break
       case 'cancel':
-        status = 'cancelled';
-        break;
+        status = 'cancelled'
+        break
       default:
-        status = 'pending';
+        status = 'pending'
     }
-    console.log('SHOW PATIENTID', patientId);
+    console.log('SHOW PATIENTID', patientId)
     try {
       if (type === 'create' && patientId) {
         const appointment = {
@@ -68,19 +68,19 @@ export const AppointmentForm = ({
           reason: values.reason!,
           status: status as Status,
           note: values.note,
-        };
-        console.log('NEW APPOINTMENT', appointment);
-        const newAppointment = await createAppointment(appointment);
+        }
+        console.log('NEW APPOINTMENT', appointment)
+        const newAppointment = await createAppointment(appointment)
 
         if (newAppointment) {
-          console.log('NEW APPOINTMENT', newAppointment);
-          form.reset();
+          console.log('NEW APPOINTMENT', newAppointment)
+          form.reset()
           router.push(
             `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`,
-          );
+          )
         }
       } else {
-        console.log('UPDATE WORKING');
+        console.log('UPDATE WORKING')
         const appointmentToUpdate = {
           userId,
           appointmentId: appointment?.id,
@@ -92,7 +92,7 @@ export const AppointmentForm = ({
           },
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           type,
-        };
+        }
         // Code to cancell an appointment
         // const updatedAppointment = await updateAppointment(appointmentToUpdate);
 
@@ -103,22 +103,22 @@ export const AppointmentForm = ({
         // }
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-    setIsLoading(false);
-  };
+    setIsLoading(false)
+  }
 
-  let buttonLabel;
+  let buttonLabel
   switch (type) {
     case 'cancel':
-      buttonLabel = 'Cancel Appointment';
-      break;
+      buttonLabel = 'Cancel Appointment'
+      break
     case 'schedule':
-      buttonLabel = 'Schedule Appointment';
-      break;
+      buttonLabel = 'Schedule Appointment'
+      break
     default:
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      buttonLabel = 'Submit Apppointment';
+      buttonLabel = 'Submit Apppointment'
   }
 
   return (
@@ -196,5 +196,5 @@ export const AppointmentForm = ({
         </SubmitButton>
       </form>
     </Form>
-  );
-};
+  )
+}
