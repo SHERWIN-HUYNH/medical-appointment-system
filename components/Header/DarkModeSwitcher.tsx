@@ -1,8 +1,8 @@
-import useColorMode from '@/hooks/useColorMode'
+
 import { Switch } from '../ui/switch'
 import { Label } from '../ui/label'
 import { useTheme } from 'next-themes'
-
+import React from 'react'
 const DarkModeSwitcher = () => {
   const { theme, setTheme } = useTheme()
 

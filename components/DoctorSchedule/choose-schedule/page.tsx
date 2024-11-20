@@ -12,7 +12,10 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Schedule } from '@prisma/client'
 import { useSession } from 'next-auth/react'
+<<<<<<< HEAD
 import { set } from 'zod'
+=======
+>>>>>>> 6e948221b114aee513d08b93da8de7337fcbaeb8
 
 type ChooseScheduleProps = {
   doctorId: string
@@ -32,12 +35,12 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
   const handleUpdateSchedule = (newData: DoctorScheduleResult[]) => {
     setApiData(newData)
   }
-  let dateFromApi: string[] = []
+
   useEffect(() => {
     const today = new Date()
     const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate())
     const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0)
-
+    let dateFromApi: string[] = []
     setVisibleRange({
       start: startDate.toISOString().slice(0, 10),
       end: endDate.toISOString().slice(0, 10),

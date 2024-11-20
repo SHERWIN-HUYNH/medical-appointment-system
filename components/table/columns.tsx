@@ -1,13 +1,9 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import Image from 'next/image'
 import React from 'react'
-import { Doctors } from '@/constants'
-
 import { AppointmentModal } from '../AppointmentModal'
 import { StatusBadge } from '../StatusBadge'
-
 import { AppointmentSchedule } from '@/types/interface'
 
 export const columns: ColumnDef<AppointmentSchedule>[] = [

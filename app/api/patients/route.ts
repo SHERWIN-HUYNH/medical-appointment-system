@@ -1,10 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { Profile } from '@/types/interface'
-import { ProfileRespository } from '@/repositories/profile'
+import { Profile } from '@/types/interface';
+import { ProfileRespository } from '@/repositories/profile';
 
-export async function POST(req: Request, res: Response) {
-  const { profile, userId }: { profile: Profile; userId: string } = await req.json()
-  console.log('PROFILE: ', profile)
+export async function POST(req: Request) {
+  const { profile, userId }: { profile: Profile; userId: string } = await req.json();
+  console.log('PROFILE: ', profile);
   const newProfile = await ProfileRespository.createProfile({
     profileData: profile,
     userId,

@@ -1,4 +1,5 @@
-import { Comment, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
+import { Comment } from '@/types/interface'
 
 const prisma = new PrismaClient()
 

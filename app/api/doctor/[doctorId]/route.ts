@@ -1,8 +1,13 @@
 import { badRequestResponse, notFoundResponse, successResponse } from '@/helpers/response'
 import { DoctorRespository } from '@/repositories/doctor'
 
-// Xử lý GET request - Lấy thông tin bác sĩ theo ID
-export async function GET(req: Request, context: any) {
+interface Context {
+  params: {
+    doctorId: string
+  }
+}
+
+export async function GET(req: Request, context: Context) {
   const { doctorId } = context.params // Lấy doctorId từ context
 
   if (!doctorId) {

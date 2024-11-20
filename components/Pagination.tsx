@@ -58,7 +58,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       )
     }
 
-    // Hiển thị dấu ... và trang cuối
     if (currentPage < totalPages - 2) {
       if (currentPage < totalPages - 3) {
         pages.push(
@@ -92,7 +91,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         onClick={() => onPageChange(currentPage - 1)}
         className="absolute left-0 py-3 px-3 w-8 h-8 rounded-md bg-slate-100 text-primary text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        &lt;
+        &lt
       </Button>
 
       <div className="flex items-center gap-2 mx-12">{renderPageNumbers()}</div>
@@ -102,7 +101,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         onClick={() => onPageChange(currentPage + 1)}
         className="absolute right-0 py-3 px-3 w-8 h-8 rounded-md bg-slate-100 text-primary text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        &gt;
+        &gt
       </Button>
     </div>
   )

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import cron from 'node-cron'
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   if (req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response('Unauthorized', { status: 401 })
   }

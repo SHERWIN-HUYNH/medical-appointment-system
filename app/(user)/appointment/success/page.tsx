@@ -4,8 +4,6 @@ import { Button } from '@/components/ui/button'
 import React from 'react'
 import { User } from 'lucide-react'
 import Stripe from 'stripe'
-import { notFound } from 'next/navigation'
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 const RequestSuccess = async ({
   searchParams,

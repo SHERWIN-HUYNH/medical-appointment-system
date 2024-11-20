@@ -1,11 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { PasskeyModal } from '@/components/PasskeyModal'
 
-import { PatientForm } from '@/components/forms/PatientForm'
 import { LoginForm } from '@/components/forms/LoginForm'
 import React from 'react'
-const Home = async ({ searchParams }: SearchParamProps) => {
+const Home = async () => {
   return (
     <div className="flex h-screen max-h-screen bg-[#f1eff2]">
       <section className="remove-scrollbar container my-auto ">

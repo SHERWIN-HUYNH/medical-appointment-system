@@ -1,7 +1,5 @@
 import React from 'react'
 import { Input } from './ui/input'
-import { Search } from 'lucide-react'
-import { Button } from './ui/button'
 
 type TableSearchProps = {
   searchTerm: string
@@ -21,6 +19,7 @@ const TableSearch = ({ searchTerm, setSearchTerm }: TableSearchProps) => {
         onChange={handleSearchChange}
         placeholder="Search..."
         className="w-230 rounded-full bg-transparent border-slate-300 shadow-inner shadow-slate-100"
+        customProp={''}
       />
     </div>
   )

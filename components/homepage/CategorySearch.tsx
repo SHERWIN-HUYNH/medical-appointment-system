@@ -1,27 +1,6 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
-import { Brain, Ear, Search } from 'lucide-react'
-import {
-  FaAllergies,
-  FaAppleAlt,
-  FaBaby,
-  FaChild,
-  FaEye,
-  FaFlask,
-  FaHeartbeat,
-  FaLeaf,
-  FaRibbon,
-  FaStethoscope,
-  FaTooth,
-  FaVial,
-  FaVirus,
-  FaWater,
-  FaWheelchair,
-  FaXRay,
-} from 'react-icons/fa'
-import { FaUserDoctor } from 'react-icons/fa6'
-import { GiBrain, GiBrokenBone, GiMuscleUp } from 'react-icons/gi'
+import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
@@ -56,7 +35,6 @@ const CategorySearch = () => {
 
   // Thêm console.log để kiểm tra state
   console.log('Current faculties:', faculties)
-
   const toggleShowAllCategories = () => {
     setShowAllCategories(!showAllCategories)
   }
@@ -74,7 +52,7 @@ const CategorySearch = () => {
       <h2 className="text-xl">Tìm kiếm bác sĩ của bạn vào bắt đầu đặt lịch hẹn</h2>
 
       <div className="flex w-full mt-3 max-w-sm items-center space-x-2">
-        <Input type="text" placeholder="Search..." className="border-slate-400" />
+        <Input type="text" placeholder="Search..." className="border-slate-400" customProp={''} />
         <Button className="text-white bg-primary hover:bg-[#56c2e6]" type="submit">
           <Search className="h-4 w-4 mr-2" />
           Search

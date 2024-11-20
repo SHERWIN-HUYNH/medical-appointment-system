@@ -1,7 +1,5 @@
 'use client'
-
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -11,11 +9,9 @@ import { signIn } from 'next-auth/react'
 import 'react-phone-number-input/style.css'
 import CustomFormField, { FormFieldType } from '../CustomFormField'
 import SubmitButton from '../SubmitButton'
-import { createUser } from '@/lib/action/patient.actions'
 import { toast } from 'sonner'
-
+import React from 'react'
 export const PatientForm = () => {
-  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof UserFormValidation>>({

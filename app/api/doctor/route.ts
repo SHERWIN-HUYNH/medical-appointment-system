@@ -51,7 +51,7 @@ export async function DELETE(req: Request) {
   try {
     const deletedDoctor = await DoctorRespository.deleteDoctor(doctor.id)
     return successResponse(deletedDoctor)
-  } catch (error: any) {
-    return badRequestResponse(error.message)
+  } catch (error: unknown) {
+    return badRequestResponse((error as Error).message)
   }
 }

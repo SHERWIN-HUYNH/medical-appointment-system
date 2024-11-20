@@ -6,7 +6,10 @@ const Table = ({
   data,
 }: {
   columns: { header: string; accessor: string; className?: string }[]
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   renderRow: (item: any) => React.ReactNode
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[]
 }) => {
   if (!data || data.length === 0) {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { notFoundResponse, successResponse } from '@/helpers/response'
 import { ServiceRepository } from '@/repositories/service'
 

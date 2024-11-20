@@ -1,5 +1,9 @@
 'use client'
+<<<<<<< HEAD
 import React, { FormEvent, useEffect, useState } from 'react'
+=======
+import React, { FormEvent, useState } from 'react'
+>>>>>>> 6e948221b114aee513d08b93da8de7337fcbaeb8
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import { UserRound } from 'lucide-react'
@@ -15,7 +19,6 @@ import { Button } from './ui/button'
 // import { useParams, useSearchParams } from 'next/navigation';
 import { formatPrice } from '@/helpers/formatCurrency'
 import { useAppointmentContext } from '@/context/AppointmentContext'
-import { useSession } from 'next-auth/react'
 
 type CheckoutFormProps = {
   clientSecret: string

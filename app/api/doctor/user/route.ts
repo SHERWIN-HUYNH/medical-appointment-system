@@ -12,8 +12,12 @@ export async function GET() {
       return notFoundResponse('NOT FOUND DOCTOR')
     }
     return successResponse(doctors)
-  } catch (error: any) {
-    console.error('Error fetching doctors:', error.message || error)
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error fetching doctors:', error.message)
+    } else {
+      console.error('Error fetching doctors:', error)
+    }
     return internalServerErrorResponse('FAIL TO GET LIST DOCTORS')
   }
 }

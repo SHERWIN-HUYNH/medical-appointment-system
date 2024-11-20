@@ -65,7 +65,6 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
       view.calendar.unselect()
       return
     }
-    console.log('SELET WRKING')
     const date = selectInfo.startStr.split('T')[0] // Lấy ngày
     const startTime = selectInfo.startStr.split('T')[1].slice(0, 5) // Get "HH:mm" for start time
     const endTime = selectInfo.endStr.split('T')[1].slice(0, 5) // Get "HH:mm" for end time
@@ -109,7 +108,6 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
         date: date,
       }
       const eventIdToDelete = `${date}-${timeSlot}`
-      console.log('EVENTID TO DELETE', eventIdToDelete)
       updateEventDeleted(eventIdToDelete)
       setDeletedDates((prevEvents) => {
         const updatedDeletedDates = [...prevEvents, newEvent]
@@ -119,7 +117,7 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
       clickInfo.event.remove()
     }
   }
-
+  console.log('Selected dates:', selectedDates)
   const handleDatesSet = (datesSetInfo: DatesSetArg) => {
     if (datesSetInfo.view.type === 'dayGridMonth') {
       setIsSelectable(false) // Disable selection in month view
@@ -139,8 +137,6 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
       timeSlot: event.timeSlot,
       isAvailable: true,
     }))
-
-    console.log('Selected schedules to save:', selectedSchedules)
 
     try {
       // First, delete the events in the database

@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
@@ -38,7 +37,6 @@ function DoctorList() {
   }, [])
 
   const displayedDoctors = showAll ? doctors : doctors.slice(0, 4)
-
   return (
     <div className="mb-10 px-8">
       <h2 className="font-bold text-xl">Popular Doctors</h2>

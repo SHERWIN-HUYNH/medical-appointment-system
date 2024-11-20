@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import SidebarDropdown from './SidebarDropdown'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SidebarItem = ({ item, pageName, setPageName }: any) => {
   const handleClick = () => {
     const updatedPageName =
@@ -13,9 +14,11 @@ const SidebarItem = ({ item, pageName, setPageName }: any) => {
 
   const pathname = usePathname()
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isActive = (item: any) => {
     if (item.route === pathname) return true
     if (item.children) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return item.children.some((child: any) => isActive(child))
     }
     return false

@@ -1,7 +1,6 @@
 'use client'
 import DefaultLayout from '@/components/Layouts/defaultLayout'
 import SelectGroup from '@/components/SelectGroup'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { academicTitles } from '@/lib/data'
@@ -14,6 +13,7 @@ import { DoctorFormValidation } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Input } from '@/components/ui/input'
 
 const AddDoctorPage = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([])
@@ -134,6 +134,7 @@ const AddDoctorPage = () => {
                       Họ và tên
                     </Label>
                     <Input
+                      customProp={''}
                       type="text"
                       placeholder="Nhập họ tên bác sĩ"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"

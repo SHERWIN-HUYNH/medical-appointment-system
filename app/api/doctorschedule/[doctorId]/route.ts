@@ -1,8 +1,12 @@
 import { badRequestResponse, notFoundResponse, successResponse } from '@/helpers/response'
 import { DoctorRespository } from '@/repositories/doctor'
 import { DoctorScheduleRespository } from '@/repositories/doctorSchedule'
-
-export async function GET(req: Request, context: any) {
+interface Context {
+  params: {
+    doctorId: string
+  }
+}
+export async function GET(req: Request, context: Context) {
   const { doctorId } = context.params
   const doctor = await DoctorRespository.getDoctorById(doctorId)
   if (!doctor) {
@@ -12,7 +16,7 @@ export async function GET(req: Request, context: any) {
   return successResponse(schedule)
 }
 
-export async function DELETE(req: Request, context: any) {
+export async function DELETE(req: Request, context: Context) {
   const schedules = await req.json()
   const { doctorId } = context.params
   const doctor = await DoctorRespository.getDoctorById(doctorId)
@@ -29,7 +33,7 @@ export async function DELETE(req: Request, context: any) {
   return successResponse(schedule)
 }
 
-export async function POST(req: Request, context: any) {
+export async function POST(req: Request, context: Context) {
   const schedules = await req.json()
   const { doctorId } = context.params
   const doctor = await DoctorRespository.getDoctorById(doctorId)

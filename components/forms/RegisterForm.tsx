@@ -1,21 +1,18 @@
 'use client'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Form } from '@/components/ui/form'
-import { RegisterFormValidation, UserFormValidation } from '@/lib/validation'
-import { signIn } from 'next-auth/react'
+import { RegisterFormValidation } from '@/lib/validation'
 import 'react-phone-number-input/style.css'
 import CustomFormField, { FormFieldType } from '../CustomFormField'
 import SubmitButton from '../SubmitButton'
-import { createUser } from '@/lib/action/patient.actions'
 import { toast } from 'sonner'
 import { Label } from '../ui/label'
 import { PasswordInput } from '../PasswordInput'
-
+import React from 'react'
 export const RegisterForm = () => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
