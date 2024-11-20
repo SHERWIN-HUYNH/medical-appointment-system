@@ -61,7 +61,11 @@ export async function POST(req: NextRequest) {
       return notFoundResponse('FAIL TO CREATE BILL')
     }
     const { data, error } = await resend.emails.send({
+<<<<<<< HEAD
+      from: `Support <${process.env.SENDER_EMAIL}>`,
+=======
       from: `Acme <onboarding@resend.dev>`,
+>>>>>>> c391485d0a29e40b074b8cf8212289422def40ed
       to: ['n21dccn191@student.ptithcm.edu.vn'],
       subject: 'Hello world',
       react: '<h1>hello world</h1>',

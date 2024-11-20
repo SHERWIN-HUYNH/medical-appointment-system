@@ -12,13 +12,15 @@ export async function GET() {
     if (!comments || comments.length === 0) {
       return notFoundResponse('NOT FOUND COMMENT')
     }
-    return successResponse(comments)
+    return successResponse(comments);
   } catch (error: unknown) {
-    console.error(
-      'Error fetching comments:',
-      error instanceof Error ? error.message : error,
-    )
-    return internalServerErrorResponse('FAIL TO GET LIST COMMENT')
+    if (error instanceof Error) {
+      console.error('Error fetching comments:', error.message);
+    } else {
+      console.error('Unknown error fetching comments:', JSON.stringify(error));
+    }
+    return internalServerErrorResponse('FAIL TO GET LIST COMMENT');
+
   }
 }
 
@@ -30,13 +32,15 @@ export async function DELETE(req: Request) {
     if (!checkComment) {
       return notFoundResponse('NOT FOUND COMMENT')
     }
-    await CommentRespository.deleteComment({ commentData: commentValues })
-    return successResponse('DELETE PROFILE SUCCESSFULLY')
+    await CommentRespository.deleteComment({ commentData: commentValues });
+    return successResponse('DELETE PROFILE SUCCESSFULLY');
   } catch (error: unknown) {
-    console.error(
-      'Error deleting profile:',
-      error instanceof Error ? error.message : error,
-    )
-    return internalServerErrorResponse('FAIL TO DELETE PROFILE')
+    if (error instanceof Error) {
+      console.error('Error deleting profile:', error.message);
+    } else {
+      console.error('Unknown error deleting profile:', JSON.stringify(error));
+    }
+    return internalServerErrorResponse('FAIL TO DELETE PROFILE');
+
   }
 }

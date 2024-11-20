@@ -1,5 +1,5 @@
-import React from 'react'
-import { Input } from './ui/input'
+import React from 'react';
+import { Input } from './ui/input';
 
 type TableSearchProps = {
   searchTerm: string

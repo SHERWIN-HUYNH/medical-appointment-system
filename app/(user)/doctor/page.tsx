@@ -1,11 +1,13 @@
-'use client'
-import React, { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { FormProvider, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import Pagination from '@/components/Pagination'
-import DoctorLayout from '@/components/Layouts/doctorLayout'
+
+'use client';
+import React, { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import Pagination from '@/components/Pagination';
+import DoctorLayout from '@/components/Layouts/doctorLayout';
+import Image from 'next/image';
 
 interface Doctor {
   id: string
@@ -106,7 +108,7 @@ const Doctor = () => {
             </p>
           </div>
         </div>
-        <img
+        <Image
           src="https://cdn.medpro.vn/prod-partner/9a085fa0-374e-4aca-9ffe-6e6d2c5c03e7-dat-kham-theo-bac-si.webp"
           alt="Doctor and Nurse"
           className="absolute bottom-0 right-0 w-1/4 max-w-[350px]  mr-35"
@@ -163,7 +165,7 @@ const Doctor = () => {
                   className="bg-white p-2 rounded-lg shadow-md hover:scale-105 hover:border-primary border border-transparent"
                 >
                   <div className="flex items-center">
-                    <img
+                    <Image
                       src={doctor.image}
                       alt={doctor.name}
                       className="w-24 h-24 rounded-lg object-cover mr-4"
