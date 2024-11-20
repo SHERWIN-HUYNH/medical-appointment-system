@@ -7,6 +7,9 @@ import { toast } from 'sonner'
 import Pagination from '@/components/Pagination'
 import DoctorLayout from '@/components/Layouts/doctorLayout'
 import Image from 'next/image'
+import { CldImage } from 'next-cloudinary'
+import { useAppointmentContext } from '@/context/AppointmentContext'
+import Link from 'next/link' // Missing import for Link component
 
 interface Doctor {
   id: string
@@ -15,7 +18,9 @@ interface Doctor {
   image: string
   description: string
   facultyName: string
+  facultyId: string
 }
+
 interface Faculty {
   id: string
   name: string
@@ -27,8 +32,9 @@ const Doctor = () => {
   const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedTitle, setSelectedTitle] = useState('')
-  const [selectedfaculty, setSelectedfaculty] = useState('')
-  const [faculties, setfaculties] = useState<Faculty[]>([])
+  const [selectedFaculty, setSelectedFaculty] = useState('')
+  const [faculties, setFaculties] = useState<Faculty[]>([])
+  const { setData } = useAppointmentContext()
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
 
@@ -53,7 +59,7 @@ const Doctor = () => {
       try {
         const response = await fetch('/api/faculty')
         const data = await response.json()
-        setfaculties(data)
+        setFaculties(data)
       } catch (error) {
         console.log('ERROR', error)
         toast.error('Lỗi khi tải dữ liệu chuyên khoa')
@@ -66,16 +72,16 @@ const Doctor = () => {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
-    filterDoctors(e.target.value, selectedTitle, selectedfaculty)
+    filterDoctors(e.target.value, selectedTitle, selectedFaculty)
   }
 
   const handleTitleFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedTitle(e.target.value)
-    filterDoctors(searchQuery, e.target.value, selectedfaculty)
+    filterDoctors(searchQuery, e.target.value, selectedFaculty)
   }
 
-  const handlefacultyFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedfaculty(e.target.value)
+  const handleFacultyFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedFaculty(e.target.value)
     filterDoctors(searchQuery, selectedTitle, e.target.value)
   }
 
@@ -83,11 +89,15 @@ const Doctor = () => {
     const filtered = doctors.filter((doctor) => {
       const matchesSearch = doctor.name.toLowerCase().includes(query.toLowerCase())
       const matchesTitle = title ? doctor.academicTitle === title : true
-      const matchesfaculty = faculty ? doctor.facultyName === faculty : true
-      return matchesSearch && matchesTitle && matchesfaculty
+      const matchesFaculty = faculty ? doctor.facultyName === faculty : true
+      return matchesSearch && matchesTitle && matchesFaculty
     })
     setFilteredDoctors(filtered)
-    setCurrentPage(1) // Reset to first page on new filter
+    setCurrentPage(1) // Reset to first page after filter
+  }
+
+  const handleDoctorClick = (facultyId: string, doctorId: string) => {
+    setData({ facultyId, doctorId })
   }
 
   const totalPages = Math.ceil(filteredDoctors.length / itemsPerPage)
@@ -98,7 +108,7 @@ const Doctor = () => {
 
   return (
     <div>
-      <div className="relative  mt-16 w-full h-[250px] bg-sky-100 bg-cover bg-center">
+      <div className="relative mt-16 w-full h-[250px] bg-sky-100 bg-cover bg-center">
         <div className="absolute inset-0 flex items-center ml-45 bg-opacity-25">
           <div className="text-left text-black p-6 bg-white bg-opacity-90 rounded-xl max-w-2xl shadow-lg">
             <h1 className="text-4xl font-semibold text-primary">ĐẶT KHÁM THEO BÁC SĨ</h1>
@@ -110,14 +120,16 @@ const Doctor = () => {
         <Image
           src="https://cdn.medpro.vn/prod-partner/9a085fa0-374e-4aca-9ffe-6e6d2c5c03e7-dat-kham-theo-bac-si.webp"
           alt="Doctor and Nurse"
-          className="absolute bottom-0 right-0 w-1/4 max-w-[350px]  mr-35"
+          width={300}
+          height={300}
+          className="absolute bottom-0 right-0 w-1/4 max-w-[350px] mr-35"
           style={{ objectFit: 'contain' }}
         />
       </div>
 
       <DoctorLayout>
         <div className="flex justify-center mt-2 px-2 pt-1.5 pb-4">
-          <div className="w-full bg-white p-1  rounded-2xl shadow-md">
+          <div className="w-full bg-white p-1 rounded-2xl shadow-md">
             <FormProvider {...formMethods}>
               <form className="flex justify-center items-center gap-4">
                 <Input
@@ -139,8 +151,8 @@ const Doctor = () => {
                   <option value="Giáo sư">Giáo sư</option>
                 </select>
                 <select
-                  value={selectedfaculty}
-                  onChange={handlefacultyFilter}
+                  value={selectedFaculty}
+                  onChange={handleFacultyFilter}
                   className="p-2 text-sm text-primary border-white focus:ring-white rounded-xl"
                 >
                   <option value="">Chuyên khoa</option>
@@ -156,7 +168,7 @@ const Doctor = () => {
         </div>
 
         <div className="flex justify-center py-4">
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className=" grid grid-cols-1 sm:grid-cols-2 gap-10">
             {displayedDoctors.length > 0 ? (
               displayedDoctors.map((doctor) => (
                 <div
@@ -164,9 +176,12 @@ const Doctor = () => {
                   className="bg-white p-2 rounded-lg shadow-md hover:scale-105 hover:border-primary border border-transparent"
                 >
                   <div className="flex items-center">
-                    <Image
+                    <CldImage
                       src={doctor.image}
                       alt={doctor.name}
+                      width={100}
+                      height={100}
+                      crop="auto"
                       className="w-24 h-24 rounded-lg object-cover mr-4"
                     />
                     <div className="flex-grow">
@@ -188,9 +203,22 @@ const Doctor = () => {
                   </div>
                   <hr className="mt-2 text-slate-300" />
                   <div className="flex justify-end mt-2">
-                    <Button className="w-32 text-white bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] hover:from-[#67e0f3] hover:to-[#e7f1f2] rounded-3xl">
-                      Đặt khám
-                    </Button>
+                    <Link
+                      href={{
+                        pathname: '/choose-service',
+                        query: {
+                          doctorName: doctor.name,
+                          facultyName: doctor.facultyName,
+                        },
+                      }}
+                    >
+                      <Button
+                        className="w-32 text-white bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] hover:from-[#67e0f3] hover:to-[#e7f1f2] rounded-3xl"
+                        onClick={() => handleDoctorClick(doctor.facultyId, doctor.id)}
+                      >
+                        Đặt khám
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               ))
@@ -200,7 +228,7 @@ const Doctor = () => {
           </div>
         </div>
 
-        <div className="flex  justify-center ">
+        <div className="flex justify-center">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
