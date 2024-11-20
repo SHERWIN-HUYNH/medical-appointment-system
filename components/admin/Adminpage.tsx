@@ -2,9 +2,11 @@ import { StatCard } from '@/components/StatCard'
 import { columns } from '@/components/table/columns'
 import { DataTable } from '@/components/table/DataTable'
 import { AppointmentRepository } from '@/repositories/appointment'
+import { AppointmentSchedule } from '@/types/interface'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+
 const AdminPage = async () => {
   const appointments = await AppointmentRepository.getAllAppointments()
   const countAppointment = await AppointmentRepository.CountAppointment()
@@ -58,7 +60,7 @@ const AdminPage = async () => {
           />
         </section>
 
-        <DataTable columns={columns} data={appointments} />
+        <DataTable columns={columns} data={appointments as unknown as AppointmentSchedule[]} />
       </main>
     </div>
   )
