@@ -19,6 +19,13 @@ import {
 } from '@/components/ui/select'
 import Header from '@/components/homepage/Header'
 import Footer from '@/components/homepage/Footer'
+import { uploadFileToCloudinary } from '@/helpers/upload-image'
+import {
+  capitalizeFirstLetterOfSentence,
+  capitalizeWords,
+  handleKeyPress,
+  isValidIdentificationNumber,
+} from '@/helpers/data_normalization'
 
 const Add_Profile = () => {
   const initialFormData = {
@@ -40,6 +47,7 @@ const Add_Profile = () => {
   const { data: session } = useSession()
   const router = useRouter()
   const today = new Date().toISOString().split('T')[0]
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData({
@@ -52,32 +60,15 @@ const Add_Profile = () => {
     }
   }
 
-  const capitalizeWords = (text: string) => {
-    return text
-      .trim()
-      .split(/\s+/)
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ')
-  }
-  const capitalizeFirstLetterOfSentence = (str: string) => {
-    if (str.length === 0) return str
-    return str.charAt(0).toUpperCase() + str.slice(1)
-  }
-
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const charCode = event.key
-    if (!/^\d$/.test(charCode)) {
-      event.preventDefault()
-    }
-  }
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setSelectedFile(e.target.files[0])
-      setFormData({
-        ...formData,
-        identificationDocumentUrl: URL.createObjectURL(e.target.files[0]),
-      })
+      const file = e.target.files[0]
+      setSelectedFile(file)
+      const previewUrl = URL.createObjectURL(file)
+      setFormData((prev) => ({
+        ...prev,
+        identificationDocumentUrl: previewUrl,
+      }))
     }
   }
 
@@ -87,11 +78,6 @@ const Add_Profile = () => {
     setErrorMessage('')
   }
 
-  const isValidIdentificationNumber = (identificationNumber: string) => {
-    const idPattern = /^[0-9]{9,12}$/
-    return idPattern.test(identificationNumber)
-  }
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -99,32 +85,52 @@ const Add_Profile = () => {
       setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.')
       return
     }
+    let uploadedUrl = formData.identificationDocumentUrl
+    if (selectedFile) {
+      try {
+        const result = await uploadFileToCloudinary(selectedFile)
+        if (!result) {
+          toast.error('Tải ảnh lên thất bại. Vui lòng thử lại!')
+          return
+        }
+        uploadedUrl = result
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : 'Có lỗi xảy ra khi tải ảnh.')
+        return
+      }
+    }
+
     const formattedData = {
       ...formData,
       name: capitalizeWords(formData.name),
       symptom: capitalizeFirstLetterOfSentence(formData.symptom),
       pastMedicalHistory: capitalizeFirstLetterOfSentence(formData.pastMedicalHistory),
-      birthDate: formData.birthDate ? new Date(formData.birthDate) : null,
+      identificationDocumentUrl: uploadedUrl,
+      birthDate: formData.birthDate ? new Date(formData.birthDate).toISOString() : null,
     }
 
-    const response = await fetch(`/api/profile/${session?.user?.id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        action: 'create',
-        profile: formattedData,
-      }),
-    })
+    try {
+      const response = await fetch(`/api/profile/${session?.user?.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'create',
+          profile: formattedData,
+        }),
+      })
 
-    if (response.ok) {
-      const data = await response.json()
-      toast.success('Thêm hồ sơ khám bệnh thành công')
-      router.back()
-    } else {
-      const errorText = await response.text()
-      toast.error('Thêm hồ sơ khám bệnh thất bại. Vui lòng thử lại!')
+      if (response.ok) {
+        toast.success('Thêm hồ sơ khám bệnh thành công')
+        router.back()
+      } else {
+        const errorText = await response.text()
+        toast.error(`Thêm hồ sơ khám bệnh thất bại: ${errorText}`)
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('Có lỗi xảy ra khi thêm hồ sơ khám bệnh.')
     }
   }
 
@@ -170,6 +176,7 @@ const Add_Profile = () => {
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
                 placeholder="Nhập họ và tên"
+                customProp={''}
               />
             </div>
 
@@ -184,6 +191,7 @@ const Add_Profile = () => {
                 max={today}
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
+                customProp={''}
               />
             </div>
 
@@ -198,6 +206,7 @@ const Add_Profile = () => {
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
                 placeholder="Nhập email"
+                customProp={''}
               />
             </div>
 
@@ -213,6 +222,7 @@ const Add_Profile = () => {
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
                 placeholder="Nhập số điện thoại"
+                customProp={''}
               />
             </div>
             <div className="rounded-lg bg-slate-100 p-1">
@@ -278,6 +288,7 @@ const Add_Profile = () => {
                   className="w-full p-1 border border-slate-300 rounded text-sm"
                   style={{ height: '30px', fontSize: '14px' }}
                   placeholder="Nhập số giấy định danh"
+                  customProp={''}
                 />
                 {errorMessage && (
                   <p className="text-red-500 text-xs mt-1 text-left">{errorMessage}</p>
@@ -294,6 +305,7 @@ const Add_Profile = () => {
                   className="w-full mt-1 border border-slate-300 rounded text-sm"
                   style={{ height: '30px', fontSize: '14px' }}
                   placeholder="Nhập triệu chứng bệnh"
+                  customProp={''}
                 />
               </div>
             </div>
@@ -318,11 +330,12 @@ const Add_Profile = () => {
                 onChange={handleFileChange}
                 className="w-full p-1 border border-slate-300 rounded text-sm bg-white"
                 style={{ height: '30px', fontSize: '14px' }}
+                customProp={''}
               />
-              {selectedFile && (
+              {formData.identificationDocumentUrl && (
                 <div className="mt-2">
                   <Image
-                    src={URL.createObjectURL(selectedFile)}
+                    src={formData.identificationDocumentUrl}
                     alt="Document Preview"
                     className="w-full object-cover"
                     width={100}

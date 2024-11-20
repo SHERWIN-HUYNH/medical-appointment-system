@@ -140,7 +140,7 @@ const EditDoctor = () => {
           },
         }),
       })
-      
+
       if (response.ok) {
         setIsActive(pendingStatus)
         form.setValue('isActive', pendingStatus)
