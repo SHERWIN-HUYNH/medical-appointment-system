@@ -170,8 +170,7 @@ const Add_Profile = () => {
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
-                placeholder="Nhập họ và tên"
-              />
+                placeholder="Nhập họ và tên" customProp={''}              />
             </div>
 
             <div className="rounded-lg bg-slate-100 p-1">
@@ -184,8 +183,7 @@ const Add_Profile = () => {
                 required
                 max={today}
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: '30px', fontSize: '14px' }}
-              />
+                style={{ height: '30px', fontSize: '14px' }} customProp={''}              />
             </div>
 
             <div className="rounded-lg bg-slate-100 p-1">
@@ -198,8 +196,7 @@ const Add_Profile = () => {
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
-                placeholder="Nhập email"
-              />
+                placeholder="Nhập email" customProp={''}              />
             </div>
 
             <div className="rounded-lg bg-slate-100 p-1">
@@ -213,8 +210,7 @@ const Add_Profile = () => {
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
-                placeholder="Nhập số điện thoại"
-              />
+                placeholder="Nhập số điện thoại" customProp={''}              />
             </div>
             <div className="rounded-lg bg-slate-100 p-1">
               <Label className="block mb-1 text-left">Giới tính</Label>
@@ -278,8 +274,7 @@ const Add_Profile = () => {
                   required
                   className="w-full p-1 border border-slate-300 rounded text-sm"
                   style={{ height: '30px', fontSize: '14px' }}
-                  placeholder="Nhập số giấy định danh"
-                />
+                  placeholder="Nhập số giấy định danh" customProp={''}                />
                 {errorMessage && (
                   <p className="text-red-500 text-xs mt-1 text-left">{errorMessage}</p>
                 )}
@@ -294,8 +289,7 @@ const Add_Profile = () => {
                   required
                   className="w-full mt-1 border border-slate-300 rounded text-sm"
                   style={{ height: '30px', fontSize: '14px' }}
-                  placeholder="Nhập triệu chứng bệnh"
-                />
+                  placeholder="Nhập triệu chứng bệnh" customProp={''}                />
               </div>
             </div>
 
@@ -318,8 +312,7 @@ const Add_Profile = () => {
                 accept="image/*"
                 onChange={handleFileChange}
                 className="w-full p-1 border border-slate-300 rounded text-sm bg-white"
-                style={{ height: '30px', fontSize: '14px' }}
-              />
+                style={{ height: '30px', fontSize: '14px' }} customProp={''}              />
               {selectedFile && (
                 <div className="mt-2">
                   <Image
