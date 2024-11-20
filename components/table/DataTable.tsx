@@ -57,8 +57,12 @@ export function DataTable<TData, TValue>({
           <Input
             placeholder="Tìm theo tên bệnh nhân..."
             value={table.getColumn('patient')?.getFilterValue() as string}
-            onChange={(event) => table.getColumn('patient')?.setFilterValue(event.target.value)}
-            className="max-w-sm rounded-2xl" customProp={''}          />
+            onChange={(event) =>
+              table.getColumn('patient')?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm rounded-2xl"
+            customProp={''}
+          />
         </div>
         <div>
           <label htmlFor="status-filter" className="mr-2">

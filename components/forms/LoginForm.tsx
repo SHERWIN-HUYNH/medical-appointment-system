@@ -78,7 +78,7 @@ export const LoginForm = () => {
             Mật khẩu
           </Label>
           <PasswordInput
-            customProp=''
+            customProp=""
             id="current_password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}

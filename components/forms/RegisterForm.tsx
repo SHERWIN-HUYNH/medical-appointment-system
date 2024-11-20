@@ -105,7 +105,7 @@ export const RegisterForm = () => {
             Mật khẩu
           </Label>
           <PasswordInput
-            customProp=''
+            customProp=""
             id="password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}

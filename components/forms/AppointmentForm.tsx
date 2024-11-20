@@ -67,7 +67,6 @@ export const AppointmentForm = ({
         // }
         // console.log('NEW APPOINTMENT', appointment)
         // const newAppointment = await createAppointment(appointment)
-
         // if (newAppointment) {
         //   console.log('NEW APPOINTMENT', newAppointment)
         //   form.reset()

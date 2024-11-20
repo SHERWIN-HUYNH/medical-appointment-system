@@ -60,7 +60,10 @@ const AdminPage = async () => {
           />
         </section>
 
-        <DataTable columns={columns} data={appointments as unknown as AppointmentSchedule[]} />
+        <DataTable
+          columns={columns}
+          data={appointments as unknown as AppointmentSchedule[]}
+        />
       </main>
     </div>
   )

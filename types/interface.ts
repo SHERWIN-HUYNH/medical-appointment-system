@@ -57,7 +57,7 @@ export interface Doctor {
   name: string
   academicTitle: string
   description?: string
-  isDeleted:boolean
+  isDeleted: boolean
   image?: string
   facultyId: string
   isActive: boolean
@@ -74,21 +74,20 @@ export interface Appointment {
 }
 
 export interface AppointmentSchedule {
-  id: string;
-  status: Status;
-  cancellationReason: string | null;
-  profileId: string;
-  serviceId: string;
-  doctorScheduleId: string;
-  profile: Profile;
-  doctorSchedule: DoctorSchedule;
+  id: string
+  status: Status
+  cancellationReason: string | null
+  profileId: string
+  serviceId: string
+  doctorScheduleId: string
+  profile: Profile
+  doctorSchedule: DoctorSchedule
 }
 export interface CreateAppointment {
   profileId: string
   doctorScheduleId: string
   serviceId: string
 }
-
 
 interface DoctorSchedule {
   id: string
