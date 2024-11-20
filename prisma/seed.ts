@@ -1,8 +1,8 @@
-import { DoctorScheduleRespository } from '@/repositories/doctorSchedule'
-import { AppointmentStatus, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient()
 async function main() {
+
   const appointmentCounts = await prisma.appointment.groupBy({
     by: ['status'],
     _count: {
