@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import React from 'react'
-import { getPatient, getUser } from '@/lib/action/patient.actions'
+import { getPatient } from '@/lib/action/patient.actions'
 import RegisterForm from '@/components/forms/DeclarationForm'
 
 const Register = async ({ params: { userId } }: SearchParamProps) => {
-  const user = await getUser(userId)
+
   const patient = await getPatient(userId)
   if (patient) redirect(`/patients/${userId}/new-appointment`)
 
