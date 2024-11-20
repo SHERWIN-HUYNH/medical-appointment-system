@@ -150,7 +150,7 @@ export const createService = z.object({
   price: z
     .string()
     .refine((price) => /^\d{1,10}(\.\d{1,2})?$/.test(price), 'Invalid price'),
-  faculty: z
+  facultyId: z
     .string()
     .refine((value) => value !== '', { message: 'Please select a faculty' }),
 })

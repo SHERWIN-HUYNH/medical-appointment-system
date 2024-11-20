@@ -140,9 +140,7 @@ const EditDoctor = () => {
           },
         }),
       })
-
-      const data = await response.json()
-
+      
       if (response.ok) {
         setIsActive(pendingStatus)
         form.setValue('isActive', pendingStatus)
@@ -151,6 +149,7 @@ const EditDoctor = () => {
         toast.error('Bác sĩ hiện đang có lịch hẹn không thể thay đổi trạng thái')
       }
     } catch (error) {
+      console.log(error)
       toast.error('Đã có lỗi xảy ra khi thay đổi trạng thái')
     } finally {
       setShowConfirmModal(false)

@@ -44,3 +44,10 @@ export async function DELETE(req: Request) {
 
   }
 }
+
+export async function POST(req: Request) {
+  const commentData = await req.json()
+
+  const comment = await CommentRespository.createComment(commentData)
+  return successResponse(comment)
+}

@@ -19,6 +19,7 @@ const TableSearch = ({ searchTerm, setSearchTerm }: TableSearchProps) => {
         onChange={handleSearchChange}
         placeholder="Search..."
         className="w-230 rounded-full bg-transparent border-slate-300 shadow-inner shadow-slate-100"
+        customProp={''}
       />
     </div>
   )

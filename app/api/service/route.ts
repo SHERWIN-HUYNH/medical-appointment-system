@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+/* eslint-disable @typescript-eslint/no-explicit-any */
+=======
 import Appointment from '@/app/patients/[userId]/new-appointment/page'
+>>>>>>> 6e948221b114aee513d08b93da8de7337fcbaeb8
 import {
   badRequestResponse,
   forbiddenResponse,
@@ -29,28 +33,14 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   const { id } = await req.json()
-  // const appointment = await AppointmentRepository.getAppointmentByServiceId(id);
-  // if (appointment) {
-  //     return forbiddenResponse("SERVICE HAS A PENDING APPOINTMENT");
-  // }
+  const appointment = await AppointmentRepository.getAppointmentByServiceId(id)
+  console.log('Appointments found:', appointment)
+  if (appointment?.length > 0) {
+    return forbiddenResponse('Dịch vụ đang có lịch hẹn đang chờ xử lý')
+  }
   const deletedService = await ServiceRepository.deleteService(id)
   if (!deletedService) {
-    return badRequestResponse('FAIL TO DELETE SERVICE')
+    return badRequestResponse('Xóa dịch vụ thất bại')
   }
   return successResponse(deletedService)
-}
-
-export async function PUT(req: Request) {
-  const service = await req.json()
-  console.log('SERVICE DATA', service)
-  // const appointment = await AppointmentRepository.getAppointmentByServiceId(service.id);
-  // if (appointment) {
-  //     return forbiddenResponse("SERVICE HAS A PENDING APPOINTMENT");
-  // }
-
-  const updatedService = await ServiceRepository.updateService(service)
-  if (!updatedService) {
-    return badRequestResponse('FAIL TO UPDATE SERVICE')
-  }
-  return successResponse(updatedService)
 }

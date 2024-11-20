@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { E164Number } from 'libphonenumber-js/core'
 import Image from 'next/image'
@@ -10,7 +12,9 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/f
 import { Input } from './ui/input'
 import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select'
 import { Textarea } from './ui/textarea'
-import React from 'react'
+import React, { useState } from 'react'
+import { formatPrice } from '@/helpers/formatCurrency'
+
 export enum FormFieldType {
   INPUT = 'input',
   TEXTAREA = 'textarea',
@@ -20,10 +24,10 @@ export enum FormFieldType {
   SELECT = 'select',
   SKELETON = 'skeleton',
   PASSWORD = 'password',
+  PRICE = 'price',
 }
 
 interface CustomProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
   label?: string
@@ -34,7 +38,6 @@ interface CustomProps {
   dateFormat?: string
   showTimeSelect?: boolean
   children?: React.ReactNode
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   renderSkeleton?: (field: any) => React.ReactNode
   fieldType: FormFieldType
   currentPassword?: string
@@ -134,14 +137,62 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                 <SelectValue placeholder={props.placeholder} />
               </SelectTrigger>
             </FormControl>
-            <SelectContent className="shad-select-content">
-              {props.children}
+            <SelectContent className="shad-select-content custom-scrollbar">
+              <div className="select-items-container">{props.children}</div>
             </SelectContent>
           </Select>
         </FormControl>
       )
     case FormFieldType.SKELETON:
       return props.renderSkeleton ? props.renderSkeleton(field) : null
+    case FormFieldType.PRICE: {
+      const [isFocused, setIsFocused] = useState(false)
+
+      const formatInputValue = (value: string) => {
+        const numbers = value.replace(/\D/g, '')
+
+        const digits = numbers.split('').reverse()
+
+        const groups = []
+        for (let i = 0; i < digits.length; i += 3) {
+          groups.push(
+            digits
+              .slice(i, i + 3)
+              .reverse()
+              .join(''),
+          )
+        }
+
+        return groups.reverse().join('.')
+      }
+
+      return (
+        <div className="flex rounded-md border bg-white">
+          <FormControl>
+            <Input
+              placeholder={props.placeholder}
+              {...field}
+              value={
+                isFocused
+                  ? formatInputValue(field.value?.toString() || '')
+                  : formatPrice(field.value)
+              }
+              onFocus={() => setIsFocused(true)}
+              onBlur={(e) => {
+                setIsFocused(false)
+                field.onChange(e.target.value.replace(/\D/g, ''))
+              }}
+              onChange={(e) => {
+                const formattedValue = formatInputValue(e.target.value)
+                e.target.value = formattedValue
+                field.onChange(e.target.value.replace(/\D/g, ''))
+              }}
+              className="shad-input border-0"
+            />
+          </FormControl>
+        </div>
+      )
+    }
     default:
       return null
   }

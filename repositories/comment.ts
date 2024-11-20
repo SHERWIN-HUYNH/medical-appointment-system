@@ -80,4 +80,26 @@ export class CommentRespository {
       throw new Error('Không thể xóa đánh giá với id đã cho')
     }
   }
+
+  static async createComment(commentData: Comment) {
+    try {
+      const currentDate = new Date().toISOString().split('T')[0] // Lấy chỉ phần ngày YYYY-MM-DD
+
+      const comment = await prisma.comment.create({
+        data: {
+          content: commentData.content,
+          rating: commentData.rating,
+          doctorId: commentData.doctorId,
+          userId: commentData.userId,
+          createdAt: new Date(currentDate), // Lưu chỉ ngày không có giờ
+        },
+      })
+      return comment
+    } catch (error) {
+      console.error('Lỗi khi tạo đánh giá:', error)
+      throw error
+    } finally {
+      await prisma.$disconnect()
+    }
+  }
 }

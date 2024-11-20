@@ -285,6 +285,14 @@
     @apply border-dark-500 bg-white !important;
   }
 
+  .select-items-container [role='option'] {
+    @apply relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-gradient-to-r hover:from-[#00b5f1] hover:to-[#00e0ff] hover:text-white transition-all duration-150 data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+  }
+
+  .select-items-container {
+    @apply max-h-[300px] overflow-y-auto;
+  }
+
   .shad-dialog {
     @apply bg-white  border-dark-500 !important;
   }

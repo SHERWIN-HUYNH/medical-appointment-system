@@ -1,34 +1,28 @@
-import React, { useEffect } from 'react'
-
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+'use client'
 import { createService } from '@/lib/validation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { z } from 'zod'
+import { Button } from '../ui/button'
+import { useForm } from 'react-hook-form'
 import { Form } from '../ui/form'
 import CustomFormField, { FormFieldType } from '../CustomFormField'
 import { SelectItem } from '../ui/select'
-import { Button } from '../ui/button'
-import { toast } from 'sonner'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 type Faculty = {
   id: string
   name: string
 }
-const CreateServiceForm = () => {
+
+const EditServiceForm = () => {
+  const [loading, setLoading] = useState(false)
   const [facultyData, setFacultyData] = useState<Faculty[]>([])
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
 
-  useEffect(() => {
-    const fetchFacultyData = async () => {
-      const response = await fetch(`/api/faculty`)
-      if (response.ok) {
-        const data = await response.json()
-        setFacultyData(data)
-      }
-    }
-
-    fetchFacultyData()
-  })
   const form = useForm<z.infer<typeof createService>>({
     resolver: zodResolver(createService),
     defaultValues: {
@@ -39,26 +33,60 @@ const CreateServiceForm = () => {
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof createService>) => {
-    const serviceData = {
-      ...values,
-      price: Number(values.price.replace(/\D/g, '')),
-    }
-
-    const response = await fetch(`/api/service`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(serviceData),
-    })
-
+  const fetchFacultyData = async () => {
+    const response = await fetch(`/api/faculty`)
     if (response.ok) {
-      toast.success('Thêm dịch vụ thành công!')
-    } else {
-      toast.error('Không thể thêm dịch vụ')
+      const data = await response.json()
+      setFacultyData(data)
     }
   }
+
+  const fetchServiceData = async () => {
+    const response = await fetch(`/api/service/${id}`)
+    if (response.ok) {
+      const service = await response.json()
+      form.reset({
+        name: service.name,
+        price: service.price.toString(),
+        description: service.description,
+        facultyId: service.facultyId,
+      })
+    } else {
+      toast.error('Failed to fetch service details.')
+    }
+  }
+
+  useEffect(() => {
+    fetchFacultyData()
+    if (id) {
+      fetchServiceData()
+    }
+  }, [id])
+
+  const onSubmit = async (values: z.infer<typeof createService>) => {
+    try {
+      setLoading(true)
+      const response = await fetch(`/api/service/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      })
+
+      const { error } = await response.json()
+
+      if (response.ok) {
+        toast.success('Service updated successfully!')
+        router.push('/test-service')
+      } else {
+        toast.error(error)
+      }
+    } catch {
+      toast.error('An error occurred while updating the service')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -74,7 +102,6 @@ const CreateServiceForm = () => {
                   placeholder=""
                 />
               </div>
-
               <div className="mb-4.5">
                 <CustomFormField
                   fieldType={FormFieldType.TEXTAREA}
@@ -94,14 +121,16 @@ const CreateServiceForm = () => {
                   placeholder=""
                 />
               </div>
-
               <div className="mb-4.5">
                 <CustomFormField
                   fieldType={FormFieldType.SELECT}
                   control={form.control}
                   name="facultyId"
                   label="Chọn chuyên khoa"
-                  placeholder="Select a faculty"
+                  placeholder={
+                    facultyData.find((f) => f.id === form.getValues('facultyId'))?.name ||
+                    'Select a faculty'
+                  }
                 >
                   {facultyData.map((faculty) => (
                     <SelectItem key={faculty.id} value={faculty.id}>
@@ -114,13 +143,13 @@ const CreateServiceForm = () => {
               </div>
             </div>
           </div>
-
           <div className="flex justify-end">
             <Button
               type="submit"
+              disabled={loading}
               className="w-24 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
             >
-              Lưu
+              {loading ? 'Đang lưu...' : 'Lưu'}
             </Button>
           </div>
         </div>
@@ -129,4 +158,4 @@ const CreateServiceForm = () => {
   )
 }
 
-export default CreateServiceForm
+export default EditServiceForm

@@ -1,59 +1,105 @@
 'use client'
+import ModalDelete from '@/components/ModalDelete'
 import Pagination from '@/components/Pagination'
 import Table from '@/components/Table'
 import TableSearch from '@/components/TableSearch'
 import { Button } from '@/components/ui/button'
-import { facultyData, serviceData } from '@/lib/data'
 import { ArrowDownNarrowWide, Pencil, Trash2 } from 'lucide-react'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 type Service = {
-  id: number
+  id: string
   name: string
   price: number
-  facultyId: number
+  facultyId: string
   description: string
+}
+
+type Faculty = {
+  id: string
+  name: string
 }
 
 const columns = [
   {
-    header: 'ID',
-    accessor: 'id',
-    className: 'hidden lg:table-cell ',
+    header: 'STT',
+    accessor: 'index',
+    className: 'w-[5%] hidden md:table-cell',
   },
   {
     header: 'Dịch vụ',
     accessor: 'service',
+    className: 'w-[20%] text-left pl-7 hidden md:table-cell ',
   },
   {
     header: 'Giá dịch vụ',
     accessor: 'price',
+    className: 'w-[20%] text-left pl-7 hidden md:table-cell ',
   },
   {
     header: 'Chuyên khoa',
     accessor: 'facultyName',
+    className: 'w-[20%] text-left pl-7 hidden md:table-cell',
   },
   {
     header: 'Mô tả',
     accessor: 'description',
-    className: 'hidden md:table-cell ',
+    className: 'w-[20%] text-left pl-7 hidden md:table-cell',
+  },
+  {
+    header: 'Thao tác',
+    accessor: 'actions',
+    className: 'w-[20%] text-left pl-7 hidden md:table-cell',
   },
 ]
 
 const ListService = () => {
-  // Phân trang
+  const [facultyData, setFacultyData] = useState<Faculty[]>([])
+  const [serviceData, setServiceData] = useState<Service[]>([])
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 5
-  const totalPages = Math.ceil(serviceData.length / itemsPerPage)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null)
+  const [showModal, setShowModal] = useState(false)
 
-  const displayedData = serviceData.slice(
+  useEffect(() => {
+    const fetchServiceData = async () => {
+      const response = await fetch(`/api/service`)
+
+      if (response.ok) {
+        const data = await response.json()
+        setServiceData(data)
+      }
+    }
+
+    const fetchFacultyData = async () => {
+      const response = await fetch(`/api/faculty`)
+      if (response.ok) {
+        const data = await response.json()
+        setFacultyData(data)
+      }
+    }
+
+    fetchServiceData()
+    fetchFacultyData()
+  }, [])
+
+  // Lọc dữ liệu dựa trên searchTerm
+  const searchData = serviceData.filter((service) =>
+    service.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
+  // Phân trang
+  const itemsPerPage = 5
+  const totalPages = Math.ceil(searchData.length / itemsPerPage)
+
+  const displayedData = searchData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   )
 
   // Hàm tìm tên chuyên khoa từ facultyId
-  const getFacultyName = (facultyId: number) => {
+  const getFacultyName = (facultyId: string) => {
     // Tìm đối tượng chuyên khoa có id khớp với facultyId
     const faculty = facultyData.find((f) => f.id === facultyId)
 
@@ -64,32 +110,74 @@ const ListService = () => {
       return 'NULL' // Trả về "NULL" nếu không tìm thấy chuyên khoa
     }
   }
+  // Tính toán số thứ tự dựa trên trang hiện tại
+  const getSequentialNumber = (index: number) => {
+    return (currentPage - 1) * itemsPerPage + index + 1
+  }
 
-  const renderRow = (item: Service) => {
+  // Thêm dữ liệu STT vào displayedData
+  const dataWithIndex = displayedData.map((item, index) => ({
+    ...item,
+    index: getSequentialNumber(index),
+  }))
+
+  const confirmDelete = async () => {
+    if (!serviceToDelete) return
+
+    try {
+      const response = await fetch(`/api/service`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: serviceToDelete.id }),
+      })
+
+      if (response.ok) {
+        setServiceData((prevData) =>
+          prevData.filter((service) => service.id !== serviceToDelete.id),
+        )
+        toast.success(`Dịch vụ ${serviceToDelete.name} đã xóa thành công!`)
+      } else {
+        const message = await response.json()
+        toast.error(message.error)
+      }
+    } catch (error) {
+      console.error('Error deleting service:', error)
+      toast.error('Đã xảy ra lỗi khi xóa dịch vụ!')
+    } finally {
+      setServiceToDelete(null)
+      setShowModal(false)
+    }
+  }
+
+  const renderRow = (item: Service & { index: number }) => {
     return (
       <tr
         key={item.id}
-        className="h-15 border-b text-left border-slate-200 even:bg-slate-50 text-sm hover:bg-blue-50"
+        className="h-15 border-b border-slate-200 even:bg-slate-50 text-sm hover:bg-blue-50"
       >
-        <td>
-          <div className="text-left p-2">
-            <h3 className="font-semi">{item.id}</h3>
-          </div>
-        </td>
-        <td className="hidden md:table-cell text-left">{item.name}</td>
-        <td className="hidden md:table-cell text-left">{item.price}</td>
-        <td className="hidden md:table-cell text-left">
+        <td className="text-center p-4">{item.index}</td>
+        <td className="text-left pl-7 hidden md:table-cell">{item.name}</td>
+        <td className="text-left pl-7 hidden md:table-cell">{item.price}</td>
+        <td className="text-left pl-7 hidden md:table-cell">
           {getFacultyName(item.facultyId)}
         </td>
-        <td className="hidden md:table-cell text-left">{item.description}</td>
-        <td>
+        <td className="text-left pl-7 hidden md:table-cell">{item.description}</td>
+        <td className="pl-7">
           <div className="flex items-center gap-2">
-            <Link href={`/test-faculty/${item.id}/edit-faculty`}>
+            <Link href={`/test-service/edit-service?id=${item.id}`}>
               <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-blue-300">
                 <Pencil size={28} strokeWidth={3} color="white" />
               </Button>
             </Link>
-            <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-purple-300">
+            <Button
+              className="w-12 h-10 flex items-center justify-center rounded-full bg-purple-300"
+              onClick={() => {
+                setServiceToDelete(item)
+                setShowModal(true)
+              }}
+            >
               <Trash2 size={28} strokeWidth={3} color="white" />
             </Button>
           </div>
@@ -105,7 +193,7 @@ const ListService = () => {
           All Service
         </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-          <TableSearch />
+          <TableSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </div>
         <div className="flex items-center gap-4 self-end">
           <Link href="/test-service/add-service">
@@ -119,7 +207,7 @@ const ListService = () => {
         </div>
       </div>
       <div className="">
-        <Table columns={columns} renderRow={renderRow} data={displayedData} />
+        <Table columns={columns} renderRow={renderRow} data={dataWithIndex} />
       </div>
       <div className="">
         <Pagination
@@ -128,6 +216,14 @@ const ListService = () => {
           onPageChange={setCurrentPage} // Pass the function to update current page
         />
       </div>
+      {showModal && (
+        <ModalDelete
+          showModal={showModal}
+          onClose={() => setShowModal(false)}
+          onConfirm={confirmDelete}
+          label={`dịch vụ ${serviceToDelete?.name}`}
+        />
+      )}
     </div>
   )
 }

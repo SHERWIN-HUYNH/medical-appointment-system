@@ -72,29 +72,35 @@ export class ServiceRepository {
     }
   }
   static async updateService(serviceData: Service) {
-    try {
-      const updatedService = await prisma.service.update({
-        where: {
-          id: serviceData.id,
-        },
-        data: serviceData,
-      })
-      return updatedService
-    } catch (error) {
-      console.error('Error updating service:', error)
-      throw error
-    } finally {
-      await prisma.$disconnect()
-    }
+    const updatedService = await prisma.service.update({
+      where: {
+        id: serviceData.id,
+      },
+      data: serviceData,
+    })
+    return updatedService
   }
   static async deleteService(serviceId: string) {
     try {
-      const deletedService = await prisma.service.delete({
-        where: {
-          id: serviceId,
-        },
+      return await prisma.$transaction(async (tx) => {
+        // Xóa tất cả appointments không phải PENDING
+        await tx.appointment.deleteMany({
+          where: {
+            serviceId: serviceId,
+            NOT: {
+              status: 'PENDING',
+            },
+          },
+        })
+
+        // Xóa service
+        const deletedService = await tx.service.delete({
+          where: {
+            id: serviceId,
+          },
+        })
+        return deletedService
       })
-      return deletedService
     } catch (error) {
       console.error('Error deleting service:', error)
       throw error
