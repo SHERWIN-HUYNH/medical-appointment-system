@@ -1,7 +1,7 @@
-import { Bill } from '@/types/interface';
-import { BillStatus, PrismaClient } from '@prisma/client';
+import { Bill } from '@/types/interface'
+import { BillStatus, PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 export class BillRespository {
   static async createBill(billData: Bill) {
     try {
@@ -13,10 +13,10 @@ export class BillRespository {
           userId: billData.userId,
           appointmentId: billData.appointmentId,
         },
-      });
-      return newBill;
+      })
+      return newBill
     } catch (error) {
-      throw new Error('Error creating bill', error as Error);
+      throw new Error('Error creating bill', error as Error)
     }
   }
   static async cancelBill(billId: string) {
@@ -29,10 +29,10 @@ export class BillRespository {
           status: BillStatus.CANCELLED,
           updatedAt: new Date(),
         },
-      });
-      return deletedBill;
+      })
+      return deletedBill
     } catch (error) {
-      throw new Error('Error canceling bill', error as Error);
+      throw new Error('Error canceling bill', error as Error)
     }
   }
 }

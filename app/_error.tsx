@@ -1,14 +1,14 @@
 // pages/_error.tsx
-import React from 'react';
-import { NextPageContext } from 'next';
+import React from 'react'
+import { NextPageContext } from 'next'
 
 interface ErrorPageProps {
-  statusCode: number;
-  errorMessage?: string;
+  statusCode: number
+  errorMessage?: string
 }
 
 const ErrorPage = ({ statusCode, errorMessage }: ErrorPageProps) => {
-  const showDetails = process.env.NODE_ENV === 'development';
+  const showDetails = process.env.NODE_ENV === 'development'
 
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -33,13 +33,13 @@ const ErrorPage = ({ statusCode, errorMessage }: ErrorPageProps) => {
         <p>Something went wrong. Please try again later.</p>
       )}
     </div>
-  );
-};
+  )
+}
 
 ErrorPage.getInitialProps = ({ res, err }: NextPageContext) => {
-  const statusCode = res ? res.statusCode : err ? (err.statusCode ?? 500) : 404;
-  const errorMessage = err ? err.message : 'Unknown error';
-  return { statusCode, errorMessage };
-};
+  const statusCode = res ? res.statusCode : err ? (err.statusCode ?? 500) : 404
+  const errorMessage = err ? err.message : 'Unknown error'
+  return { statusCode, errorMessage }
+}
 
-export default ErrorPage;
+export default ErrorPage

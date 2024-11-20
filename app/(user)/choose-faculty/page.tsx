@@ -1,42 +1,42 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import UserLayout from '@/components/Layouts/userLayout';
-import { useAppointmentContext } from '@/context/AppointmentContext';
+'use client'
+import React, { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import UserLayout from '@/components/Layouts/userLayout'
+import { useAppointmentContext } from '@/context/AppointmentContext'
 
 interface Faculty {
-  id: string;
-  name: string;
-  description?: string;
+  id: string
+  name: string
+  description?: string
 }
 
 const ChooseFaculty = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [faculties, setFaculties] = useState<Faculty[]>([]);
-  const { setData } = useAppointmentContext();
+  const [searchQuery, setSearchQuery] = useState('')
+  const [faculties, setFaculties] = useState<Faculty[]>([])
+  const { setData } = useAppointmentContext()
 
   useEffect(() => {
     const fetchFaculties = async () => {
       try {
-        const response = await fetch('/api/faculty');
-        const data = await response.json();
-        setFaculties(data || []);
+        const response = await fetch('/api/faculty')
+        const data = await response.json()
+        setFaculties(data || [])
       } catch (error) {
-        console.log(error);
-        setFaculties([]);
+        console.log(error)
+        setFaculties([])
       }
-    };
-    fetchFaculties();
-  }, []);
+    }
+    fetchFaculties()
+  }, [])
 
   const filteredFaculties = faculties.filter((faculty) =>
     faculty.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  )
 
   const handleFacultyClick = (facultyId: string) => {
-    setData({ facultyId });
-  };
+    setData({ facultyId })
+  }
 
   return (
     <UserLayout>
@@ -148,7 +148,7 @@ const ChooseFaculty = () => {
         </main>
       </section>
     </UserLayout>
-  );
-};
+  )
+}
 
-export default ChooseFaculty;
+export default ChooseFaculty

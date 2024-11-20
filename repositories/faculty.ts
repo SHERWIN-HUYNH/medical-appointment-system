@@ -1,7 +1,7 @@
-import { Faculty } from '@/types/interface';
-import { PrismaClient } from '@prisma/client';
+import { Faculty } from '@/types/interface'
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export class FacultyRepository {
   static async getFacultyById(facultyId: string) {
@@ -10,23 +10,23 @@ export class FacultyRepository {
         where: {
           id: facultyId,
         },
-      });
-      await prisma.$disconnect();
-      return faculty;
+      })
+      await prisma.$disconnect()
+      return faculty
     } catch (error) {
-      await prisma.$disconnect();
-      throw error;
+      await prisma.$disconnect()
+      throw error
     }
   }
 
   static async getFaculties() {
     try {
-      const faculties = await prisma.faculty.findMany();
-      await prisma.$disconnect();
-      return faculties;
+      const faculties = await prisma.faculty.findMany()
+      await prisma.$disconnect()
+      return faculties
     } catch (error) {
-      await prisma.$disconnect();
-      throw error;
+      await prisma.$disconnect()
+      throw error
     }
   }
 
@@ -37,9 +37,9 @@ export class FacultyRepository {
         description: facultyData.description,
         image: facultyData.image,
       },
-    });
-    await prisma.$disconnect();
-    return newFaculty;
+    })
+    await prisma.$disconnect()
+    return newFaculty
   }
 
   static async updateFaculty(facultyData: Faculty, id: string) {
@@ -52,9 +52,9 @@ export class FacultyRepository {
         description: facultyData.description,
         image: facultyData.image,
       },
-    });
-    await prisma.$disconnect();
-    return updatedFaculty;
+    })
+    await prisma.$disconnect()
+    return updatedFaculty
   }
 
   static async deleteFaculty(facultyData: Faculty) {
@@ -62,8 +62,8 @@ export class FacultyRepository {
       where: {
         id: facultyData.id,
       },
-    });
-    await prisma.$disconnect();
-    return deletedFaculty;
+    })
+    await prisma.$disconnect()
+    return deletedFaculty
   }
 }

@@ -1,59 +1,59 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Form } from '@/components/ui/form';
-import { UserLogin } from '@/lib/validation';
-import 'react-phone-number-input/style.css';
-import CustomFormField, { FormFieldType } from '../CustomFormField';
-import SubmitButton from '../SubmitButton';
-import { toast } from 'sonner';
-import { PasswordInput } from '../PasswordInput';
-import { Label } from '../ui/label';
-import { signIn, useSession } from 'next-auth/react';
-import React from 'react';
-import { useAppointmentContext } from '@/context/AppointmentContext';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { Form } from '@/components/ui/form'
+import { UserLogin } from '@/lib/validation'
+import 'react-phone-number-input/style.css'
+import CustomFormField, { FormFieldType } from '../CustomFormField'
+import SubmitButton from '../SubmitButton'
+import { toast } from 'sonner'
+import { PasswordInput } from '../PasswordInput'
+import { Label } from '../ui/label'
+import { signIn, useSession } from 'next-auth/react'
+import React from 'react'
+import { useAppointmentContext } from '@/context/AppointmentContext'
 export const LoginForm = () => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState('');
-  const { data: session } = useSession();
-  const { data, setData } = useAppointmentContext();
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState('')
+  const { data: session } = useSession()
+  const { data, setData } = useAppointmentContext()
   const form = useForm<z.infer<typeof UserLogin>>({
     resolver: zodResolver(UserLogin),
     defaultValues: {
       email: '',
       password: '',
     },
-  });
+  })
   const onSubmit = async (values: z.infer<typeof UserLogin>) => {
-    setIsLoading(true);
+    setIsLoading(true)
     const res = await signIn('credentials', {
       email: values.email,
       password: currentPassword,
       redirect: false,
-    });
+    })
     if (res?.error) {
-      toast.error(res.error);
+      toast.error(res.error)
     }
     if (res?.ok) {
-      setIsLoading(false);
-      setData({ userId: session?.user.id });
-      console.log('CONTEXT USERID', data.userId);
-      toast.success('Đăng nhập thành công');
+      setIsLoading(false)
+      setData({ userId: session?.user.id })
+      console.log('CONTEXT USERID', data.userId)
+      toast.success('Đăng nhập thành công')
       if (session?.user.roleName === 'USER') {
-        router.push('/');
+        router.push('/')
       }
       if (session?.user.roleName === 'ADMIN') {
-        router.push('/test-admin');
+        router.push('/test-admin')
       }
     } else {
-      console.log('ERRPR SESSION', session);
+      console.log('ERRPR SESSION', session)
     }
-  };
+  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
@@ -88,5 +88,5 @@ export const LoginForm = () => {
         <SubmitButton isLoading={isLoading}>Đăng nhập</SubmitButton>
       </form>
     </Form>
-  );
-};
+  )
+}

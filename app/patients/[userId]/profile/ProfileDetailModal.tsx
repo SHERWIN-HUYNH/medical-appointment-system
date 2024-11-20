@@ -1,5 +1,5 @@
-import React from 'react';
-import { Profile } from '@/types/interface';
+import React from 'react'
+import { Profile } from '@/types/interface'
 import {
   Cable,
   Cake,
@@ -10,13 +10,13 @@ import {
   Mails,
   Scroll,
   Smartphone,
-} from 'lucide-react';
-import { FaVenusMars } from 'react-icons/fa';
+} from 'lucide-react'
+import { FaVenusMars } from 'react-icons/fa'
 
 interface ProfileDetailModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  profile: Profile;
+  isOpen: boolean
+  onClose: () => void
+  profile: Profile
 }
 
 const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
@@ -24,12 +24,12 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
   onClose,
   profile,
 }) => {
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   const formatDate = (date: Date | undefined) => {
-    if (!date) return 'N/A';
-    return new Date(date).toLocaleDateString('vi-VN');
-  };
+    if (!date) return 'N/A'
+    return new Date(date).toLocaleDateString('vi-VN')
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -119,7 +119,7 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProfileDetailModal;
+export default ProfileDetailModal

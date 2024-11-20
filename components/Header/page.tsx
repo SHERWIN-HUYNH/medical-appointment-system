@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 // const Header = () => {
 //   return (
@@ -10,14 +10,14 @@ import React from 'react';
 // }
 
 // export default Header
-import Link from 'next/link';
+import Link from 'next/link'
 
-import Image from 'next/image';
-import DropdownUser from './DropdownUser';
+import Image from 'next/image'
+import DropdownUser from './DropdownUser'
 
 const Header = (props: {
-  sidebarOpen: string | boolean | undefined;
-  setSidebarOpen: (arg0: boolean) => void;
+  sidebarOpen: string | boolean | undefined
+  setSidebarOpen: (arg0: boolean) => void
 }) => {
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
@@ -27,8 +27,8 @@ const Header = (props: {
           <button
             aria-controls="sidebar"
             onClick={(e) => {
-              e.stopPropagation();
-              props.setSidebarOpen(!props.sidebarOpen);
+              e.stopPropagation()
+              props.setSidebarOpen(!props.sidebarOpen)
             }}
             className="z-99999 block rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
           >
@@ -117,7 +117,7 @@ const Header = (props: {
         </div>
       </div>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

@@ -1,7 +1,7 @@
-'use client';
-import React from 'react';
-import DefaultLayout from '@/components/Layouts/defaultLayout';
-import Chart from '@/components/Charts/page';
+'use client'
+import React from 'react'
+import DefaultLayout from '@/components/Layouts/defaultLayout'
+import Chart from '@/components/Charts/page'
 
 const Thong_Ke = () => {
   return (
@@ -12,7 +12,7 @@ const Thong_Ke = () => {
         </div>
       </DefaultLayout>
     </div>
-  );
-};
+  )
+}
 
-export default Thong_Ke;
+export default Thong_Ke

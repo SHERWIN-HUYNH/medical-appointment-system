@@ -1,9 +1,9 @@
-'use client';
+'use client'
 
-import React, { useState } from 'react';
-import { Input } from '../../components/ui/input';
-import { Button } from '../../components/ui/button';
-import { Brain, Ear, Search } from 'lucide-react';
+import React, { useState } from 'react'
+import { Input } from '../../components/ui/input'
+import { Button } from '../../components/ui/button'
+import { Brain, Ear, Search } from 'lucide-react'
 import {
   FaAllergies,
   FaAppleAlt,
@@ -21,15 +21,15 @@ import {
   FaWater,
   FaWheelchair,
   FaXRay,
-} from 'react-icons/fa';
-import { FaUserDoctor } from 'react-icons/fa6';
-import { GiBrain, GiBrokenBone, GiMuscleUp } from 'react-icons/gi';
+} from 'react-icons/fa'
+import { FaUserDoctor } from 'react-icons/fa6'
+import { GiBrain, GiBrokenBone, GiMuscleUp } from 'react-icons/gi'
 
 // Định nghĩa type Category
 type Category = {
-  name: string;
-  icon: JSX.Element;
-};
+  name: string
+  icon: JSX.Element
+}
 
 function CategorySearch() {
   // Danh sách các category với type Category
@@ -126,22 +126,22 @@ function CategorySearch() {
       name: 'Cơ xương khớp',
       icon: <GiMuscleUp className="text-white h-6 w-6" />,
     },
-  ];
+  ]
 
   // State để quản lý hiển thị danh sách category
-  const [showAllCategories, setShowAllCategories] = useState<boolean>(false);
+  const [showAllCategories, setShowAllCategories] = useState<boolean>(false)
 
   // Hàm để chuyển đổi trạng thái hiển thị các category
   const toggleShowAllCategories = () => {
-    setShowAllCategories(!showAllCategories);
-  };
+    setShowAllCategories(!showAllCategories)
+  }
 
   // Hiển thị danh sách các category dựa vào trạng thái showAllCategories
-  let displayCategories;
+  let displayCategories
   if (showAllCategories) {
-    displayCategories = categoryList.slice(0, 12);
+    displayCategories = categoryList.slice(0, 12)
   } else {
-    displayCategories = categoryList.slice(0, 6);
+    displayCategories = categoryList.slice(0, 6)
   }
 
   return (
@@ -176,7 +176,7 @@ function CategorySearch() {
         {showAllCategories ? 'Thu gọn' : 'Xem thêm'}
       </Button>
     </div>
-  );
+  )
 }
 
-export default CategorySearch;
+export default CategorySearch

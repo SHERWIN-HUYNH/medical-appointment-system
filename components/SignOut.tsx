@@ -1,7 +1,6 @@
-import React from 'react';
-import { Button } from './ui/button';
-import { redirect } from 'next/dist/server/api-utils';
-import { signOut } from 'next-auth/react';
+import React from 'react'
+import { Button } from './ui/button'
+import { signOut } from 'next-auth/react'
 
 const SignOut = () => {
   return (
@@ -15,7 +14,7 @@ const SignOut = () => {
     >
       Sign out
     </Button>
-  );
-};
+  )
+}
 
-export default SignOut;
+export default SignOut

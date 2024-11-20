@@ -1,7 +1,7 @@
-import { Profile } from '@/types/interface';
-import { PrismaClient } from '@prisma/client';
+import { Profile } from '@/types/interface'
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export class ProfileRespository {
   static async getListProfileByUserId(userId: string) {
@@ -10,13 +10,13 @@ export class ProfileRespository {
         where: {
           userId: userId,
         },
-      });
-      return profiles;
+      })
+      return profiles
     } catch (error) {
-      console.error('Lỗi khi truy xuất hồ sơ bệnh nhân: ', error);
-      throw error;
+      console.error('Lỗi khi truy xuất hồ sơ bệnh nhân: ', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 
@@ -26,13 +26,13 @@ export class ProfileRespository {
         where: {
           id: id,
         },
-      });
-      return profile;
+      })
+      return profile
     } catch (error) {
-      console.error('Lỗi khi truy xuất hồ sơ bệnh nhân: ', error);
-      throw error;
+      console.error('Lỗi khi truy xuất hồ sơ bệnh nhân: ', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 
@@ -40,8 +40,8 @@ export class ProfileRespository {
     profileData,
     userId,
   }: {
-    profileData: Profile;
-    userId: string;
+    profileData: Profile
+    userId: string
   }) {
     try {
       const newProfile = await prisma.profile.create({
@@ -58,21 +58,21 @@ export class ProfileRespository {
           pastMedicalHistory: profileData.pastMedicalHistory,
           userId: userId,
         },
-      });
-      return newProfile;
+      })
+      return newProfile
     } catch (error) {
-      console.error('Lỗi khi thêm hồ sơ bệnh nhân: ', error);
-      throw error;
+      console.error('Lỗi khi thêm hồ sơ bệnh nhân: ', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
   static async updateProfile({
     profileData,
     userId,
   }: {
-    profileData: Profile;
-    userId: string;
+    profileData: Profile
+    userId: string
   }) {
     try {
       const newProfile = await prisma.profile.update({
@@ -92,13 +92,13 @@ export class ProfileRespository {
           pastMedicalHistory: profileData.pastMedicalHistory,
           userId: userId,
         },
-      });
-      return newProfile;
+      })
+      return newProfile
     } catch (error) {
-      console.error('Lỗi khi thêm hồ sơ bệnh nhân: ', error);
-      throw error;
+      console.error('Lỗi khi thêm hồ sơ bệnh nhân: ', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 
@@ -108,15 +108,15 @@ export class ProfileRespository {
         where: {
           id: profileData.id,
         },
-      });
+      })
 
-      console.log('Hồ sơ đã bị xóa thành công:', deletedProfile);
-      return deletedProfile;
+      console.log('Hồ sơ đã bị xóa thành công:', deletedProfile)
+      return deletedProfile
     } catch (error: any) {
-      console.error('Lỗi xóa hồ sơ bệnh nhân:', error.message || error);
-      throw new Error('Không thể xóa hồ sơ bệnh nhân. Vui lòng thử lại sau.');
+      console.error('Lỗi xóa hồ sơ bệnh nhân:', error.message || error)
+      throw new Error('Không thể xóa hồ sơ bệnh nhân. Vui lòng thử lại sau.')
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 }

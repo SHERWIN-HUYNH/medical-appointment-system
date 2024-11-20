@@ -1,40 +1,40 @@
-'use client';
-import UserLayout from '@/components/Layouts/userLayout';
-import React, { useEffect, useState } from 'react';
+'use client'
+import UserLayout from '@/components/Layouts/userLayout'
+import React, { useEffect, useState } from 'react'
 
 interface Faculty {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
+  id: string
+  name: string
+  image: string
+  description: string
 }
 
 const FacultyPage = () => {
-  const [facultyData, setFacultyData] = useState<Faculty[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [facultyData, setFacultyData] = useState<Faculty[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchFaculties = async () => {
       try {
-        const response = await fetch('/api/faculty');
+        const response = await fetch('/api/faculty')
         if (response.ok) {
-          const data = await response.json();
-          setFacultyData(data);
-          setLoading(false);
+          const data = await response.json()
+          setFacultyData(data)
+          setLoading(false)
         } else {
-          setError('Không thể tải dữ liệu chuyên khoa');
-          setLoading(false);
+          setError('Không thể tải dữ liệu chuyên khoa')
+          setLoading(false)
         }
       } catch (error) {
-        console.error(error);
-        setError('Đã có lỗi xảy ra');
-        setLoading(false);
+        console.error(error)
+        setError('Đã có lỗi xảy ra')
+        setLoading(false)
       }
-    };
+    }
 
-    fetchFaculties();
-  }, []);
+    fetchFaculties()
+  }, [])
 
   return (
     <UserLayout>
@@ -82,7 +82,7 @@ const FacultyPage = () => {
         )}
       </main>
     </UserLayout>
-  );
-};
+  )
+}
 
-export default FacultyPage;
+export default FacultyPage

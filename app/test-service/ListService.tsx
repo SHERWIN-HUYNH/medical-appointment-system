@@ -1,20 +1,20 @@
-'use client';
-import Pagination from '@/components/Pagination';
-import Table from '@/components/Table';
-import TableSearch from '@/components/TableSearch';
-import { Button } from '@/components/ui/button';
-import { facultyData, serviceData } from '@/lib/data';
-import { ArrowDownNarrowWide, Pencil, Trash2 } from 'lucide-react';
-import Link from 'next/link';
-import React, { useState } from 'react';
+'use client'
+import Pagination from '@/components/Pagination'
+import Table from '@/components/Table'
+import TableSearch from '@/components/TableSearch'
+import { Button } from '@/components/ui/button'
+import { facultyData, serviceData } from '@/lib/data'
+import { ArrowDownNarrowWide, Pencil, Trash2 } from 'lucide-react'
+import Link from 'next/link'
+import React, { useState } from 'react'
 
 type Service = {
-  id: number;
-  name: string;
-  price: number;
-  facultyId: number;
-  description: string;
-};
+  id: number
+  name: string
+  price: number
+  facultyId: number
+  description: string
+}
 
 const columns = [
   {
@@ -39,31 +39,31 @@ const columns = [
     accessor: 'description',
     className: 'hidden md:table-cell ',
   },
-];
+]
 
 const ListService = () => {
   // Phân trang
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const totalPages = Math.ceil(serviceData.length / itemsPerPage);
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
+  const totalPages = Math.ceil(serviceData.length / itemsPerPage)
 
   const displayedData = serviceData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
-  );
+  )
 
   // Hàm tìm tên chuyên khoa từ facultyId
   const getFacultyName = (facultyId: number) => {
     // Tìm đối tượng chuyên khoa có id khớp với facultyId
-    const faculty = facultyData.find((f) => f.id === facultyId);
+    const faculty = facultyData.find((f) => f.id === facultyId)
 
     // Kiểm tra nếu faculty tồn tại
     if (faculty) {
-      return faculty.name; // Trả về tên của chuyên khoa nếu tìm thấy
+      return faculty.name // Trả về tên của chuyên khoa nếu tìm thấy
     } else {
-      return 'NULL'; // Trả về "NULL" nếu không tìm thấy chuyên khoa
+      return 'NULL' // Trả về "NULL" nếu không tìm thấy chuyên khoa
     }
-  };
+  }
 
   const renderRow = (item: Service) => {
     return (
@@ -95,8 +95,8 @@ const ListService = () => {
           </div>
         </td>
       </tr>
-    );
-  };
+    )
+  }
   return (
     <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0 h-screen">
       {/* TOP */}
@@ -129,7 +129,7 @@ const ListService = () => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ListService;
+export default ListService

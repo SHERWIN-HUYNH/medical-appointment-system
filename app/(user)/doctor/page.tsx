@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -9,92 +10,92 @@ import DoctorLayout from '@/components/Layouts/doctorLayout';
 import Image from 'next/image';
 
 interface Doctor {
-  id: string;
-  name: string;
-  academicTitle: string;
-  image: string;
-  description: string;
-  facultyName: string;
+  id: string
+  name: string
+  academicTitle: string
+  image: string
+  description: string
+  facultyName: string
 }
 interface Faculty {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 const Doctor = () => {
-  const formMethods = useForm();
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTitle, setSelectedTitle] = useState('');
-  const [selectedfaculty, setSelectedfaculty] = useState('');
-  const [faculties, setfaculties] = useState<Faculty[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const formMethods = useForm()
+  const [doctors, setDoctors] = useState<Doctor[]>([])
+  const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedTitle, setSelectedTitle] = useState('')
+  const [selectedfaculty, setSelectedfaculty] = useState('')
+  const [faculties, setfaculties] = useState<Faculty[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 6
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await fetch('/api/doctor/user');
-        const data = await response.json();
+        const response = await fetch('/api/doctor/user')
+        const data = await response.json()
         if (response.ok) {
-          setDoctors(data);
-          setFilteredDoctors(data);
+          setDoctors(data)
+          setFilteredDoctors(data)
         } else {
-          toast.error('Lỗi khi tải dữ liệu bác sĩ');
+          toast.error('Lỗi khi tải dữ liệu bác sĩ')
         }
       } catch (error) {
-        console.log('ERROR', error);
-        toast.error('Lỗi khi kết nối với máy chủ');
+        console.log('ERROR', error)
+        toast.error('Lỗi khi kết nối với máy chủ')
       }
-    };
+    }
 
     const fetchFaculties = async () => {
       try {
-        const response = await fetch('/api/faculty');
-        const data = await response.json();
-        setfaculties(data);
+        const response = await fetch('/api/faculty')
+        const data = await response.json()
+        setfaculties(data)
       } catch (error) {
-        console.log('ERROR', error);
-        toast.error('Lỗi khi tải dữ liệu chuyên khoa');
+        console.log('ERROR', error)
+        toast.error('Lỗi khi tải dữ liệu chuyên khoa')
       }
-    };
+    }
 
-    fetchDoctors();
-    fetchFaculties();
-  }, []);
+    fetchDoctors()
+    fetchFaculties()
+  }, [])
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-    filterDoctors(e.target.value, selectedTitle, selectedfaculty);
-  };
+    setSearchQuery(e.target.value)
+    filterDoctors(e.target.value, selectedTitle, selectedfaculty)
+  }
 
   const handleTitleFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedTitle(e.target.value);
-    filterDoctors(searchQuery, e.target.value, selectedfaculty);
-  };
+    setSelectedTitle(e.target.value)
+    filterDoctors(searchQuery, e.target.value, selectedfaculty)
+  }
 
   const handlefacultyFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedfaculty(e.target.value);
-    filterDoctors(searchQuery, selectedTitle, e.target.value);
-  };
+    setSelectedfaculty(e.target.value)
+    filterDoctors(searchQuery, selectedTitle, e.target.value)
+  }
 
   const filterDoctors = (query: string, title: string, faculty: string) => {
     const filtered = doctors.filter((doctor) => {
-      const matchesSearch = doctor.name.toLowerCase().includes(query.toLowerCase());
-      const matchesTitle = title ? doctor.academicTitle === title : true;
-      const matchesfaculty = faculty ? doctor.facultyName === faculty : true;
-      return matchesSearch && matchesTitle && matchesfaculty;
-    });
-    setFilteredDoctors(filtered);
-    setCurrentPage(1); // Reset to first page on new filter
-  };
+      const matchesSearch = doctor.name.toLowerCase().includes(query.toLowerCase())
+      const matchesTitle = title ? doctor.academicTitle === title : true
+      const matchesfaculty = faculty ? doctor.facultyName === faculty : true
+      return matchesSearch && matchesTitle && matchesfaculty
+    })
+    setFilteredDoctors(filtered)
+    setCurrentPage(1) // Reset to first page on new filter
+  }
 
-  const totalPages = Math.ceil(filteredDoctors.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredDoctors.length / itemsPerPage)
   const displayedDoctors = filteredDoctors.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
-  );
+  )
 
   return (
     <div>
@@ -126,6 +127,7 @@ const Doctor = () => {
                   onChange={handleSearch}
                   placeholder="Tìm kiếm bác sĩ"
                   className="p-2 w-5/6 text-sm border-white rounded-xl focus:ring-white"
+                  customProp={''}
                 />
                 <select
                   value={selectedTitle}
@@ -208,7 +210,7 @@ const Doctor = () => {
         </div>
       </DoctorLayout>
     </div>
-  );
-};
+  )
+}
 
-export default Doctor;
+export default Doctor

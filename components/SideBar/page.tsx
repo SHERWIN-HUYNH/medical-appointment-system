@@ -1,16 +1,16 @@
-'use client';
-import React from 'react';
-import ClickOutside from '../ClickOutside';
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import SidebarItem from './SidebarItem';
-import useLocalStorage from '@/hooks/useLocalStorage';
-import { CircleUser, FolderKanban } from 'lucide-react';
+'use client'
+import React from 'react'
+import ClickOutside from '../ClickOutside'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
+import SidebarItem from './SidebarItem'
+import useLocalStorage from '@/hooks/useLocalStorage'
+import { CircleUser, FolderKanban } from 'lucide-react'
 
 interface SidebarProps {
-  sidebarOpen: boolean;
-  setSidebarOpen: (arg: boolean) => void;
+  sidebarOpen: boolean
+  setSidebarOpen: (arg: boolean) => void
 }
 const menuGroups = [
   {
@@ -183,10 +183,9 @@ const menuGroups = [
       },
     ],
   },
-];
+]
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
-  const pathname = usePathname();
-  const [pageName, setPageName] = useLocalStorage('selectedMenu', 'dashboard');
+  const [pageName, setPageName] = useLocalStorage('selectedMenu', 'dashboard')
   return (
     <ClickOutside onClick={() => setSidebarOpen(false)}>
       <aside
@@ -254,7 +253,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         </div>
       </aside>
     </ClickOutside>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

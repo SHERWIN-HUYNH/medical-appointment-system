@@ -1,21 +1,21 @@
-'use client';
-import ModalDelete from '@/components/ModalDelete';
-import Pagination from '@/components/Pagination';
-import Table from '@/components/Table';
-import TableSearch from '@/components/table/TableSearch';
-import { Button } from '@/components/ui/button';
-import { Trash2, Star as StarSolid } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+'use client'
+import ModalDelete from '@/components/ModalDelete'
+import Pagination from '@/components/Pagination'
+import Table from '@/components/Table'
+import TableSearch from '@/components/table/TableSearch'
+import { Button } from '@/components/ui/button'
+import { Trash2, Star as StarSolid } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 type Comment = {
-  id: number;
-  createdAt: string;
-  userName: string;
-  doctorName: string;
-  content: string;
-  rating: number;
-};
+  id: number
+  createdAt: string
+  userName: string
+  doctorName: string
+  content: string
+  rating: number
+}
 
 const columns = [
   { header: 'STT', accessor: 'index' },
@@ -24,15 +24,15 @@ const columns = [
   { header: 'Tên người dùng', accessor: 'userName' },
   { header: 'Nội dung', accessor: 'content', className: 'hidden md:table-cell' },
   { header: 'Số sao đánh giá', accessor: 'rating' },
-];
+]
 
 const ListComment = () => {
-  const [comments, setCommentData] = useState<Comment[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedRating, setSelectedRating] = useState<number | null>(null);
-  const itemsPerPage = 7;
-  const [showModal, setShowModal] = useState(false);
-  const [commentToDelete, setCommentToDelete] = useState<Comment | null>(null);
+  const [comments, setCommentData] = useState<Comment[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [selectedRating, setSelectedRating] = useState<number | null>(null)
+  const itemsPerPage = 7
+  const [showModal, setShowModal] = useState(false)
+  const [commentToDelete, setCommentToDelete] = useState<Comment | null>(null)
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -42,21 +42,21 @@ const ListComment = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-        });
+        })
         if (!response.ok) {
-          throw new Error('Lỗi khi lấy danh sách đánh giá');
+          throw new Error('Lỗi khi lấy danh sách đánh giá')
         }
-        const comments = await response.json();
-        console.log(comments);
-        setCommentData(comments);
+        const comments = await response.json()
+        console.log(comments)
+        setCommentData(comments)
       } catch (error) {
-        console.error('Error fetching comments:', error);
-        toast.error('Lỗi khi tải đánh giá! Vui lòng thử lại.');
+        console.error('Error fetching comments:', error)
+        toast.error('Lỗi khi tải đánh giá! Vui lòng thử lại.')
       }
-    };
+    }
 
-    fetchComments();
-  }, []);
+    fetchComments()
+  }, [])
 
   const confirmDelete = async () => {
     if (commentToDelete) {
@@ -67,54 +67,54 @@ const ListComment = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ commentValues: commentToDelete }),
-        });
+        })
         if (!response.ok) {
-          throw new Error('Không thể xóa đánh giá.');
+          throw new Error('Không thể xóa đánh giá.')
         }
 
         const updatedCommentData = comments.filter(
           (comment) => comment.id !== commentToDelete.id,
-        );
-        setCommentData(updatedCommentData);
+        )
+        setCommentData(updatedCommentData)
 
-        setCommentToDelete(null);
-        setShowModal(false);
-        toast.success('Xóa đánh giá thành công');
+        setCommentToDelete(null)
+        setShowModal(false)
+        toast.success('Xóa đánh giá thành công')
       } catch (error) {
-        console.error('Lỗi khi xóa đánh giá:', error);
-        toast.error('Lỗi khi xóa đánh giá!');
+        console.error('Lỗi khi xóa đánh giá:', error)
+        toast.error('Lỗi khi xóa đánh giá!')
       }
     }
-  };
+  }
 
-  const totalPages = Math.ceil(comments.length / itemsPerPage);
+  const totalPages = Math.ceil(comments.length / itemsPerPage)
 
   const filteredData = comments.filter(
     (item) => !selectedRating || item.rating === selectedRating,
-  );
+  )
 
   const displayedData = filteredData
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
     .map((item, index) => ({
       ...item,
       index: (currentPage - 1) * itemsPerPage + index + 1,
-    }));
+    }))
 
   const handleSearch = (searchTerm: string) => {
     if (!searchTerm) {
     } else {
       const results = comments.filter((item) =>
         item.doctorName.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
+      )
 
       if (results.length === 0) {
-        toast.error('Không tìm thấy đánh giá nào phù hợp.');
+        toast.error('Không tìm thấy đánh giá nào phù hợp.')
       }
 
-      setCommentData(results);
-      setCurrentPage(1);
+      setCommentData(results)
+      setCurrentPage(1)
     }
-  };
+  }
 
   const renderStars = (rating: number) => (
     <div className="flex justify-center">
@@ -127,14 +127,14 @@ const ListComment = () => {
         />
       ))}
     </div>
-  );
+  )
 
   const renderRow = (item: Comment & { index: number }) => {
-    const date = new Date(item.createdAt);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    const formattedDate = `${day}/${month}/${year}`;
+    const date = new Date(item.createdAt)
+    const day = String(date.getDate()).padStart(2, '0')
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const year = date.getFullYear()
+    const formattedDate = `${day}/${month}/${year}`
 
     return (
       <tr
@@ -152,8 +152,8 @@ const ListComment = () => {
             <Button
               className="w-12 h-10 flex items-center justify-center rounded-full bg-purple-300"
               onClick={() => {
-                setCommentToDelete(item);
-                setShowModal(true);
+                setCommentToDelete(item)
+                setShowModal(true)
               }}
             >
               <Trash2 size={28} strokeWidth={3} color="white" />
@@ -161,8 +161,8 @@ const ListComment = () => {
           </div>
         </td>
       </tr>
-    );
-  };
+    )
+  }
 
   return (
     <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0 relative h-screen">
@@ -213,7 +213,7 @@ const ListComment = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ListComment;
+export default ListComment

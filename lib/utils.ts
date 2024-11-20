@@ -1,13 +1,14 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  return twMerge(clsx(inputs))
 }
 
-export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value))
 
-export const convertFileToUrl = (file: File) => URL.createObjectURL(file);
+export const convertFileToUrl = (file: File) => URL.createObjectURL(file)
 
 // FORMAT DATE TIME
 export const formatDateTime = (
@@ -23,7 +24,7 @@ export const formatDateTime = (
     minute: 'numeric', // numeric minute (e.g., '30')
     hour12: true, // use 12-hour clock (true) or 24-hour clock (false),
     timeZone: timeZone, // use the provided timezone
-  };
+  }
 
   const dateDayOptions: Intl.DateTimeFormatOptions = {
     weekday: 'short', // abbreviated weekday name (e.g., 'Mon')
@@ -31,50 +32,50 @@ export const formatDateTime = (
     month: '2-digit', // abbreviated month name (e.g., 'Oct')
     day: '2-digit', // numeric day of the month (e.g., '25')
     timeZone: timeZone, // use the provided timezone
-  };
+  }
 
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: 'short', // abbreviated month name (e.g., 'Oct')
     year: 'numeric', // numeric year (e.g., '2023')
     day: 'numeric', // numeric day of the month (e.g., '25')
     timeZone: timeZone, // use the provided timezone
-  };
+  }
 
   const timeOptions: Intl.DateTimeFormatOptions = {
     hour: 'numeric', // numeric hour (e.g., '8')
     minute: 'numeric', // numeric minute (e.g., '30')
     hour12: true, // use 12-hour clock (true) or 24-hour clock (false)
     timeZone: timeZone, // use the provided timezone
-  };
+  }
 
   const formattedDateTime: string = new Date(dateString).toLocaleString(
     'en-US',
     dateTimeOptions,
-  );
+  )
 
   const formattedDateDay: string = new Date(dateString).toLocaleString(
     'en-US',
     dateDayOptions,
-  );
+  )
 
-  const formattedDate: string = new Date(dateString).toLocaleString('en-US', dateOptions);
+  const formattedDate: string = new Date(dateString).toLocaleString('en-US', dateOptions)
 
-  const formattedTime: string = new Date(dateString).toLocaleString('en-US', timeOptions);
+  const formattedTime: string = new Date(dateString).toLocaleString('en-US', timeOptions)
 
   return {
     dateTime: formattedDateTime,
     dateDay: formattedDateDay,
     dateOnly: formattedDate,
     timeOnly: formattedTime,
-  };
-};
+  }
+}
 
 export function encryptKey(passkey: string) {
-  return btoa(passkey);
+  return btoa(passkey)
 }
 
 export function decryptKey(passkey: string) {
-  return atob(passkey);
+  return atob(passkey)
 }
 
 export const shortenTitle = (title: string) => {
@@ -86,9 +87,9 @@ export const shortenTitle = (title: string) => {
     'Bác sĩ Chuyên khoa I': 'BSCK I',
     'Bác sĩ Chuyên khoa II': 'BSCK II',
     'Bác sĩ Đa khoa': 'BSĐK',
-  };
-  return titleMap[title] || title;
-};
+  }
+  return titleMap[title] || title
+}
 
 export const getDayOfWeek = (dateStr: string) => {
   const daysInVietnamese: { [key: string]: string } = {
@@ -99,13 +100,13 @@ export const getDayOfWeek = (dateStr: string) => {
     Fri: 'Thứ 6',
     Sat: 'Thứ 7',
     Sun: 'Chủ nhật',
-  };
+  }
 
-  const [year, month, day] = dateStr.split('-').map((num) => parseInt(num));
-  const date = new Date(year, month - 1, day);
-  const dayOfWeek = date.toLocaleString('en-US', { weekday: 'short' });
-  return daysInVietnamese[dayOfWeek] || dayOfWeek;
-};
+  const [year, month, day] = dateStr.split('-').map((num) => parseInt(num))
+  const date = new Date(year, month - 1, day)
+  const dayOfWeek = date.toLocaleString('en-US', { weekday: 'short' })
+  return daysInVietnamese[dayOfWeek] || dayOfWeek
+}
 
 const dayOrder: { [key: string]: number } = {
   'Thứ 2': 1,
@@ -115,12 +116,12 @@ const dayOrder: { [key: string]: number } = {
   'Thứ 6': 5,
   'Thứ 7': 6,
   'Chủ nhật': 7,
-};
+}
 
 export const sortDayOfWeek = (days: string[]) => {
   return days.sort((a, b) => {
-    const dayA = getDayOfWeek(a);
-    const dayB = getDayOfWeek(b);
-    return dayOrder[dayA] - dayOrder[dayB];
-  });
-};
+    const dayA = getDayOfWeek(a)
+    const dayB = getDayOfWeek(b)
+    return dayOrder[dayA] - dayOrder[dayB]
+  })
+}

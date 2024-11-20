@@ -1,39 +1,39 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import { Undo2, PenLine } from 'lucide-react';
-import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+'use client'
+import { Button } from '@/components/ui/button'
+import { Undo2, PenLine } from 'lucide-react'
+import Image from 'next/image'
+import React, { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { toast } from 'sonner'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import Header from '@/components/homepage/Header';
-import Footer from '@/components/homepage/Footer';
+} from '@/components/ui/select'
+import Header from '@/components/homepage/Header'
+import Footer from '@/components/homepage/Footer'
 
 const Edit_Profile = () => {
-  const { data: session } = useSession();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
-  const email = searchParams.get('email');
-  const name = searchParams.get('name');
-  const phone = searchParams.get('phone');
-  const gender = searchParams.get('gender');
-  const identificationType = searchParams.get('identificationType');
-  const identificationNumber = searchParams.get('identificationNumber');
-  const identificationDocumentUrl = searchParams.get('identificationDocumentUrl');
-  const pastMedicalHistory = searchParams.get('pastMedicalHistory');
-  const birthDate = searchParams.get('birthDate');
-  const symptom = searchParams.get('symptom');
+  const { data: session } = useSession()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
+  const email = searchParams.get('email')
+  const name = searchParams.get('name')
+  const phone = searchParams.get('phone')
+  const gender = searchParams.get('gender')
+  const identificationType = searchParams.get('identificationType')
+  const identificationNumber = searchParams.get('identificationNumber')
+  const identificationDocumentUrl = searchParams.get('identificationDocumentUrl')
+  const pastMedicalHistory = searchParams.get('pastMedicalHistory')
+  const birthDate = searchParams.get('birthDate')
+  const symptom = searchParams.get('symptom')
 
   const [formData, setFormData] = useState({
     name: name || '',
@@ -46,60 +46,60 @@ const Edit_Profile = () => {
     pastMedicalHistory: pastMedicalHistory || '',
     birthDate: birthDate || '',
     symptom: symptom || '',
-  });
+  })
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const today = new Date().toISOString().split('T')[0];
-  const [errorMessage, setErrorMessage] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const today = new Date().toISOString().split('T')[0]
+  const [errorMessage, setErrorMessage] = useState('')
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData({
       ...formData,
       [name]: value,
-    });
+    })
 
     if (name === 'identificationNumber' && isValidIdentificationNumber(value)) {
-      setErrorMessage('');
+      setErrorMessage('')
     }
-  };
+  }
   const capitalizeWords = (text: string) => {
     return text
       .trim()
       .split(/\s+/)
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
-  };
+      .join(' ')
+  }
   const capitalizeFirstLetterOfSentence = (str: string) => {
-    if (str.length === 0) return str;
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
+    if (str.length === 0) return str
+    return str.charAt(0).toUpperCase() + str.slice(1)
+  }
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const charCode = event.key;
+    const charCode = event.key
     if (!/^\d$/.test(charCode)) {
-      event.preventDefault();
+      event.preventDefault()
     }
-  };
+  }
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setSelectedFile(e.target.files[0]);
+      setSelectedFile(e.target.files[0])
       setFormData({
         ...formData,
         identificationDocumentUrl: URL.createObjectURL(e.target.files[0]),
-      });
+      })
     }
-  };
+  }
 
   const isValidIdentificationNumber = (identificationNumber: string) => {
-    const idPattern = /^[0-9]{9,12}$/;
-    return idPattern.test(identificationNumber);
-  };
+    const idPattern = /^[0-9]{9,12}$/
+    return idPattern.test(identificationNumber)
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!isValidIdentificationNumber(formData.identificationNumber)) {
-      setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.');
-      return;
+      setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.')
+      return
     }
 
     const formattedData = {
@@ -108,7 +108,7 @@ const Edit_Profile = () => {
       symptom: capitalizeFirstLetterOfSentence(formData.symptom),
       pastMedicalHistory: capitalizeFirstLetterOfSentence(formData.pastMedicalHistory),
       birthDate: formData.birthDate ? new Date(formData.birthDate) : null,
-    };
+    }
 
     try {
       const response = await fetch(`/api/profile/${session?.user?.id}`, {
@@ -122,19 +122,19 @@ const Edit_Profile = () => {
             id: id,
           },
         }),
-      });
+      })
 
       if (response.ok) {
-        toast.success('Sửa hồ sơ khám bệnh thành công');
-        router.back();
+        toast.success('Sửa hồ sơ khám bệnh thành công')
+        router.back()
       } else {
-        toast.error('Sửa hồ sơ khám bệnh thất bại. Vui lòng thử lại!');
+        toast.error('Sửa hồ sơ khám bệnh thất bại. Vui lòng thử lại!')
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
-      toast.error('Đã xảy ra lỗi khi cập nhật hồ sơ.');
+      console.error('Error updating profile:', error)
+      toast.error('Đã xảy ra lỗi khi cập nhật hồ sơ.')
     }
-  };
+  }
 
   return (
     <div>
@@ -358,7 +358,7 @@ const Edit_Profile = () => {
       </div>
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default Edit_Profile;
+export default Edit_Profile

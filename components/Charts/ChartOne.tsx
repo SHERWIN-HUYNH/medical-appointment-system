@@ -1,12 +1,12 @@
-'use client';
-import { ApexOptions } from 'apexcharts';
-import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
-import { Button } from '../ui/button';
+'use client'
+import { ApexOptions } from 'apexcharts'
+import React, { useState } from 'react'
+import dynamic from 'next/dynamic'
+import { Button } from '../ui/button'
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
-});
+})
 
 const chartTypeLine = 'line' as const;
 
@@ -103,10 +103,10 @@ const options: ApexOptions = {
     min: 0,
     max: 100, // Giá trị tối đa mặc định cho biểu đồ tháng
   },
-};
+}
 
 const ChartOne: React.FC = () => {
-  const [viewBy, setViewBy] = useState<'month' | 'year'>('month');
+  const [viewBy, setViewBy] = useState<'month' | 'year'>('month')
 
   // Dữ liệu theo tháng
   const monthData = {
@@ -130,7 +130,7 @@ const ChartOne: React.FC = () => {
     ],
     chartType: chartTypeLine, // Sử dụng hằng số
     yMax: 100, // Sử dụng biểu đồ vùng cho tháng
-  };
+  }
 
   // Dữ liệu theo năm
   const yearData = {
@@ -140,9 +140,9 @@ const ChartOne: React.FC = () => {
     ],
     chartType: chartTypeLine, // Sử dụng biểu đồ đường cho năm
     yMax: 1000, // Giá trị tối đa của trục y cho năm
-  };
+  }
 
-  const currentData = viewBy === 'month' ? monthData : yearData;
+  const currentData = viewBy === 'month' ? monthData : yearData
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
@@ -207,7 +207,7 @@ const ChartOne: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ChartOne;
+export default ChartOne

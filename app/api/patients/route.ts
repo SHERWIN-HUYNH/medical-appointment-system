@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   const newProfile = await ProfileRespository.createProfile({
     profileData: profile,
     userId,
-  });
+  })
 
   if (newProfile) {
     return new Response(
@@ -15,13 +15,13 @@ export async function POST(req: Request) {
         message: 'CREATE PROFILE SUCCESSFULLY',
         status: 200,
       }),
-    );
+    )
   } else {
     return new Response(
       JSON.stringify({
         message: 'CREATE PROFILE FAILED',
         status: 400,
       }),
-    );
+    )
   }
 }

@@ -1,14 +1,14 @@
-'use client';
+'use client'
 
-import DefaultLayout from '@/components/Layouts/defaultLayout';
-import { useParams } from 'next/navigation';
-import DoctorSchedule from '@/components/DoctorSchedule';
-import React from 'react';
+import DefaultLayout from '@/components/Layouts/defaultLayout'
+import { useParams } from 'next/navigation'
+import DoctorSchedule from '@/components/DoctorSchedule'
+import React from 'react'
 const WorkingSchedulePage = () => {
-  const { doctorId } = useParams();
-  if (!doctorId) return null;
+  const { doctorId } = useParams()
+  if (!doctorId) return null
   const doctorIdString =
-    typeof doctorId === 'string' ? doctorId : JSON.stringify(doctorId);
+    typeof doctorId === 'string' ? doctorId : JSON.stringify(doctorId)
   return (
     <DefaultLayout>
       <div className="bg-[#e8f2f7] w-full h-min flex flex-col justify-center ">
@@ -150,7 +150,7 @@ const WorkingSchedulePage = () => {
         </section>
       </div>
     </DefaultLayout>
-  );
-};
+  )
+}
 
-export default WorkingSchedulePage;
+export default WorkingSchedulePage

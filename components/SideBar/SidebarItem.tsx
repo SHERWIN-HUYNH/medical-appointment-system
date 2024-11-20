@@ -1,27 +1,30 @@
-import React from 'react';
-import Link from 'next/link';
+import React from 'react'
+import Link from 'next/link'
 
-import { usePathname } from 'next/navigation';
-import SidebarDropdown from './SidebarDropdown';
+import { usePathname } from 'next/navigation'
+import SidebarDropdown from './SidebarDropdown'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SidebarItem = ({ item, pageName, setPageName }: any) => {
   const handleClick = () => {
     const updatedPageName =
-      pageName !== item.label.toLowerCase() ? item.label.toLowerCase() : '';
-    return setPageName(updatedPageName);
-  };
+      pageName !== item.label.toLowerCase() ? item.label.toLowerCase() : ''
+    return setPageName(updatedPageName)
+  }
 
-  const pathname = usePathname();
+  const pathname = usePathname()
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isActive = (item: any) => {
-    if (item.route === pathname) return true;
+    if (item.route === pathname) return true
     if (item.children) {
-      return item.children.some((child: any) => isActive(child));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return item.children.some((child: any) => isActive(child))
     }
-    return false;
-  };
+    return false
+  }
 
-  const isItemActive = isActive(item);
+  const isItemActive = isActive(item)
 
   return (
     <>
@@ -65,7 +68,7 @@ const SidebarItem = ({ item, pageName, setPageName }: any) => {
         )}
       </li>
     </>
-  );
-};
+  )
+}
 
-export default SidebarItem;
+export default SidebarItem

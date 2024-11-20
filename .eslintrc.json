@@ -8,5 +8,6 @@
   "rules": {
     "@typescript-eslint/no-explicit-any": "error",
     "prettier/prettier": ["warn", { "endOfLine": "auto","semi": false }]
+
   }
 }
