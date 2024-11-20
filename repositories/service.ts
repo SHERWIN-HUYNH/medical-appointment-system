@@ -1,6 +1,7 @@
 import { Service } from '@/types/interface'
 import { PrismaClient } from '@prisma/client'
 import { FacultyRepository } from './faculty'
+import { AppointmentRepository } from './appointment'
 
 const prisma = new PrismaClient()
 
@@ -10,6 +11,7 @@ export class ServiceRepository {
       const services = await prisma.service.findUnique({
         where: {
           id: serviceId,
+          isDeleted: false
         },
       })
       return services
@@ -26,6 +28,7 @@ export class ServiceRepository {
       const services = await prisma.service.findMany({
         where: {
           facultyId: facultyId,
+          isDeleted: false
         },
         include: {
           faculty: true,
@@ -81,31 +84,36 @@ export class ServiceRepository {
     return updatedService
   }
   static async deleteService(serviceId: string) {
-    try {
-      return await prisma.$transaction(async (tx) => {
-        // Xóa tất cả appointments không phải PENDING
-        await tx.appointment.deleteMany({
-          where: {
-            serviceId: serviceId,
-            NOT: {
-              status: 'PENDING',
-            },
-          },
-        })
-
-        // Xóa service
-        const deletedService = await tx.service.delete({
-          where: {
-            id: serviceId,
-          },
-        })
-        return deletedService
-      })
-    } catch (error) {
-      console.error('Error deleting service:', error)
-      throw error
-    } finally {
-      await prisma.$disconnect()
+    // Kiểm tra lịch hẹn pending bằng hàm getAppointmentByServiceId
+    const pendingAppointments = await AppointmentRepository.getAppointmentByServiceId(serviceId);
+    if (pendingAppointments.length > 0) {
+      throw new Error('Dịch vụ đang có lịch hẹn đang chờ xử lý');
     }
+
+    const result = await prisma.$transaction(async (tx) => {
+      // Xóa tất cả appointments không phải PENDING
+      await tx.appointment.deleteMany({
+        where: {
+          serviceId: serviceId,
+          NOT: {
+            status: 'PENDING',
+          },
+        },
+      });
+
+      // Soft delete service bằng cách cập nhật isDeleted = true
+      const deletedService = await tx.service.update({
+        where: {
+          id: serviceId,
+        },
+        data: {
+          isDeleted: true
+        }
+      });
+      return deletedService;
+    });
+
+    await prisma.$disconnect();
+    return result;
   }
 }

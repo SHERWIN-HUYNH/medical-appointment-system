@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
+import clsx from 'clsx'
 
 interface PaginationProps {
   currentPage: number
@@ -17,11 +18,13 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         <Button
           key={1}
           onClick={() => onPageChange(1)}
-          className={`px-3 py-3 w-8 h-8 rounded-md text-xs font-semibold ${
-            currentPage === 1
-              ? 'bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-white'
-              : 'bg-slate-100 text-primary'
-          }`}
+          className={clsx(
+            'px-3 py-3 w-8 h-8 rounded-md text-xs font-semibold',
+            {
+              'bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-white': currentPage === 1,
+              'bg-slate-100 text-primary': currentPage !== 1
+            }
+          )}
         >
           1
         </Button>,
@@ -47,11 +50,13 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         <Button
           key={i}
           onClick={() => onPageChange(i)}
-          className={`px-3 py-3 w-8 h-8 rounded-sm ${
-            currentPage === i
-              ? 'bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-white'
-              : 'bg-slate-100 text-primary'
-          }`}
+          className={clsx(
+            'px-3 py-3 w-8 h-8 rounded-sm',
+            {
+              'bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-white': currentPage === i,
+              'bg-slate-100 text-primary': currentPage !== i
+            }
+          )}
         >
           {i}
         </Button>,
@@ -70,11 +75,13 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         <Button
           key={totalPages}
           onClick={() => onPageChange(totalPages)}
-          className={`px-3 py-3 w-8 h-8 rounded-sm ${
-            currentPage === totalPages
-              ? 'bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-white'
-              : 'bg-slate-100 text-primary'
-          }`}
+          className={clsx(
+            'px-3 py-3 w-8 h-8 rounded-sm',
+            {
+              'bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-white': currentPage === totalPages,
+              'bg-slate-100 text-primary': currentPage !== totalPages
+            }
+          )}
         >
           {totalPages}
         </Button>,
@@ -89,9 +96,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       <Button
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
-        className="absolute left-0 py-3 px-3 w-8 h-8 rounded-md bg-slate-100 text-primary text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+        className={clsx(
+          'absolute left-0 py-3 px-3 w-8 h-8 rounded-md bg-slate-100 text-primary text-sm font-semibold',
+          'disabled:opacity-50 disabled:cursor-not-allowed'
+        )}
       >
-        &lt
+        &lt;
       </Button>
 
       <div className="flex items-center gap-2 mx-12">{renderPageNumbers()}</div>
@@ -99,9 +109,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       <Button
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
-        className="absolute right-0 py-3 px-3 w-8 h-8 rounded-md bg-slate-100 text-primary text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+        className={clsx(
+          'absolute right-0 py-3 px-3 w-8 h-8 rounded-md bg-slate-100 text-primary text-sm font-semibold',
+          'disabled:opacity-50 disabled:cursor-not-allowed'
+        )}
       >
-        &gt
+        &gt;
       </Button>
     </div>
   )

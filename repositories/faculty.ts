@@ -1,5 +1,7 @@
 import { Faculty } from '@/types/interface'
 import { PrismaClient } from '@prisma/client'
+import { DoctorRespository } from './doctor'
+import { ServiceRepository } from './service'
 
 const prisma = new PrismaClient()
 
@@ -9,6 +11,7 @@ export class FacultyRepository {
       const faculty = await prisma.faculty.findUnique({
         where: {
           id: facultyId,
+          isDeleted: false  // Chỉ lấy faculty chưa bị xóa
         },
       })
       await prisma.$disconnect()
@@ -21,7 +24,11 @@ export class FacultyRepository {
 
   static async getFaculties() {
     try {
-      const faculties = await prisma.faculty.findMany()
+      const faculties = await prisma.faculty.findMany({
+        where: {
+          isDeleted: false  // Chỉ lấy những faculty chưa bị xóa
+        }
+      })
       await prisma.$disconnect()
       return faculties
     } catch (error) {
@@ -58,12 +65,31 @@ export class FacultyRepository {
   }
 
   static async deleteFaculty(facultyData: Faculty) {
-    const deletedFaculty = await prisma.faculty.delete({
-      where: {
-        id: facultyData.id,
-      },
-    })
-    await prisma.$disconnect()
-    return deletedFaculty
+    // 1. Lấy danh sách services của faculty sử dụng getServicesByFacultyId
+    const services = await ServiceRepository.getServicesByFacultyId(facultyData.id);
+
+    // 2. Lấy danh sách bác sĩ của chuyên khoa
+    const doctors = await DoctorRespository.getDoctorsByFaculty(facultyData.id);
+
+    // 3. Tiến hành xóa
+    return await prisma.$transaction(async (tx) => {
+      // Xóa từng service sử dụng hàm deleteService
+      for (const service of services) {
+        await ServiceRepository.deleteService(service.id);
+      }
+
+      // Xóa từng bác sĩ
+      for (const doctor of doctors) {
+        await DoctorRespository.deleteDoctor(doctor.id);
+      }
+
+      // Nếu xóa tất cả thành công, cập nhật trạng thái faculty
+      const deletedFaculty = await tx.faculty.update({
+        where: { id: facultyData.id },
+        data: { isDeleted: true }
+      });
+
+      return deletedFaculty;
+    });
   }
 }

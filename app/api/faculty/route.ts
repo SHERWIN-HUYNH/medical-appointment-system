@@ -1,4 +1,4 @@
-import { badRequestResponse, notFoundResponse, successResponse } from '@/helpers/response'
+import { badRequestResponse, notFoundResponse, successResponse, forbiddenResponse } from '@/helpers/response'
 import { FacultyRepository } from '@/repositories/faculty'
 
 // Xử lý GET request - Lấy một hoặc tất cả chuyên khoa
@@ -44,10 +44,14 @@ export async function PUT(req: Request) {
 
 // Xử lý DELETE request - Xóa chuyên khoa
 export async function DELETE(req: Request) {
-  const { faculty } = await req.json()
-  const deletedFaculty = await FacultyRepository.deleteFaculty(faculty)
-  if (!deletedFaculty) {
-    return badRequestResponse('FAIL TO DELETE FACULTY')
+  try {
+    const { id } = await req.json();
+    const deletedFaculty = await FacultyRepository.deleteFaculty(id);
+    return successResponse(deletedFaculty);
+  } catch (error) {
+    if (error instanceof Error) {
+      return forbiddenResponse(error.message);
+    }
+    return badRequestResponse('Xóa dịch vụ thất bại');
   }
-  return successResponse(deletedFaculty)
 }

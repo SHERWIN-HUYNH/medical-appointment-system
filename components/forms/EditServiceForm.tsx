@@ -52,7 +52,8 @@ const EditServiceForm = () => {
         facultyId: service.facultyId,
       })
     } else {
-      toast.error('Failed to fetch service details.')
+      const message = await response.json()
+      toast.error(message.error)
     }
   }
 

@@ -12,6 +12,7 @@ export async function GET(req: Request, context: { params: { facultyId: string }
 
     return successResponse(faculty)
   } catch (error) {
+    console.error('Error fetching faculty:', error)
     return badRequestResponse('Failed to fetch faculty')
   }
 }

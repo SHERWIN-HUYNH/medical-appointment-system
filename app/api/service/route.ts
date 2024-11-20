@@ -1,15 +1,10 @@
-<<<<<<< HEAD
 /* eslint-disable @typescript-eslint/no-explicit-any */
-=======
-import Appointment from '@/app/patients/[userId]/new-appointment/page'
->>>>>>> 6e948221b114aee513d08b93da8de7337fcbaeb8
 import {
   badRequestResponse,
   forbiddenResponse,
   notFoundResponse,
   successResponse,
 } from '@/helpers/response'
-import { AppointmentRepository } from '@/repositories/appointment'
 import { ServiceRepository } from '@/repositories/service'
 import { Service } from '@/types/interface'
 
@@ -32,15 +27,14 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const { id } = await req.json()
-  const appointment = await AppointmentRepository.getAppointmentByServiceId(id)
-  console.log('Appointments found:', appointment)
-  if (appointment?.length > 0) {
-    return forbiddenResponse('Dịch vụ đang có lịch hẹn đang chờ xử lý')
+  try {
+    const { id } = await req.json();
+    const deletedService = await ServiceRepository.deleteService(id);
+    return successResponse(deletedService);
+  } catch (error) {
+    if (error instanceof Error) {
+      return forbiddenResponse(error.message);
+    }
+    return badRequestResponse('Xóa dịch vụ thất bại');
   }
-  const deletedService = await ServiceRepository.deleteService(id)
-  if (!deletedService) {
-    return badRequestResponse('Xóa dịch vụ thất bại')
-  }
-  return successResponse(deletedService)
 }

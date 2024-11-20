@@ -1,4 +1,5 @@
-import { notFoundResponse, successResponse } from '@/helpers/response'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { badRequestResponse, notFoundResponse, successResponse } from '@/helpers/response'
 import { ServiceRepository } from '@/repositories/service'
 
 export async function GET(req: Request, context: any) {
@@ -12,8 +13,6 @@ export async function GET(req: Request, context: any) {
     return successResponse(services)
   } catch (error) {
     console.error('Error fetching services:', error)
-    return new Response(JSON.stringify({ error: 'Failed to fetch services' }), {
-      status: 500,
-    })
+    return badRequestResponse('Failed to fetch services')
   }
 }

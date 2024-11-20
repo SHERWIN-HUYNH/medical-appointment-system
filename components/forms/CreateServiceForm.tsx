@@ -105,9 +105,9 @@ const CreateServiceForm = () => {
                 >
                   {facultyData.map((faculty) => (
                     <SelectItem key={faculty.id} value={faculty.id}>
-                      <div className="flex cursor-pointer items-center gap-2">
+                      <span className="flex cursor-pointer items-center gap-2">
                         <p>{faculty.name}</p>
-                      </div>
+                      </span>
                     </SelectItem>
                   ))}
                 </CustomFormField>

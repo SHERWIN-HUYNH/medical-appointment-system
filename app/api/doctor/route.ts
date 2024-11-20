@@ -1,4 +1,4 @@
-import { badRequestResponse, notFoundResponse, successResponse } from '@/helpers/response'
+import { badRequestResponse, forbiddenResponse, notFoundResponse, successResponse } from '@/helpers/response'
 import { DoctorRespository } from '@/repositories/doctor'
 
 export async function GET() {
@@ -30,7 +30,7 @@ export async function PUT(req: Request) {
   if (doctorData.isActive && !doctor.isActive) {
     const hasAppointments = await DoctorRespository.hasAppointments(doctor.id)
     if (hasAppointments) {
-      return badRequestResponse('Bác sĩ này đang có cuộc hẹn không thể chuyển trạng thái')
+      return forbiddenResponse('Bác sĩ này đang có cuộc hẹn không thể chuyển trạng thái')
     }
   }
   const updatedFaculty = await DoctorRespository.updateDoctor(doctor.id, doctor)
@@ -42,16 +42,14 @@ export async function PUT(req: Request) {
 
 // Xử lý DELETE request - Xóa bác sĩ theo ID
 export async function DELETE(req: Request) {
-  const { doctor } = await req.json()
-
-  if (!doctor?.id) {
-    return badRequestResponse('Missing doctor ID')
-  }
-
   try {
-    const deletedDoctor = await DoctorRespository.deleteDoctor(doctor.id)
-    return successResponse(deletedDoctor)
-  } catch (error: unknown) {
-    return badRequestResponse((error as Error).message)
+    const { id } = await req.json();
+    const deletedDoctor = await DoctorRespository.deleteDoctor(id);
+    return successResponse(deletedDoctor);
+  } catch (error) {
+    if (error instanceof Error) {
+      return forbiddenResponse(error.message);
+    }
+    return badRequestResponse('Xóa bác sĩ thất bại');
   }
 }
