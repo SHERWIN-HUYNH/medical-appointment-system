@@ -133,7 +133,7 @@ const menuGroups = [
           </svg>
         ),
         label: 'Đánh giá',
-        route: '/test-admin/evaluation',
+        route: '/admin/evaluate',
       },
     ],
   },
@@ -173,7 +173,7 @@ const menuGroups = [
           </svg>
         ),
         label: 'Báo cáo & Thống kê',
-        route: '/chart',
+        route: '/admin/chart',
       },
       {
         icon: <CircleUser />,

@@ -185,7 +185,7 @@ const Profile = () => {
                       <hr className="mt-2" />
                       <div className="mt-2 flex justify-end gap-2">
                         <Button
-                          className="bg-white text-red-400 hover:bg-red-400 hover:text-white text-sm"
+                          className="bg-white text-red-400 hover:bg-red-500 hover:text-white text-sm"
                           onClick={() => {
                             setProfileToDelete(profile.id)
                             setIsModalOpen(true)

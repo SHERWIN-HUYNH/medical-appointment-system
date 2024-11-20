@@ -1,13 +1,13 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { Undo2, PenLine } from 'lucide-react'
-import Image from 'next/image'
 import React, { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
+import { CldImage } from 'next-cloudinary'
 import { useRouter, useSearchParams } from 'next/navigation'
 import {
   Select,
@@ -18,6 +18,13 @@ import {
 } from '@/components/ui/select'
 import Header from '@/components/homepage/Header'
 import Footer from '@/components/homepage/Footer'
+import { uploadFileToCloudinary } from '@/helpers/upload-image'
+import {
+  capitalizeFirstLetterOfSentence,
+  capitalizeWords,
+  handleKeyPress,
+  isValidIdentificationNumber,
+} from '@/helpers/data_normalization'
 
 const Edit_Profile = () => {
   const { data: session } = useSession()
@@ -63,36 +70,17 @@ const Edit_Profile = () => {
       setErrorMessage('')
     }
   }
-  const capitalizeWords = (text: string) => {
-    return text
-      .trim()
-      .split(/\s+/)
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ')
-  }
-  const capitalizeFirstLetterOfSentence = (str: string) => {
-    if (str.length === 0) return str
-    return str.charAt(0).toUpperCase() + str.slice(1)
-  }
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const charCode = event.key
-    if (!/^\d$/.test(charCode)) {
-      event.preventDefault()
-    }
-  }
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedFile(e.target.files[0])
-      setFormData({
-        ...formData,
-        identificationDocumentUrl: URL.createObjectURL(e.target.files[0]),
-      })
-    }
-  }
 
-  const isValidIdentificationNumber = (identificationNumber: string) => {
-    const idPattern = /^[0-9]{9,12}$/
-    return idPattern.test(identificationNumber)
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0]
+      setSelectedFile(file)
+      const previewUrl = URL.createObjectURL(file)
+      setFormData((prev) => ({
+        ...prev,
+        identificationDocumentUrl: previewUrl,
+      }))
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -103,11 +91,27 @@ const Edit_Profile = () => {
       return
     }
 
+    let uploadedUrl = formData.identificationDocumentUrl
+    if (selectedFile) {
+      try {
+        const result = await uploadFileToCloudinary(selectedFile)
+        if (!result) {
+          toast.error('Tải ảnh lên thất bại. Vui lòng thử lại!')
+          return
+        }
+        uploadedUrl = result
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : 'Có lỗi xảy ra khi tải ảnh.')
+        return
+      }
+    }
+
     const formattedData = {
       ...formData,
       name: capitalizeWords(formData.name),
       symptom: capitalizeFirstLetterOfSentence(formData.symptom),
       pastMedicalHistory: capitalizeFirstLetterOfSentence(formData.pastMedicalHistory),
+      identificationDocumentUrl: uploadedUrl,
       birthDate: formData.birthDate ? new Date(formData.birthDate) : null,
     }
 
@@ -167,7 +171,6 @@ const Edit_Profile = () => {
             className="mt-4 grid grid-cols-1 gap-1 lg:grid-cols-2 lg:gap-2 text-sm"
             onSubmit={handleSubmit}
           >
-            {/* Phần nhập thông tin bệnh nhân */}
             <div className="rounded-lg bg-slate-100 p-1">
               <Label className="block mb-1 text-left">Họ và tên</Label>
               <Input
@@ -341,12 +344,12 @@ const Edit_Profile = () => {
               />
               {formData.identificationDocumentUrl && (
                 <div className="mt-2">
-                  <Image
+                  <CldImage
                     src={formData.identificationDocumentUrl}
-                    alt="Identification Document"
-                    width={150}
-                    height={100}
-                    className="w-full object-cover"
+                    width="850"
+                    height="500"
+                    crop="auto"
+                    alt={'Identification Document'}
                   />
                 </div>
               )}
