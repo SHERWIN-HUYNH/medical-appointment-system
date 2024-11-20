@@ -68,7 +68,15 @@ export async function POST(req: NextRequest) {
       sendTo: user?.email,
       subject: 'Xác nhận Đặt lịch hẹn thành công',
       text: '',
-      html: createAppointmentEmailContent(profile.name, service.name, doctor.name, schedule.date, schedule.timeSlot, profile.phone, profile.email),
+      html: createAppointmentEmailContent(
+        profile.name,
+        service.name,
+        doctor.name,
+        schedule.date,
+        schedule.timeSlot,
+        profile.phone,
+        profile.email,
+      ),
     })
     return successResponse(appointment)
   }

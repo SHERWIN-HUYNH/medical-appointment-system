@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
 import ClickOutside from '../ClickOutside'
-import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import SidebarItem from './SidebarItem'

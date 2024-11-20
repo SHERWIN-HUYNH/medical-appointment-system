@@ -8,17 +8,16 @@ import { useAppointmentContext } from '@/context/AppointmentContext'
 import Link from 'next/link'
 
 const ChooseService = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [services, setServices] = useState<Service[]>([]);
-  const router = useRouter();
-  const { data } = useAppointmentContext();
-  const searchParams = useSearchParams();
-  const doctorName = searchParams.get('doctorName');
-  const facultyName = searchParams.get('facultyName');
+  const [searchQuery, setSearchQuery] = useState('')
+  const [services, setServices] = useState<Service[]>([])
+  const router = useRouter()
+  const { data } = useAppointmentContext()
+  const searchParams = useSearchParams()
+  const doctorName = searchParams.get('doctorName')
+  const facultyName = searchParams.get('facultyName')
   // const doctorId = data.doctorId;
-  const facultyId = data.facultyId;
-  const [isLoading, setIsLoading] = useState(false);
-
+  const facultyId = data.facultyId
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -44,9 +43,8 @@ const ChooseService = () => {
         setIsLoading(false)
       }
     }
-    fetchServices();
-  }, [facultyId, router]);
-
+    fetchServices()
+  }, [facultyId, router])
 
   const filteredServices = services.filter((service) =>
     String(service.name || '')

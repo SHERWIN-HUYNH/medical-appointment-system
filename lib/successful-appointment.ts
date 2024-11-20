@@ -1,5 +1,13 @@
-export function createAppointmentEmailContent(customerName: string, service: string, doctorName: string, appointmentDate: string, appointmentTime: string, phone: string, supportEmail: string) {
-    return `
+export function createAppointmentEmailContent(
+  customerName: string,
+  service: string,
+  doctorName: string,
+  appointmentDate: string,
+  appointmentTime: string,
+  phone: string,
+  supportEmail: string,
+) {
+  return `
     <!DOCTYPE html>
     <html lang="vi">
     <head>
@@ -93,5 +101,5 @@ export function createAppointmentEmailContent(customerName: string, service: str
       </div>
     </body>
     </html>
-    `;
+    `
 }

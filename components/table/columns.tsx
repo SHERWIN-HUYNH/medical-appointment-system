@@ -22,7 +22,7 @@ export const columns: ColumnDef<AppointmentSchedule>[] = [
     },
     filterFn: (row, columnId, filterValue) => {
       // Access the patient's name for filtering
-      const patientName = (row.getValue(columnId) as any)?.name
+      const patientName = (row.getValue(columnId) as { name: string })?.name
       return patientName?.toLowerCase().includes(filterValue.toLowerCase())
     },
   },

@@ -1,11 +1,5 @@
 import { bills, userData } from '@/lib/data'
-import {
-  CircleDollarSign,
-  CreditCard,
-  MapPinHouse,
-  ScrollText,
-  UserRoundPen,
-} from 'lucide-react'
+import { CircleDollarSign, CreditCard, MapPinHouse, UserRoundPen } from 'lucide-react'
 import React from 'react'
 
 const PaymentHistory = () => {

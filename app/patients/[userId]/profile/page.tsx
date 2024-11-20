@@ -79,7 +79,7 @@ const Profile = () => {
         prevProfiles.filter((profile) => profile.id !== profileToDelete),
       )
       toast.success('Xóa hồ sơ thành công')
-    } catch (error) {
+    } catch {
       toast.error('Lỗi khi xóa hồ sơ')
     } finally {
       setIsModalOpen(false)
