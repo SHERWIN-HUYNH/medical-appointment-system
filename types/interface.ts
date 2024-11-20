@@ -3,11 +3,11 @@ declare type Status = 'PENDING' | 'SCHEDULED' | 'CANCELLED'
 export interface Profile {
   id: string
   name: string
-  birthDate?: Date
+  birthDate?: Date | null
   gender: Gender
   email: string
   phone: string
-  allergies?: string
+  allergies?: string | null
   symptom: string
   identificationType: string
   identificationNumber: string
@@ -21,39 +21,6 @@ export interface UserRole {
   email: string
   roleName: string
 }
-
-export interface Appointment {
-  profileId: string
-  doctorScheduleId: string
-  serviceId: string
-  note: string
-  status: Status
-  cancellationReason: string
-}
-interface DoctorSchedule {
-  id: string
-  doctorId: string
-  scheduleId: string
-  isAvailable: boolean
-  schedule: Schedule // Full schedule object
-  doctor: Doctor // Full doctor object
-}
-export interface AppointmentSchedule {
-  id: string
-  status: Status
-  cancellationReason: string | null
-  profileId: string
-  serviceId: string
-  doctorScheduleId: string
-  profile: Profile // Full profile object
-  doctorSchedule: DoctorSchedule // Full doctor schedule object
-}
-export interface CreateAppointment {
-  profileId: string
-  doctorScheduleId: string
-  serviceId: string
-}
-
 export interface Faculty {
   id: string
   name: string
@@ -90,14 +57,45 @@ export interface Doctor {
   name: string
   academicTitle: string
   description?: string
+  isDeleted: boolean
   image?: string
   facultyId: string
   isActive: boolean
-  faculty?: {
-    name: string
-  }
   comments: Comment[]
   doctorSchedule: Schedule[]
+}
+export interface Appointment {
+  profileId: string
+  doctorScheduleId: string
+  serviceId: string
+  note: string
+  status: Status
+  cancellationReason: string
+}
+
+export interface AppointmentSchedule {
+  id: string
+  status: Status
+  cancellationReason: string | null
+  profileId: string
+  serviceId: string
+  doctorScheduleId: string
+  profile: Profile
+  doctorSchedule: DoctorSchedule
+}
+export interface CreateAppointment {
+  profileId: string
+  doctorScheduleId: string
+  serviceId: string
+}
+
+interface DoctorSchedule {
+  id: string
+  doctorId: string
+  scheduleId: string
+  isAvailable: boolean
+  schedule: Schedule // Full schedule object
+  doctor: Doctor // Full doctor object
 }
 export interface Bill {
   id?: string
