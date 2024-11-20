@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 /* eslint-disable @typescript-eslint/no-explicit-any */
-=======
-import Appointment from '@/app/patients/[userId]/new-appointment/page'
->>>>>>> 6e948221b114aee513d08b93da8de7337fcbaeb8
 import {
   badRequestResponse,
   forbiddenResponse,
