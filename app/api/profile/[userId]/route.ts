@@ -6,11 +6,11 @@ import {
   notFoundResponse,
   successResponse,
   unauthorizedResponse,
-} from '@/helpers/response';
+} from '@/helpers/response'
 
 export async function POST(req: Request, context: { params: { userId: string } }) {
-  const { profile }: { profile: Profile } = await req.json();
-  const { userId } = context.params;
+  const { profile }: { profile: Profile } = await req.json()
+  const { userId } = context.params
   if (!userId) {
     return unauthorizedResponse('UNAUTHENTICATED')
   }
@@ -27,12 +27,12 @@ export async function POST(req: Request, context: { params: { userId: string } }
 }
 
 export async function PUT(req: Request, context: { params: { userId: string } }) {
-  const { profile }: { profile: Profile } = await req.json();
-  const { userId } = context.params;
+  const { profile }: { profile: Profile } = await req.json()
+  const { userId } = context.params
   if (!userId) {
-    return unauthorizedResponse('UNAUTHENTICATED');
+    return unauthorizedResponse('UNAUTHENTICATED')
   }
-  const checkprofile = await ProfileRespository.getListProfileByUserId(profile.id);
+  const checkprofile = await ProfileRespository.getListProfileByUserId(profile.id)
   if (!checkprofile) {
     return notFoundResponse('NOT FOUND PROFILE')
   }
@@ -49,23 +49,23 @@ export async function PUT(req: Request, context: { params: { userId: string } })
 }
 
 export async function GET(request: Request, context: { params: { userId: string } }) {
-  const { userId } = context.params;
+  const { userId } = context.params
   if (!userId) {
-    return unauthorizedResponse('UNAUTHENTICATED');
+    return unauthorizedResponse('UNAUTHENTICATED')
   }
   try {
     const profiles = await ProfileRespository.getListProfileByUserId(userId)
     if (!profiles || profiles.length === 0) {
       return notFoundResponse('NOT FOUND PROFILE')
     }
-    return successResponse(profiles);
+    return successResponse(profiles)
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error('Error fetching profiles:', error.message);
+      console.error('Error fetching profiles:', error.message)
     } else {
-      console.error('Error fetching profiles:', error);
+      console.error('Error fetching profiles:', error)
     }
-    return internalServerErrorResponse('FAIL TO GET LIST PROFILE');
+    return internalServerErrorResponse('FAIL TO GET LIST PROFILE')
   }
 }
 
@@ -77,14 +77,14 @@ export async function DELETE(req: Request) {
     if (!checkProfile) {
       return notFoundResponse('NOT FOUND PROFILE')
     }
-    await ProfileRespository.deleteProfile({ profileData: profileValues });
-    return successResponse('DELETE PROFILE SUCCESSFULLY');
+    await ProfileRespository.deleteProfile({ profileData: profileValues })
+    return successResponse('DELETE PROFILE SUCCESSFULLY')
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error('Error deleting profile:', error.message);
+      console.error('Error deleting profile:', error.message)
     } else {
-      console.error('Error deleting profile:', error);
+      console.error('Error deleting profile:', error)
     }
-    return internalServerErrorResponse('FAIL TO DELETE PROFILE');
+    return internalServerErrorResponse('FAIL TO DELETE PROFILE')
   }
 }

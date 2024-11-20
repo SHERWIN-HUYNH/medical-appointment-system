@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-
-import { PatientForm } from '@/components/forms/PatientForm'
+import React from 'react'
 import { PasskeyModal } from '@/components/PasskeyModal'
 import { RegisterForm } from '@/components/forms/RegisterForm'
 

@@ -2,13 +2,13 @@
 import { Button } from '@/components/ui/button'
 import { Undo2, PenLine } from 'lucide-react'
 import Image from 'next/image'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   Select,
   SelectContent,
@@ -48,6 +48,7 @@ const Edit_Profile = () => {
     symptom: symptom || '',
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const today = new Date().toISOString().split('T')[0]
   const [errorMessage, setErrorMessage] = useState('')
@@ -178,6 +179,7 @@ const Edit_Profile = () => {
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
                 placeholder="Nhập họ và tên"
+                customProp={''}
               />
             </div>
 
@@ -196,6 +198,7 @@ const Edit_Profile = () => {
                 required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
+                customProp={''}
               />
             </div>
 
@@ -209,6 +212,7 @@ const Edit_Profile = () => {
                 readOnly
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
+                customProp={''}
               />
             </div>
 
@@ -224,6 +228,7 @@ const Edit_Profile = () => {
                 className="w-full p-1 border border-slate-300 rounded text-sm"
                 style={{ height: '30px', fontSize: '14px' }}
                 placeholder="Nhập số điện thoại"
+                customProp={''}
               />
             </div>
             <div className="rounded-lg bg-slate-100 p-1">
@@ -291,6 +296,7 @@ const Edit_Profile = () => {
                   className="w-full p-1 border border-slate-300 rounded text-sm"
                   style={{ height: '30px', fontSize: '14px' }}
                   placeholder="Nhập số giấy định danh"
+                  customProp={''}
                 />
                 {errorMessage && (
                   <p className="text-red-500 text-xs mt-1 text-left">{errorMessage}</p>
@@ -307,6 +313,7 @@ const Edit_Profile = () => {
                   className="w-full mt-1 border border-slate-300 rounded text-sm"
                   style={{ height: '30px', fontSize: '14px' }}
                   placeholder="Nhập triệu chứng bệnh"
+                  customProp={''}
                 />
               </div>
             </div>
@@ -330,6 +337,7 @@ const Edit_Profile = () => {
                 onChange={handleFileChange}
                 className="w-full p-1 border border-slate-300 rounded text-sm bg-white"
                 style={{ height: '30px', fontSize: '14px' }}
+                customProp={''}
               />
               {formData.identificationDocumentUrl && (
                 <div className="mt-2">

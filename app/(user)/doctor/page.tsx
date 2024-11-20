@@ -1,13 +1,12 @@
-
-'use client';
-import React, { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { FormProvider, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import Pagination from '@/components/Pagination';
-import DoctorLayout from '@/components/Layouts/doctorLayout';
-import Image from 'next/image';
+'use client'
+import React, { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { FormProvider, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import Pagination from '@/components/Pagination'
+import DoctorLayout from '@/components/Layouts/doctorLayout'
+import Image from 'next/image'
 
 interface Doctor {
   id: string

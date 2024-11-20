@@ -120,10 +120,11 @@ const Add_Profile = () => {
 
     if (response.ok) {
       const data = await response.json()
-      toast.success('Thêm hồ sơ khám bệnh thành công')
+      toast.success('Thêm hồ sơ khám bệnh thành công', data)
       router.back()
     } else {
       const errorText = await response.text()
+      console.log(errorText)
       toast.error('Thêm hồ sơ khám bệnh thất bại. Vui lòng thử lại!')
     }
   }

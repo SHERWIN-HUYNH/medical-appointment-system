@@ -12,11 +12,6 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Schedule } from '@prisma/client'
 import { useSession } from 'next-auth/react'
-<<<<<<< HEAD
-import { set } from 'zod'
-=======
->>>>>>> 6e948221b114aee513d08b93da8de7337fcbaeb8
-
 type ChooseScheduleProps = {
   doctorId: string
   setSelectedDate: React.Dispatch<React.SetStateAction<string>>

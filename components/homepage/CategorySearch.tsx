@@ -52,7 +52,12 @@ const CategorySearch = () => {
       <h2 className="text-xl">Tìm kiếm bác sĩ của bạn vào bắt đầu đặt lịch hẹn</h2>
 
       <div className="flex w-full mt-3 max-w-sm items-center space-x-2">
-        <Input type="text" placeholder="Search..." className="border-slate-400" customProp={''} />
+        <Input
+          type="text"
+          placeholder="Search..."
+          className="border-slate-400"
+          customProp={''}
+        />
         <Button className="text-white bg-primary hover:bg-[#56c2e6]" type="submit">
           <Search className="h-4 w-4 mr-2" />
           Search

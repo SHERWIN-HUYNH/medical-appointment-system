@@ -18,7 +18,6 @@ export const AppointmentForm = ({
   patientId,
   type = 'create',
   appointment,
-  setOpen,
 }: {
   userId: string
   patientId: string
@@ -81,26 +80,6 @@ export const AppointmentForm = ({
         }
       } else {
         console.log('UPDATE WORKING')
-        const appointmentToUpdate = {
-          userId,
-          appointmentId: appointment?.id,
-          appointment: {
-            primaryPhysician: values.primaryPhysician,
-            schedule: new Date(values.schedule),
-            status: status as Status,
-            cancellationReason: values.cancellationReason,
-          },
-          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          type,
-        }
-        // Code to cancell an appointment
-        // const updatedAppointment = await updateAppointment(appointmentToUpdate);
-
-        // if (updatedAppointment) {
-        //   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        //   setOpen && setOpen(false);
-        //   form.reset();
-        // }
       }
     } catch (error) {
       console.log(error)
