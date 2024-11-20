@@ -20,6 +20,7 @@ import ConfirmModal from '@/components/ConfirmModal'
 const EditDoctor = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([])
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [fileName, setFileName] = useState<string>('')
   const [isActive, setIsActive] = useState<boolean>(false)
@@ -204,6 +205,7 @@ const EditDoctor = () => {
                       Họ và tên
                     </Label>
                     <Input
+                      customProp={''}
                       type="text"
                       placeholder="Nhập họ tên bác sĩ"
                       {...register('name')}

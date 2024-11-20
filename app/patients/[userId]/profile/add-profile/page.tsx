@@ -120,7 +120,6 @@ const Add_Profile = () => {
           profile: formattedData,
         }),
       })
-
       if (response.ok) {
         toast.success('Thêm hồ sơ khám bệnh thành công')
         router.back()

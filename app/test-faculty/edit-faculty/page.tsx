@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label'
 
 const EditFaculty = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [fileName, setFileName] = useState<string>('')
   // Khởi tạo form với validation schema và giá trị mặc định

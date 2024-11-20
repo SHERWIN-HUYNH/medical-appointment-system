@@ -1,14 +1,14 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { Undo2, PenLine } from 'lucide-react'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { CldImage } from 'next-cloudinary'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   Select,
   SelectContent,
@@ -55,6 +55,7 @@ const Edit_Profile = () => {
     symptom: symptom || '',
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const today = new Date().toISOString().split('T')[0]
   const [errorMessage, setErrorMessage] = useState('')

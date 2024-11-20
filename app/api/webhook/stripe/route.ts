@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { Resend } from 'resend'
 import { DoctorRespository } from '@/repositories/doctor'
 import { ServiceRepository } from '@/repositories/service'
 import { ProfileRespository } from '@/repositories/profile'
@@ -9,8 +8,11 @@ import { DoctorScheduleRespository } from '@/repositories/doctorSchedule'
 import { AppointmentRepository } from '@/repositories/appointment'
 import { BillRespository } from '@/repositories/bill'
 import { BillStatus } from '@prisma/client'
+import { sendMail } from '@/lib/send-email'
+import { createAppointmentEmailContent } from '@/lib/successful-appointment'
+import { ScheduleRespository } from '@/repositories/schedule'
+import { UserRepository } from '@/repositories/user'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
-const resend = new Resend(process.env.RESEND_API_KEY as string)
 
 export async function POST(req: NextRequest) {
   const event = await stripe.webhooks.constructEvent(
@@ -27,9 +29,11 @@ export async function POST(req: NextRequest) {
     const profileId = charge.metadata.profileId
     const userId = charge.metadata.billId
     const pricePaidInCents = charge.amount
+    const schedule = await ScheduleRespository.getScheduleById(scheduleId)
     const service = await ServiceRepository.getServicesById(serviceId)
     const doctor = await DoctorRespository.getDoctorById(doctorId)
     const profile = await ProfileRespository.getProfileById(profileId)
+    const user = await UserRepository.getUserByUserId(userId)
     console.log('service', doctorId, scheduleId)
     if (!service || !doctor || !profile) {
       return notFoundResponse('NOT FOUND SERVICE OR DOCTOR')
@@ -60,21 +64,20 @@ export async function POST(req: NextRequest) {
     if (!bill) {
       return notFoundResponse('FAIL TO CREATE BILL')
     }
-    const { data, error } = await resend.emails.send({
-<<<<<<< HEAD
-      from: `Support <${process.env.SENDER_EMAIL}>`,
-=======
-      from: `Acme <onboarding@resend.dev>`,
->>>>>>> c391485d0a29e40b074b8cf8212289422def40ed
-      to: ['n21dccn191@student.ptithcm.edu.vn'],
-      subject: 'Hello world',
-      react: '<h1>hello world</h1>',
+    sendMail({
+      sendTo: user?.email,
+      subject: 'Xác nhận Đặt lịch hẹn thành công',
+      text: '',
+      html: createAppointmentEmailContent(
+        profile.name,
+        service.name,
+        doctor.name,
+        schedule.date,
+        schedule.timeSlot,
+        profile.phone,
+        profile.email,
+      ),
     })
-    if (error) {
-      console.log('email error', error)
-    } else {
-      console.log('email success', data)
-    }
     return successResponse(appointment)
   }
 

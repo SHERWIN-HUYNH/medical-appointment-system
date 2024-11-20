@@ -5,7 +5,6 @@ import {
   Cake,
   CircleUser,
   FileDigit,
-  FlipVertical2,
   History,
   Mails,
   Scroll,
@@ -25,12 +24,6 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
   profile,
 }) => {
   if (!isOpen) return null
-
-  const formatDate = (date: Date | undefined) => {
-    if (!date) return 'N/A'
-    return new Date(date).toLocaleDateString('vi-VN')
-  }
-
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
