@@ -1,21 +1,24 @@
-export const uploadImage = async (rawImage: File) => {
-  const formData = new FormData()
-  formData.append('file', rawImage)
-  formData.append('upload_preset', 'travel-buddy-web')
+export const uploadFileToCloudinary = async (file: File): Promise<string | null> => {
+  const uploadFormData = new FormData()
+  uploadFormData.append('file', file)
+  uploadFormData.append('upload_preset', 'appointment')
 
-  const uploadResponse = await fetch(
-    'https://api.cloudinary.com/v1_1/dx1jngfdn/image/upload',
-    {
+  try {
+    const response = await fetch('https://api.cloudinary.com/v1_1/dbg1rtbcc/upload', {
       method: 'POST',
-      body: formData,
-    },
-  )
-  if (!uploadResponse.ok) {
-    throw new Error('Image upload failed')
+      body: uploadFormData,
+    })
+
+    const data = await response.json()
+
+    if (response.ok) {
+      return data.public_id
+    } else {
+      console.error('Cloudinary upload failed:', data)
+      throw new Error('Tải ảnh lên thất bại. Vui lòng thử lại!')
+    }
+  } catch (error) {
+    console.error('Upload error:', error)
+    throw new Error('Có lỗi xảy ra khi tải ảnh.')
   }
-
-  const imageData = await uploadResponse.json()
-  const imageUrl = imageData.secure_url
-
-  return imageUrl
 }

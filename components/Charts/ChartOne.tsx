@@ -8,7 +8,7 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 })
 
-const chartTypeLine = 'line' as const;
+const chartTypeLine = 'line' as const
 
 const options: ApexOptions = {
   legend: {

@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -23,58 +22,22 @@ import { PatientFormValidation } from '@/lib/validation'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'react-phone-number-input/style.css'
 import CustomFormField, { FormFieldType } from '../CustomFormField'
-
+import React from 'react'
 import SubmitButton from '../SubmitButton'
-import { registerPatient } from '@/lib/action/patient.actions'
 import { FileUploader } from '../FileUploader'
 
-const RegisterForm = ({ user }: { user: User }) => {
-  const router = useRouter()
+const RegisterForm = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof PatientFormValidation>>({
     resolver: zodResolver(PatientFormValidation),
     defaultValues: {
       ...PatientFormDefaultValues,
-      // name: user.name,
-      // email: user.email,
-      // phone: user.phone,
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
-    // setIsLoading(true);
-    // // Store file info in form data as
-    // let formData;
-    // if (
-    //   // Check if there is a file to upload
-    //   values.identificationDocument &&
-    //   values.identificationDocument?.length > 0
-    // ) {
-    //   const blobFile = new Blob([values.identificationDocument[0]], {
-    //     type: values.identificationDocument[0].type,
-    //   });
-    //   formData = new FormData();
-    //   formData.append("blobFile", blobFile);
-    //   formData.append("fileName", values.identificationDocument[0].name);
-    // }
-    // try {
-    //   const patientData = {
-    //     ...values,
-    //     userId: user.$id,
-    //     birthDate: new Date(values.birthDate),
-    //     identificationDocument: formData,
-    //   };
-    //   //@ts-ignore
-    //   const newPatient = await registerPatient(patientData);
-    //   if (newPatient) {
-    //     router.push(`/patients/${user.$id}/new-appointment`);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // setIsLoading(false);
-  }
+  const onSubmit = async () => {}
 
   return (
     <Form {...form}>

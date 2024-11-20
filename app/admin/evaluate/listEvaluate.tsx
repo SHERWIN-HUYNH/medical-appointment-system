@@ -150,7 +150,7 @@ const ListComment = () => {
         <td>
           <div className="flex items-center gap-2">
             <Button
-              className="w-12 h-10 flex items-center justify-center rounded-full bg-purple-300"
+              className="w-12 h-10 ml-8 flex items-center justify-center rounded-full bg-red-400"
               onClick={() => {
                 setCommentToDelete(item)
                 setShowModal(true)

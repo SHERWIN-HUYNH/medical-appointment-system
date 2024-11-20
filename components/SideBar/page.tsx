@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
 import ClickOutside from '../ClickOutside'
-import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import SidebarItem from './SidebarItem'
@@ -134,7 +133,7 @@ const menuGroups = [
           </svg>
         ),
         label: 'Đánh giá',
-        route: '/test-admin/evaluation',
+        route: '/admin/evaluate',
       },
     ],
   },
@@ -174,7 +173,7 @@ const menuGroups = [
           </svg>
         ),
         label: 'Báo cáo & Thống kê',
-        route: '/chart',
+        route: '/admin/chart',
       },
       {
         icon: <CircleUser />,

@@ -44,6 +44,7 @@ interface CustomProps {
 }
 
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
+  const [isFocused, setIsFocused] = useState(false)
   switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
@@ -146,8 +147,6 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
     case FormFieldType.SKELETON:
       return props.renderSkeleton ? props.renderSkeleton(field) : null
     case FormFieldType.PRICE: {
-      const [isFocused, setIsFocused] = useState(false)
-
       const formatInputValue = (value: string) => {
         const numbers = value.replace(/\D/g, '')
 

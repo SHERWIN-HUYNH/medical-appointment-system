@@ -61,6 +61,7 @@ export function DataTable<TData, TValue>({
               table.getColumn('patient')?.setFilterValue(event.target.value)
             }
             className="max-w-sm rounded-2xl"
+            customProp={''}
           />
         </div>
         <div>

@@ -1,7 +1,6 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -10,15 +9,12 @@ import { getAppointmentSchema } from '@/lib/validation'
 import CustomFormField, { FormFieldType } from '../CustomFormField'
 import SubmitButton from '../SubmitButton'
 import { Form } from '../ui/form'
-import { createAppointment } from '@/lib/action/appointment.actions'
 import { AppointmentSchedule } from '@/types/interface'
 
 export const AppointmentForm = ({
-  userId,
   patientId,
   type = 'create',
   appointment,
-  setOpen,
 }: {
   userId: string
   patientId: string
@@ -26,7 +22,6 @@ export const AppointmentForm = ({
   appointment?: AppointmentSchedule
   setOpen?: Dispatch<SetStateAction<boolean>>
 }) => {
-  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   console.log('appointment type', type)
   const AppointmentFormValidation = getAppointmentSchema(type)
@@ -43,7 +38,7 @@ export const AppointmentForm = ({
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof AppointmentFormValidation>) => {
+  const onSubmit = async () => {
     setIsLoading(true)
 
     let status
@@ -55,52 +50,32 @@ export const AppointmentForm = ({
         status = 'cancelled'
         break
       default:
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         status = 'pending'
     }
     console.log('SHOW PATIENTID', patientId)
     try {
       if (type === 'create' && patientId) {
-        const appointment = {
-          userId,
-          patient: patientId,
-          primaryPhysician: values.primaryPhysician,
-          schedule: new Date(values.schedule),
-          reason: values.reason!,
-          status: status as Status,
-          note: values.note,
-        }
-        console.log('NEW APPOINTMENT', appointment)
-        const newAppointment = await createAppointment(appointment)
-
-        if (newAppointment) {
-          console.log('NEW APPOINTMENT', newAppointment)
-          form.reset()
-          router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`,
-          )
-        }
+        // const appointment = {
+        //   userId,
+        //   patient: patientId,
+        //   primaryPhysician: values.primaryPhysician,
+        //   schedule: new Date(values.schedule),
+        //   reason: values.reason!,
+        //   status: status as Status,
+        //   note: values.note,
+        // }
+        // console.log('NEW APPOINTMENT', appointment)
+        // const newAppointment = await createAppointment(appointment)
+        // if (newAppointment) {
+        //   console.log('NEW APPOINTMENT', newAppointment)
+        //   form.reset()
+        //   router.push(
+        //     `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`,
+        //   )
+        // }
       } else {
         console.log('UPDATE WORKING')
-        const appointmentToUpdate = {
-          userId,
-          appointmentId: appointment?.id,
-          appointment: {
-            primaryPhysician: values.primaryPhysician,
-            schedule: new Date(values.schedule),
-            status: status as Status,
-            cancellationReason: values.cancellationReason,
-          },
-          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          type,
-        }
-        // Code to cancell an appointment
-        // const updatedAppointment = await updateAppointment(appointmentToUpdate);
-
-        // if (updatedAppointment) {
-        //   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        //   setOpen && setOpen(false);
-        //   form.reset();
-        // }
       }
     } catch (error) {
       console.log(error)

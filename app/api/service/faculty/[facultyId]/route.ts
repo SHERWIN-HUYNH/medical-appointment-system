@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { badRequestResponse, notFoundResponse, successResponse } from '@/helpers/response'
 import { ServiceRepository } from '@/repositories/service'
-
-export async function GET(req: Request, context: any) {
+interface Context {
+  params: {
+    facultyId: string
+  }
+}
+export async function GET(req: Request, context: Context) {
   const { facultyId } = context.params
   try {
     const services = await ServiceRepository.getServicesByFacultyId(facultyId)

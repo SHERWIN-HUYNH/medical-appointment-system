@@ -79,7 +79,7 @@ const Profile = () => {
         prevProfiles.filter((profile) => profile.id !== profileToDelete),
       )
       toast.success('Xóa hồ sơ thành công')
-    } catch (error) {
+    } catch {
       toast.error('Lỗi khi xóa hồ sơ')
     } finally {
       setIsModalOpen(false)
@@ -185,7 +185,7 @@ const Profile = () => {
                       <hr className="mt-2" />
                       <div className="mt-2 flex justify-end gap-2">
                         <Button
-                          className="bg-white text-red-400 hover:bg-red-400 hover:text-white text-sm"
+                          className="bg-white text-red-400 hover:bg-red-500 hover:text-white text-sm"
                           onClick={() => {
                             setProfileToDelete(profile.id)
                             setIsModalOpen(true)
