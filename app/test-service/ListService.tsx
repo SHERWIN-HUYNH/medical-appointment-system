@@ -1,13 +1,9 @@
 'use client'
-<<<<<<< HEAD
 import ModalDelete from '@/components/ModalDelete'
-=======
->>>>>>> 6e948221b114aee513d08b93da8de7337fcbaeb8
 import Pagination from '@/components/Pagination'
 import Table from '@/components/Table'
 import TableSearch from '@/components/TableSearch'
 import { Button } from '@/components/ui/button'
-<<<<<<< HEAD
 import { ArrowDownNarrowWide, Pencil, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -25,20 +21,6 @@ type Faculty = {
   id: string
   name: string
 }
-=======
-import { facultyData, serviceData } from '@/lib/data'
-import { ArrowDownNarrowWide, Pencil, Trash2 } from 'lucide-react'
-import Link from 'next/link'
-import React, { useState } from 'react'
-
-type Service = {
-  id: number
-  name: string
-  price: number
-  facultyId: number
-  description: string
-}
->>>>>>> 6e948221b114aee513d08b93da8de7337fcbaeb8
 
 const columns = [
   {
