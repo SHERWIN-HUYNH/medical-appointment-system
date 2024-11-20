@@ -1,15 +1,15 @@
-'use client';
-import React from 'react';
-import UserLayout from '@/components/Layouts/userLayout';
+'use client'
+import React from 'react'
+import UserLayout from '@/components/Layouts/userLayout'
 // import { useSession } from 'next-auth/react';
-import { HousePlus } from 'lucide-react';
-import ChooseSchedule from '@/components/DoctorSchedule/choose-schedule/page';
-import { useParams } from 'next/navigation';
+import { HousePlus } from 'lucide-react'
+import ChooseSchedule from '@/components/DoctorSchedule/choose-schedule/page'
+import { useParams } from 'next/navigation'
 
 const CalendarPage = () => {
-  const [selectedDate, setSelectedDate] = React.useState<string>('');
-  const params = useParams();
-  const doctorId = params.doctorId;
+  const [selectedDate, setSelectedDate] = React.useState<string>('')
+  const params = useParams()
+  const doctorId = params.doctorId
   return (
     <UserLayout>
       <section className=" style_body flex  space-x-7  max-w-screen-xl px-4 pb-6 mt-8">
@@ -113,7 +113,7 @@ const CalendarPage = () => {
         </div>
       </section>
     </UserLayout>
-  );
-};
+  )
+}
 
-export default CalendarPage;
+export default CalendarPage

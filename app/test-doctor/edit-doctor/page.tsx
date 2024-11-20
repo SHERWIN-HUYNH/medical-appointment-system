@@ -1,31 +1,31 @@
-'use client';
-import DefaultLayout from '@/components/Layouts/defaultLayout';
-import SelectGroup from '@/components/SelectGroup';
-import SwitcherToggle from '@/components/SwitcherToggle';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { academicTitles } from '@/lib/data';
-import { DoctorFormValidation } from '@/lib/validation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Faculty } from '@prisma/client';
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import ConfirmModal from '@/components/ConfirmModal';
+'use client'
+import DefaultLayout from '@/components/Layouts/defaultLayout'
+import SelectGroup from '@/components/SelectGroup'
+import SwitcherToggle from '@/components/SwitcherToggle'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { academicTitles } from '@/lib/data'
+import { DoctorFormValidation } from '@/lib/validation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Faculty } from '@prisma/client'
+import { useRouter, useSearchParams } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+import { useForm, FormProvider } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import ConfirmModal from '@/components/ConfirmModal'
 
 const EditDoctor = () => {
-  const [facultyData, setFacultyData] = useState<Faculty[]>([]);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [fileName, setFileName] = useState<string>('');
-  const [isActive, setIsActive] = useState<boolean>(false);
-  const [gender, setGender] = useState<boolean>(true);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [pendingStatus, setPendingStatus] = useState<boolean | null>(null);
+  const [facultyData, setFacultyData] = useState<Faculty[]>([])
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [fileName, setFileName] = useState<string>('')
+  const [isActive, setIsActive] = useState<boolean>(false)
+  const [gender, setGender] = useState<boolean>(true)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [pendingStatus, setPendingStatus] = useState<boolean | null>(null)
   const form = useForm<z.infer<typeof DoctorFormValidation>>({
     resolver: zodResolver(DoctorFormValidation),
     defaultValues: {
@@ -37,35 +37,35 @@ const EditDoctor = () => {
       isActive: false,
       gender: true,
     },
-  });
+  })
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = form;
+  } = form
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
 
   const fetchFacultyData = async () => {
-    const response = await fetch(`/api/faculty`);
+    const response = await fetch(`/api/faculty`)
     if (response.ok) {
-      const data = await response.json();
-      setFacultyData(data);
+      const data = await response.json()
+      setFacultyData(data)
     }
-  };
+  }
 
   const getAcademicTitleId = (name: string) => {
-    const title = academicTitles.find((title) => title.name === name);
-    return title?.id || '';
-  };
+    const title = academicTitles.find((title) => title.name === name)
+    return title?.id || ''
+  }
 
   const fetchDoctorData = async () => {
-    const response = await fetch(`/api/doctor/${id}`);
+    const response = await fetch(`/api/doctor/${id}`)
     if (response.ok) {
-      const doctor = await response.json();
+      const doctor = await response.json()
       form.reset({
         name: doctor.name,
         image: doctor.image,
@@ -74,57 +74,57 @@ const EditDoctor = () => {
         description: doctor.description,
         isActive: doctor.isActive,
         gender: doctor.gender,
-      });
-      setImagePreview(doctor.image);
-      setIsActive(doctor.isActive);
-      setFileName(doctor.image || '');
-      setGender(doctor.gender);
+      })
+      setImagePreview(doctor.image)
+      setIsActive(doctor.isActive)
+      setFileName(doctor.image || '')
+      setGender(doctor.gender)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchFacultyData();
+    fetchFacultyData()
     if (id) {
-      fetchDoctorData();
+      fetchDoctorData()
     }
-  }, [id]);
+  }, [id])
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[0]
 
     if (!file) {
-      toast.error('Vui lòng tải lên một tệp hình ảnh');
-      return;
+      toast.error('Vui lòng tải lên một tệp hình ảnh')
+      return
     }
     if (!file.type.startsWith('image/')) {
-      toast.error('Chỉ cho phép tải lên các tệp hình ảnh');
-      event.target.value = '';
-      return;
+      toast.error('Chỉ cho phép tải lên các tệp hình ảnh')
+      event.target.value = ''
+      return
     }
-    setImageFile(file);
-    form.setValue('image', file.name);
-    setImagePreview(file.name);
-    setFileName(file.name);
-  };
+    setImageFile(file)
+    form.setValue('image', file.name)
+    setImagePreview(file.name)
+    setFileName(file.name)
+  }
 
   const handleToggle = (value: boolean) => {
     if (!value) {
-      setPendingStatus(value);
-      setShowConfirmModal(true);
+      setPendingStatus(value)
+      setShowConfirmModal(true)
     } else {
-      setIsActive(value);
-      form.setValue('isActive', value);
+      setIsActive(value)
+      form.setValue('isActive', value)
     }
-  };
+  }
 
   const handleGenderChange = (value: string) => {
-    const genderValue = value === 'true';
-    setGender(genderValue);
-    form.setValue('gender', genderValue);
-  };
+    const genderValue = value === 'true'
+    setGender(genderValue)
+    form.setValue('gender', genderValue)
+  }
 
   const handleConfirmStatusChange = async () => {
-    if (pendingStatus === null) return;
+    if (pendingStatus === null) return
 
     try {
       const response = await fetch('/api/doctor', {
@@ -139,51 +139,51 @@ const EditDoctor = () => {
             isActive: pendingStatus,
           },
         }),
-      });
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (response.ok) {
-        setIsActive(pendingStatus);
-        form.setValue('isActive', pendingStatus);
-        toast.success('Thay đổi trạng thái thành công');
+        setIsActive(pendingStatus)
+        form.setValue('isActive', pendingStatus)
+        toast.success('Thay đổi trạng thái thành công')
       } else {
-        toast.error('Bác sĩ hiện đang có lịch hẹn không thể thay đổi trạng thái');
+        toast.error('Bác sĩ hiện đang có lịch hẹn không thể thay đổi trạng thái')
       }
     } catch (error) {
-      toast.error('Đã có lỗi xảy ra khi thay đổi trạng thái');
+      toast.error('Đã có lỗi xảy ra khi thay đổi trạng thái')
     } finally {
-      setShowConfirmModal(false);
-      setPendingStatus(null);
+      setShowConfirmModal(false)
+      setPendingStatus(null)
     }
-  };
+  }
 
   const onSubmit = async (values: z.infer<typeof DoctorFormValidation>) => {
     const academicTitleName =
       academicTitles.find((title) => title.id === values.academicTitle)?.name ||
-      values.academicTitle;
+      values.academicTitle
     const response = await fetch(`/api/doctor`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         doctor: { id, ...values, academicTitle: academicTitleName },
       }),
-    });
+    })
 
-    const data = await response.json();
+    const data = await response.json()
 
     if (response.ok) {
-      toast.success('Cập nhật thông tin bác sĩ thành công');
-      router.push('/test-doctor');
+      toast.success('Cập nhật thông tin bác sĩ thành công')
+      router.push('/test-doctor')
     } else {
-      toast.error(data.message || 'Cập nhật thông tin bác sĩ thất bại');
+      toast.error(data.message || 'Cập nhật thông tin bác sĩ thất bại')
       // Nếu cập nhật thất bại do bác sĩ có lịch hẹn, reset trạng thái
       if (data.message === 'Bác sĩ này đang có cuộc hẹn không thể chuyển trạng thái') {
-        setIsActive(true);
-        form.setValue('isActive', true);
+        setIsActive(true)
+        form.setValue('isActive', true)
       }
     }
-  };
+  }
 
   return (
     <DefaultLayout>
@@ -359,8 +359,8 @@ const EditDoctor = () => {
         <ConfirmModal
           isOpen={showConfirmModal}
           onClose={() => {
-            setShowConfirmModal(false);
-            setPendingStatus(null);
+            setShowConfirmModal(false)
+            setPendingStatus(null)
           }}
           onConfirm={handleConfirmStatusChange}
           title="Xác nhận thay đổi trạng thái"
@@ -368,7 +368,7 @@ const EditDoctor = () => {
         />
       </FormProvider>
     </DefaultLayout>
-  );
-};
+  )
+}
 
-export default EditDoctor;
+export default EditDoctor

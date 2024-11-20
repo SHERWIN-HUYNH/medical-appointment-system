@@ -1,30 +1,30 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import { FilePen, InfoIcon, TrashIcon, X } from 'lucide-react';
-import React, { useState } from 'react';
-import ReviewModal from './ReviewModal';
+'use client'
+import { Button } from '@/components/ui/button'
+import { FilePen, InfoIcon, TrashIcon, X } from 'lucide-react'
+import React, { useState } from 'react'
+import ReviewModal from './ReviewModal'
 
 // Define types for the status and medical record
 type Status = {
-  id: number;
-  label: string;
-};
+  id: number
+  label: string
+}
 
 type MedicalRecord = {
-  id: string;
-  patientName: string;
-  department: string;
-  time: string;
-  hour: string;
-  statusId: number;
-};
+  id: string
+  patientName: string
+  department: string
+  time: string
+  hour: string
+  statusId: number
+}
 
 // Array of statuses
 const statuses: Status[] = [
   { id: 1, label: 'Chưa khám' },
   { id: 2, label: 'Đã khám' },
   { id: 3, label: 'Đã hủy' },
-];
+]
 
 // Array of medical records
 const medicalRecordsData: MedicalRecord[] = [
@@ -60,15 +60,15 @@ const medicalRecordsData: MedicalRecord[] = [
     hour: '10:00 (Buổi Sáng)',
     statusId: 1, // Chưa khám
   },
-];
+]
 
 // Modal để in ra chi tiết phiếu khám bệnh
 const MedicalRecordDetail = ({
   record,
   onClose,
 }: {
-  record: MedicalRecord;
-  onClose: () => void;
+  record: MedicalRecord
+  onClose: () => void
 }) => (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div className="bg-white p-6 rounded-lg w-full max-w-lg">
@@ -98,15 +98,15 @@ const MedicalRecordDetail = ({
       </div>
     </div>
   </div>
-);
+)
 
 // Modal for confirmation of cancellation
 const ConfirmationModal = ({
   onConfirm,
   onCancel,
 }: {
-  onConfirm: () => void;
-  onCancel: () => void;
+  onConfirm: () => void
+  onCancel: () => void
 }) => (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div className="bg-white p-6 rounded-lg w-full max-w-sm">
@@ -122,42 +122,42 @@ const ConfirmationModal = ({
       </div>
     </div>
   </div>
-);
+)
 
 const MedicalRecord = () => {
-  const [selectedStatusId, setSelectedStatusId] = useState<number>(1);
-  const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>(null);
-  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
-  const [recordToCancel, setRecordToCancel] = useState<MedicalRecord | null>(null);
-  const [showReviewModal, setShowReviewModal] = useState<boolean>(false);
-  const [rating, setRating] = useState<number>(0);
-  const [comment, setComment] = useState<string>('');
+  const [selectedStatusId, setSelectedStatusId] = useState<number>(1)
+  const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>(null)
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false)
+  const [recordToCancel, setRecordToCancel] = useState<MedicalRecord | null>(null)
+  const [showReviewModal, setShowReviewModal] = useState<boolean>(false)
+  const [rating, setRating] = useState<number>(0)
+  const [comment, setComment] = useState<string>('')
 
   // Filter medical records based on selected status
   const filteredRecords = medicalRecordsData.filter(
     (record) => record.statusId === selectedStatusId,
-  );
+  )
 
   const handleCancelRecord = (record: MedicalRecord) => {
-    setRecordToCancel(record);
-    setShowConfirmation(true);
-  };
+    setRecordToCancel(record)
+    setShowConfirmation(true)
+  }
 
   const confirmCancelRecord = () => {
     if (recordToCancel) {
       // Cap nhat trang thai "Đã hủy" (3)
-      recordToCancel.statusId = 3;
-      setShowConfirmation(false);
-      setSelectedRecord(null);
-      alert('Phiếu khám đã được hủy.');
+      recordToCancel.statusId = 3
+      setShowConfirmation(false)
+      setSelectedRecord(null)
+      alert('Phiếu khám đã được hủy.')
     }
-  };
+  }
 
   const handleReview = () => {
-    console.log('Rating:', rating);
-    console.log('Comment:', comment);
-    setShowReviewModal(false);
-  };
+    console.log('Rating:', rating)
+    console.log('Comment:', comment)
+    setShowReviewModal(false)
+  }
 
   return (
     <div>
@@ -268,7 +268,7 @@ const MedicalRecord = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default MedicalRecord;
+export default MedicalRecord

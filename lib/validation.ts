@@ -1,8 +1,8 @@
-import { z } from 'zod';
+import { z } from 'zod'
 export const UserLogin = z.object({
   email: z.string().email('Invalid email address'),
   password: z.string(),
-});
+})
 export const UserFormValidation = z.object({
   name: z
     .string()
@@ -12,7 +12,7 @@ export const UserFormValidation = z.object({
   phone: z
     .string()
     .refine((phone) => /^\+\d{10,15}$/.test(phone), 'Invalid phone number'),
-});
+})
 export const RegisterFormValidation = z.object({
   name: z
     .string()
@@ -23,7 +23,7 @@ export const RegisterFormValidation = z.object({
     .string()
     .refine((phone) => /^\+\d{10,15}$/.test(phone), 'Invalid phone number'),
   // password: z.string().min(8, "Password must be at least 8 characters"),
-});
+})
 export const PatientFormValidation = z.object({
   name: z
     .string()
@@ -88,7 +88,7 @@ export const PatientFormValidation = z.object({
       message: 'You must consent to privacy in order to proceed',
     })
     .optional(),
-});
+})
 
 export const FacultyFormValidation = z.object({
   name: z
@@ -100,7 +100,7 @@ export const FacultyFormValidation = z.object({
     .min(1, "Description can't be empty")
     .max(500, 'Description must be at most 500 characters'),
   image: z.string().min(1, 'Vui lòng chọn ảnh chuyên khoa'),
-});
+})
 
 export const DoctorFormValidation = z.object({
   name: z.string().min(1, 'Tên không được để trống'),
@@ -110,7 +110,7 @@ export const DoctorFormValidation = z.object({
   description: z.string().min(1, 'Mô tả không được để trống'),
   isActive: z.boolean(),
   gender: z.boolean(),
-});
+})
 export const CreateAppointmentSchema = z.object({
   primaryPhysician: z.string().min(2, 'Select at least one doctor'),
   schedule: z.coerce.date(),
@@ -120,7 +120,7 @@ export const CreateAppointmentSchema = z.object({
     .max(500, 'Reason must be at most 500 characters'),
   note: z.string().optional(),
   cancellationReason: z.string().optional(),
-});
+})
 
 export const ScheduleAppointmentSchema = z.object({
   primaryPhysician: z.string().min(2, 'Select at least one doctor'),
@@ -128,7 +128,7 @@ export const ScheduleAppointmentSchema = z.object({
   reason: z.string().optional(),
   note: z.string().optional(),
   cancellationReason: z.string().optional(),
-});
+})
 
 export const CancelAppointmentSchema = z.object({
   primaryPhysician: z.string().min(2, 'Select at least one doctor'),
@@ -139,7 +139,7 @@ export const CancelAppointmentSchema = z.object({
     .string()
     .min(2, 'Reason must be at least 2 characters')
     .max(500, 'Reason must be at most 500 characters'),
-});
+})
 
 export const createService = z.object({
   name: z
@@ -153,14 +153,14 @@ export const createService = z.object({
   faculty: z
     .string()
     .refine((value) => value !== '', { message: 'Please select a faculty' }),
-});
+})
 export function getAppointmentSchema(type: string) {
   switch (type) {
     case 'create':
-      return CreateAppointmentSchema;
+      return CreateAppointmentSchema
     case 'cancel':
-      return CancelAppointmentSchema;
+      return CancelAppointmentSchema
     default:
-      return ScheduleAppointmentSchema;
+      return ScheduleAppointmentSchema
   }
 }

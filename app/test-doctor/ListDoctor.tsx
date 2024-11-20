@@ -1,34 +1,34 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import ModalDelete from '@/components/ModalDelete';
-import Pagination from '@/components/Pagination';
-import Table from '@/components/Table';
-import TableSearch from '@/components/TableSearch';
+'use client'
+import React, { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import ModalDelete from '@/components/ModalDelete'
+import Pagination from '@/components/Pagination'
+import Table from '@/components/Table'
+import TableSearch from '@/components/TableSearch'
 import {
   ArrowDownNarrowWide,
   CalendarRange,
   Pencil,
   SlidersHorizontal,
   Trash2,
-} from 'lucide-react';
-import Link from 'next/link';
-import { academicTitles } from '@/lib/data';
-import { toast } from 'sonner';
+} from 'lucide-react'
+import Link from 'next/link'
+import { academicTitles } from '@/lib/data'
+import { toast } from 'sonner'
 
 type Doctor = {
-  id: string;
-  name: string;
-  academicTitle: string;
-  image: string;
-  description: string;
-  facultyId: string;
-};
+  id: string
+  name: string
+  academicTitle: string
+  image: string
+  description: string
+  facultyId: string
+}
 
 type Faculty = {
-  id: string;
-  name: string;
-};
+  id: string
+  name: string
+}
 
 const columns = [
   {
@@ -66,66 +66,66 @@ const columns = [
     accessor: 'actions',
     className: 'w-[25%] text-left pl-16',
   },
-];
+]
 
 const ListDoctor = () => {
-  const [doctorData, setDoctorData] = useState<Doctor[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const [showModal, setShowModal] = useState(false);
-  const [doctorToDelete, setDoctorToDelete] = useState<Doctor | null>(null);
-  const [message, setMessage] = useState('');
-  const [fadeOut, setFadeOut] = useState(false);
-  const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
-  const [showFilter, setShowFilter] = useState(false);
-  const [showSort, setShowSort] = useState(false);
-  const [sortOption, setSortOption] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [facultyData, setFacultyData] = useState<Faculty[]>([]);
+  const [doctorData, setDoctorData] = useState<Doctor[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
+  const [showModal, setShowModal] = useState(false)
+  const [doctorToDelete, setDoctorToDelete] = useState<Doctor | null>(null)
+  const [message, setMessage] = useState('')
+  const [fadeOut, setFadeOut] = useState(false)
+  const [selectedFaculties, setSelectedFaculties] = useState<string[]>([])
+  const [showFilter, setShowFilter] = useState(false)
+  const [showSort, setShowSort] = useState(false)
+  const [sortOption, setSortOption] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
+  const [facultyData, setFacultyData] = useState<Faculty[]>([])
 
   useEffect(() => {
     const fetchDoctorData = async () => {
-      const response = await fetch(`/api/doctor`);
+      const response = await fetch(`/api/doctor`)
 
       if (response.ok) {
-        const data = await response.json();
-        setDoctorData(data);
+        const data = await response.json()
+        setDoctorData(data)
       }
-    };
+    }
 
     const fetchFacultyData = async () => {
-      const response = await fetch(`/api/faculty`);
+      const response = await fetch(`/api/faculty`)
       if (response.ok) {
-        const data = await response.json();
-        setFacultyData(data);
+        const data = await response.json()
+        setFacultyData(data)
       }
-    };
+    }
 
-    fetchDoctorData();
-    fetchFacultyData();
-  }, []);
+    fetchDoctorData()
+    fetchFacultyData()
+  }, [])
 
   const getFacultyName = (facultyId: string) => {
-    const faculty = facultyData.find((fac) => fac.id === facultyId);
-    return faculty ? faculty.name : 'Unknown Faculty';
-  };
+    const faculty = facultyData.find((fac) => fac.id === facultyId)
+    return faculty ? faculty.name : 'Unknown Faculty'
+  }
 
   //function lấy tên academic title
   const getAcademicTitleName = (titleId: string) => {
-    const title = academicTitles.find((title) => title.id === titleId);
-    return title ? title.name : titleId;
-  };
+    const title = academicTitles.find((title) => title.id === titleId)
+    return title ? title.name : titleId
+  }
 
   const showMessage = (msg: string) => {
-    setMessage(msg);
-    setFadeOut(false);
+    setMessage(msg)
+    setFadeOut(false)
     setTimeout(() => {
-      setFadeOut(true);
-    }, 2000);
-  };
+      setFadeOut(true)
+    }, 2000)
+  }
 
   const confirmDelete = async () => {
-    if (!doctorToDelete) return;
+    if (!doctorToDelete) return
 
     try {
       const response = await fetch(`/api/doctor`, {
@@ -134,90 +134,88 @@ const ListDoctor = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ doctor: doctorToDelete }),
-      });
+      })
 
       if (response.ok) {
         // Cập nhật state sau khi xóa thành công
         setDoctorData((prevData) =>
           prevData.filter((doctor) => doctor.id !== doctorToDelete.id),
-        );
-        toast.success(`Bác sĩ ${doctorToDelete.name} đã xóa thành công!`);
+        )
+        toast.success(`Bác sĩ ${doctorToDelete.name} đã xóa thành công!`)
       } else {
-        toast.error('Không thể xóa bác sĩ đang có lịch hẹn!');
+        toast.error('Không thể xóa bác sĩ đang có lịch hẹn!')
       }
     } catch (error) {
-      console.error('Error deleting doctor:', error);
-      showMessage('Đã xảy ra lỗi khi xóa bác sĩ!');
+      console.error('Error deleting doctor:', error)
+      showMessage('Đã xảy ra lỗi khi xóa bác sĩ!')
     } finally {
       // Reset trạng thái
-      setDoctorToDelete(null);
-      setShowModal(false);
+      setDoctorToDelete(null)
+      setShowModal(false)
     }
-  };
+  }
 
   const handleFacultyFilterChange = (facultyId: string) => {
     if (selectedFaculties.includes(facultyId)) {
-      setSelectedFaculties(selectedFaculties.filter((id) => id !== facultyId));
+      setSelectedFaculties(selectedFaculties.filter((id) => id !== facultyId))
     } else {
-      setSelectedFaculties([...selectedFaculties, facultyId]);
+      setSelectedFaculties([...selectedFaculties, facultyId])
     }
-    setCurrentPage(1);
-  };
+    setCurrentPage(1)
+  }
 
   const filteredDoctorData = doctorData.filter((doctor) => {
     const matchesFaculty =
-      selectedFaculties.length === 0 || selectedFaculties.includes(doctor.facultyId);
-    const matchesSearchTerm = doctor.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    return matchesFaculty && matchesSearchTerm;
-  });
+      selectedFaculties.length === 0 || selectedFaculties.includes(doctor.facultyId)
+    const matchesSearchTerm = doctor.name.toLowerCase().includes(searchTerm.toLowerCase())
+    return matchesFaculty && matchesSearchTerm
+  })
 
-  const totalPages = Math.ceil(filteredDoctorData.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredDoctorData.length / itemsPerPage)
 
   const displayedData = filteredDoctorData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
-  );
+  )
 
   // Xử lý sắp xếp
   const handleSortOptionChange = (option: string) => {
-    setSortOption(option);
-    let sortedData = [...doctorData];
+    setSortOption(option)
+    let sortedData = [...doctorData]
 
     const sortByName = (a: Doctor, b: Doctor) => {
       // Tách tên và họ
-      const [firstNameA, lastNameA] = a.name.split(' ').slice(-1);
-      const [firstNameB, lastNameB] = b.name.split(' ').slice(-1);
+      const [firstNameA, lastNameA] = a.name.split(' ').slice(-1)
+      const [firstNameB, lastNameB] = b.name.split(' ').slice(-1)
 
       // So sánh tên trước
       if (firstNameA !== firstNameB) {
-        return firstNameA.localeCompare(firstNameB);
+        return firstNameA.localeCompare(firstNameB)
       }
 
       // Nếu tên giống nhau, so sánh họ
-      return lastNameA.localeCompare(lastNameB);
-    };
-
-    if (option === 'A-Z') {
-      sortedData = sortedData.sort((a, b) => sortByName(a, b));
-    } else if (option === 'Z-A') {
-      sortedData = sortedData.sort((a, b) => sortByName(b, a));
+      return lastNameA.localeCompare(lastNameB)
     }
 
-    setDoctorData(sortedData);
-  };
+    if (option === 'A-Z') {
+      sortedData = sortedData.sort((a, b) => sortByName(a, b))
+    } else if (option === 'Z-A') {
+      sortedData = sortedData.sort((a, b) => sortByName(b, a))
+    }
+
+    setDoctorData(sortedData)
+  }
 
   // Tính toán số thứ tự dựa trên trang hiện tại
   const getSequentialNumber = (index: number) => {
-    return (currentPage - 1) * itemsPerPage + index + 1;
-  };
+    return (currentPage - 1) * itemsPerPage + index + 1
+  }
 
   // Thêm dữ liệu STT vào displayedData
   const dataWithIndex = displayedData.map((item, index) => ({
     ...item,
     index: getSequentialNumber(index),
-  }));
+  }))
 
   const renderRow = (item: Doctor & { index: number }) => (
     <tr
@@ -257,8 +255,8 @@ const ListDoctor = () => {
           <Button
             className="w-12 h-10 flex items-center justify-center rounded-full bg-purple-300"
             onClick={() => {
-              setDoctorToDelete(item);
-              setShowModal(true);
+              setDoctorToDelete(item)
+              setShowModal(true)
             }}
           >
             <Trash2 size={28} strokeWidth={3} color="white" />
@@ -266,7 +264,7 @@ const ListDoctor = () => {
         </div>
       </td>
     </tr>
-  );
+  )
 
   return (
     <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0 relative min-h-screen flex flex-col">
@@ -313,9 +311,9 @@ const ListDoctor = () => {
                 checked={selectedFaculties.length === 0}
                 onChange={() => {
                   if (selectedFaculties.length === 0) {
-                    setSelectedFaculties([]);
+                    setSelectedFaculties([])
                   } else {
-                    setSelectedFaculties(facultyData.map((f) => f.id));
+                    setSelectedFaculties(facultyData.map((f) => f.id))
                   }
                 }}
                 className="mr-2"
@@ -401,7 +399,7 @@ const ListDoctor = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ListDoctor;
+export default ListDoctor

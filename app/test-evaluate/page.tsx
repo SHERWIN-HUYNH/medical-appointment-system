@@ -1,6 +1,6 @@
-import DefaultLayout from '@/components/Layouts/defaultLayout';
-import React from 'react';
-import ListEvaluate from './listEvaluate';
+import DefaultLayout from '@/components/Layouts/defaultLayout'
+import React from 'react'
+import ListEvaluate from './listEvaluate'
 
 const Evaluate = () => {
   return (
@@ -9,7 +9,7 @@ const Evaluate = () => {
         <ListEvaluate />
       </DefaultLayout>
     </div>
-  );
-};
+  )
+}
 
-export default Evaluate;
+export default Evaluate

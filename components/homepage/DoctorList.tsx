@@ -1,20 +1,20 @@
-'use client';
+'use client'
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { Button } from '../../components/ui/button';
+import React, { useState } from 'react'
+import Image from 'next/image'
+import { Button } from '../../components/ui/button'
 
 type Doctor = {
-  name: string;
-  category: string;
-  image: string;
-  address: string;
-  phone: string;
-  year_of_experience: string;
-};
+  name: string
+  category: string
+  image: string
+  address: string
+  phone: string
+  year_of_experience: string
+}
 
 function DoctorList() {
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(false)
 
   const doctorList: Doctor[] = [
     {
@@ -65,16 +65,16 @@ function DoctorList() {
       phone: '',
       year_of_experience: '20 years',
     },
-  ];
+  ]
 
-  let displayedDoctors;
+  let displayedDoctors
 
   if (showAll) {
     // Nếu showAll là true, hiển thị tất cả bác sĩ
-    displayedDoctors = doctorList;
+    displayedDoctors = doctorList
   } else {
     // Nếu showAll là false, chỉ hiển thị 4 bác sĩ đầu tiên
-    displayedDoctors = doctorList.slice(0, 4);
+    displayedDoctors = doctorList.slice(0, 4)
   }
 
   return (
@@ -119,7 +119,7 @@ function DoctorList() {
         </Button>
       </div>
     </div>
-  );
+  )
 }
 
-export default DoctorList;
+export default DoctorList

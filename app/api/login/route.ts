@@ -1,22 +1,17 @@
-import { comparePassword } from '@/helpers/hash';
-import { signJwtAccessToken } from '@/lib/jwt';
-import prisma from '@/lib/prisma';
-import * as bcrypt from 'bcrypt';
-import { useSession } from 'next-auth/react';
-
+import { comparePassword } from '@/helpers/hash'
+import { signJwtAccessToken } from '@/lib/jwt'
+import prisma from '@/lib/prisma'
 interface RequestBody {
-  username: string;
-  password: string;
+  username: string
+  password: string
 }
 export async function POST(request: Request) {
-  const body: RequestBody = await request.json();
-
-  console.log('DATABASE LOG IN');
+  const body: RequestBody = await request.json()
   const user = await prisma.user.findFirst({
     where: {
       email: body.username,
     },
-  });
+  })
   if (!user) {
     throw new Response(
       JSON.stringify({
@@ -25,9 +20,9 @@ export async function POST(request: Request) {
       {
         status: 401,
       },
-    );
+    )
   }
-  const isPasswordCorrect = await comparePassword(body.password, user.password);
+  const isPasswordCorrect = await comparePassword(body.password, user.password)
 
   if (!isPasswordCorrect) {
     return new Response(
@@ -37,17 +32,18 @@ export async function POST(request: Request) {
       {
         status: 401,
       },
-    );
+    )
   }
   if (user) {
-    const { password, ...userWithoutPass } = user;
-    const accessToken = signJwtAccessToken(userWithoutPass);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPass } = user
+    const accessToken = signJwtAccessToken(userWithoutPass)
 
     const result = {
       ...userWithoutPass,
       accessToken,
-    };
-    return new Response(JSON.stringify(result));
+    }
+    return new Response(JSON.stringify(result))
   } else
     return new Response(
       JSON.stringify({
@@ -56,5 +52,5 @@ export async function POST(request: Request) {
       {
         status: 401,
       },
-    );
+    )
 }

@@ -6,7 +6,7 @@ export const academicTitles = [
   { id: 'acd05', name: 'Tiến sĩ' },
   { id: 'acd06', name: 'Phó Giáo sư' },
   { id: 'acd07', name: 'Giáo sư' },
-];
+]
 
 export const bills = [
   {
@@ -59,7 +59,7 @@ export const bills = [
     appointmentId: 'A12349',
     userId: 'U005',
   },
-];
+]
 
 export const userData = [
   {
@@ -102,4 +102,4 @@ export const userData = [
     email: 'hoangvane@example.com',
     roleName: 'Admin',
   },
-];
+]

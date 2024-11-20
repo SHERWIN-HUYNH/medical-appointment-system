@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import Link from 'next/link';
-import ClickOutside from '@/components/ClickOutside';
+import { useState } from 'react'
+import Link from 'next/link'
+import ClickOutside from '@/components/ClickOutside'
 
 const DropdownNotification = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [notifying, setNotifying] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [notifying, setNotifying] = useState(true)
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
       <li>
         <Link
           onClick={() => {
-            setNotifying(false);
-            setDropdownOpen(!dropdownOpen);
+            setNotifying(false)
+            setDropdownOpen(!dropdownOpen)
           }}
           href="#"
           className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke bg-gray hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
@@ -115,7 +115,7 @@ const DropdownNotification = () => {
         )}
       </li>
     </ClickOutside>
-  );
-};
+  )
+}
 
-export default DropdownNotification;
+export default DropdownNotification

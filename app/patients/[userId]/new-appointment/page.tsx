@@ -1,10 +1,10 @@
-import Image from 'next/image';
-import { getPatient } from '@/lib/action/patient.actions';
-import { AppointmentForm } from '@/components/forms/AppointmentForm';
-import React from 'react';
+import Image from 'next/image'
+import { getPatient } from '@/lib/action/patient.actions'
+import { AppointmentForm } from '@/components/forms/AppointmentForm'
+import React from 'react'
 const Appointment = async ({ params: { userId } }: SearchParamProps) => {
-  const patient = await getPatient(userId);
-  console.log('take patientId', patient?.$id);
+  const patient = await getPatient(userId)
+  console.log('take patientId', patient?.$id)
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
@@ -31,7 +31,7 @@ const Appointment = async ({ params: { userId } }: SearchParamProps) => {
         className="side-img max-w-[390px] bg-bottom"
       />
     </div>
-  );
-};
+  )
+}
 
-export default Appointment;
+export default Appointment

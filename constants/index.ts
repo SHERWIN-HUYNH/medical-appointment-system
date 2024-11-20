@@ -1,4 +1,4 @@
-export const GenderOptions = ['Male', 'Female', 'Other'];
+export const GenderOptions = ['Male', 'Female', 'Other']
 
 export const PatientFormDefaultValues = {
   firstName: '',
@@ -24,7 +24,7 @@ export const PatientFormDefaultValues = {
   treatmentConsent: false,
   disclosureConsent: false,
   privacyConsent: false,
-};
+}
 
 export const IdentificationTypes = [
   'Birth Certificate',
@@ -38,7 +38,7 @@ export const IdentificationTypes = [
   'State ID Card',
   'Student ID Card',
   'Voter ID Card',
-];
+]
 
 export const Doctors = [
   {
@@ -77,10 +77,10 @@ export const Doctors = [
     image: '/assets/images/dr-sharma.png',
     name: 'Hardik Sharma',
   },
-];
+]
 
 export const StatusIcon = {
   scheduled: '/assets/icons/check.svg',
   pending: '/assets/icons/pending.svg',
   cancelled: '/assets/icons/cancelled.svg',
-};
+}

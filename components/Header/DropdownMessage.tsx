@@ -1,19 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import ClickOutside from '@/components/ClickOutside';
+import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import ClickOutside from '@/components/ClickOutside'
 
 const DropdownMessage = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [notifying, setNotifying] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [notifying, setNotifying] = useState(true)
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
       <li className="relative">
         <Link
           onClick={() => {
-            setNotifying(false);
-            setDropdownOpen(!dropdownOpen);
+            setNotifying(false)
+            setDropdownOpen(!dropdownOpen)
           }}
           className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke bg-gray hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
           href="#"
@@ -204,7 +204,7 @@ const DropdownMessage = () => {
         {/* <!-- Dropdown End --> */}
       </li>
     </ClickOutside>
-  );
-};
+  )
+}
 
-export default DropdownMessage;
+export default DropdownMessage

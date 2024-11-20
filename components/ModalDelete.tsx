@@ -1,14 +1,14 @@
-import React from 'react';
+import React from 'react'
 
 type ModalProps = {
-  showModal: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  label: string; // Thêm prop này
-};
+  showModal: boolean
+  onClose: () => void
+  onConfirm: () => void
+  label: string // Thêm prop này
+}
 
 const ModalDelete = ({ showModal, onClose, onConfirm, label }: ModalProps) => {
-  if (!showModal) return null; // Không render modal nếu không cần thiết
+  if (!showModal) return null // Không render modal nếu không cần thiết
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -32,7 +32,7 @@ const ModalDelete = ({ showModal, onClose, onConfirm, label }: ModalProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ModalDelete;
+export default ModalDelete

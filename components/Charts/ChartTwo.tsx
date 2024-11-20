@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import { ApexOptions } from 'apexcharts';
-import React from 'react';
-import dynamic from 'next/dynamic';
+import { ApexOptions } from 'apexcharts'
+import React from 'react'
+import dynamic from 'next/dynamic'
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
-});
+})
 
 const options: ApexOptions = {
   colors: ['#3C50E0', '#80CAEE'],
@@ -79,7 +79,7 @@ const options: ApexOptions = {
   fill: {
     opacity: 1,
   },
-};
+}
 
 const ChartTwo: React.FC = () => {
   const series = [
@@ -91,7 +91,7 @@ const ChartTwo: React.FC = () => {
       name: 'Lịch hẹn 2023',
       data: [13, 23, 20, 8, 13, 27, 15, 20, 23, 19, 17, 27],
     },
-  ];
+  ]
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
@@ -151,7 +151,7 @@ const ChartTwo: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ChartTwo;
+export default ChartTwo

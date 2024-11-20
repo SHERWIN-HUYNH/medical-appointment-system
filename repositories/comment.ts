@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-import { Comment } from '@/types/interface';
+import { PrismaClient } from '@prisma/client'
+import { Comment } from '@/types/interface'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export class CommentRespository {
   static async getListComments() {
@@ -15,19 +15,19 @@ export class CommentRespository {
             select: { name: true },
           },
         },
-      });
+      })
       const formattedComments = comments.map((comment) => ({
         ...comment,
         doctorName: comment.doctor?.name || 'Không xác định',
         userName: comment.user?.name || 'Không xác định',
-      }));
+      }))
 
-      return formattedComments;
+      return formattedComments
     } catch (error) {
-      console.error('Lỗi khi truy xuất đánh giá của bệnh nhân: ', error);
-      throw error;
+      console.error('Lỗi khi truy xuất đánh giá của bệnh nhân: ', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
   static async getCommentsByUserDoctor(name: string) {
@@ -45,11 +45,11 @@ export class CommentRespository {
             },
           },
         },
-      });
-      return comments;
+      })
+      return comments
     } catch (error) {
-      console.error('Lỗi truy xuất đánh gia theo tên bác sĩ', error);
-      throw error;
+      console.error('Lỗi truy xuất đánh gia theo tên bác sĩ', error)
+      throw error
     }
   }
   static async getCommentById(id: string) {
@@ -58,13 +58,13 @@ export class CommentRespository {
         where: {
           id: id,
         },
-      });
-      return comment;
+      })
+      return comment
     } catch (error) {
-      console.error('Lỗi khi truy xuất đánh giá: ', error);
-      throw error;
+      console.error('Lỗi khi truy xuất đánh giá: ', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
   static async deleteComment({ commentData }: { commentData: Comment }) {
@@ -73,11 +73,11 @@ export class CommentRespository {
         where: {
           id: commentData.id,
         },
-      });
-      return deletedComment;
+      })
+      return deletedComment
     } catch (error) {
-      console.error('Lỗi khi xóa đánh giá:', error);
-      throw new Error('Không thể xóa đánh giá với id đã cho');
+      console.error('Lỗi khi xóa đánh giá:', error)
+      throw new Error('Không thể xóa đánh giá với id đã cho')
     }
   }
 }

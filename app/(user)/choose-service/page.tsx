@@ -1,57 +1,57 @@
-'use client';
-import UserLayout from '@/components/Layouts/userLayout';
-import { Button } from '@/components/ui/button';
-import { Service } from '@prisma/client';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { useAppointmentContext } from '@/context/AppointmentContext';
-import Link from 'next/link';
+'use client'
+import UserLayout from '@/components/Layouts/userLayout'
+import { Button } from '@/components/ui/button'
+import { Service } from '@prisma/client'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useAppointmentContext } from '@/context/AppointmentContext'
+import Link from 'next/link'
 
 const ChooseService = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [services, setServices] = useState<Service[]>([]);
-  const router = useRouter();
-  const { data } = useAppointmentContext();
-  const searchParams = useSearchParams();
-  const doctorName = searchParams.get('doctorName');
-  const facultyName = searchParams.get('facultyName');
-  const doctorId = data.doctorId;
-  const facultyId = data.facultyId;
-  const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('')
+  const [services, setServices] = useState<Service[]>([])
+  const router = useRouter()
+  const { data } = useAppointmentContext()
+  const searchParams = useSearchParams()
+  const doctorName = searchParams.get('doctorName')
+  const facultyName = searchParams.get('facultyName')
+  const doctorId = data.doctorId
+  const facultyId = data.facultyId
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetchServices = async () => {
       if (!facultyId) {
-        router.push('/choose-faculty');
-        return;
+        router.push('/choose-faculty')
+        return
       }
 
       try {
-        setIsLoading(true);
-        const response = await fetch(`/api/service/faculty/${facultyId}`);
-        const serviceData = await response.json();
-        console.log('Response data:', serviceData);
+        setIsLoading(true)
+        const response = await fetch(`/api/service/faculty/${facultyId}`)
+        const serviceData = await response.json()
+        console.log('Response data:', serviceData)
 
         if (Array.isArray(serviceData)) {
-          setServices(serviceData);
+          setServices(serviceData)
         } else {
-          console.error('API returned invalid data:', serviceData);
+          console.error('API returned invalid data:', serviceData)
         }
       } catch (error) {
-        console.error('Error fetching services:', error);
+        console.error('Error fetching services:', error)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
+    }
 
-    fetchServices();
-  }, [facultyId]);
+    fetchServices()
+  }, [facultyId])
 
   const filteredServices = services.filter((service) =>
     String(service.name || '')
       .toLowerCase()
       .includes(searchQuery.toLowerCase()),
-  );
+  )
 
   return (
     <UserLayout>
@@ -221,7 +221,7 @@ const ChooseService = () => {
         </main>
       </section>
     </UserLayout>
-  );
-};
+  )
+}
 
-export default ChooseService;
+export default ChooseService

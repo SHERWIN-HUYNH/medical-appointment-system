@@ -1,26 +1,26 @@
-import { bills, userData } from '@/lib/data';
+import { bills, userData } from '@/lib/data'
 import {
   CircleDollarSign,
   CreditCard,
   MapPinHouse,
   ScrollText,
   UserRoundPen,
-} from 'lucide-react';
-import React from 'react';
+} from 'lucide-react'
+import React from 'react'
 
 const PaymentHistory = () => {
   // Hàm tìm tên user từ userId
   const getUserName = (userId: string) => {
     // Tìm đối tượng chuyên khoa có id khớp với userId
-    const user = userData.find((u) => u.id === userId);
+    const user = userData.find((u) => u.id === userId)
 
     // Kiểm tra nếu user tồn tại
     if (user) {
-      return user.name; // Trả về tên của người dùng nếu tìm thấy
+      return user.name // Trả về tên của người dùng nếu tìm thấy
     } else {
-      return 'NULL'; // Trả về "NULL" nếu không tìm thấy người dùng
+      return 'NULL' // Trả về "NULL" nếu không tìm thấy người dùng
     }
-  };
+  }
   return (
     <div>
       <div className="mt-5">
@@ -71,7 +71,7 @@ const PaymentHistory = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PaymentHistory;
+export default PaymentHistory

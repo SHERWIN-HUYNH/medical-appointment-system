@@ -1,13 +1,13 @@
-import Image from 'next/image';
-import { redirect } from 'next/navigation';
-import * as Sentry from '@sentry/nextjs';
-import { getPatient, getUser } from '@/lib/action/patient.actions';
-import RegisterForm from '@/components/forms/DeclarationForm';
+import Image from 'next/image'
+import { redirect } from 'next/navigation'
+import * as Sentry from '@sentry/nextjs'
+import { getPatient, getUser } from '@/lib/action/patient.actions'
+import RegisterForm from '@/components/forms/DeclarationForm'
 
 const Register = async ({ params: { userId } }: SearchParamProps) => {
-  const user = await getUser(userId);
-  const patient = await getPatient(userId);
-  if (patient) redirect(`/patients/${userId}/new-appointment`);
+  const user = await getUser(userId)
+  const patient = await getPatient(userId)
+  if (patient) redirect(`/patients/${userId}/new-appointment`)
 
   return (
     <div className="flex h-screen max-h-screen">
@@ -35,7 +35,7 @@ const Register = async ({ params: { userId } }: SearchParamProps) => {
         className="side-img max-w-[390px]"
       />
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register

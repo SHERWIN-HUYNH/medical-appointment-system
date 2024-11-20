@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import React from 'react'
 
 interface SwitcherToggleProps {
-  enabled: boolean;
-  onToggle: (value: boolean) => void;
+  enabled: boolean
+  onToggle: (value: boolean) => void
 }
 
 const SwitcherToggle = ({ enabled, onToggle }: SwitcherToggleProps) => {
@@ -16,7 +16,7 @@ const SwitcherToggle = ({ enabled, onToggle }: SwitcherToggleProps) => {
             className="sr-only"
             checked={enabled} // Set the checked state based on the enabled prop
             onChange={() => {
-              onToggle(!enabled); // Call the onToggle function with the new value
+              onToggle(!enabled) // Call the onToggle function with the new value
             }}
           />
           <div className="block h-8 w-14 rounded-full bg-meta-9 dark:bg-[#5A616B]"></div>
@@ -28,7 +28,7 @@ const SwitcherToggle = ({ enabled, onToggle }: SwitcherToggleProps) => {
         </div>
       </label>
     </div>
-  );
-};
+  )
+}
 
-export default SwitcherToggle;
+export default SwitcherToggle

@@ -1,18 +1,18 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import React from 'react'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 
 interface ReviewModalProps {
-  rating: number;
-  setRating: (rating: number) => void;
-  comment: string;
-  setComment: (comment: string) => void;
-  onSubmit: () => void;
-  onClose: () => void;
+  rating: number
+  setRating: (rating: number) => void
+  comment: string
+  setComment: (comment: string) => void
+  onSubmit: () => void
+  onClose: () => void
 }
 
 const ReviewModal = (props: ReviewModalProps) => {
-  const { rating, setRating, comment, setComment, onSubmit, onClose } = props;
+  const { rating, setRating, comment, setComment, onSubmit, onClose } = props
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -47,7 +47,7 @@ const ReviewModal = (props: ReviewModalProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ReviewModal;
+export default ReviewModal

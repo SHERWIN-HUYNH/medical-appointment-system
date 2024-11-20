@@ -1,10 +1,10 @@
-'use client';
+'use client'
 
-import UserLayout from '@/components/Layouts/userLayout';
-import { Button } from '@/components/ui/button';
-import { useSession } from 'next-auth/react';
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import UserLayout from '@/components/Layouts/userLayout'
+import { Button } from '@/components/ui/button'
+import { useSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   FaUser,
   FaBirthdayCake,
@@ -16,32 +16,32 @@ import {
   FaArrowRight,
   FaArrowLeft,
   FaPlus,
-} from 'react-icons/fa';
-import { toast } from 'sonner';
-import Modal from '@/components/Modal';
-import Link from 'next/link';
+} from 'react-icons/fa'
+import { toast } from 'sonner'
+import Modal from '@/components/Modal'
+import Link from 'next/link'
 
 interface Profile {
-  id: string;
-  name: string;
-  birthDate?: Date;
-  gender: 'FEMALE' | 'MALE';
-  email: string;
-  phone: string;
-  allergies?: string;
-  identificationType: string;
-  identificationNumber: string;
-  identificationDocumentUrl: string;
-  pastMedicalHistory: string;
+  id: string
+  name: string
+  birthDate?: Date
+  gender: 'FEMALE' | 'MALE'
+  email: string
+  phone: string
+  allergies?: string
+  identificationType: string
+  identificationNumber: string
+  identificationDocumentUrl: string
+  pastMedicalHistory: string
 }
 
 const ChooseProfile: React.FC = () => {
-  const [selectedProfile, setSelectedProfile] = useState<string>('');
-  const [profiles, setProfiles] = useState<Profile[]>([]);
-  const { data: session } = useSession();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [profileToDelete, setProfileToDelete] = useState<string | null>(null);
-  const router = useRouter();
+  const [selectedProfile, setSelectedProfile] = useState<string>('')
+  const [profiles, setProfiles] = useState<Profile[]>([])
+  const { data: session } = useSession()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [profileToDelete, setProfileToDelete] = useState<string | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -49,39 +49,39 @@ const ChooseProfile: React.FC = () => {
         const response = await fetch(`/api/profile/${session?.user?.id}`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
-        });
-        if (!response.ok) throw new Error('Lỗi khi lấy dữ liệu hồ sơ');
-        const data = await response.json();
-        setProfiles(data);
+        })
+        if (!response.ok) throw new Error('Lỗi khi lấy dữ liệu hồ sơ')
+        const data = await response.json()
+        setProfiles(data)
       } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu hồ sơ:', error);
+        console.error('Lỗi khi lấy dữ liệu hồ sơ:', error)
       }
-    };
-    if (session?.user?.id) fetchProfiles();
-  }, [session]);
+    }
+    if (session?.user?.id) fetchProfiles()
+  }, [session])
 
   const handleDeleteProfile = async () => {
-    if (!profileToDelete) return;
+    if (!profileToDelete) return
     try {
       const response = await fetch(`/api/profile/${session?.user?.id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ profileValues: { id: profileToDelete } }),
-      });
-      if (!response.ok) throw new Error();
-      setProfiles((prev) => prev.filter((p) => p.id !== profileToDelete));
-      toast.success('Xóa hồ sơ thành công');
+      })
+      if (!response.ok) throw new Error()
+      setProfiles((prev) => prev.filter((p) => p.id !== profileToDelete))
+      toast.success('Xóa hồ sơ thành công')
     } catch {
-      toast.error('Lỗi khi xóa hồ sơ');
+      toast.error('Lỗi khi xóa hồ sơ')
     } finally {
-      setIsModalOpen(false);
-      setProfileToDelete(null);
+      setIsModalOpen(false)
+      setProfileToDelete(null)
     }
-  };
+  }
 
   const handleProfileClick = (profileId: string) => {
-    setSelectedProfile((prev) => (prev === profileId ? '' : profileId));
-  };
+    setSelectedProfile((prev) => (prev === profileId ? '' : profileId))
+  }
 
   return (
     <UserLayout>
@@ -143,8 +143,8 @@ const ChooseProfile: React.FC = () => {
                       <Button
                         className="flex items-center text-xs bg-red-50 text-red-400 py-1 px-4 rounded hover:bg-red-400 hover:text-white transition"
                         onClick={() => {
-                          setProfileToDelete(profile.id);
-                          setIsModalOpen(true);
+                          setProfileToDelete(profile.id)
+                          setIsModalOpen(true)
                         }}
                       >
                         <FaTrash className="mr-2" />
@@ -215,7 +215,7 @@ const ChooseProfile: React.FC = () => {
         message="Bạn có chắc chắn muốn xóa hồ sơ này không?"
       />
     </UserLayout>
-  );
-};
+  )
+}
 
-export default ChooseProfile;
+export default ChooseProfile

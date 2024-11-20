@@ -1,36 +1,36 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { Form, FormControl } from '@/components/ui/form';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { SelectItem } from '@/components/ui/select';
+import { Form, FormControl } from '@/components/ui/form'
+import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { SelectItem } from '@/components/ui/select'
 import {
   Doctors,
   GenderOptions,
   IdentificationTypes,
   PatientFormDefaultValues,
-} from '@/constants';
+} from '@/constants'
 
-import { PatientFormValidation } from '@/lib/validation';
+import { PatientFormValidation } from '@/lib/validation'
 
-import 'react-datepicker/dist/react-datepicker.css';
-import 'react-phone-number-input/style.css';
-import CustomFormField, { FormFieldType } from '../CustomFormField';
+import 'react-datepicker/dist/react-datepicker.css'
+import 'react-phone-number-input/style.css'
+import CustomFormField, { FormFieldType } from '../CustomFormField'
 
-import SubmitButton from '../SubmitButton';
-import { registerPatient } from '@/lib/action/patient.actions';
-import { FileUploader } from '../FileUploader';
+import SubmitButton from '../SubmitButton'
+import { registerPatient } from '@/lib/action/patient.actions'
+import { FileUploader } from '../FileUploader'
 
 const RegisterForm = ({ user }: { user: User }) => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof PatientFormValidation>>({
     resolver: zodResolver(PatientFormValidation),
@@ -40,7 +40,7 @@ const RegisterForm = ({ user }: { user: User }) => {
       // email: user.email,
       // phone: user.phone,
     },
-  });
+  })
 
   const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     // setIsLoading(true);
@@ -74,7 +74,7 @@ const RegisterForm = ({ user }: { user: User }) => {
     //   console.log(error);
     // }
     // setIsLoading(false);
-  };
+  }
 
   return (
     <Form {...form}>
@@ -355,7 +355,7 @@ const RegisterForm = ({ user }: { user: User }) => {
         <SubmitButton isLoading={isLoading}>Submit and Continue</SubmitButton>
       </form>
     </Form>
-  );
-};
+  )
+}
 
-export default RegisterForm;
+export default RegisterForm
