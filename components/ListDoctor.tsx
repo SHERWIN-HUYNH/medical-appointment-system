@@ -149,7 +149,7 @@ const ListDoctor = () => {
         <div className="max-w-[300px] truncate" title={row.original.description}>
           {row.original.description}
         </div>
-      )
+      ),
     },
     {
       header: 'Thao tác',

@@ -11,7 +11,7 @@ export class ServiceRepository {
       const services = await prisma.service.findUnique({
         where: {
           id: serviceId,
-          isDeleted: false
+          isDeleted: false,
         },
       })
       return services
@@ -28,7 +28,7 @@ export class ServiceRepository {
       const services = await prisma.service.findMany({
         where: {
           facultyId: facultyId,
-          isDeleted: false
+          isDeleted: false,
         },
         include: {
           faculty: true,
@@ -85,9 +85,10 @@ export class ServiceRepository {
   }
   static async deleteService(serviceId: string) {
     // Kiểm tra lịch hẹn pending bằng hàm getAppointmentByServiceId
-    const pendingAppointments = await AppointmentRepository.getAppointmentByServiceId(serviceId);
+    const pendingAppointments =
+      await AppointmentRepository.getAppointmentByServiceId(serviceId)
     if (pendingAppointments.length > 0) {
-      throw new Error('Dịch vụ đang có lịch hẹn đang chờ xử lý');
+      throw new Error('Dịch vụ đang có lịch hẹn đang chờ xử lý')
     }
 
     const result = await prisma.$transaction(async (tx) => {
@@ -99,7 +100,7 @@ export class ServiceRepository {
             status: 'PENDING',
           },
         },
-      });
+      })
 
       // Soft delete service bằng cách cập nhật isDeleted = true
       const deletedService = await tx.service.update({
@@ -107,13 +108,13 @@ export class ServiceRepository {
           id: serviceId,
         },
         data: {
-          isDeleted: true
-        }
-      });
-      return deletedService;
-    });
+          isDeleted: true,
+        },
+      })
+      return deletedService
+    })
 
-    await prisma.$disconnect();
-    return result;
+    await prisma.$disconnect()
+    return result
   }
 }

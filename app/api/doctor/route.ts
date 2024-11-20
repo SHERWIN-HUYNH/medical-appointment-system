@@ -1,4 +1,9 @@
-import { badRequestResponse, forbiddenResponse, notFoundResponse, successResponse } from '@/helpers/response'
+import {
+  badRequestResponse,
+  forbiddenResponse,
+  notFoundResponse,
+  successResponse,
+} from '@/helpers/response'
 import { DoctorRespository } from '@/repositories/doctor'
 
 export async function GET() {
@@ -43,13 +48,13 @@ export async function PUT(req: Request) {
 // Xử lý DELETE request - Xóa bác sĩ theo ID
 export async function DELETE(req: Request) {
   try {
-    const { id } = await req.json();
-    const deletedDoctor = await DoctorRespository.deleteDoctor(id);
-    return successResponse(deletedDoctor);
+    const { id } = await req.json()
+    const deletedDoctor = await DoctorRespository.deleteDoctor(id)
+    return successResponse(deletedDoctor)
   } catch (error) {
     if (error instanceof Error) {
-      return forbiddenResponse(error.message);
+      return forbiddenResponse(error.message)
     }
-    return badRequestResponse('Xóa bác sĩ thất bại');
+    return badRequestResponse('Xóa bác sĩ thất bại')
   }
 }

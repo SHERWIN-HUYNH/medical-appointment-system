@@ -6,7 +6,7 @@ import { Pencil, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { ColumnDef} from '@tanstack/react-table'
+import { ColumnDef } from '@tanstack/react-table'
 import { formatPrice } from '@/helpers/formatCurrency'
 
 type Service = {
@@ -93,14 +93,14 @@ const ListService = () => {
         const a = rowA.original.name.toLowerCase()
         const b = rowB.original.name.toLowerCase()
         return a < b ? -1 : a > b ? 1 : 0
-      }
+      },
     },
     {
       accessorKey: 'price',
       header: 'Giá dịch vụ',
       cell: ({ row }) => formatPrice(row.original.price),
       enableSorting: true,
-      sortingFn: (rowA, rowB) => rowA.original.price - rowB.original.price
+      sortingFn: (rowA, rowB) => rowA.original.price - rowB.original.price,
     },
     {
       accessorKey: 'facultyId',
@@ -111,7 +111,7 @@ const ListService = () => {
         const a = getFacultyName(rowA.original.facultyId).toLowerCase()
         const b = getFacultyName(rowB.original.facultyId).toLowerCase()
         return a < b ? -1 : a > b ? 1 : 0
-      }
+      },
     },
     {
       accessorKey: 'description',
@@ -155,16 +155,16 @@ const ListService = () => {
       </div>
 
       <div className="flex-1 overflow-x-auto w-full">
-        <DataTable 
-          columns={columns} 
-          data={serviceData} 
+        <DataTable
+          columns={columns}
+          data={serviceData}
           searchKey="name"
           filterOptions={{
-            key: "facultyId",
-            options: facultyData.map(faculty => ({
+            key: 'facultyId',
+            options: facultyData.map((faculty) => ({
               label: faculty.name,
-              value: faculty.id
-            }))
+              value: faculty.id,
+            })),
           }}
         />
       </div>

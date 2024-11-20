@@ -44,8 +44,8 @@ const ListFaculty = () => {
         body: JSON.stringify({ id: facultyToDelete.id }),
       })
       if (response.ok) {
-        setFacultyData((prevData) => 
-          prevData.filter((faculty) => faculty.id !== facultyToDelete.id)
+        setFacultyData((prevData) =>
+          prevData.filter((faculty) => faculty.id !== facultyToDelete.id),
         )
         toast.success(`Chuyên khoa ${facultyToDelete.name} đã xóa thành công!`)
       } else {

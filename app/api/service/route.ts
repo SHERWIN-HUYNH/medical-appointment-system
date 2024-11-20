@@ -28,13 +28,13 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const { id } = await req.json();
-    const deletedService = await ServiceRepository.deleteService(id);
-    return successResponse(deletedService);
+    const { id } = await req.json()
+    const deletedService = await ServiceRepository.deleteService(id)
+    return successResponse(deletedService)
   } catch (error) {
     if (error instanceof Error) {
-      return forbiddenResponse(error.message);
+      return forbiddenResponse(error.message)
     }
-    return badRequestResponse('Xóa dịch vụ thất bại');
+    return badRequestResponse('Xóa dịch vụ thất bại')
   }
 }

@@ -105,22 +105,22 @@ export function DataTable<TData, TValue>({
                 <SelectTrigger className="w-[180px] border-slate-500 focus-visible:ring-0 focus:ring-0">
                   <SelectValue placeholder="Chuyên khoa" />
                 </SelectTrigger>
-                <SelectContent className='border-slate-500'>
+                <SelectContent className="border-slate-500">
+                  <SelectItem
+                    value="all"
+                    className="bg-white hover:bg-primary hover:text-white text-slate-700 cursor-pointer transition-all duration-100"
+                  >
+                    Tất cả chuyên khoa
+                  </SelectItem>
+                  {filterOptions.options.map((option) => (
                     <SelectItem
-                      value="all"
-                      className='bg-white hover:bg-primary hover:text-white text-slate-700 cursor-pointer transition-all duration-100'
+                      key={option.value}
+                      value={option.value}
+                      className="bg-white hover:bg-primary hover:text-white text-slate-700 cursor-pointer transition-all duration-100"
                     >
-                      Tất cả chuyên khoa
+                      {option.label}
                     </SelectItem>
-                    {filterOptions.options.map((option) => (
-                      <SelectItem
-                        key={option.value}
-                        value={option.value}
-                        className='bg-white hover:bg-primary hover:text-white text-slate-700 cursor-pointer transition-all duration-100'
-                      >
-                        {option.label}
-                      </SelectItem>
-                    ))}
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -187,10 +187,7 @@ export function DataTable<TData, TValue>({
                     )}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell 
-                        key={cell.id} 
-                        className="px-4 py-3 max-w-[200px]"
-                      >
+                      <TableCell key={cell.id} className="px-4 py-3 max-w-[200px]">
                         <div className="truncate">
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </div>

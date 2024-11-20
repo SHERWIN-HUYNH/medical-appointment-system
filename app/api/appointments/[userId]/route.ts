@@ -10,17 +10,18 @@ export async function GET(req: Request, { params }: { params: { userId: string }
   try {
     // First get all profiles for this user
     const profiles = await ProfileRespository.getListProfileByUserId(params.userId)
-    
+
     if (!profiles || profiles.length === 0) {
       return notFoundResponse('Không tìm thấy hồ sơ bệnh nhân')
     }
 
     // Get appointments for all profiles
-    const profileIds = profiles.map(profile => profile.id)
+    const profileIds = profiles.map((profile) => profile.id)
     const allAppointments = []
-    
+
     for (const profileId of profileIds) {
-      const appointments = await AppointmentRepository.getAppointmentsByProfileId(profileId)
+      const appointments =
+        await AppointmentRepository.getAppointmentsByProfileId(profileId)
       allAppointments.push(...appointments)
     }
 
