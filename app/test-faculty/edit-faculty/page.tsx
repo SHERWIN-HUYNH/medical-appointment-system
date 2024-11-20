@@ -11,6 +11,7 @@ import { z } from 'zod'
 import { toast } from 'sonner'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Label } from '@/components/ui/label'
+import Image from 'next/image'
 
 const EditFaculty = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
@@ -154,12 +155,14 @@ const EditFaculty = () => {
                   </div>
                   {imagePreview && (
                     <div className="mt-4 flex rounded-lg">
-                      <img
-                        src={`/assets/icons/${imagePreview}`}
-                        alt="Image Preview"
-                        className="w-30 h-30 object-cover bg-slate-300"
-                        style={{ maxWidth: '200px', maxHeight: '200px' }}
-                      />
+                      <div className="relative w-[100px] h-[100px]">
+                        <Image
+                          src={`/assets/icons/${imagePreview}`}
+                          alt="Image Preview"
+                          fill
+                          className="object-cover bg-slate-300 rounded-lg"
+                        />
+                      </div>
                     </div>
                   )}
                 </div>

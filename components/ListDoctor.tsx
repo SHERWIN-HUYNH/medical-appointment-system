@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { academicTitles } from '@/lib/data'
 import { toast } from 'sonner'
 import { ColumnDef } from '@tanstack/react-table'
+import Image from 'next/image'
 
 type Doctor = {
   id: string
@@ -132,11 +133,12 @@ const ListDoctor = () => {
       header: 'Hình ảnh',
       enableSorting: false,
       cell: ({ row }) => (
-        <div className="w-[80px] h-[80px]">
-          <img
+        <div className="relative w-[80px] h-[80px]">
+          <Image
             src={`/assets/doctor/${row.original.image}`}
             alt={row.original.name}
-            className="w-full h-full object-cover rounded"
+            fill
+            className="object-cover rounded"
           />
         </div>
       ),

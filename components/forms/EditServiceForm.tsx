@@ -1,7 +1,7 @@
 'use client'
 import { createService } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { Button } from '../ui/button'
@@ -41,7 +41,7 @@ const EditServiceForm = () => {
     }
   }
 
-  const fetchServiceData = async () => {
+  const fetchServiceData = useCallback(async () => {
     const response = await fetch(`/api/service/${id}`)
     if (response.ok) {
       const service = await response.json()
@@ -55,14 +55,14 @@ const EditServiceForm = () => {
       const message = await response.json()
       toast.error(message.error)
     }
-  }
+  }, [id, form])
 
   useEffect(() => {
     fetchFacultyData()
     if (id) {
       fetchServiceData()
     }
-  }, [id])
+  }, [id, fetchServiceData])
 
   const onSubmit = async (values: z.infer<typeof createService>) => {
     try {

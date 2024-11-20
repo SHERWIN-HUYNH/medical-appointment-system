@@ -10,12 +10,13 @@ import { DoctorFormValidation } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Faculty } from '@prisma/client'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import ConfirmModal from '@/components/ConfirmModal'
+import Image from 'next/image'
 
 const EditDoctor = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([])
@@ -63,7 +64,7 @@ const EditDoctor = () => {
     return title?.id || ''
   }
 
-  const fetchDoctorData = async () => {
+  const fetchDoctorData = useCallback(async () => {
     const response = await fetch(`/api/doctor/${id}`)
     if (response.ok) {
       const doctor = await response.json()
@@ -81,14 +82,14 @@ const EditDoctor = () => {
       setFileName(doctor.image || '')
       setGender(doctor.gender)
     }
-  }
+  }, [id, getAcademicTitleId])
 
   useEffect(() => {
     fetchFacultyData()
     if (id) {
       fetchDoctorData()
     }
-  }, [id])
+  }, [id, fetchDoctorData])
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -331,14 +332,14 @@ const EditDoctor = () => {
                         onChange={handleImageChange}
                       />
                     </div>
-                    {/* Preview ảnh - tách riêng khỏi container h-[90px] */}
+                    {/* Preview ảnh */}
                     {imagePreview && (
-                      <div>
-                        <img
+                      <div className="relative w-[100px] h-[100px]">
+                        <Image
                           src={`/assets/doctor/${imagePreview}`}
                           alt="Image Preview"
-                          className="w-30 h-30 object-cover"
-                          style={{ maxWidth: '200px', maxHeight: '200px' }}
+                          fill
+                          className="object-cover rounded-lg"
                         />
                       </div>
                     )}

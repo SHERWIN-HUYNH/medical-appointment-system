@@ -38,8 +38,11 @@ const ChooseDoctor = () => {
   useEffect(() => {
     if (!facultyId) {
       router.push('/choose-faculty')
-      return
     }
+  }, [facultyId, router])
+
+  useEffect(() => {
+    if (!facultyId) return
 
     const fetchDoctors = async () => {
       try {
