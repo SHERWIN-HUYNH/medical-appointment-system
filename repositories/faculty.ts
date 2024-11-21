@@ -1,5 +1,4 @@
-import { Faculty } from '@/types/interface'
-import { PrismaClient } from '@prisma/client'
+import { Faculty, PrismaClient } from '@prisma/client'
 import { DoctorRespository } from './doctor'
 import { ServiceRepository } from './service'
 
@@ -64,32 +63,53 @@ export class FacultyRepository {
     return updatedFaculty
   }
 
-  static async deleteFaculty(facultyData: Faculty) {
-    // 1. Lấy danh sách services của faculty sử dụng getServicesByFacultyId
-    const services = await ServiceRepository.getServicesByFacultyId(facultyData.id)
-
-    // 2. Lấy danh sách bác sĩ của chuyên khoa
-    const doctors = await DoctorRespository.getDoctorsByFaculty(facultyData.id)
-
-    // 3. Tiến hành xóa
-    return await prisma.$transaction(async (tx) => {
-      // Xóa từng service sử dụng hàm deleteService
-      for (const service of services) {
-        await ServiceRepository.deleteService(service.id)
+  static async deleteFaculty(facultyId: string) {
+    try {
+      if (!facultyId) {
+        throw new Error('Faculty ID is undefined');
       }
+      const services = await ServiceRepository.getServicesByFacultyId(facultyId);
+      const doctors = await DoctorRespository.getDoctorsByFaculty(facultyId);
 
-      // Xóa từng bác sĩ
-      for (const doctor of doctors) {
-        await DoctorRespository.deleteDoctor(doctor.id)
-      }
+      return await prisma.$transaction(async (tx) => {
+        for (const service of services) {
+          await ServiceRepository.deleteService(service.id);
+        }
 
-      // Nếu xóa tất cả thành công, cập nhật trạng thái faculty
-      const deletedFaculty = await tx.faculty.update({
-        where: { id: facultyData.id },
-        data: { isDeleted: true },
-      })
+        for (const doctor of doctors) {
+          await DoctorRespository.deleteDoctor(doctor.id);
+        }
 
-      return deletedFaculty
-    })
+        const deletedFaculty = await tx.faculty.update({
+          where: { id: facultyId },
+          data: { isDeleted: true },
+        });
+
+        return deletedFaculty;
+      });
+    } catch (error) {
+      console.error('Error deleting faculty:', error);
+      throw error;
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
+  static async checkFacultyExists(name: string) {
+    try {
+      const faculty = await prisma.faculty.findFirst({
+        where: {
+          name: {
+            equals: name,
+            mode: 'insensitive' // Tìm kiếm không phân biệt hoa thường
+          },
+          isDeleted: false
+        }
+      });
+      return faculty !== null;
+    } catch (error) {
+      await prisma.$disconnect();
+      throw error;
+    }
   }
 }

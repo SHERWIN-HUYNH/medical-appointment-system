@@ -80,7 +80,7 @@ const ListFaculty = () => {
       enableSorting: false,
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <Link href={`/test-faculty/edit-faculty?id=${row.original.id}`}>
+          <Link href={`/admin/faculty/edit-faculty?id=${row.original.id}`}>
             <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-blue-700">
               <Pencil size={28} strokeWidth={3} color="white" />
             </Button>
@@ -103,7 +103,7 @@ const ListFaculty = () => {
     <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-lg font-semibold text-primary">Quản lý chuyên khoa</h1>
-        <Link href="/test-faculty/add-faculty">
+        <Link href="/admin/faculty/add-faculty">
           <Button className="flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-blue-400 text-white">
             Thêm chuyên khoa
           </Button>

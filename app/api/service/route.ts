@@ -4,6 +4,7 @@ import {
   forbiddenResponse,
   notFoundResponse,
   successResponse,
+  conflictResponse,
 } from '@/helpers/response'
 import { ServiceRepository } from '@/repositories/service'
 import { Service } from '@/types/interface'
@@ -17,13 +18,22 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const service: Service = await req.json()
-  console.log('SERVICE', service)
-  const newService = await ServiceRepository.createService(service)
-  if (!newService) {
-    return badRequestResponse('FAIL TO CREATE SERVICE')
+  try {
+    const service: Service = await req.json()
+    if (!service) {
+      return badRequestResponse('MISSING SERVICE DATA')
+    }
+    const exists = await ServiceRepository.checkServiceExists(service.name, service.facultyId)
+    
+    if (exists) {
+      return conflictResponse('Dịch vụ này đã tồn tại trong hệ thống')
+    }
+    const newService = await ServiceRepository.createService(service)
+    return successResponse(newService)
+  } catch (error) {
+    console.log(error)
+    return badRequestResponse('Thêm dịch vụ thất bại')
   }
-  return successResponse(newService)
 }
 
 export async function DELETE(req: Request) {

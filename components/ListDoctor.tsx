@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { academicTitles } from '@/lib/data'
 import { toast } from 'sonner'
 import { ColumnDef } from '@tanstack/react-table'
-import Image from 'next/image'
+import { CldImage } from 'next-cloudinary'
 
 type Doctor = {
   id: string
@@ -134,8 +134,8 @@ const ListDoctor = () => {
       enableSorting: false,
       cell: ({ row }) => (
         <div className="relative w-[80px] h-[80px]">
-          <Image
-            src={`/assets/doctor/${row.original.image}`}
+          <CldImage
+            src={row.original.image}
             alt={row.original.name}
             fill
             className="object-cover rounded"
@@ -159,12 +159,12 @@ const ListDoctor = () => {
       enableSorting: false,
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <Link href={`/test-doctor/${row.original.id}/schedule`}>
+          <Link href={`/admin/doctor/${row.original.id}/schedule`}>
             <Button className="w-auto h-10 flex items-center justify-center rounded-full bg-green-300">
               <CalendarRange size={20} strokeWidth={1.75} color="white" />
             </Button>
           </Link>
-          <Link href={`/test-doctor/edit-doctor?id=${row.original.id}`}>
+          <Link href={`/admin/doctor/edit-doctor?id=${row.original.id}`}>
             <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-blue-700">
               <Pencil size={28} strokeWidth={3} color="white" />
             </Button>
@@ -187,7 +187,7 @@ const ListDoctor = () => {
     <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0 min-h-screen">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-lg font-semibold text-primary">Quản lý bác sĩ</h1>
-        <Link href="/test-doctor/add-doctor">
+        <Link href="/admin/doctor/add-doctor">
           <Button className="flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-blue-400 text-white">
             Thêm Bác Sĩ
           </Button>

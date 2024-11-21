@@ -73,13 +73,12 @@ const EditServiceForm = () => {
         body: JSON.stringify(values),
       })
 
-      const { error } = await response.json()
-
       if (response.ok) {
         toast.success('Service updated successfully!')
-        router.push('/test-service')
+        router.push('/service-admin')
       } else {
-        toast.error(error)
+        const message = await response.json()
+        toast.error(message.error)
       }
     } catch {
       toast.error('An error occurred while updating the service')

@@ -3,6 +3,7 @@ import {
   notFoundResponse,
   successResponse,
   forbiddenResponse,
+  conflictResponse,
 } from '@/helpers/response'
 import { FacultyRepository } from '@/repositories/faculty'
 
@@ -25,13 +26,25 @@ export async function POST(req: Request) {
     return badRequestResponse('MISSING SERVICE DATA')
   }
 
-  const newFaculty = await FacultyRepository.createFaculty(faculty)
+  try {
+    // Kiểm tra xem chuyên khoa đã tồn tại chưa
+    const exists = await FacultyRepository.checkFacultyExists(faculty.name)
+    
+    if (exists) {
+      return conflictResponse('Chuyên khoa này đã tồn tại trong hệ thống')
+    }
 
-  if (!newFaculty) {
-    return badRequestResponse('FAIL TO CREATE Faculty')
+    const newFaculty = await FacultyRepository.createFaculty(faculty)
+
+    if (!newFaculty) {
+      return badRequestResponse('FAIL TO CREATE FACULTY')
+    }
+
+    return successResponse(newFaculty)
+  } catch (error) {
+    console.error('Error creating faculty:', error)
+    return badRequestResponse('Có lỗi xảy ra khi tạo chuyên khoa')
   }
-
-  return successResponse(newFaculty)
 }
 
 export async function PUT(req: Request) {

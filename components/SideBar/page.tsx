@@ -37,7 +37,7 @@ const menuGroups = [
         label: 'Bác sĩ',
         route: '#',
         children: [
-          { label: 'Quản lý', route: '/test-doctor', icon: <FolderKanban /> },
+          { label: 'Quản lý', route: '/admin/doctor', icon: <FolderKanban /> },
           {
             label: 'Lịch làm việc',
             route: '/test-admin/workingSchedule',
@@ -86,7 +86,7 @@ const menuGroups = [
           </svg>
         ),
         label: 'Chuyên khoa',
-        route: '/test-faculty',
+        route: '/admin/faculty',
       },
       {
         icon: (
@@ -114,7 +114,7 @@ const menuGroups = [
           </svg>
         ),
         label: 'Dich vụ',
-        route: '/test-service',
+        route: '/service-admin',
       },
       {
         icon: (

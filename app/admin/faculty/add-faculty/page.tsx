@@ -14,11 +14,15 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { Label } from '@/components/ui/label'
+import { uploadFileToCloudinary } from '@/helpers/upload-image'
+import { Input } from '@/components/ui/input'
 
 const AddFaculty = () => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+
 
   const form = useForm<z.infer<typeof FacultyFormValidation>>({
     resolver: zodResolver(FacultyFormValidation),
@@ -29,50 +33,53 @@ const AddFaculty = () => {
     },
   })
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      
+      form.setValue('image', previewUrl);
+      form.clearErrors('image');
 
-    if (!file) {
-      toast.error('Vui lòng tải lên một tệp hình ảnh')
-      return
+      setImagePreview(previewUrl);
     }
-
-    if (!file.type.startsWith('image/')) {
-      toast.error('Chỉ cho phép tải lên các tệp hình ảnh')
-      event.target.value = ''
-      return
-    }
-
-    // Lưu tên file
-    const fileName = file.name
-    form.setValue('image', fileName)
-
-    // Tạo preview
-    setImagePreview(URL.createObjectURL(file))
-    form.clearErrors('image')
   }
 
   const onSubmit = async (values: z.infer<typeof FacultyFormValidation>) => {
-    setLoading(true)
+    setLoading(true);
     try {
+      let uploadedUrl = values.image;
+      if (selectedFile) {
+        const result = await uploadFileToCloudinary(selectedFile);
+        if (result) {
+          uploadedUrl = result;
+        } else {
+          toast.error('Tải ảnh lên thất bại. Vui lòng thử lại!');
+          return;
+        }
+      }
+
       const response = await fetch('/api/faculty', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
-      })
+        body: JSON.stringify({ ...values, image: uploadedUrl }),
+      });
 
       if (!response.ok) {
-        throw new Error('Failed to create faculty')
+        const message = await response.json()
+        toast.error(message.error)
+        return;
       }
 
-      toast.success('Thêm chuyên khoa thành công!')
+      toast.success('Thêm chuyên khoa thành công!');
     } catch (error) {
-      console.log(error)
-      toast.error('Không thể thêm chuyên khoa')
+      console.error(error);
+      toast.error('Không thể thêm chuyên khoa');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -80,7 +87,7 @@ const AddFaculty = () => {
     <DefaultLayout>
       <div className="rounded-sm border border-stroke bg-white shadow-xl dark:border-strokedark dark:bg-boxdark">
         <Button
-          onClick={() => router.push('/test-faculty')}
+          onClick={() => router.push('/admin/faculty')}
           variant="ghost"
           className="flex items-center gap-2 hover:bg-transparent hover:text-primary"
         >
@@ -122,12 +129,11 @@ const AddFaculty = () => {
                     Hình ảnh
                   </Label>
                   <div className="mt-3 bg-slate-50">
-                    <input
+                    <Input
                       type="file"
                       accept="image/*"
                       className="w-full rounded-md border border-stroke p-2 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:px-2.5 file:py-1 file:text-sm focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
-                      onChange={handleImageChange}
-                    />
+                      onChange={handleImageChange} customProp={''}                    />
                     {form.formState.errors.image && (
                       <span className="text-red-500">
                         {form.formState.errors.image.message}

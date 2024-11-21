@@ -56,7 +56,8 @@ const CreateServiceForm = () => {
     if (response.ok) {
       toast.success('Thêm dịch vụ thành công!')
     } else {
-      toast.error('Không thể thêm dịch vụ')
+      const message = await response.json()
+      toast.error(message.error)
     }
   }
   return (

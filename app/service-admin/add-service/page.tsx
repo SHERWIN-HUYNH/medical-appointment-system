@@ -14,7 +14,7 @@ const AddService = () => {
         <section className="sub-container">
           <div className="rounded-sm border border-stroke bg-white shadow-xl dark:border-strokedark dark:bg-boxdark">
             <Button
-              onClick={() => router.push('/test-service')}
+              onClick={() => router.push('/service-admin')}
               variant="ghost"
               className="flex items-center gap-2 hover:bg-transparent hover:text-primary"
             >
