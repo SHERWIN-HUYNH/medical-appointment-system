@@ -66,32 +66,32 @@ export class FacultyRepository {
   static async deleteFaculty(facultyId: string) {
     try {
       if (!facultyId) {
-        throw new Error('Faculty ID is undefined');
+        throw new Error('Faculty ID is undefined')
       }
-      const services = await ServiceRepository.getServicesByFacultyId(facultyId);
-      const doctors = await DoctorRespository.getDoctorsByFaculty(facultyId);
+      const services = await ServiceRepository.getServicesByFacultyId(facultyId)
+      const doctors = await DoctorRespository.getDoctorsByFaculty(facultyId)
 
       return await prisma.$transaction(async (tx) => {
         for (const service of services) {
-          await ServiceRepository.deleteService(service.id);
+          await ServiceRepository.deleteService(service.id)
         }
 
         for (const doctor of doctors) {
-          await DoctorRespository.deleteDoctor(doctor.id);
+          await DoctorRespository.deleteDoctor(doctor.id)
         }
 
         const deletedFaculty = await tx.faculty.update({
           where: { id: facultyId },
           data: { isDeleted: true },
-        });
+        })
 
-        return deletedFaculty;
-      });
+        return deletedFaculty
+      })
     } catch (error) {
-      console.error('Error deleting faculty:', error);
-      throw error;
+      console.error('Error deleting faculty:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 
@@ -101,15 +101,15 @@ export class FacultyRepository {
         where: {
           name: {
             equals: name,
-            mode: 'insensitive' // Tìm kiếm không phân biệt hoa thường
+            mode: 'insensitive', // Tìm kiếm không phân biệt hoa thường
           },
-          isDeleted: false
-        }
-      });
-      return faculty !== null;
+          isDeleted: false,
+        },
+      })
+      return faculty !== null
     } catch (error) {
-      await prisma.$disconnect();
-      throw error;
+      await prisma.$disconnect()
+      throw error
     }
   }
 }

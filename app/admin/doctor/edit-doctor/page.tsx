@@ -51,18 +51,18 @@ const EditDoctor = () => {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
 
-  const fetchFacultyData = async () => {
+  const getAcademicTitleId = useCallback((name: string) => {
+    const title = academicTitles.find((title) => title.name === name)
+    return title?.id || ''
+  }, [])
+
+  const fetchFacultyData = useCallback(async () => {
     const response = await fetch(`/api/faculty`)
     if (response.ok) {
       const data = await response.json()
       setFacultyData(data)
     }
-  }
-
-  const getAcademicTitleId = (name: string) => {
-    const title = academicTitles.find((title) => title.name === name)
-    return title?.id || ''
-  }
+  }, [])
 
   const fetchDoctorData = useCallback(async () => {
     const response = await fetch(`/api/doctor/${id}`)
@@ -84,14 +84,14 @@ const EditDoctor = () => {
       setIsActive(doctor.isActive)
       setGender(doctor.gender)
     }
-  }, [id, getAcademicTitleId, selectedFile])
+  }, [id, selectedFile, form, getAcademicTitleId])
 
   useEffect(() => {
     fetchFacultyData()
     if (id) {
       fetchDoctorData()
     }
-  }, [id])
+  }, [id, fetchFacultyData, fetchDoctorData])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -328,7 +328,9 @@ const EditDoctor = () => {
                         className="w-full rounded-md border border-stroke p-3 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary pr-[120px]"
                         value={fileUrl}
                         readOnly
-                        placeholder="Chưa có file nào được chọn" customProp={''}                      />
+                        placeholder="Chưa có file nào được chọn"
+                        customProp={''}
+                      />
                       <Label
                         htmlFor="file-input"
                         className="absolute right-0 top-0 bottom-0 flex items-center justify-center px-4 bg-[#EEEEEE] rounded-r-md cursor-pointer"
@@ -339,7 +341,9 @@ const EditDoctor = () => {
                         id="file-input"
                         type="file"
                         className="hidden"
-                        onChange={handleImageChange} customProp={''}                      />
+                        onChange={handleImageChange}
+                        customProp={''}
+                      />
                     </div>
                     {/* Preview ảnh */}
                     {imagePreview && (

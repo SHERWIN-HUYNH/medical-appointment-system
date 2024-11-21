@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   try {
     // Kiểm tra xem chuyên khoa đã tồn tại chưa
     const exists = await FacultyRepository.checkFacultyExists(faculty.name)
-    
+
     if (exists) {
       return conflictResponse('Chuyên khoa này đã tồn tại trong hệ thống')
     }

@@ -60,14 +60,14 @@ const AddDoctorPage = () => {
   const onSubmit = async (values: z.infer<typeof DoctorFormValidation>) => {
     setLoading(true)
     try {
-      let uploadedUrl = values.image;
+      let uploadedUrl = values.image
       if (selectedFile) {
-        const result = await uploadFileToCloudinary(selectedFile);
+        const result = await uploadFileToCloudinary(selectedFile)
         if (result) {
-          uploadedUrl = result;
+          uploadedUrl = result
         } else {
-          toast.error('Tải ảnh lên thất bại. Vui lòng thử lại!');
-          return;
+          toast.error('Tải ảnh lên thất bại. Vui lòng thử lại!')
+          return
         }
       }
       const academicTitleName =
@@ -109,14 +109,14 @@ const AddDoctorPage = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      setSelectedFile(file);
-      const previewUrl = URL.createObjectURL(file);
-      
-      form.setValue('image', previewUrl);
-      form.clearErrors('image');
+      const file = e.target.files[0]
+      setSelectedFile(file)
+      const previewUrl = URL.createObjectURL(file)
 
-      setImagePreview(previewUrl);
+      form.setValue('image', previewUrl)
+      form.clearErrors('image')
+
+      setImagePreview(previewUrl)
     }
   }
 
@@ -227,7 +227,9 @@ const AddDoctorPage = () => {
                       type="file"
                       accept="image/*"
                       className="w-full rounded-md border border-stroke p-2 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:px-2.5 file:py-1 file:text-sm focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
-                      onChange={handleImageChange} customProp={''}                    />
+                      onChange={handleImageChange}
+                      customProp={''}
+                    />
                     {errors.image && (
                       <span className="mt-1 text-sm text-red-500">
                         {errors.image.message}

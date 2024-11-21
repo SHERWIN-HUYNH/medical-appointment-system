@@ -23,7 +23,6 @@ const AddFaculty = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-
   const form = useForm<z.infer<typeof FacultyFormValidation>>({
     resolver: zodResolver(FacultyFormValidation),
     defaultValues: {
@@ -35,28 +34,28 @@ const AddFaculty = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      setSelectedFile(file);
-      const previewUrl = URL.createObjectURL(file);
-      
-      form.setValue('image', previewUrl);
-      form.clearErrors('image');
+      const file = e.target.files[0]
+      setSelectedFile(file)
+      const previewUrl = URL.createObjectURL(file)
 
-      setImagePreview(previewUrl);
+      form.setValue('image', previewUrl)
+      form.clearErrors('image')
+
+      setImagePreview(previewUrl)
     }
   }
 
   const onSubmit = async (values: z.infer<typeof FacultyFormValidation>) => {
-    setLoading(true);
+    setLoading(true)
     try {
-      let uploadedUrl = values.image;
+      let uploadedUrl = values.image
       if (selectedFile) {
-        const result = await uploadFileToCloudinary(selectedFile);
+        const result = await uploadFileToCloudinary(selectedFile)
         if (result) {
-          uploadedUrl = result;
+          uploadedUrl = result
         } else {
-          toast.error('Tải ảnh lên thất bại. Vui lòng thử lại!');
-          return;
+          toast.error('Tải ảnh lên thất bại. Vui lòng thử lại!')
+          return
         }
       }
 
@@ -66,20 +65,20 @@ const AddFaculty = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ ...values, image: uploadedUrl }),
-      });
+      })
 
       if (!response.ok) {
         const message = await response.json()
         toast.error(message.error)
-        return;
+        return
       }
 
-      toast.success('Thêm chuyên khoa thành công!');
+      toast.success('Thêm chuyên khoa thành công!')
     } catch (error) {
-      console.error(error);
-      toast.error('Không thể thêm chuyên khoa');
+      console.error(error)
+      toast.error('Không thể thêm chuyên khoa')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
@@ -133,7 +132,9 @@ const AddFaculty = () => {
                       type="file"
                       accept="image/*"
                       className="w-full rounded-md border border-stroke p-2 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:px-2.5 file:py-1 file:text-sm focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
-                      onChange={handleImageChange} customProp={''}                    />
+                      onChange={handleImageChange}
+                      customProp={''}
+                    />
                     {form.formState.errors.image && (
                       <span className="text-red-500">
                         {form.formState.errors.image.message}

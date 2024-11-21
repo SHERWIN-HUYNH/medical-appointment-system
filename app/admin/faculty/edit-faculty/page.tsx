@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import { FacultyFormValidation } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'sonner'
@@ -34,14 +34,7 @@ const EditFaculty = () => {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
 
-  // Hook useEffect để fetch dữ liệu chuyên khoa khi component được mount
-  useEffect(() => {
-    if (id) {
-      fetchFacultyData()
-    }
-  }, [id])
-
-  const fetchFacultyData = async () => {
+  const fetchFacultyData = useCallback(async () => {
     const response = await fetch(`/api/faculty/${id}`)
     if (response.ok) {
       const facultyData = await response.json()
@@ -57,7 +50,13 @@ const EditFaculty = () => {
     } else {
       toast.error('Failed to fetch faculty details.')
     }
-  }
+  }, [id, form, selectedFile])
+
+  useEffect(() => {
+    if (id) {
+      fetchFacultyData()
+    }
+  }, [id, fetchFacultyData])
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -103,7 +102,6 @@ const EditFaculty = () => {
         toast.success('Faculty updated successfully!')
         router.push('/admin/faculty')
       } else {
-
         const message = await response.json()
         toast.error(message.error)
       }

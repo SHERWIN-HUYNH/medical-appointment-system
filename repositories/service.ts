@@ -61,15 +61,15 @@ export class ServiceRepository {
         where: {
           name: name,
           facultyId: facultyId,
-          isDeleted: false
-        }
-      });
-      return service;
+          isDeleted: false,
+        },
+      })
+      return service
     } catch (error) {
-      console.error('Error checking service:', error);
-      throw error;
+      console.error('Error checking service:', error)
+      throw error
     } finally {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     }
   }
 
@@ -77,11 +77,14 @@ export class ServiceRepository {
     try {
       const faculty = await FacultyRepository.getFacultyById(serviceData.facultyId)
       if (!faculty) throw new Error('Faculty not found')
-      
+
       // Kiểm tra service đã tồn tại
-      const existingService = await this.checkServiceExists(serviceData.name, serviceData.facultyId);
+      const existingService = await this.checkServiceExists(
+        serviceData.name,
+        serviceData.facultyId,
+      )
       if (existingService) {
-        throw new Error('Dịch vụ đã tồn tại trong chuyên khoa này');
+        throw new Error('Dịch vụ đã tồn tại trong chuyên khoa này')
       }
 
       const newService = await prisma.service.create({

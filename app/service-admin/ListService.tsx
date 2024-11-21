@@ -125,7 +125,7 @@ const ListService = () => {
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
           <Link href={`/service-admin/edit-service?id=${row.original.id}`}>
-            <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-blue-700">
+            <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-primary">
               <Pencil size={28} strokeWidth={3} color="white" />
             </Button>
           </Link>

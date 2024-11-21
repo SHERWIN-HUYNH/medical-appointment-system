@@ -165,7 +165,7 @@ const ListDoctor = () => {
             </Button>
           </Link>
           <Link href={`/admin/doctor/edit-doctor?id=${row.original.id}`}>
-            <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-blue-700">
+            <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-primary">
               <Pencil size={28} strokeWidth={3} color="white" />
             </Button>
           </Link>

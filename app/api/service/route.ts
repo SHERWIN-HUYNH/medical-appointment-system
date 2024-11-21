@@ -23,8 +23,11 @@ export async function POST(req: Request) {
     if (!service) {
       return badRequestResponse('MISSING SERVICE DATA')
     }
-    const exists = await ServiceRepository.checkServiceExists(service.name, service.facultyId)
-    
+    const exists = await ServiceRepository.checkServiceExists(
+      service.name,
+      service.facultyId,
+    )
+
     if (exists) {
       return conflictResponse('Dịch vụ này đã tồn tại trong hệ thống')
     }
