@@ -7,7 +7,6 @@ export async function GET(req: NextRequest) {
   }
   try {
     await startCronJob()
-    console.log('Cron job run successfully')
     return NextResponse.json({ data: 'Cron job run ', status: 200 })
   } catch (error) {
     console.error('Scheduler error:', error)
