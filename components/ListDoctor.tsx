@@ -165,12 +165,12 @@ const ListDoctor = () => {
             </Button>
           </Link>
           <Link href={`/test-doctor/edit-doctor?id=${row.original.id}`}>
-            <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-blue-300">
+            <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-blue-700">
               <Pencil size={28} strokeWidth={3} color="white" />
             </Button>
           </Link>
           <Button
-            className="w-12 h-10 flex items-center justify-center rounded-full bg-purple-300"
+            className="w-12 h-10 flex items-center justify-center rounded-full bg-red-700"
             onClick={() => {
               setDoctorToDelete(row.original)
               setShowModal(true)

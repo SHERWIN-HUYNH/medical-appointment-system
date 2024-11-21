@@ -125,12 +125,12 @@ const ListService = () => {
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
           <Link href={`/test-service/edit-service?id=${row.original.id}`}>
-            <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-blue-300">
+            <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-blue-700">
               <Pencil size={28} strokeWidth={3} color="white" />
             </Button>
           </Link>
           <Button
-            className="w-12 h-10 flex items-center justify-center rounded-full bg-purple-300"
+            className="w-12 h-10 flex items-center justify-center rounded-full bg-red-700"
             onClick={() => {
               setServiceToDelete(row.original)
               setShowModal(true)
