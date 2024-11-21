@@ -1,11 +1,10 @@
-import cron from 'node-cron'
 import { AppointmentStatus, PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 // Cron job chạy mỗi ngày lúc 12:00 AM
-const startCronJob = () => {
-  cron.schedule('*/1 * * * *', async () => {
+const startCronJob = async () => {
+
     const currentDate = new Date()
     try {
       const pendingAppointments = await prisma.appointment.findMany({
@@ -42,7 +41,6 @@ const startCronJob = () => {
     } catch (error) {
       console.error('Error updating statuses:', error)
     }
-  })
 }
 
 export default startCronJob
