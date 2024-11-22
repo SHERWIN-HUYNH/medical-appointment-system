@@ -1,4 +1,10 @@
-import { badRequestResponse, notFoundResponse, successResponse } from '@/helpers/response'
+import {
+  badRequestResponse,
+  notFoundResponse,
+  successResponse,
+  forbiddenResponse,
+  conflictResponse,
+} from '@/helpers/response'
 import { FacultyRepository } from '@/repositories/faculty'
 
 // Xử lý GET request - Lấy một hoặc tất cả chuyên khoa
@@ -20,13 +26,25 @@ export async function POST(req: Request) {
     return badRequestResponse('MISSING SERVICE DATA')
   }
 
-  const newFaculty = await FacultyRepository.createFaculty(faculty)
+  try {
+    // Kiểm tra xem chuyên khoa đã tồn tại chưa
+    const exists = await FacultyRepository.checkFacultyExists(faculty.name)
 
-  if (!newFaculty) {
-    return badRequestResponse('FAIL TO CREATE Faculty')
+    if (exists) {
+      return conflictResponse('Chuyên khoa này đã tồn tại trong hệ thống')
+    }
+
+    const newFaculty = await FacultyRepository.createFaculty(faculty)
+
+    if (!newFaculty) {
+      return badRequestResponse('FAIL TO CREATE FACULTY')
+    }
+
+    return successResponse(newFaculty)
+  } catch (error) {
+    console.error('Error creating faculty:', error)
+    return badRequestResponse('Có lỗi xảy ra khi tạo chuyên khoa')
   }
-
-  return successResponse(newFaculty)
 }
 
 export async function PUT(req: Request) {
@@ -44,10 +62,14 @@ export async function PUT(req: Request) {
 
 // Xử lý DELETE request - Xóa chuyên khoa
 export async function DELETE(req: Request) {
-  const { faculty } = await req.json()
-  const deletedFaculty = await FacultyRepository.deleteFaculty(faculty)
-  if (!deletedFaculty) {
-    return badRequestResponse('FAIL TO DELETE FACULTY')
+  try {
+    const { id } = await req.json()
+    const deletedFaculty = await FacultyRepository.deleteFaculty(id)
+    return successResponse(deletedFaculty)
+  } catch (error) {
+    if (error instanceof Error) {
+      return forbiddenResponse(error.message)
+    }
+    return badRequestResponse('Xóa dịch vụ thất bại')
   }
-  return successResponse(deletedFaculty)
 }

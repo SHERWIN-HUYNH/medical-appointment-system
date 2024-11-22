@@ -56,7 +56,8 @@ const CreateServiceForm = () => {
     if (response.ok) {
       toast.success('Thêm dịch vụ thành công!')
     } else {
-      toast.error('Không thể thêm dịch vụ')
+      const message = await response.json()
+      toast.error(message.error)
     }
   }
   return (
@@ -105,9 +106,9 @@ const CreateServiceForm = () => {
                 >
                   {facultyData.map((faculty) => (
                     <SelectItem key={faculty.id} value={faculty.id}>
-                      <div className="flex cursor-pointer items-center gap-2">
+                      <span className="flex cursor-pointer items-center gap-2">
                         <p>{faculty.name}</p>
-                      </div>
+                      </span>
                     </SelectItem>
                   ))}
                 </CustomFormField>

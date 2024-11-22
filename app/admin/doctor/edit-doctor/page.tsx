@@ -10,19 +10,20 @@ import { DoctorFormValidation } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Faculty } from '@prisma/client'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import ConfirmModal from '@/components/ConfirmModal'
+import { uploadFileToCloudinary } from '@/helpers/upload-image'
+import { CldImage } from 'next-cloudinary'
 
 const EditDoctor = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([])
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [fileName, setFileName] = useState<string>('')
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [fileUrl, setFileUrl] = useState<string>('')
   const [isActive, setIsActive] = useState<boolean>(false)
   const [gender, setGender] = useState<boolean>(true)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
@@ -50,62 +51,60 @@ const EditDoctor = () => {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
 
-  const fetchFacultyData = async () => {
+  const getAcademicTitleId = useCallback((name: string) => {
+    const title = academicTitles.find((title) => title.name === name)
+    return title?.id || ''
+  }, [])
+
+  const fetchFacultyData = useCallback(async () => {
     const response = await fetch(`/api/faculty`)
     if (response.ok) {
       const data = await response.json()
       setFacultyData(data)
     }
-  }
+  }, [])
 
-  const getAcademicTitleId = (name: string) => {
-    const title = academicTitles.find((title) => title.name === name)
-    return title?.id || ''
-  }
-
-  const fetchDoctorData = async () => {
+  const fetchDoctorData = useCallback(async () => {
     const response = await fetch(`/api/doctor/${id}`)
     if (response.ok) {
       const doctor = await response.json()
       form.reset({
         name: doctor.name,
-        image: doctor.image,
         academicTitle: getAcademicTitleId(doctor.academicTitle),
         faculty: doctor.facultyId,
+        image: doctor.image,
         description: doctor.description,
         isActive: doctor.isActive,
         gender: doctor.gender,
       })
-      setImagePreview(doctor.image)
+      if (!selectedFile) {
+        setImagePreview(doctor.image)
+        setFileUrl(doctor.image)
+      }
       setIsActive(doctor.isActive)
-      setFileName(doctor.image || '')
       setGender(doctor.gender)
     }
-  }
+  }, [id, selectedFile, form, getAcademicTitleId])
 
   useEffect(() => {
     fetchFacultyData()
     if (id) {
       fetchDoctorData()
     }
-  }, [id])
+  }, [id, fetchFacultyData, fetchDoctorData])
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0]
+      setSelectedFile(file)
+      const previewUrl = URL.createObjectURL(file)
 
-    if (!file) {
-      toast.error('Vui lòng tải lên một tệp hình ảnh')
-      return
+      form.setValue('image', previewUrl)
+      form.clearErrors('image')
+
+      setImagePreview(previewUrl)
+      setFileUrl(previewUrl)
     }
-    if (!file.type.startsWith('image/')) {
-      toast.error('Chỉ cho phép tải lên các tệp hình ảnh')
-      event.target.value = ''
-      return
-    }
-    setImageFile(file)
-    form.setValue('image', file.name)
-    setImagePreview(file.name)
-    setFileName(file.name)
   }
 
   const handleToggle = (value: boolean) => {
@@ -123,6 +122,10 @@ const EditDoctor = () => {
     setGender(genderValue)
     form.setValue('gender', genderValue)
   }
+
+  const academicTitleName =
+    academicTitles.find((title) => title.id === form.getValues('academicTitle'))?.name ||
+    form.getValues('academicTitle')
 
   const handleConfirmStatusChange = async () => {
     if (pendingStatus === null) return
@@ -147,7 +150,8 @@ const EditDoctor = () => {
         form.setValue('isActive', pendingStatus)
         toast.success('Thay đổi trạng thái thành công')
       } else {
-        toast.error('Bác sĩ hiện đang có lịch hẹn không thể thay đổi trạng thái')
+        const message = await response.json()
+        toast.error(message.error)
       }
     } catch (error) {
       console.log(error)
@@ -159,14 +163,22 @@ const EditDoctor = () => {
   }
 
   const onSubmit = async (values: z.infer<typeof DoctorFormValidation>) => {
-    const academicTitleName =
-      academicTitles.find((title) => title.id === values.academicTitle)?.name ||
-      values.academicTitle
+    let uploadedUrl = values.image
+    if (selectedFile) {
+      const result = await uploadFileToCloudinary(selectedFile)
+      if (result) {
+        uploadedUrl = result
+      } else {
+        toast.error('Tải ảnh lên thất bại. Vui lòng thử lại!')
+        return
+      }
+    }
+
     const response = await fetch(`/api/doctor`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        doctor: { id, ...values, academicTitle: academicTitleName },
+        doctor: { id, ...values, image: uploadedUrl, academicTitle: academicTitleName },
       }),
     })
 
@@ -174,7 +186,7 @@ const EditDoctor = () => {
 
     if (response.ok) {
       toast.success('Cập nhật thông tin bác sĩ thành công')
-      router.push('/test-doctor')
+      router.push('/admin/doctor')
     } else {
       toast.error(data.message || 'Cập nhật thông tin bác sĩ thất bại')
       // Nếu cập nhật thất bại do bác sĩ có lịch hẹn, reset trạng thái
@@ -311,34 +323,36 @@ const EditDoctor = () => {
                       Hình ảnh
                     </Label>
                     <div className="relative">
-                      <input
+                      <Input
                         type="text"
                         className="w-full rounded-md border border-stroke p-3 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary pr-[120px]"
-                        value={fileName}
+                        value={fileUrl}
                         readOnly
                         placeholder="Chưa có file nào được chọn"
+                        customProp={''}
                       />
-                      <label
+                      <Label
                         htmlFor="file-input"
                         className="absolute right-0 top-0 bottom-0 flex items-center justify-center px-4 bg-[#EEEEEE] rounded-r-md cursor-pointer"
                       >
                         Chọn file
-                      </label>
-                      <input
+                      </Label>
+                      <Input
                         id="file-input"
                         type="file"
                         className="hidden"
                         onChange={handleImageChange}
+                        customProp={''}
                       />
                     </div>
-                    {/* Preview ảnh - tách riêng khỏi container h-[90px] */}
+                    {/* Preview ảnh */}
                     {imagePreview && (
-                      <div>
-                        <img
-                          src={`/assets/doctor/${imagePreview}`}
+                      <div className="relative w-[100px] h-[100px]">
+                        <CldImage
+                          src={`${imagePreview}`}
                           alt="Image Preview"
-                          className="w-30 h-30 object-cover"
-                          style={{ maxWidth: '200px', maxHeight: '200px' }}
+                          fill
+                          className="object-cover rounded-lg"
                         />
                       </div>
                     )}

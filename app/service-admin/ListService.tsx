@@ -1,22 +1,20 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
 import ModalDelete from '@/components/ModalDelete'
 import { DataTable } from '@/components/Table'
-import { CalendarRange, Pencil, Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Pencil, Trash2 } from 'lucide-react'
 import Link from 'next/link'
-import { academicTitles } from '@/lib/data'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { ColumnDef } from '@tanstack/react-table'
-import { CldImage } from 'next-cloudinary'
+import { formatPrice } from '@/helpers/formatCurrency'
 
-type Doctor = {
+type Service = {
   id: string
   name: string
-  academicTitle: string
-  image: string
-  description: string
+  price: number
   facultyId: string
+  description: string
 }
 
 type Faculty = {
@@ -24,18 +22,18 @@ type Faculty = {
   name: string
 }
 
-const ListDoctor = () => {
-  const [doctorData, setDoctorData] = useState<Doctor[]>([])
+const ListService = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([])
+  const [serviceData, setServiceData] = useState<Service[]>([])
+  const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null)
   const [showModal, setShowModal] = useState(false)
-  const [doctorToDelete, setDoctorToDelete] = useState<Doctor | null>(null)
 
   useEffect(() => {
-    const fetchDoctorData = async () => {
-      const response = await fetch(`/api/doctor`)
+    const fetchServiceData = async () => {
+      const response = await fetch(`/api/service`)
       if (response.ok) {
         const data = await response.json()
-        setDoctorData(data)
+        setServiceData(data)
       }
     }
 
@@ -47,54 +45,49 @@ const ListDoctor = () => {
       }
     }
 
-    fetchDoctorData()
+    fetchServiceData()
     fetchFacultyData()
   }, [])
 
   const getFacultyName = (facultyId: string) => {
-    const faculty = facultyData.find((fac) => fac.id === facultyId)
-    return faculty ? faculty.name : 'Unknown Faculty'
-  }
-
-  const getAcademicTitleName = (titleId: string) => {
-    const title = academicTitles.find((title) => title.id === titleId)
-    return title ? title.name : titleId
+    const faculty = facultyData.find((f) => f.id === facultyId)
+    return faculty ? faculty.name : 'NULL'
   }
 
   const confirmDelete = async () => {
-    if (!doctorToDelete) return
+    if (!serviceToDelete) return
 
     try {
-      const response = await fetch(`/api/doctor`, {
+      const response = await fetch(`/api/service`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: doctorToDelete.id }),
+        body: JSON.stringify({ id: serviceToDelete.id }),
       })
 
       if (response.ok) {
-        setDoctorData((prevData) =>
-          prevData.filter((doctor) => doctor.id !== doctorToDelete.id),
+        setServiceData((prevData) =>
+          prevData.filter((service) => service.id !== serviceToDelete.id),
         )
-        toast.success(`Bác sĩ ${doctorToDelete.name} đã xóa thành công!`)
+        toast.success(`Dịch vụ ${serviceToDelete.name} đã xóa thành công!`)
       } else {
         const message = await response.json()
         toast.error(message.error)
       }
     } catch (error) {
-      console.error('Error deleting doctor:', error)
-      toast.error('Đã xảy ra lỗi khi xóa bác sĩ!')
+      console.error('Error deleting service:', error)
+      toast.error('Đã xảy ra lỗi khi xóa dịch vụ!')
     } finally {
-      setDoctorToDelete(null)
+      setServiceToDelete(null)
       setShowModal(false)
     }
   }
 
-  const columns: ColumnDef<Doctor>[] = [
+  const columns: ColumnDef<Service>[] = [
     {
       accessorKey: 'name',
-      header: 'Bác sĩ',
+      header: 'Dịch vụ',
       enableSorting: true,
       sortingFn: (rowA, rowB) => {
         const a = rowA.original.name.toLowerCase()
@@ -103,19 +96,11 @@ const ListDoctor = () => {
       },
     },
     {
-      accessorKey: 'academicTitle',
-      header: 'Học hàm/học vị',
-      cell: ({ row }) => (
-        <div className="min-w-[150px]">
-          {getAcademicTitleName(row.original.academicTitle)}
-        </div>
-      ),
+      accessorKey: 'price',
+      header: 'Giá dịch vụ',
+      cell: ({ row }) => formatPrice(row.original.price),
       enableSorting: true,
-      sortingFn: (rowA, rowB) => {
-        const a = getAcademicTitleName(rowA.original.academicTitle).toLowerCase()
-        const b = getAcademicTitleName(rowB.original.academicTitle).toLowerCase()
-        return a < b ? -1 : a > b ? 1 : 0
-      },
+      sortingFn: (rowA, rowB) => rowA.original.price - rowB.original.price,
     },
     {
       accessorKey: 'facultyId',
@@ -129,42 +114,17 @@ const ListDoctor = () => {
       },
     },
     {
-      accessorKey: 'image',
-      header: 'Hình ảnh',
-      enableSorting: false,
-      cell: ({ row }) => (
-        <div className="relative w-[80px] h-[80px]">
-          <CldImage
-            src={row.original.image}
-            alt={row.original.name}
-            fill
-            className="object-cover rounded"
-          />
-        </div>
-      ),
-    },
-    {
       accessorKey: 'description',
       header: 'Mô tả',
       enableSorting: false,
-      cell: ({ row }) => (
-        <div className="max-w-[300px] truncate" title={row.original.description}>
-          {row.original.description}
-        </div>
-      ),
     },
     {
-      header: 'Thao tác',
       id: 'actions',
+      header: 'Thao tác',
       enableSorting: false,
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <Link href={`/admin/doctor/${row.original.id}/schedule`}>
-            <Button className="w-auto h-10 flex items-center justify-center rounded-full bg-green-300">
-              <CalendarRange size={20} strokeWidth={1.75} color="white" />
-            </Button>
-          </Link>
-          <Link href={`/admin/doctor/edit-doctor?id=${row.original.id}`}>
+          <Link href={`/service-admin/edit-service?id=${row.original.id}`}>
             <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-primary">
               <Pencil size={28} strokeWidth={3} color="white" />
             </Button>
@@ -172,7 +132,7 @@ const ListDoctor = () => {
           <Button
             className="w-12 h-10 flex items-center justify-center rounded-full bg-red-700"
             onClick={() => {
-              setDoctorToDelete(row.original)
+              setServiceToDelete(row.original)
               setShowModal(true)
             }}
           >
@@ -186,17 +146,18 @@ const ListDoctor = () => {
   return (
     <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0 min-h-screen">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-lg font-semibold text-primary">Quản lý bác sĩ</h1>
-        <Link href="/admin/doctor/add-doctor">
+        <h1 className="text-lg font-semibold text-primary">All Service</h1>
+        <Link href="/service-admin/add-service">
           <Button className="flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-blue-400 text-white">
-            Thêm Bác Sĩ
+            Thêm dịch vụ
           </Button>
         </Link>
       </div>
+
       <div className="flex-1 overflow-x-auto w-full">
         <DataTable
           columns={columns}
-          data={doctorData}
+          data={serviceData}
           searchKey="name"
           filterOptions={{
             key: 'facultyId',
@@ -213,11 +174,11 @@ const ListDoctor = () => {
           showModal={showModal}
           onClose={() => setShowModal(false)}
           onConfirm={confirmDelete}
-          label={`bác sĩ ${doctorToDelete?.name}`}
+          label={`dịch vụ ${serviceToDelete?.name}`}
         />
       )}
     </div>
   )
 }
 
-export default ListDoctor
+export default ListService

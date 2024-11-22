@@ -4,18 +4,32 @@ import {
   successResponse,
   internalServerErrorResponse,
 } from '@/helpers/response'
+import { ProfileRespository } from '@/repositories/profile'
 
-export async function GET(req: Request, { params }: { params: { profileId: string } }) {
+export async function GET(req: Request, { params }: { params: { userId: string } }) {
   try {
-    const appointments = await AppointmentRepository.getAppointmentsByProfileId(
-      params.profileId,
-    )
+    // First get all profiles for this user
+    const profiles = await ProfileRespository.getListProfileByUserId(params.userId)
 
-    if (!appointments || appointments.length === 0) {
+    if (!profiles || profiles.length === 0) {
+      return notFoundResponse('Không tìm thấy hồ sơ bệnh nhân')
+    }
+
+    // Get appointments for all profiles
+    const profileIds = profiles.map((profile) => profile.id)
+    const allAppointments = []
+
+    for (const profileId of profileIds) {
+      const appointments =
+        await AppointmentRepository.getAppointmentsByProfileId(profileId)
+      allAppointments.push(...appointments)
+    }
+
+    if (allAppointments.length === 0) {
       return notFoundResponse('Không tìm thấy lịch khám')
     }
 
-    const formattedAppointments = appointments.map((appointment) => ({
+    const formattedAppointments = allAppointments.map((appointment) => ({
       id: appointment.id,
       patientName: appointment.profile.name,
       faculty: appointment.doctorSchedule.doctor.faculty.name,

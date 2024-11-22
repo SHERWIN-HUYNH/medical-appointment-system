@@ -14,11 +14,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Input } from '@/components/ui/input'
+import { uploadFileToCloudinary } from '@/helpers/upload-image'
 
 const AddDoctorPage = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([])
   const [loading, setLoading] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const form = useForm<z.infer<typeof DoctorFormValidation>>({
     resolver: zodResolver(DoctorFormValidation),
     defaultValues: {
@@ -58,6 +60,16 @@ const AddDoctorPage = () => {
   const onSubmit = async (values: z.infer<typeof DoctorFormValidation>) => {
     setLoading(true)
     try {
+      let uploadedUrl = values.image
+      if (selectedFile) {
+        const result = await uploadFileToCloudinary(selectedFile)
+        if (result) {
+          uploadedUrl = result
+        } else {
+          toast.error('Tải ảnh lên thất bại. Vui lòng thử lại!')
+          return
+        }
+      }
       const academicTitleName =
         academicTitles.find((title) => title.id === values.academicTitle)?.name ||
         values.academicTitle
@@ -70,7 +82,7 @@ const AddDoctorPage = () => {
         body: JSON.stringify({
           name: values.name,
           academicTitle: academicTitleName,
-          image: values.image,
+          image: uploadedUrl,
           description: values.description,
           facultyId: values.faculty,
           isActive: values.isActive,
@@ -79,8 +91,8 @@ const AddDoctorPage = () => {
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || 'Failed to create doctor')
+        const message = await response.json()
+        toast.error(message.error)
       }
 
       toast.success('Bác sĩ đã được thêm thành công')
@@ -95,27 +107,17 @@ const AddDoctorPage = () => {
     }
   }
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0]
+      setSelectedFile(file)
+      const previewUrl = URL.createObjectURL(file)
 
-    if (!file) {
-      toast.error('Vui lòng tải lên một tệp hình ảnh')
-      return
+      form.setValue('image', previewUrl)
+      form.clearErrors('image')
+
+      setImagePreview(previewUrl)
     }
-
-    if (!file.type.startsWith('image/')) {
-      toast.error('Chỉ cho phép tải lên các tệp hình ảnh')
-      event.target.value = ''
-      return
-    }
-
-    // Lưu tên file
-    const fileName = file.name
-    form.setValue('image', fileName)
-
-    // Tạo preview
-    setImagePreview(URL.createObjectURL(file))
-    form.clearErrors('image')
   }
 
   return (
@@ -221,11 +223,12 @@ const AddDoctorPage = () => {
                     <Label className="mb-2.5 block font-medium text-black dark:text-white">
                       Hình ảnh
                     </Label>
-                    <input
+                    <Input
                       type="file"
                       accept="image/*"
                       className="w-full rounded-md border border-stroke p-2 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:px-2.5 file:py-1 file:text-sm focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
                       onChange={handleImageChange}
+                      customProp={''}
                     />
                     {errors.image && (
                       <span className="mt-1 text-sm text-red-500">
