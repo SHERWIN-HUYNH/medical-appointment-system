@@ -2,14 +2,16 @@ import { badRequestResponse, notFoundResponse, successResponse } from '@/helpers
 import { ChartRepository } from '@/repositories/chart'
 
 export async function GET() {
-  const appointments = await ChartRepository.getAppointmentsSummaryByFaculty()
-  if (!appointments || appointments.length === 0) {
-    return notFoundResponse('NOT FOUND PROFILE')
-  }
-  if (appointments) {
-    console.log('Dữ liệu trả về:', appointments)
-    return successResponse('GET REPORT SUCCESSFULLY')
-  } else {
-    return badRequestResponse('FAIL TO GET REPORT')
+  try {
+    const appointments = await ChartRepository.getAppointmentsSummaryByFaculty();
+
+    if (!appointments || appointments.length === 0) {
+      return notFoundResponse('NOT FOUND APPOINTMENTS');
+    }
+
+    return successResponse(appointments);
+  } catch (error) {
+    console.error('Error fetching appointments summary:', error);
+    return badRequestResponse('FAIL TO GET REPORT');
   }
 }

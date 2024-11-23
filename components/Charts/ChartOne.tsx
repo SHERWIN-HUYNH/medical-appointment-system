@@ -1,12 +1,18 @@
 'use client'
 import { ApexOptions } from 'apexcharts'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { Button } from '../ui/button'
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 })
+
+interface AppointmentData {
+  year: number
+  month: number
+  price: number
+}
 
 const chartTypeLine = 'line' as const
 
@@ -16,7 +22,7 @@ const options: ApexOptions = {
     position: 'top',
     horizontalAlign: 'left',
   },
-  colors: ['#3C50E0', '#80CAEE'],
+  colors: ['#80CAEE'],
   chart: {
     fontFamily: 'Satoshi, sans-serif',
     height: 335,
@@ -52,7 +58,7 @@ const options: ApexOptions = {
     },
   ],
   stroke: {
-    width: [2, 2],
+    width: [2],
     curve: 'straight',
   },
   grid: {
@@ -73,7 +79,7 @@ const options: ApexOptions = {
   markers: {
     size: 4,
     colors: '#fff',
-    strokeColors: ['#3056D3', '#80CAEE'],
+    strokeColors: ['#80CAEE'],
     strokeWidth: 3,
     strokeOpacity: 0.9,
     strokeDashArray: 0,
@@ -86,7 +92,7 @@ const options: ApexOptions = {
   },
   xaxis: {
     type: 'category',
-    categories: [],
+    categories: [], // Categories will be dynamically updated based on view (month or year)
     axisBorder: {
       show: false,
     },
@@ -101,70 +107,73 @@ const options: ApexOptions = {
       },
     },
     min: 0,
-    max: 100, // Giá trị tối đa mặc định cho biểu đồ tháng
+    max: 100, // Default max for monthly data
   },
 }
 
 const ChartOne: React.FC = () => {
   const [viewBy, setViewBy] = useState<'month' | 'year'>('month')
+  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear())
+  const years = Array.from({ length: 5 }, (_, index) => new Date().getFullYear() - index)
+  const [appointmentsData, setAppointmentsData] = useState<AppointmentData[]>([])
 
-  // Dữ liệu theo tháng
+  // Monthly data
   const monthData = {
     categories: [
-      'Tháng 1',
-      'Tháng 2',
-      'Tháng 3',
-      'Tháng 4',
-      'Tháng 5',
-      'Tháng 6',
-      'Tháng 7',
-      'Tháng 8',
-      'Tháng 9',
-      'Tháng 10',
-      'Tháng 11',
-      'Tháng 12',
+      'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
     ],
     series: [
-      { name: 'Năm 2022', data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45] },
-      { name: 'Năm 2023', data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51] },
+      { name: `Doanh thu Năm ${selectedYear}`, data: appointmentsData.filter(a => a.year === selectedYear).map(a => a.price) },
     ],
-    chartType: chartTypeLine, // Sử dụng hằng số
-    yMax: 100, // Sử dụng biểu đồ vùng cho tháng
+    chartType: chartTypeLine,
+    yMax: 100,
   }
 
-  // Dữ liệu theo năm
+  const fetchAppointmentsData = async () => {
+    try {
+      const response = await fetch(`/api/chart/chart2`)
+      const data: AppointmentData[] = await response.json()
+      setAppointmentsData(data)
+    } catch (error) {
+      console.error('Error fetching appointment data:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchAppointmentsData()
+  }, [])
+
+  // Yearly data (you can adjust this similarly to how you handle monthly data)
   const yearData = {
-    categories: ['2020', '2021', '2022', '2023', '2024'], // Thêm các năm vào đây
+    categories: years.map(year => year.toString()), // Dynamic year categories based on available years
     series: [
-      { name: 'Doanh thu', data: [320, 450, 540, 600, 720] }, // Dữ liệu giả theo năm
+      { name: 'Doanh thu', data: years.map(year => {
+        const yearlyData = appointmentsData.filter(a => a.year === year)
+        return yearlyData.reduce((total, item) => total + item.price, 0) // Calculate total price for each year
+      }) },
     ],
-    chartType: chartTypeLine, // Sử dụng biểu đồ đường cho năm
-    yMax: 1000, // Giá trị tối đa của trục y cho năm
+    chartType: chartTypeLine,
+    yMax: 1000,
   }
 
   const currentData = viewBy === 'month' ? monthData : yearData
+
+  // Handle year change
+  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedYear(Number(event.target.value))
+  }
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
           <div className="flex min-w-47.5">
-            <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
-              <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
-            </span>
-            <div className="w-full">
-              <p className="font-semibold text-primary">Doanh thu</p>
-              <p className="text-sm font-medium">Năm 2023</p>
-            </div>
-          </div>
-          {/* Thêm chú thích cho Năm 2022 */}
-          <div className="flex min-w-47.5">
             <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-[#6577F3]">
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-[#6577F3]"></span>
             </span>
             <div className="w-full">
               <p className="font-semibold text-[#6577F3]">Doanh thu</p>
-              <p className="text-sm font-medium">Năm 2022</p>
+              <p className="text-sm font-medium">{viewBy === 'month' ? `Năm ${selectedYear}` : 'Doanh thu theo năm'}</p>
             </div>
           </div>
         </div>
@@ -172,20 +181,25 @@ const ChartOne: React.FC = () => {
           <div className="inline-flex items-center border-slate-500 rounded-md bg-whiter p-1.5 dark:bg-meta-4 gap-2">
             <Button
               onClick={() => setViewBy('month')}
-              className={`rounded px-3 py-1 text-xs font-medium text-black hover:bg-slate-500 hover:shadow-card dark:text-white dark:hover:bg-boxdark ${
-                viewBy === 'month' ? 'bg-slate-400 text-white' : ''
-              }`}
+              className={`rounded px-3 py-1 text-xs font-medium text-black hover:bg-slate-500 hover:shadow-card dark:text-white dark:hover:bg-boxdark ${viewBy === 'month' ? 'bg-slate-400 text-white' : ''}`}
             >
               Tháng
             </Button>
             <Button
               onClick={() => setViewBy('year')}
-              className={`rounded px-3 py-1 text-xs font-medium text-black hover:bg-slate-500 hover:shadow-card dark:text-white dark:hover:bg-boxdark ${
-                viewBy === 'year' ? 'bg-slate-400 text-white' : ''
-              }`}
+              className={`rounded px-3 py-1 text-xs font-medium text-black hover:bg-slate-500 hover:shadow-card dark:text-white dark:hover:bg-boxdark ${viewBy === 'year' ? 'bg-slate-400 text-white' : ''}`}
             >
               Năm
             </Button>
+            {viewBy === 'month' && (
+              <select value={selectedYear} onChange={handleYearChange} className="rounded px-3 py-1 text-xs font-medium text-black dark:bg-boxdark dark:text-white">
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
         </div>
       </div>
@@ -195,12 +209,12 @@ const ChartOne: React.FC = () => {
           <ReactApexChart
             options={{
               ...options,
-              chart: { ...options.chart, type: currentData.chartType }, // Chuyển đổi biểu đồ dựa trên lựa chọn
+              chart: { ...options.chart, type: currentData.chartType },
               xaxis: { ...options.xaxis, categories: currentData.categories },
-              yaxis: { ...options.yaxis, max: currentData.yMax }, // Đặt giá trị tối đa của trục y
+              yaxis: { ...options.yaxis, max: currentData.yMax },
             }}
             series={currentData.series}
-            type={currentData.chartType} // Kiểu biểu đồ cố định
+            type={currentData.chartType}
             height={350}
             width={'100%'}
           />
