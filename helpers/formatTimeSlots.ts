@@ -8,7 +8,10 @@ export function formatTimeSlot(timeSlot: string): string {
 
   return `${formattedStart}-${formattedEnd}`
 }
-
+export function formatDateToVN(dateString: Date) {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('vi-VN')
+}
 export async function fetchEventsFromApi(
   doctorId: string,
 ): Promise<DoctorScheduleResult[]> {

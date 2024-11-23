@@ -54,32 +54,6 @@ export const AppointmentForm = ({
         status = 'pending'
     }
     console.log('SHOW PATIENTID', patientId)
-    try {
-      if (type === 'create' && patientId) {
-        // const appointment = {
-        //   userId,
-        //   patient: patientId,
-        //   primaryPhysician: values.primaryPhysician,
-        //   schedule: new Date(values.schedule),
-        //   reason: values.reason!,
-        //   status: status as Status,
-        //   note: values.note,
-        // }
-        // console.log('NEW APPOINTMENT', appointment)
-        // const newAppointment = await createAppointment(appointment)
-        // if (newAppointment) {
-        //   console.log('NEW APPOINTMENT', newAppointment)
-        //   form.reset()
-        //   router.push(
-        //     `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`,
-        //   )
-        // }
-      } else {
-        console.log('UPDATE WORKING')
-      }
-    } catch (error) {
-      console.log(error)
-    }
     setIsLoading(false)
   }
 
@@ -95,7 +69,7 @@ export const AppointmentForm = ({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       buttonLabel = 'Submit Apppointment'
   }
-
+  const title = type == 'Chi tiết' ? 'Đóng' : 'Hủy lịch hẹn'
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
@@ -114,15 +88,17 @@ export const AppointmentForm = ({
               name="primaryPhysician"
               label="Bác sĩ"
               placeholder="Select a doctor"
+              disabled={true}
             ></CustomFormField>
 
             <CustomFormField
-              fieldType={FormFieldType.DATE_PICKER}
+              fieldType={FormFieldType.INPUT}
               control={form.control}
               name="schedule"
               label="Ngày khám"
               showTimeSelect
               dateFormat="MM/dd/yyyy  -  h:mm aa"
+              disabled={true}
             />
 
             <div className={`flex flex-col gap-6  ${type === 'create' && 'xl:flex-row'}`}>
@@ -155,19 +131,39 @@ export const AppointmentForm = ({
         )}
 
         {type === 'cancel' && (
-          <CustomFormField
-            fieldType={FormFieldType.TEXTAREA}
-            control={form.control}
-            name="cancellationReason"
-            label="Lí do hủy hẹn"
-            placeholder="Họp đột xuất"
-          />
+          <>
+            <CustomFormField
+              fieldType={FormFieldType.INPUT}
+              control={form.control}
+              name="primaryPhysician"
+              label="Bác sĩ"
+              placeholder="Select a doctor"
+              disabled={true}
+            ></CustomFormField>
+
+            <CustomFormField
+              fieldType={FormFieldType.INPUT}
+              control={form.control}
+              name="schedule"
+              label="Ngày khám"
+              showTimeSelect
+              dateFormat="MM/dd/yyyy  -  h:mm aa"
+              disabled={true}
+            />
+            <CustomFormField
+              fieldType={FormFieldType.TEXTAREA}
+              control={form.control}
+              name="cancellationReason"
+              label="Lí do hủy hẹn"
+              placeholder="Họp đột xuất"
+            />
+          </>
         )}
         <SubmitButton
           isLoading={isLoading}
           className={`${type === 'cancel' ? 'shad-danger-btn' : 'shad-primary-btn'} w-full`}
         >
-          Đóng
+          {title}
         </SubmitButton>
       </form>
     </Form>

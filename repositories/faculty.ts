@@ -66,4 +66,15 @@ export class FacultyRepository {
     await prisma.$disconnect()
     return deletedFaculty
   }
+  static async getFacultyByDoctorId(doctorId: string) {
+    const faculty = await prisma.doctor.findUnique({
+      where: {
+        id: doctorId,
+      },
+      include: {
+        faculty: true,
+      },
+    })
+    return faculty?.faculty
+  }
 }

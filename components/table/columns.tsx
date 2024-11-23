@@ -1,11 +1,9 @@
 'use client'
-
 import { ColumnDef } from '@tanstack/react-table'
 import React from 'react'
 import { AppointmentModal } from '../AppointmentModal'
 import { StatusBadge } from '../StatusBadge'
 import { AppointmentSchedule } from '@/types/interface'
-
 export const columns: ColumnDef<AppointmentSchedule>[] = [
   {
     header: 'STT',
@@ -21,7 +19,6 @@ export const columns: ColumnDef<AppointmentSchedule>[] = [
       return <p className="text-14-medium ">{appointment.profile.name}</p>
     },
     filterFn: (row, columnId, filterValue) => {
-      // Access the patient's name for filtering
       const patientName = (row.getValue(columnId) as { name: string })?.name
       return patientName?.toLowerCase().includes(filterValue.toLowerCase())
     },
@@ -72,13 +69,6 @@ export const columns: ColumnDef<AppointmentSchedule>[] = [
 
       return (
         <div className="flex items-center gap-3">
-          {/* <Image
-            src={doctor?.image ?? '/default-image.jpg'}
-            alt="doctor"
-            width={100}
-            height={100}
-            className="size-8"
-          /> */}
           <p className="whitespace-nowrap">Dr. {doctor?.name}</p>
         </div>
       )

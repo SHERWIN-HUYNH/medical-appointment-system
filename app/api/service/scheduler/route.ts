@@ -1,6 +1,6 @@
 import startCronJob from '@/helpers/cron-job'
 import { NextRequest, NextResponse } from 'next/server'
-export const dynamic = 'force-dynamic'; 
+export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest) {
   if (req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response('Unauthorized', { status: 401 })
