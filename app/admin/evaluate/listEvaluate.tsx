@@ -18,12 +18,16 @@ type Comment = {
 }
 
 const columns = [
-  { header: 'STT', accessor: 'index' },
-  { header: 'Ngày đăng', accessor: 'createdAt' },
-  { header: 'Bác sĩ', accessor: 'doctorName' },
-  { header: 'Tên người dùng', accessor: 'userName' },
-  { header: 'Nội dung', accessor: 'content', className: 'hidden md:table-cell' },
-  { header: 'Số sao đánh giá', accessor: 'rating' },
+  { header: 'STT', accessor: 'index', className: 'w-[5%]' },
+  { header: 'Ngày đăng', accessor: 'createdAt', className: 'text-left w-[10%]' },
+  { header: 'Bác sĩ', accessor: 'doctorName', className: 'text-left w-[16%]' },
+  { header: 'Tên người dùng', accessor: 'userName', className: 'text-left w-[16%]' },
+  {
+    header: 'Nội dung',
+    accessor: 'content',
+    className: 'hidden md:table-cell text-left w-[35%]',
+  },
+  { header: 'Số sao đánh giá', accessor: 'rating', className: 'text-left w-[12%]' },
 ]
 
 const ListComment = () => {
@@ -139,18 +143,18 @@ const ListComment = () => {
     return (
       <tr
         key={item.id}
-        className="h-15 border-b border-slate-200 even:bg-slate-50 text-sm hover:bg-blue-50"
+        className="h-15 border-b text-left border-slate-200 even:bg-slate-50 text-sm hover:bg-blue-50"
       >
         <td className="text-center">{item.index}</td>
-        <td className="text-center">{formattedDate}</td>
-        <td className="text-center">{item.doctorName}</td>
-        <td className="text-center">{item.userName}</td>
-        <td className="hidden md:table-cell text-center">{item.content}</td>
-        <td className="text-center">{renderStars(item.rating)}</td>
-        <td>
+        <td className="text-left">{formattedDate}</td>
+        <td className="text-left">{item.doctorName}</td>
+        <td className="text-left">{item.userName}</td>
+        <td className="hidden md:table-cell text-left">{item.content}</td>
+        <td className="text-left">{renderStars(item.rating)}</td>
+        <td className="w-[5%]">
           <div className="flex items-center gap-2">
             <Button
-              className="w-12 h-10 ml-8 flex items-center justify-center rounded-full bg-red-400"
+              className="w-12 h-10 flex items-center justify-center rounded-full bg-red-400"
               onClick={() => {
                 setCommentToDelete(item)
                 setShowModal(true)

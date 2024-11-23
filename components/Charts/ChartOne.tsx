@@ -20,7 +20,7 @@ const options: ApexOptions = {
   chart: {
     fontFamily: 'Satoshi, sans-serif',
     height: 335,
-    type: chartTypeLine, // Sử dụng hằng số
+    type: chartTypeLine,
     dropShadow: {
       enabled: true,
       color: '#623CEA14',
