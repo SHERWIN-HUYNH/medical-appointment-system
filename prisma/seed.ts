@@ -1,20 +1,12 @@
+import { FacultyRepository } from '@/repositories/faculty'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 async function main() {
-  const appointmentCounts = await prisma.appointment.groupBy({
-    by: ['status'],
-    _count: {
-      id: true,
-    },
-  })
-
-  // Format kết quả
-  const result = appointmentCounts.map((group) => ({
-    status: group.status,
-    count: group._count.id,
-  }))
-  console.log(result)
+  const faculty = await FacultyRepository.getFacultyByDoctorId(
+    '87d17887-308e-4e14-afb1-7360add65d6b',
+  )
+  console.log(faculty?.name)
 }
 main()
   .catch((e) => {

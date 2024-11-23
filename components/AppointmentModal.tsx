@@ -31,23 +31,20 @@ export const AppointmentModal = ({
   description: string
 }) => {
   const [open, setOpen] = useState(false)
+  const title = type == 'Chi tiết' ? 'Chi tiết cuộc hẹn' : 'Hủy lịch hẹn'
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant="ghost"
           className={`capitalize ${type === 'Chi tiết' && 'text-green-500'}`}
-          //disabled={appointment?.status === "cancelled" || appointment?.status === "scheduled"}
         >
           {type}
         </Button>
       </DialogTrigger>
       <DialogContent className="shad-dialog sm:max-w-md">
         <DialogHeader className="mb-4 space-y-3">
-          <DialogTitle className="capitalize">Hủy lịch hẹn</DialogTitle>
-          {/* <DialogDescription>
-            Please fill in the following details to {type} appointment
-          </DialogDescription> */}
+          <DialogTitle className="capitalize">{title}</DialogTitle>
         </DialogHeader>
 
         <AppointmentForm

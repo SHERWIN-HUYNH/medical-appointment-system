@@ -112,4 +112,15 @@ export class FacultyRepository {
       throw error
     }
   }
+  static async getFacultyByDoctorId(doctorId: string) {
+    const faculty = await prisma.doctor.findUnique({
+      where: {
+        id: doctorId,
+      },
+      include: {
+        faculty: true,
+      },
+    })
+    return faculty?.faculty
+  }
 }

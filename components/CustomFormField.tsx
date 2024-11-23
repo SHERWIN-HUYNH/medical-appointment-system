@@ -41,6 +41,7 @@ interface CustomProps {
   renderSkeleton?: (field: any) => React.ReactNode
   fieldType: FormFieldType
   currentPassword?: string
+  css?: string
 }
 
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
@@ -63,6 +64,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
               placeholder={props.placeholder}
               {...field}
               className="shad-input border-0"
+              disabled={props.disabled}
             />
           </FormControl>
         </div>
@@ -206,7 +208,7 @@ const CustomFormField = (props: CustomProps) => {
       render={({ field }) => (
         <FormItem className="flex-1">
           {props.fieldType !== FormFieldType.CHECKBOX && label && (
-            <FormLabel className="shad-input-label ">{label}</FormLabel>
+            <FormLabel className="shad-input-label">{label}</FormLabel>
           )}
           <RenderInput field={field} props={props} />
 

@@ -14,15 +14,14 @@ import {
   Trash2,
 } from 'lucide-react'
 import Link from 'next/link'
-import MedicalRecord from './MedicalRecord'
-import PaymentHistory from './PaymentHistory'
-
 import Modal from '@/components/Modal'
 import { toast } from 'sonner'
-import ProfileDetailModal from '@/app/patients/[userId]/profile/ProfileDetailModal'
-import type { Profile } from '@/types/interface'
+import type { BillInfor, Profile } from '@/types/interface'
 import Header from '@/components/homepage/Header'
 import Footer from '@/components/homepage/Footer'
+import MedicalRecord from '@/components/Patient/MedicalRecord'
+import PaymentHistory from '@/components/Patient/PaymentHistory'
+import ProfileDetailModal from '@/components/Patient/ProfileDetailModal'
 
 const Profile = () => {
   const [selectedOption, setSelectedOption] = useState(1)
@@ -32,7 +31,7 @@ const Profile = () => {
   const [profileToDelete, setProfileToDelete] = useState<string | null>(null)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null)
-
+  const [bills, setBills] = useState<BillInfor[]>()
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
@@ -51,11 +50,28 @@ const Profile = () => {
         console.error('Lỗi khi lấy dữ liệu hồ sơ:', error)
       }
     }
-
+    const fetchBills = async () => {
+      try {
+        const response = await fetch(`/api/bill/${session?.user?.id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (!response.ok) {
+          throw new Error('Lỗi khi lấy dữ liệu hồ sơ')
+        }
+        const bills = await response.json()
+        setBills(bills)
+      } catch (error) {
+        console.log('ERROR', error)
+      }
+    }
+    fetchBills() 
     if (session?.user?.id) {
       fetchProfiles()
     }
-  }, [session])
+  }, [])
 
   const handleDeleteProfile = async () => {
     if (profileToDelete === null) return
@@ -94,11 +110,7 @@ const Profile = () => {
   const Buttons = [
     { id: 1, name: 'Hồ sơ bệnh nhân', icon: <FaBookMedical /> },
     { id: 2, name: 'Phiếu khám bệnh', icon: <FaNewspaper /> },
-    {
-      id: 3,
-      name: 'Lịch sử thanh toán viện phí',
-      icon: <RiMoneyDollarCircleLine />,
-    },
+    { id: 3, name: 'Lịch sử thanh toán viện phí', icon: <RiMoneyDollarCircleLine /> },
   ]
 
   return (
@@ -134,7 +146,6 @@ const Profile = () => {
           <div className="rounded-lg lg:col-span-2 p-4 bg-white w-full">
             {selectedOption === 1 && (
               <div>
-                <p className="text-slate-300 text-xs">PATIENT&apos;S RECORDS</p>
                 <h2 className="text-lg font-bold">Danh sách hồ sơ bệnh nhân</h2>
                 <hr className="w-full border-t-2 border-primary mt-4" />
                 <br />
@@ -240,35 +251,31 @@ const Profile = () => {
 
             {selectedOption === 2 && (
               <div>
-                <p className="text-slate-300 text-xs">MEDICAL BILLS</p>
+                
                 <h2 className="text-lg font-bold">Danh sách phiếu khám bệnh</h2>
                 <hr className="w-full border-t-2 border-blue-300 mt-4" />
                 <br />
-                <MedicalRecord />
+                <MedicalRecord appointments={bills} />
               </div>
             )}
             {selectedOption === 3 && (
               <div>
-                <p className="text-slate-300 text-xs">PAYMENT HISTORY</p>
                 <h2 className="text-lg font-bold">Lịch sử thanh toán viện phí</h2>
                 <hr className="w-full border-t-2 border-blue-300 mt-4" />
                 <br />
-                <PaymentHistory />
+                <PaymentHistory bills={bills} />
               </div>
             )}
           </div>
         </div>
       </div>
       <Footer />
-
-      {/* Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleDeleteProfile}
         message="Bạn có chắc chắn muốn xóa hồ sơ này không?"
       />
-
       {selectedProfile && (
         <ProfileDetailModal
           isOpen={isDetailModalOpen}

@@ -35,4 +35,35 @@ export class BillRespository {
       throw new Error('Error canceling bill', error as Error)
     }
   }
+  static async getAllBillsByUserId(userId: string) {
+    try {
+      const bills = await prisma.bill.findMany({
+        where: {
+          userId: userId,
+        },
+        include: {
+          user: true,
+          appointment: {
+            include: {
+              profile: true,
+              doctorSchedule: {
+                include: {
+                  schedule: true,
+                  doctor: {
+                    include: {
+                      faculty: true,
+                    },
+                  },
+                },
+              },
+              Service: true,
+            },
+          },
+        },
+      })
+      return bills
+    } catch (error) {
+      throw new Error('Error retrieving bills', error as Error)
+    }
+  }
 }

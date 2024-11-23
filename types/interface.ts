@@ -15,6 +15,13 @@ export interface Profile {
   pastMedicalHistory: string
   userId: string
 }
+export interface UserInfor {
+  id: string
+  name: string
+  email: string
+  roleName: string
+  phone: number
+}
 export interface UserRole {
   id: string
   name: string
@@ -63,6 +70,7 @@ export interface Doctor {
   isActive: boolean
   comments: Comment[]
   doctorSchedule: Schedule[]
+  faculty: Faculty
 }
 export interface Appointment {
   profileId: string
@@ -82,6 +90,7 @@ export interface AppointmentSchedule {
   doctorScheduleId: string
   profile: Profile
   doctorSchedule: DoctorSchedule
+  Service: Service
 }
 export interface CreateAppointment {
   profileId: string
@@ -107,4 +116,15 @@ export interface Bill {
   status: string
   paymentMethod?: string
   note?: string
+}
+export interface BillInfor {
+  id: string
+  price: number
+  appointmentId: string
+  userId: string
+  createdAt: Date
+  updatedAt: Date
+  status: string
+  appointment: AppointmentSchedule
+  user: UserInfor
 }
