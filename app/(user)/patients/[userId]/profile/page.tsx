@@ -67,7 +67,7 @@ const Profile = () => {
         console.log('ERROR', error)
       }
     }
-    fetchBills() 
+    fetchBills()
     if (session?.user?.id) {
       fetchProfiles()
     }
@@ -251,7 +251,6 @@ const Profile = () => {
 
             {selectedOption === 2 && (
               <div>
-                
                 <h2 className="text-lg font-bold">Danh sách phiếu khám bệnh</h2>
                 <hr className="w-full border-t-2 border-blue-300 mt-4" />
                 <br />

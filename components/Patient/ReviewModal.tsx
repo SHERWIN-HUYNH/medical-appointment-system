@@ -52,13 +52,10 @@ const ReviewModal = (props: ReviewModalProps) => {
           <Button
             onClick={onSubmit}
             disabled={rating === 0}
-            className={clsx(
-              'bg-blue-800 text-white',
-              {
-                'opacity-50 cursor-not-allowed': rating === 0,
-                'hover:bg-blue-700': rating > 0
-              }
-            )}
+            className={clsx('bg-blue-800 text-white', {
+              'opacity-50 cursor-not-allowed': rating === 0,
+              'hover:bg-blue-700': rating > 0,
+            })}
           >
             Gửi đánh giá
           </Button>
