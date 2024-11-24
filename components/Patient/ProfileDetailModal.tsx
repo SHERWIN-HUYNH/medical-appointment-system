@@ -48,63 +48,67 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
         </div>
         <div className="grid grid-cols-2 gap-2">
           <div className="space-y-2">
-            <p className="flex items-center gap-2">
-              <CircleUser className="w-5 h-5 text-slate-400" />
-              <span className="text-slate-400">Họ và tên:</span> {profile.name}
-            </p>
-            <p className="flex items-center gap-2">
-              <Mails className="w-5 h-5 text-slate-400" />
-              <span className="text-slate-400">Email:</span> {profile.email}
-            </p>
-            <p className="flex items-center gap-2">
-              <Smartphone className="w-5 h-5 text-slate-400" />
-              <span className="text-slate-400">Số điện thoại:</span>
-              {profile.phone ? profile.phone : 'N/A'}
-            </p>
-            <p className="flex items-center gap-2">
-              <FaVenusMars className="w-5 h-5 text-slate-400" />
-              <span className="text-slate-400">Giới tính:</span>
-              {profile.gender === 'MALE'
-                ? 'Nam'
-                : profile.gender === 'FEMALE'
-                  ? 'Nữ'
-                  : 'Khác'}
-            </p>
-            <p className="flex items-center gap-2">
-              <Cake className="w-5 h-5 text-slate-400" />
-              <span className="text-slate-400">Ngày sinh:</span>
-              {profile.birthDate
-                ? new Date(profile.birthDate).toLocaleDateString()
-                : 'N/A'}
-            </p>
+            <ul className="list-none space-y-2">
+              <li className="flex items-center gap-2">
+                <CircleUser className="w-5 h-5 text-slate-400" />
+                <span className="text-slate-400">Họ và tên:</span> {profile.name}
+              </li>
+              <li className="flex items-center gap-2">
+                <Mails className="w-5 h-5 text-slate-400" />
+                <span className="text-slate-400">Email:</span> {profile.email}
+              </li>
+              <li className="flex items-center gap-2">
+                <Smartphone className="w-5 h-5 text-slate-400" />
+                <span className="text-slate-400">Số điện thoại:</span>
+                {profile.phone ? profile.phone : 'N/A'}
+              </li>
+              <li className="flex items-center gap-2">
+                <FaVenusMars className="w-5 h-5 text-slate-400" />
+                <span className="text-slate-400">Giới tính:</span>
+                {profile.gender === 'MALE'
+                  ? 'Nam'
+                  : profile.gender === 'FEMALE'
+                    ? 'Nữ'
+                    : 'Khác'}
+              </li>
+              <li className="flex items-center gap-2">
+                <Cake className="w-5 h-5 text-slate-400" />
+                <span className="text-slate-400">Ngày sinh:</span>
+                {profile.birthDate
+                  ? new Date(profile.birthDate).toLocaleDateString()
+                  : 'N/A'}
+              </li>
+            </ul>
           </div>
           <div className="space-y-2">
-            <p className="flex items-center gap-2">
-              <Cable className="w-5 h-5 text-slate-400" />
-              <span className="text-slate-400">Triệu chứng:</span>{' '}
-              {profile.symptom || 'Không có'}
-            </p>
-            <p className="flex items-center gap-2">
-              <History className="w-5 h-5 text-slate-400" />
-              <span className="text-slate-400">Tiền sử bệnh:</span>{' '}
-              {profile.pastMedicalHistory || 'Không có'}
-            </p>
-            <p className="flex items-center gap-2">
-              <Scroll className="w-5 h-5 text-slate-400" />
-              <span className="text-slate-400">Loại giấy tờ:</span>{' '}
-              {profile.identificationType}
-            </p>
-            <p className="flex items-center gap-2">
-              <FileDigit className="w-5 h-5 text-slate-400" />
-              <span className="text-slate-400">Số giấy tờ:</span>{' '}
-              {profile.identificationNumber}
-            </p>
+            <ul className="list-none space-y-2">
+              <li className="flex items-center gap-2">
+                <Cable className="w-5 h-5 text-slate-400" />
+                <span className="text-slate-400">Triệu chứng:</span>{' '}
+                {profile.symptom || 'Không có'}
+              </li>
+              <li className="flex items-center gap-2">
+                <History className="w-5 h-5 text-slate-400" />
+                <span className="text-slate-400">Tiền sử bệnh:</span>{' '}
+                {profile.pastMedicalHistory || 'Không có'}
+              </li>
+              <li className="flex items-center gap-2">
+                <Scroll className="w-5 h-5 text-slate-400" />
+                <span className="text-slate-400">Loại giấy tờ:</span>{' '}
+                {profile.identificationType}
+              </li>
+              <li className="flex items-center gap-2">
+                <FileDigit className="w-5 h-5 text-slate-400" />
+                <span className="text-slate-400">Số giấy tờ:</span>{' '}
+                {profile.identificationNumber}
+              </li>
+            </ul>
           </div>
         </div>
 
         <div className="mt-4 flex justify-end">
           <button
-            className="bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] hover:from-[#67e0f3] hover:to-[#e7f1f2] text-white px-3 py-1.5 rounded  transition-colors"
+            className="bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-white px-3 py-1.5 rounded  transition-colors"
             onClick={onClose}
           >
             Đóng

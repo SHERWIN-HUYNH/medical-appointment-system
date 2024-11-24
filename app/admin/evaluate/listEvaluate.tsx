@@ -1,7 +1,6 @@
 'use client'
 import ModalDelete from '@/components/ModalDelete'
 import Pagination from '@/components/Pagination'
-import Table from '@/components/Table'
 import TableSearch from '@/components/table/TableSearch'
 import { Button } from '@/components/ui/button'
 import { Trash2, Star as StarSolid } from 'lucide-react'
@@ -15,6 +14,28 @@ type Comment = {
   doctorName: string
   content: string
   rating: number
+}
+interface TableProps<T> {
+  columns: { header: string; accessor: string; className?: string }[]
+  data: T[]
+  renderRow: (row: T) => React.ReactNode
+}
+
+function Table<T>({ columns, data, renderRow }: TableProps<T>) {
+  return (
+    <table className="w-full border-collapse border border-slate-200">
+      <thead>
+        <tr>
+          {columns.map((col) => (
+            <th key={col.accessor} className={col.className}>
+              {col.header}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>{data.map(renderRow)}</tbody>
+    </table>
+  )
 }
 
 const columns = [
