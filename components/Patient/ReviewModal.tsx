@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import clsx from 'clsx'
 
 interface ReviewModalProps {
   rating: number
@@ -51,9 +52,10 @@ const ReviewModal = (props: ReviewModalProps) => {
           <Button
             onClick={onSubmit}
             disabled={rating === 0}
-            className={`bg-blue-800 text-white ${
-              rating === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
-            }`}
+            className={clsx('bg-blue-800 text-white', {
+              'opacity-50 cursor-not-allowed': rating === 0,
+              'hover:bg-blue-700': rating > 0,
+            })}
           >
             Gửi đánh giá
           </Button>
