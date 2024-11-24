@@ -4,17 +4,17 @@ const prisma = new PrismaClient()
 
 type GroupedData = {
   [key: string]: {
-    year: number;
-    month: number;
-    totalAppointments: number;
-    totalAmount: number;
+    year: number
+    month: number
+    totalAppointments: number
+    totalAmount: number
     appointments: {
-      id: string;
-      date: string;
-      price: number;
-    }[];
-  };
-};
+      id: string
+      date: string
+      price: number
+    }[]
+  }
+}
 
 export class ChartRepository {
   static async getAppointmentsSummaryByFaculty() {
@@ -22,7 +22,7 @@ export class ChartRepository {
       const appointments = await prisma.appointment.findMany({
         where: {
           status: {
-            in: [AppointmentStatus.SCHEDULED, AppointmentStatus.PENDING],
+            in: [AppointmentStatus.SCHEDULED],
           },
         },
         select: {
@@ -130,36 +130,36 @@ export class ChartRepository {
           },
         },
       })
-  
+
       const groupedData = appointments.reduce<GroupedData>((acc, appointment) => {
         const date = new Date(appointment.doctorSchedule.schedule.date)
         const year = date.getFullYear()
         const month = date.getMonth() + 1
-  
+
         const key = `${year}-${month}`
         if (!acc[key]) {
           acc[key] = {
             year,
             month,
             totalAmount: 0,
-            totalAppointments: 0, // Số lượng lịch hẹn
+            totalAppointments: 0,
             appointments: [],
           }
         }
-  
+
         acc[key].totalAmount += appointment.payments?.price || 0
-        acc[key].totalAppointments += 1 // Tăng số lượng lịch hẹn
+        acc[key].totalAppointments += 1
         acc[key].appointments.push({
           id: appointment.id,
           date: appointment.doctorSchedule.schedule.date,
           price: appointment.payments?.price || 0,
         })
-  
+
         return acc
       }, {})
-  
+
       const result = Object.values(groupedData)
-  
+
       return result
     } catch (error) {
       console.error('Error retrieving and grouping appointments:', error)
@@ -168,5 +168,4 @@ export class ChartRepository {
       await prisma.$disconnect()
     }
   }
-  
 }

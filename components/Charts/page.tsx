@@ -34,9 +34,7 @@ const Chart: React.FC = () => {
         }
 
         const responseData = await response.json()
-        const data: AppointmentReport[] = Array.isArray(responseData)
-          ? responseData
-          : []
+        const data: AppointmentReport[] = Array.isArray(responseData) ? responseData : []
 
         if (data.length === 0) {
           console.warn('Không có dữ liệu để hiển thị.')

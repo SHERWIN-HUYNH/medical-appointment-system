@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import ReactApexChart from 'react-apexcharts';
-import { ApexOptions } from 'apexcharts';
+import React, { useState, useEffect } from 'react'
+import ReactApexChart from 'react-apexcharts'
+import { ApexOptions } from 'apexcharts'
 
 interface AppointmentReport {
-  facultyId: string;
-  facultyName: string;
-  scheduledAppointments: number;
-  completionRate: number;
+  facultyId: string
+  facultyName: string
+  scheduledAppointments: number
+  completionRate: number
 }
 
 const ChartThree: React.FC = () => {
-  const [series, setSeries] = useState<number[]>([]);
-  const [labels, setLabels] = useState<string[]>([]);
+  const [series, setSeries] = useState<number[]>([])
+  const [labels, setLabels] = useState<string[]>([])
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
       fontFamily: 'Satoshi, sans-serif',
@@ -57,7 +57,7 @@ const ChartThree: React.FC = () => {
         },
       },
     ],
-  });
+  })
 
   useEffect(() => {
     const fetchAppointmentData = async () => {
@@ -67,42 +67,43 @@ const ChartThree: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-        });
+        })
 
         if (!response.ok) {
-          throw new Error('Lỗi khi lấy dữ liệu báo cáo');
+          throw new Error('Lỗi khi lấy dữ liệu báo cáo')
         }
 
-        const responseData = await response.json();
-        const data: AppointmentReport[] = Array.isArray(responseData)
-          ? responseData
-          : [];
+        const responseData = await response.json()
+        const data: AppointmentReport[] = Array.isArray(responseData) ? responseData : []
 
         if (data.length === 0) {
-          console.warn('Không có dữ liệu để hiển thị.');
-          return;
+          console.warn('Không có dữ liệu để hiển thị.')
+          return
         }
 
-        const sortedData = data.sort((a, b) => b.completionRate - a.completionRate);
-        const topThree = sortedData.slice(0, 3);
-        const topThreeTotal = topThree.reduce((acc, item) => acc + item.completionRate, 0);
-        const othersPercentage = 100 - topThreeTotal;
-        const updatedLabels = [...topThree.map((item) => item.facultyName), 'Khác'];
-        const updatedSeries = [...topThree.map((item) => item.completionRate), othersPercentage];
+        const sortedData = data.sort((a, b) => b.completionRate - a.completionRate)
+        const topThree = sortedData.slice(0, 3)
+        const topThreeTotal = topThree.reduce((acc, item) => acc + item.completionRate, 0)
+        const othersPercentage = 100 - topThreeTotal
+        const updatedLabels = [...topThree.map((item) => item.facultyName), 'Khác']
+        const updatedSeries = [
+          ...topThree.map((item) => item.completionRate),
+          othersPercentage,
+        ]
 
-        setLabels(updatedLabels);
-        setSeries(updatedSeries);
+        setLabels(updatedLabels)
+        setSeries(updatedSeries)
         setOptions((prevOptions) => ({
           ...prevOptions,
           labels: updatedLabels,
-        }));
+        }))
       } catch (error) {
-        console.error('Error fetching appointment data:', error);
+        console.error('Error fetching appointment data:', error)
       }
-    };
+    }
 
-    fetchAppointmentData();
-  }, []);
+    fetchAppointmentData()
+  }, [])
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5">
@@ -132,14 +133,14 @@ const ChartThree: React.FC = () => {
               ></span>
               <p className="flex w-full justify-start text-xs font-medium text-black dark:text-white">
                 <span>{label}</span>
-                <span className='ml-1'>{series[index]}%</span>
+                <span className="ml-1">{series[index]}%</span>
               </p>
             </div>
           </div>
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ChartThree;
+export default ChartThree

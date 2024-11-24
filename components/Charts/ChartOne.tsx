@@ -22,14 +22,14 @@ const options: ApexOptions = {
     position: 'top',
     horizontalAlign: 'left',
   },
-  colors: ['#80CAEE'],
+  colors: ['#6577F3'],
   chart: {
     fontFamily: 'Satoshi, sans-serif',
     height: 335,
     type: chartTypeLine,
     dropShadow: {
       enabled: true,
-      color: '#623CEA14',
+      color: '#6577F3',
       top: 10,
       blur: 4,
       left: 0,
@@ -79,7 +79,7 @@ const options: ApexOptions = {
   markers: {
     size: 4,
     colors: '#fff',
-    strokeColors: ['#80CAEE'],
+    strokeColors: ['#6577F3'],
     strokeWidth: 3,
     strokeOpacity: 0.9,
     strokeDashArray: 0,
@@ -92,7 +92,7 @@ const options: ApexOptions = {
   },
   xaxis: {
     type: 'category',
-    categories: [], // Categories will be dynamically updated based on view (month or year)
+    categories: [],
     axisBorder: {
       show: false,
     },
@@ -107,33 +107,32 @@ const options: ApexOptions = {
       },
     },
     min: 0,
-    max: 100, // Default max for monthly data
+    max: 100,
   },
 }
 
 const ChartOne: React.FC = () => {
   const [viewBy, setViewBy] = useState<'month' | 'year'>('month')
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear())
-  const years = Array.from({ length: 5 }, (_, index) => new Date().getFullYear() - index)
+  const years = Array.from(
+    { length: 5 },
+    (_, index) => new Date().getFullYear() - index,
+  ).sort((a, b) => a - b)
   const [appointmentsData, setAppointmentsData] = useState<AppointmentData[]>([])
-
-  // Monthly data
-  const monthData = {
-    categories: [
-      'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
-    ],
-    series: [
-      { name: `Doanh thu Năm ${selectedYear}`, data: appointmentsData.filter(a => a.year === selectedYear).map(a => a.price) },
-    ],
-    chartType: chartTypeLine,
-    yMax: 100,
-  }
 
   const fetchAppointmentsData = async () => {
     try {
       const response = await fetch(`/api/chart/chart2`)
-      const data: AppointmentData[] = await response.json()
-      setAppointmentsData(data)
+      const data: Array<{ year: number; month: number; totalAmount: number }> =
+        await response.json()
+
+      const formattedData: AppointmentData[] = data.map((item) => ({
+        year: item.year,
+        month: item.month,
+        price: item.totalAmount,
+      }))
+
+      setAppointmentsData(formattedData)
     } catch (error) {
       console.error('Error fetching appointment data:', error)
     }
@@ -143,22 +142,54 @@ const ChartOne: React.FC = () => {
     fetchAppointmentsData()
   }, [])
 
-  // Yearly data (you can adjust this similarly to how you handle monthly data)
-  const yearData = {
-    categories: years.map(year => year.toString()), // Dynamic year categories based on available years
+  const monthData = {
+    categories: [
+      'Tháng 1',
+      'Tháng 2',
+      'Tháng 3',
+      'Tháng 4',
+      'Tháng 5',
+      'Tháng 6',
+      'Tháng 7',
+      'Tháng 8',
+      'Tháng 9',
+      'Tháng 10',
+      'Tháng 11',
+      'Tháng 12',
+    ],
     series: [
-      { name: 'Doanh thu', data: years.map(year => {
-        const yearlyData = appointmentsData.filter(a => a.year === year)
-        return yearlyData.reduce((total, item) => total + item.price, 0) // Calculate total price for each year
-      }) },
+      {
+        name: `Doanh thu Năm ${selectedYear}`,
+        data: Array.from({ length: 12 }, (_, i) => {
+          const month = i + 1
+          const data = appointmentsData.find(
+            (a) => a.year === selectedYear && a.month === month,
+          )
+          return data ? data.price : 0
+        }),
+      },
     ],
     chartType: chartTypeLine,
-    yMax: 1000,
+    yMax: Math.max(100, ...appointmentsData.map((a) => a.price)),
+  }
+
+  const yearData = {
+    categories: years.map((year) => year.toString()),
+    series: [
+      {
+        name: 'Doanh thu',
+        data: years.map((year) => {
+          const yearlyData = appointmentsData.filter((a) => a.year === year)
+          return yearlyData.reduce((total, item) => total + item.price, 0)
+        }),
+      },
+    ],
+    chartType: chartTypeLine,
+    yMax: Math.max(100, ...appointmentsData.map((a) => a.price)),
   }
 
   const currentData = viewBy === 'month' ? monthData : yearData
 
-  // Handle year change
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedYear(Number(event.target.value))
   }
@@ -173,33 +204,40 @@ const ChartOne: React.FC = () => {
             </span>
             <div className="w-full">
               <p className="font-semibold text-[#6577F3]">Doanh thu</p>
-              <p className="text-sm font-medium">{viewBy === 'month' ? `Năm ${selectedYear}` : 'Doanh thu theo năm'}</p>
+              <p className="text-sm font-medium">
+                {viewBy === 'month' ? `Năm ${selectedYear}` : 'Theo năm'}
+              </p>
             </div>
           </div>
         </div>
         <div className="flex w-full max-w-45 justify-end">
-          <div className="inline-flex items-center border-slate-500 rounded-md bg-whiter p-1.5 dark:bg-meta-4 gap-2">
+          <div className="inline-flex items-center border-slate-400 rounded-md bg-white p-1.5 gap-2">
             <Button
               onClick={() => setViewBy('month')}
-              className={`rounded px-3 py-1 text-xs font-medium text-black hover:bg-slate-500 hover:shadow-card dark:text-white dark:hover:bg-boxdark ${viewBy === 'month' ? 'bg-slate-400 text-white' : ''}`}
+              className={`rounded px-3 py-1 text-xs font-medium text-black hover:bg-slate-400 hover:shadow-card  ${viewBy === 'month' ? 'bg-slate-400 text-white' : ''}`}
             >
               Tháng
+              {viewBy === 'month' && (
+                <select
+                  value={selectedYear}
+                  onChange={handleYearChange}
+                  className="ml-2 py-1 text-xs font-medium text-white bg-slate-400 "
+                >
+                  {years.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+              )}
             </Button>
+
             <Button
               onClick={() => setViewBy('year')}
-              className={`rounded px-3 py-1 text-xs font-medium text-black hover:bg-slate-500 hover:shadow-card dark:text-white dark:hover:bg-boxdark ${viewBy === 'year' ? 'bg-slate-400 text-white' : ''}`}
+              className={`rounded px-3 py-1 text-xs font-medium text-black hover:bg-slate-400 hover:shadow-card ${viewBy === 'year' ? 'bg-slate-400 text-white' : ''}`}
             >
               Năm
             </Button>
-            {viewBy === 'month' && (
-              <select value={selectedYear} onChange={handleYearChange} className="rounded px-3 py-1 text-xs font-medium text-black dark:bg-boxdark dark:text-white">
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            )}
           </div>
         </div>
       </div>

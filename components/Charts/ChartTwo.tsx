@@ -84,7 +84,7 @@ const ChartTwo: React.FC = () => {
   }, [])
 
   const filteredData = appointmentsData.filter(
-    (data) => data.year === Number(selectedYear)
+    (data) => data.year === Number(selectedYear),
   )
 
   const monthlyAppointments = Array(12).fill(0)
