@@ -31,6 +31,7 @@ export const authOptions: NextAuthOptions = {
         if (!user) {
           throw new Error('User not found')
         }
+
         const isPasswordCorrect = await compare(credentials.password, user.password)
         if (!isPasswordCorrect) {
           throw new Error('Wrong Password')
@@ -48,7 +49,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        console.log('token', token, user)
         return {
           ...token,
           id: user.id,

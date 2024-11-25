@@ -48,7 +48,7 @@ export const LoginForm = () => {
         router.push('/')
       }
       if (session?.user.roleName === 'ADMIN') {
-        router.push('/test-admin')
+        router.push('/admin')
       }
     } else {
       console.log('ERRPR SESSION', session)

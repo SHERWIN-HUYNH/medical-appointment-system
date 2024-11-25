@@ -8,7 +8,6 @@ export async function GET() {
     if (!appointments || appointments.length === 0) {
       return notFoundResponse('NOT FOUND APPOINTMENTS')
     }
-    console.log('Appointments found:', appointments)
     return successResponse(appointments)
   } catch (error) {
     console.error('Error fetching appointments summary:', error)
