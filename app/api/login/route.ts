@@ -38,12 +38,22 @@ export async function POST(request: Request) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userWithoutPass } = user
     const accessToken = signJwtAccessToken(userWithoutPass)
-
+    let url = ''
+    if (user.roleName === 'ADMIN') {
+      url = '/admin'
+    } else {
+      url = '/'
+    }
     const result = {
       ...userWithoutPass,
       accessToken,
     }
-    return new Response(JSON.stringify(result))
+    return new Response(
+      JSON.stringify({
+        result,
+        url,
+      }),
+    )
   } else
     return new Response(
       JSON.stringify({
