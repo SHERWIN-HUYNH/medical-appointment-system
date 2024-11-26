@@ -64,23 +64,39 @@ export function DataTable<TData, TValue>({
             customProp={''}
           />
         </div>
-        <div>
-          <label htmlFor="status-filter" className="mr-2">
-            Status:
-          </label>
-          <select
-            id="status-filter"
-            value={(table.getColumn('status')?.getFilterValue() as string) ?? ''}
-            onChange={(event) =>
-              table.getColumn('status')?.setFilterValue(event.target.value)
-            }
-            className="p-2 border rounded-2xl"
-          >
-            <option value="">All</option>
-            <option value="PENDING">Pending</option>
-            <option value="SCHEDULED">Scheduled</option>
-            <option value="CANCELLED">Cancelled</option>
-          </select>
+        <div className="flex gap-3">
+          <div>
+            <Input
+              placeholder="Tìm theo tên bác sĩ..."
+              value={table.getColumn('primaryPhysician')?.getFilterValue() as string}
+              onChange={(event) => {
+                console.log(
+                  table.getColumn('primaryPhysician')?.setFilterValue(event.target.value),
+                )
+                table.getColumn('primaryPhysician')?.setFilterValue(event.target.value)
+              }}
+              className="max-w-sm rounded-2xl"
+              customProp={''}
+            />
+          </div>
+          <div>
+            <label htmlFor="status-filter" className="mr-2">
+              Status:
+            </label>
+            <select
+              id="status-filter"
+              value={(table.getColumn('status')?.getFilterValue() as string) ?? ''}
+              onChange={(event) =>
+                table.getColumn('status')?.setFilterValue(event.target.value)
+              }
+              className="p-2 border rounded-2xl"
+            >
+              <option value="">All</option>
+              <option value="PENDING">Pending</option>
+              <option value="SCHEDULED">Scheduled</option>
+              <option value="CANCELLED">Cancelled</option>
+            </select>
+          </div>
         </div>
       </div>
 

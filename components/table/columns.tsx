@@ -14,13 +14,15 @@ export const columns: ColumnDef<AppointmentSchedule>[] = [
   {
     accessorKey: 'patient',
     header: 'Bệnh nhân',
+    // enableColumnFilter: true,
     cell: ({ row }) => {
       const appointment = row.original
       return <p className="text-14-medium ">{appointment.profile.name}</p>
     },
+    accessorFn: (row) => row.profile.name, // Extract the patient name for display and filtering
     filterFn: (row, columnId, filterValue) => {
-      const patientName = (row.getValue(columnId) as { name: string })?.name
-      return patientName?.toLowerCase().includes(filterValue.toLowerCase())
+      const patientName = row.getValue<string>(columnId)
+      return patientName.toLowerCase().includes(filterValue.toLowerCase())
     },
   },
   {
@@ -63,6 +65,7 @@ export const columns: ColumnDef<AppointmentSchedule>[] = [
   {
     accessorKey: 'primaryPhysician',
     header: 'Bác sĩ',
+    // enableColumnFilter: true,
     cell: ({ row }) => {
       const appointment = row.original
       const doctor = appointment.doctorSchedule.doctor
@@ -72,6 +75,11 @@ export const columns: ColumnDef<AppointmentSchedule>[] = [
           <p className="whitespace-nowrap">Dr. {doctor?.name}</p>
         </div>
       )
+    },
+    accessorFn: (row) => row.doctorSchedule.doctor?.name || '', // Extract the doctor name
+    filterFn: (row, columnId, filterValue) => {
+      const doctorName = row.getValue<string>(columnId)
+      return doctorName.toLowerCase().includes(filterValue.toLowerCase())
     },
   },
   {

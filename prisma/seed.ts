@@ -3,10 +3,18 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 async function main() {
-  const faculty = await FacultyRepository.getFacultyByDoctorId(
-    '87d17887-308e-4e14-afb1-7360add65d6b',
-  )
-  console.log(faculty?.name)
+  const user = await prisma.user.update({
+    where: {
+      id: '02822a38-de27-413e-89ee-8642ba558ce3',
+    },
+    data: {
+      name: 'Huynh Trung',
+      email: 'huynhchitrung020503@gmail.com',
+      phone: 'chitrung020503',
+      password: 'chitrung020503',
+    },
+  })
+  console.log(user)
 }
 main()
   .catch((e) => {

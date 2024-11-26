@@ -251,9 +251,14 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
           />
         </div>
       </div>
-      <Button onClick={saveSelectedTimeSlots} className=" text-white hover:bg-primary/50">
-        Save Timeslots
-      </Button>
+      <div className="flex justify-end">
+        <Button
+          onClick={saveSelectedTimeSlots}
+          className=" mb-2 mr-2 text-white hover:bg-primary/50"
+        >
+          Lưu lịch làm việc
+        </Button>
+      </div>
     </div>
   )
 }

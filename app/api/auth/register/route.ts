@@ -4,6 +4,8 @@ import {
   createdResponse,
   internalServerErrorResponse,
 } from '@/helpers/response'
+import { createAccount } from '@/lib/email/createAccount'
+import { sendMail } from '@/lib/send-email'
 import { UserRepository } from '@/repositories/user'
 import { RegisterSchema } from '@/validation/register'
 import { UserRole } from '@prisma/client'
@@ -11,22 +13,37 @@ import { UserRole } from '@prisma/client'
 export const POST = async (request: Request) => {
   try {
     const body = await request.json()
-
-    const { name, email, password, phone } = RegisterSchema.parse(body)
+    console.log('BODY', body)
+    const { username: name, email, password, phone, role } = RegisterSchema.parse(body)
 
     const user = await UserRepository.getUserByEmail(email)
     if (user) {
       return conflictResponse('User already exists.')
     }
     const hashedPassword = await hashPassword(password)
-    await UserRepository.insert({
+    console.log('ROLE', role)
+    const account = await UserRepository.insert({
       name,
       email,
       password: hashedPassword,
       phone,
-      roleName: UserRole.USER,
+      roleName: role ?? UserRole.USER,
     })
-
+    if (account) {
+      if (role == UserRole.ADMIN || role == UserRole.DOCTOR) {
+        sendMail({
+          sendTo: account?.email,
+          subject: 'Tạo mật khẩu thành công',
+          text: '',
+          html: createAccount(
+            email,
+            password,
+            name,
+            'http://localhost:3000/auth/reset-password',
+          ),
+        })
+      }
+    }
     return createdResponse({
       message: 'User created successfully.',
     })

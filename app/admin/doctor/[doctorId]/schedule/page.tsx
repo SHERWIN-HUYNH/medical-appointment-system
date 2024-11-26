@@ -1,12 +1,32 @@
 'use client'
-
 import DefaultLayout from '@/components/Layouts/defaultLayout'
 import { useParams } from 'next/navigation'
 import DoctorSchedule from '@/components/DoctorSchedule'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { Doctor, Faculty } from '@/types/interface'
+type ResponseData = {
+  faculty: Faculty
+} & Doctor
 const WorkingSchedulePage = () => {
   const { doctorId } = useParams()
+  const [doctor, setDoctor] = useState<ResponseData | null>()
   if (!doctorId) return null
+  useEffect(() => {
+    const fetchDoctor = async () => {
+      try {
+        const response = await fetch(`/api/doctor/${doctorId}`)
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`)
+        }
+        const data: Doctor = await response.json()
+        setDoctor(data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    fetchDoctor()
+  }, [doctorId])
+  if (!doctor) return null
   const doctorIdString =
     typeof doctorId === 'string' ? doctorId : JSON.stringify(doctorId)
   return (
@@ -64,7 +84,7 @@ const WorkingSchedulePage = () => {
                   </svg>
                 </div>
                 <div className="flex justify-center flex-col">
-                  <p>Chuyên khoa: Khám xương khớp</p>
+                  <p>Chuyên khoa: {doctor.faculty.name}</p>
                 </div>
               </li>
               <li className="text-16-normal flex ">
@@ -89,7 +109,7 @@ const WorkingSchedulePage = () => {
                   </svg>
                 </div>
                 <div className="flex justify-center flex-col">
-                  <p>Bác sĩ: Cao Thỉ</p>
+                  <p>Bác sĩ: {doctor.name}</p>
                 </div>
               </li>
               <li className="text-16-normal flex ">
@@ -114,36 +134,12 @@ const WorkingSchedulePage = () => {
                   </svg>
                 </div>
                 <div className="flex justify-center flex-col">
-                  <p>Học hàm/Học vị: PGS</p>
-                </div>
-              </li>
-              <li className="text-16-normal flex ">
-                <div className=" mr-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-house-plus"
-                  >
-                    <path d="M13.22 2.416a2 2 0 0 0-2.511.057l-7 5.999A2 2 0 0 0 3 10v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7.354" />
-                    <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
-                    <path d="M15 6h6" />
-                    <path d="M18 3v6" />
-                  </svg>
-                </div>
-                <div className="flex justify-center flex-col">
-                  <p>Dịch vụ: Khám dịch vụ</p>
+                  <p>Học hàm/Học vị: {doctor.academicTitle}</p>
                 </div>
               </li>
             </ul>
           </div>
-          <main className="bg-white flex flex-col w-[940px] h-min justify-between overflow-hidden">
+          <main className="bg-white flex flex-col w-[861px] h-min justify-between overflow-hidden">
             <h1 className="blue-header w-full">Vui lòng chọn khung giờ làm việc</h1>
             <DoctorSchedule doctorId={doctorIdString} />
           </main>

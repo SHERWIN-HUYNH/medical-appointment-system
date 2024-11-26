@@ -39,7 +39,7 @@ export function transformApiEventData(data: DoctorScheduleResult) {
   const end = new Date(`${schedule.date}T${endTime}`)
   return {
     id: `${schedule.date}-${schedule.timeSlot}`,
-    title: isAvailable == true ? 'Trống' : 'Có hẹn',
+    title: '',
     start: start,
     end: end,
     backgroundColor: isAvailable == true ? '#00b5f1' : 'red',

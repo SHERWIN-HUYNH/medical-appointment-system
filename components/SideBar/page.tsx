@@ -178,7 +178,7 @@ const menuGroups = [
       {
         icon: <CircleUser />,
         label: 'Tạo tài khoản',
-        route: '/chart',
+        route: '/admin/auth/signup',
       },
     ],
   },

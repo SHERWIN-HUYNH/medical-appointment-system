@@ -9,7 +9,7 @@ import { AppointmentRepository } from '@/repositories/appointment'
 import { BillRespository } from '@/repositories/bill'
 import { BillStatus } from '@prisma/client'
 import { sendMail } from '@/lib/send-email'
-import { createAppointmentEmailContent } from '@/lib/successful-appointment'
+import { createAppointmentEmailContent } from '@/lib/email/successful-appointment'
 import { ScheduleRespository } from '@/repositories/schedule'
 import { UserRepository } from '@/repositories/user'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
