@@ -21,7 +21,7 @@ function Header() {
     {
       id: 3,
       name: 'Dịch vụ',
-      path: '/',
+      path: '/service',
     },
     {
       id: 4,

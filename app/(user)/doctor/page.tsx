@@ -9,7 +9,7 @@ import DoctorLayout from '@/components/Layouts/doctorLayout'
 import Image from 'next/image'
 import { CldImage } from 'next-cloudinary'
 import { useAppointmentContext } from '@/context/AppointmentContext'
-import Link from 'next/link' // Missing import for Link component
+import Link from 'next/link'
 
 interface Doctor {
   id: string
@@ -93,7 +93,7 @@ const Doctor = () => {
       return matchesSearch && matchesTitle && matchesFaculty
     })
     setFilteredDoctors(filtered)
-    setCurrentPage(1) // Reset to first page after filter
+    setCurrentPage(1)
   }
 
   const handleDoctorClick = (facultyId: string, doctorId: string) => {
@@ -174,6 +174,13 @@ const Doctor = () => {
                 <div
                   key={doctor.id}
                   className="bg-white p-2 rounded-lg shadow-md hover:scale-105 hover:border-primary border border-transparent"
+                  style={{
+                    width: '550px',
+                    height: '190px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}
                 >
                   <div className="flex items-center">
                     <CldImage
