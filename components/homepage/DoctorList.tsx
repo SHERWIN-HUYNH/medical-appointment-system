@@ -3,6 +3,10 @@ import React, { useState, useEffect } from 'react'
 import { CldImage } from 'next-cloudinary'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
+import Link from 'next/link'
+import { useAppointmentContext } from '@/context/AppointmentContext'
+import { Button } from '@/components/ui/button'
+import { shortenTitle } from '@/lib/utils'
 
 // Import Swiper styles
 import 'swiper/css'
@@ -19,10 +23,12 @@ type Doctor = {
   academicTitle: string
   gender: boolean
   isActive: boolean
+  description: string
 }
 
 function DoctorList() {
   const [doctors, setDoctors] = useState<Doctor[]>([])
+  const { setData } = useAppointmentContext()
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -38,6 +44,10 @@ function DoctorList() {
 
     fetchDoctors()
   }, [])
+
+  const handleDoctorClick = (facultyId: string, doctorId: string) => {
+    setData({ facultyId, doctorId })
+  }
 
   return (
     <section className="w-full bg-[#F8F8F8]">
@@ -68,8 +78,8 @@ function DoctorList() {
                   </div>
                   <div className="flex flex-col flex-grow justify-between">
                     <div className="mt-4 space-y-2">
-                      <span className="inline-block text-[13px] bg-primary p-1 rounded-full px-2 text-white w-fit">
-                        Bác sĩ
+                      <span className="inline-block text-[13px] p-1 rounded-full px-2 bg-primary text-white w-fit">
+                        {shortenTitle(doctor.academicTitle)}
                       </span>
                       <div className="space-y-2">
                         <h2 className="font-semibold text-base line-clamp-1">
@@ -78,17 +88,30 @@ function DoctorList() {
                         <h2 className="text-sm line-clamp-1">
                           Chuyên khoa: {doctor.faculty.name}
                         </h2>
-                        <h2 className="text-sm line-clamp-1">
-                          Học hàm/học vị: {doctor.academicTitle}
-                        </h2>
                         <h2 className="text-sm">
                           Giới tính: {doctor.gender ? 'Nam' : 'Nữ'}
                         </h2>
+                        <h2 className="text-sm line-clamp-1">
+                          Giới thiệu: {doctor.description}
+                        </h2>
                       </div>
                     </div>
-                    <button className="mt-4 p-2.5 border border-primary text-primary rounded-full w-full text-center text-sm hover:bg-primary hover:text-white transition-all duration-300">
-                      Đặt ngay
-                    </button>
+                    <Link
+                      href={{
+                        pathname: '/choose-service',
+                        query: {
+                          doctorName: doctor.name,
+                          facultyName: doctor.faculty.name,
+                        },
+                      }}
+                    >
+                      <Button
+                        className="mt-4 p-2.5 bg-transparent border border-primary text-primary rounded-full w-full text-center text-sm hover:bg-primary hover:text-white transition-all duration-300"
+                        onClick={() => handleDoctorClick(doctor.facultyId, doctor.id)}
+                      >
+                        Đặt ngay
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </SwiperSlide>
