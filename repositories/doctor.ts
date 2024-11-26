@@ -1,7 +1,17 @@
-import { AppointmentStatus, Doctor, PrismaClient } from '@prisma/client'
+import { AppointmentStatus, Doctor, PrismaClient, Schedule } from '@prisma/client'
 import { getDayOfWeek } from '@/lib/utils'
 
 const prisma = new PrismaClient()
+
+interface DoctorWithSchedule extends Doctor {
+  doctorSchedule: Array<{
+    schedule: Schedule
+  }>
+}
+
+interface DoctorWithScheduleDays extends Doctor {
+  scheduleDays: string[]
+}
 
 export class DoctorRespository {
   static async createDoctor(doctorData: Doctor) {
@@ -159,6 +169,28 @@ export class DoctorRespository {
     }
   }
 
+  // Hàm private để xử lý và gom nhóm lịch làm việc theo ngày
+  private static mapDoctorsWithScheduleDays(
+    doctors: DoctorWithSchedule[],
+  ): DoctorWithScheduleDays[] {
+    return doctors.map((doctor) => {
+      const daysByWeekday = new Map<string, string>()
+      // Gom nhóm các lịch theo thứ trong tuần
+      doctor.doctorSchedule.forEach((ds) => {
+        const weekday = getDayOfWeek(ds.schedule.date)
+        if (!daysByWeekday.has(weekday)) {
+          daysByWeekday.set(weekday, ds.schedule.date)
+        }
+      })
+
+      const uniqueDays = Array.from(daysByWeekday.values())
+      return {
+        ...doctor,
+        scheduleDays: uniqueDays,
+      }
+    })
+  }
+
   static async getDoctorsByFaculty(facultyId: string) {
     const doctors = await prisma.doctor.findMany({
       where: {
@@ -178,27 +210,7 @@ export class DoctorRespository {
       },
     })
 
-    // Gom nhóm các lịch theo thứ trong tuần
-    const doctorsWithScheduleDays = doctors.map((doctor) => {
-      // Tạo Map để lưu trữ ngày đại diện cho mỗi thứ trong tuần
-      const daysByWeekday = new Map<string, string>()
-
-      doctor.doctorSchedule.forEach((ds) => {
-        const weekday = getDayOfWeek(ds.schedule.date)
-        // Nếu thứ này chưa có trong Map, thêm vào với ngày đầu tiên gặp
-        if (!daysByWeekday.has(weekday)) {
-          daysByWeekday.set(weekday, ds.schedule.date)
-        }
-      })
-
-      // Chuyển Map thành mảng các ngày đại diện
-      const uniqueDays = Array.from(daysByWeekday.values())
-
-      return {
-        ...doctor,
-        scheduleDays: uniqueDays,
-      }
-    })
+    const doctorsWithScheduleDays = this.mapDoctorsWithScheduleDays(doctors)
     await prisma.$disconnect()
     return doctorsWithScheduleDays
   }

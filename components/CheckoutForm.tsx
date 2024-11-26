@@ -12,9 +12,8 @@ import {
   CardTitle,
 } from './ui/card'
 import { Button } from './ui/button'
-// import { useParams, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation'
 import { formatPrice } from '@/helpers/formatCurrency'
-import { useAppointmentContext } from '@/context/AppointmentContext'
 
 type CheckoutFormProps = {
   clientSecret: string
@@ -23,19 +22,39 @@ type CheckoutFormProps = {
   date: string
 }
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY as string)
-export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps) {
-  const { data } = useAppointmentContext()
-  console.log('CONTEXT DATA', data)
-  if (clientSecret == '') return <h1>Chưa có sản phẩm</h1>
+export function CheckoutForm({ clientSecret }: CheckoutFormProps) {
+  const searchParams = useSearchParams()
+
+  // Lấy dữ liệu từ query params
+  const date = searchParams.get('date') || ''
+  const timeSlot = searchParams.get('timeSlot') || ''
+  const doctorName = searchParams.get('doctorName') || ''
+  const facultyName = searchParams.get('facultyName') || ''
+  const serviceName = searchParams.get('serviceName') || ''
+  const profileName = searchParams.get('profileName') || ''
+  const profilePhone = searchParams.get('profilePhone') || ''
+
+  // Kiểm tra và log dữ liệu để debug
+  console.log('Checkout data:', {
+    date,
+    timeSlot,
+    doctorName,
+    facultyName,
+    serviceName,
+    profileName,
+    profilePhone,
+  })
+
+  if (clientSecret == '') return <h1>Chưa có sản phẩm</h1>
 
   return (
     <div className="mx-auto card-container animation">
-      <div className=" reset-css card basis-1/4 gap-y-5 max-w-1/4">
+      <div className="reset-css card basis-1/4 gap-y-5 max-w-1/4">
         <div>
           <h1 className="card-header">Thông tin bệnh nhân</h1>
           <ul className="card-body">
             <li className="card-item">
-              <p className=" mt-[6px]">
+              <p className="mt-[6px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="22"
@@ -53,10 +72,10 @@ export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps
                   <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
                 </svg>
               </p>
-              <p>HUYNH TRUNG</p>
+              <p>{profileName}</p>
             </li>
             <li className="card-item">
-              <p className=" mt-[6px]">
+              <p className="mt-[6px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -73,10 +92,10 @@ export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps
                   <path d="M12 18h.01" />
                 </svg>
               </p>
-              <p>0969239222</p>
+              <p>{profilePhone}</p>
             </li>
             <li className="card-item">
-              <p className=" mt-[6px]">
+              <p className="mt-[6px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -106,7 +125,7 @@ export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps
           <h1 className="card-header">Thông tin cơ sở y tế</h1>
           <ul className="card-body">
             <li className="card-item">
-              <p className=" mt-[6px]">
+              <p className="mt-[6px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="22"
@@ -126,7 +145,7 @@ export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps
               </p>
               <p>
                 Bệnh Viện Quận Bình Thạnh<br></br>
-                <span className=" text-[#8a8a8a]">
+                <span className="text-[#8a8a8a]">
                   132 Lê Văn Duyệt, Phường 1, Bình Thạnh, Thành phố Hồ Chí Minh
                 </span>
               </p>
@@ -134,7 +153,7 @@ export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps
           </ul>
         </div>
       </div>
-      <div className=" reset-css card basis-3/4 max-w-3/4">
+      <div className="reset-css card basis-3/4 max-w-3/4">
         <h1 className="card-header">Thông tin thanh toán</h1>
         <div className="flex items-start justify-between">
           <div className="card-body card basis-1/2 max-w-1/2 bg-white h-full">
@@ -145,7 +164,7 @@ export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps
           <div className="card-body card basis-1/2 max-w-1/2 bg-white">
             <Card className="mb-3 rounded-lg border border-solid border-[#00e0ff]">
               <CardHeader>
-                <div className=" flex items-center">
+                <div className="flex items-center">
                   <p>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -166,13 +185,13 @@ export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps
                       <rect x="2" y="5" width="20" height="14" rx="2" />
                     </svg>
                   </p>
-                  <h1 className=" font-semibold text-primary text-2xl">
+                  <h1 className="font-semibold text-primary text-2xl">
                     Thông tin thanh toán
                   </h1>
                 </div>
               </CardHeader>
               <CardContent>
-                <ul className=" px-2 py-3">
+                <ul className="px-2 py-3">
                   <li className="list-item-payment -mt-4">
                     <div className="flex items-start gap-x-2">
                       <p>
@@ -197,7 +216,7 @@ export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps
                       </p>
                       <p className="highlight-text">Chuyên khoa</p>
                     </div>
-                    <p className="li-payment-center">Khám Nội Tổng Quát</p>
+                    <p className="li-payment-center">{facultyName}</p>
                   </li>
                   <li className="list-item-payment">
                     <div className="flex items-center gap-x-2">
@@ -206,7 +225,7 @@ export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps
                       </p>
                       <p className="highlight-text">Bác sĩ</p>
                     </div>
-                    <p className="li-payment-center">LÊ QUỐC BẢO - Tầng 3</p>
+                    <p className="li-payment-center">{doctorName}</p>
                   </li>
                   <li className="list-item-payment">
                     <div className="flex items-center gap-x-2">
@@ -232,9 +251,7 @@ export function CheckoutForm({ clientSecret, timeSlot, date }: CheckoutFormProps
                       </p>
                       <p className="highlight-text">Dịch vụ</p>
                     </div>
-                    <p className="li-payment-center">
-                      Khám Tự Chọn Yêu Cầu (Tầng 2,3 - Khu B)
-                    </p>
+                    <p className="li-payment-center">{serviceName}</p>
                   </li>
                   <li className="list-item-payment">
                     <div className="flex items-center gap-x-2">

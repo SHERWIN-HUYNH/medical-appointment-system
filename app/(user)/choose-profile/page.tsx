@@ -4,7 +4,7 @@ import UserLayout from '@/components/Layouts/userLayout'
 import { Button } from '@/components/ui/button'
 import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   FaUser,
   FaBirthdayCake,
@@ -20,6 +20,7 @@ import {
 import { toast } from 'sonner'
 import Modal from '@/components/Modal'
 import Link from 'next/link'
+import { useAppointmentContext } from '@/context/AppointmentContext'
 
 interface Profile {
   id: string
@@ -42,6 +43,12 @@ const ChooseProfile: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [profileToDelete, setProfileToDelete] = useState<string | null>(null)
   const router = useRouter()
+  const { data } = useAppointmentContext()
+  const searchParams = useSearchParams()
+
+  // Lấy thông tin từ URL query params
+  const date = searchParams.get('date')
+  const timeSlot = searchParams.get('timeSlot')
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -81,6 +88,38 @@ const ChooseProfile: React.FC = () => {
 
   const handleProfileClick = (profileId: string) => {
     setSelectedProfile((prev) => (prev === profileId ? '' : profileId))
+  }
+
+  const handleContinue = (profileId: string) => {
+    const { serviceId, facultyId, doctorId } = data
+    const selectedProfileData = profiles.find((p) => p.id === profileId)
+    const doctorName = searchParams.get('doctorName')
+    const facultyName = searchParams.get('facultyName')
+    const serviceName = searchParams.get('serviceName')
+
+    if (!serviceId || !facultyId || !doctorId || !date || !timeSlot) {
+      toast.error('Thiếu thông tin đặt khám')
+      console.log('Debug info:', {
+        context: data,
+        queryParams: { date, timeSlot },
+      })
+      return
+    }
+
+    // Chuyển đến trang payment với đầy đủ thông tin
+    router.push(
+      `/appointment?` +
+        `date=${date}&` +
+        `timeSlot=${timeSlot}&` +
+        `facultyId=${facultyId}&` +
+        `doctorId=${doctorId}&` +
+        `serviceId=${serviceId}&` +
+        `doctorName=${doctorName}&` +
+        `facultyName=${facultyName}&` +
+        `serviceName=${serviceName}&` +
+        `profileName=${selectedProfileData?.name}&` +
+        `profilePhone=${selectedProfileData?.phone}`,
+    )
   }
 
   return (
@@ -156,16 +195,7 @@ const ChooseProfile: React.FC = () => {
                           query: {
                             id: profile.id,
                             name: profile.name,
-                            email: profile.email,
                             phone: profile.phone,
-                            gender: profile.gender,
-                            identificationType: profile.identificationType,
-                            identificationNumber: profile.identificationNumber,
-                            identificationDocumentUrl: profile.identificationDocumentUrl,
-                            pastMedicalHistory: profile.pastMedicalHistory,
-                            birthDate: profile.birthDate
-                              ? profile.birthDate.toString()
-                              : '',
                           },
                         }}
                       >
@@ -177,7 +207,7 @@ const ChooseProfile: React.FC = () => {
                     </div>
                     <Button
                       className="flex items-center bg-primary text-white py-1 px-4 rounded-lg shadow-md transform transition duration-200 hover:scale-105 hover:bg-blue-400"
-                      onClick={() => router.push(`/choose-faculty`)}
+                      onClick={() => handleContinue(profile.id)}
                     >
                       <FaArrowRight className="mr-2" />
                       Tiếp tục
