@@ -51,7 +51,7 @@ function DoctorList() {
 
   return (
     <section className="w-full bg-[#F8F8F8]">
-      <div className="container mx-auto py-16">
+      <div className="container mx-auto py-12">
         <h2 className="font-bold text-4xl mb-12 text-center">
           <span className="text-primary">Bác sĩ nổi bật</span>
         </h2>
@@ -66,7 +66,7 @@ function DoctorList() {
           >
             {doctors.map((doctor) => (
               <SwiperSlide key={doctor.id} className="h-full py-8">
-                <div className="w-[280px] h-full bg-white border border-slate-200 rounded-lg p-4 cursor-pointer hover:shadow-lg hover:scale-105 transition-all ease-in-out flex flex-col">
+                <div className="w-[280px] h-full bg-white border border-slate-200 rounded-lg p-4 cursor-pointer shadow-lg hover:scale-105 transition-all ease-in-out flex flex-col">
                   <div className="w-full h-[200px] overflow-hidden rounded-lg flex-shrink-0">
                     <CldImage
                       src={`${doctor.image}`}

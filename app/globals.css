@@ -355,6 +355,35 @@
   .custom-select > option:first-of-type {
     @apply text-[#00b5f1] font-medium;
   }
+
+  /* Thêm các utility classes mới */
+  .primary-gradient {
+    @apply bg-gradient-to-r from-[#00b5f1] to-[#00e0ff];
+  }
+
+  .primary-gradient-hover {
+    @apply hover:bg-gradient-to-r hover:from-[#00b5f1] hover:to-[#00e0ff];
+  }
+
+  .primary-text {
+    @apply text-[#003553];
+  }
+
+  .primary-border {
+    @apply border-[#00e0ff];
+  }
+
+  .table-base {
+    @apply w-full border-collapse border border-slate-300;
+  }
+
+  .table-cell {
+    @apply border border-slate-300 px-4 py-2 text-sm text-left;
+  }
+
+  .table-header {
+    @apply bg-slate-200 font-semibold text-slate-600;
+  }
 }
 
 /* =====  REACT-DATEPICKER OVERRIDES */

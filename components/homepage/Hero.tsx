@@ -42,12 +42,12 @@ const Hero = () => {
   const services = [
     {
       name: 'Đặt khám theo chuyên khoa',
-      icon: '/assets/icons/dat_kham_theo_chuyen_khoa.png',
+      icon: '/assets/icons/dat_kham_theo_chuyen_khoa.webp',
       href: '/choose-faculty',
     },
     {
       name: 'Đặt khám theo bác sĩ',
-      icon: '/assets/icons/dat_kham_theo_bac_si.png',
+      icon: '/assets/icons/dat_kham_theo_bac_si.webp',
       href: '/doctor',
     },
     {

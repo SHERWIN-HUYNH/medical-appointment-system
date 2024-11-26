@@ -8,6 +8,7 @@ import { Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { Button } from '../ui/button'
+import Link from 'next/link'
 
 // Định nghĩa type Faculty
 type Faculty = {
@@ -52,29 +53,33 @@ const CategorySearch = () => {
         >
           {faculties.map((faculty) => (
             <SwiperSlide key={faculty.id} className="py-4">
-              <div className="w-[160px] h-[160px] flex flex-col text-center items-center p-4 bg-white border border-slate-200 rounded-lg cursor-pointer shadow-lg hover:scale-105 transition-all ease-in-out gap-3">
-                <div className="p-4 rounded-2xl bg-primary">
-                  <CldImage
-                    src={`${faculty.image}`}
-                    alt={faculty.name}
-                    width={35}
-                    height={35}
-                    className="text-white h-9 w-9"
-                  />
+              <Link href={`/faculty/${faculty.id}`}>
+                <div className="w-[160px] h-[160px] flex flex-col text-center items-center p-4 bg-white border border-slate-200 rounded-lg cursor-pointer shadow-lg hover:scale-105 transition-all ease-in-out gap-3">
+                  <div className="p-4 rounded-2xl bg-primary">
+                    <CldImage
+                      src={`${faculty.image}`}
+                      alt={faculty.name}
+                      width={35}
+                      height={35}
+                      className="text-white h-9 w-9"
+                    />
+                  </div>
+                  <p className="text-sm text-blue-900 mt-1 min-h-[40px] line-clamp-2 break-words hyphens-auto">
+                    {faculty.name}
+                  </p>
                 </div>
-                <p className="text-sm text-blue-900 mt-1 min-h-[40px] line-clamp-2 break-words hyphens-auto">
-                  {faculty.name}
-                </p>
-              </div>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
 
       {/* Thêm button Xem thêm */}
-      <Button className="mt-6 px-8 py-2.5 bg-transparent text-primary border-2 border-primary rounded-full hover:bg-primary hover:text-white transition-all duration-300 font-medium">
-        Xem thêm
-      </Button>
+      <Link href="/faculty">
+        <Button className="mt-6 px-8 py-2.5 bg-transparent text-primary border-2 border-primary rounded-full hover:bg-primary hover:text-white transition-all duration-300 font-medium">
+          Xem thêm
+        </Button>
+      </Link>
     </div>
   )
 }
