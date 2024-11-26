@@ -90,7 +90,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             withCountryCallingCode
             value={field.value as E164Number | undefined}
             onChange={field.onChange}
-            className="input-phone"
+            className={props.css ? props.css : 'input-phone'}
           />
         </FormControl>
       )
@@ -200,7 +200,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
 }
 
 const CustomFormField = (props: CustomProps) => {
-  const { control, name, label } = props
+  const { control, name, label, css } = props
   return (
     <FormField
       control={control}

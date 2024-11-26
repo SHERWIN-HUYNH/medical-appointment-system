@@ -13,7 +13,6 @@ export async function GET(req: Request, context: Context) {
   if (!doctorId) {
     return badRequestResponse('MISSING DOCTOR ID')
   }
-
   const doctor = await DoctorRespository.getDoctorById(doctorId) // Fetch by ID
   if (!doctor) {
     return notFoundResponse('DOCTOR NOT FOUND')

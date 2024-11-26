@@ -46,6 +46,9 @@ export class DoctorRespository {
       where: {
         id: doctorId,
       },
+      include: {
+        faculty: true,
+      },
     })
     await prisma.$disconnect()
     return doctor

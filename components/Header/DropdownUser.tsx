@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import ClickOutside from '@/components/ClickOutside'
 import { signOut, useSession } from 'next-auth/react'
-
+import React from 'react'
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const { data: session } = useSession()
@@ -58,7 +58,7 @@ const DropdownUser = () => {
           <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
             <li>
               <Link
-                href="/profile"
+                href="/admin/auth/updateProfile"
                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
               >
                 <svg

@@ -1,6 +1,6 @@
 import { internalServerErrorResponse, successResponse } from '@/helpers/response'
 import { sendMail } from '@/lib/send-email'
-import { createAppointmentEmailContent } from '@/lib/successful-appointment'
+import { createAppointmentEmailContent } from '@/lib/email/successful-appointment'
 export async function POST() {
   try {
     sendMail({

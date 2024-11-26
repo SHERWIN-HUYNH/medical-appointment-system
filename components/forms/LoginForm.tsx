@@ -31,27 +31,33 @@ export const LoginForm = () => {
   })
   const onSubmit = async (values: z.infer<typeof UserLogin>) => {
     setIsLoading(true)
-    const res = await signIn('credentials', {
-      email: values.email,
-      password: currentPassword,
-      redirect: false,
-    })
-    if (res?.error) {
-      toast.error(res.error)
-    }
-    if (res?.ok) {
+    try {
+      const res = await signIn('credentials', {
+        email: values.email,
+        password: currentPassword,
+        redirect: false,
+      })
+      if (res?.error) {
+        toast.error(res.error)
+      }
+      if (res?.ok) {
+        setIsLoading(false)
+        setData({ userId: session?.user.id })
+        console.log('CONTEXT USERID', data.userId)
+        toast.success('Đăng nhập thành công')
+        if (session?.user.roleName === 'USER') {
+          router.push('/')
+        }
+        if (session?.user.roleName === 'ADMIN') {
+          router.push('/admin')
+        }
+      } else {
+        console.log('ERRPR SESSION', session)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
       setIsLoading(false)
-      setData({ userId: session?.user.id })
-      console.log('CONTEXT USERID', data.userId)
-      toast.success('Đăng nhập thành công')
-      if (session?.user.roleName === 'USER') {
-        router.push('/')
-      }
-      if (session?.user.roleName === 'ADMIN') {
-        router.push('/admin')
-      }
-    } else {
-      console.log('ERRPR SESSION', session)
     }
   }
   return (

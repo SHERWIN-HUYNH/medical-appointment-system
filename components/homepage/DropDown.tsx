@@ -2,8 +2,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import ClickOutside from '@/components/ClickOutside'
 import { signOut, useSession } from 'next-auth/react'
-import { BellRing, BookPlus, CreditCard, LogOut } from 'lucide-react'
-
+import { BellRing, BookPlus, CreditCard, LogOut, SquareUser } from 'lucide-react'
+import React from 'react'
 const Dropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const { data: session } = useSession()
@@ -55,6 +55,15 @@ const Dropdown = () => {
               >
                 <BellRing className="h-5 w-5" />
                 Thông báo
+              </Link>
+            </li>
+            <li className="w-full">
+              <Link
+                href={`/account/${session?.user?.id}`}
+                className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:bg-slate-100 hover:text-primary dark:hover:bg-strokedark lg:text-base w-full px-6 py-2"
+              >
+                <SquareUser className="h-5 w-5" />
+                Thông tin của tôi
               </Link>
             </li>
           </ul>
