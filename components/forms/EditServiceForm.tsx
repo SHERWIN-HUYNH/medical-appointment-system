@@ -75,7 +75,7 @@ const EditServiceForm = () => {
 
       if (response.ok) {
         toast.success('Service updated successfully!')
-        router.push('/service-admin')
+        router.push('/admin/service')
       } else {
         const message = await response.json()
         toast.error(message.error)

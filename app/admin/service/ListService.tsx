@@ -124,7 +124,7 @@ const ListService = () => {
       enableSorting: false,
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <Link href={`/service-admin/edit-service?id=${row.original.id}`}>
+          <Link href={`/admin/service/edit-service?id=${row.original.id}`}>
             <Button className="w-12 h-10 flex items-center justify-center rounded-full bg-primary">
               <Pencil size={28} strokeWidth={3} color="white" />
             </Button>
@@ -147,7 +147,7 @@ const ListService = () => {
     <div className="bg-white shadow-xl p-4 rounded-md flex-1 mt-0 min-h-screen">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-lg font-semibold text-primary">All Service</h1>
-        <Link href="/service-admin/add-service">
+        <Link href="/admin/service/add-service">
           <Button className="flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-blue-400 text-white">
             Thêm dịch vụ
           </Button>
