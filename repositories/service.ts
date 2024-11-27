@@ -135,7 +135,6 @@ export class ServiceRepository {
         },
       })
 
-      // Soft delete service bằng cách cập nhật isDeleted = true
       const deletedService = await tx.service.update({
         where: {
           id: serviceId,
@@ -149,5 +148,31 @@ export class ServiceRepository {
 
     await prisma.$disconnect()
     return result
+  }
+
+  static async getServicesIsActive() {
+    try {
+      const services = await prisma.service.findMany({
+        where: {
+          isDeleted: false,
+        },
+        include: {
+          faculty: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      })
+      return services.map((service) => ({
+        ...service,
+        facultyName: service.faculty?.name || 'N/A',
+      }))
+    } catch (error) {
+      console.error('Error retrieving services:', error)
+      throw error
+    } finally {
+      await prisma.$disconnect()
+    }
   }
 }
