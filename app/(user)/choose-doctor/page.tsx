@@ -120,9 +120,12 @@ const ChooseDoctor = () => {
                   </svg>
                 </div>
                 <div className="flex justify-center flex-col text-sm">
-                  <p>Bệnh viện Đại học Y Dược TP.HCM</p>
-                  <p className="text-[#858585] text-xs">
-                    Cơ sở 201 Nguyễn Chí Thanh, Phường 12, Quận 5, TP. Hồ Chí Minh
+                  <p>
+                    Bệnh Viện Quận Bình Thạnh
+                    <br />
+                    <span className="text-slate-600">
+                      132 Lê Văn Duyệt, Phường 1, Bình Thạnh, Thành phố Hồ Chí Minh
+                    </span>
                   </p>
                 </div>
               </li>

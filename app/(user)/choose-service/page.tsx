@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 import UserLayout from '@/components/Layouts/userLayout'
 import { Button } from '@/components/ui/button'
 import { Service } from '@prisma/client'
@@ -11,11 +12,10 @@ const ChooseService = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [services, setServices] = useState<Service[]>([])
   const router = useRouter()
-  const { data } = useAppointmentContext()
+  const { data, setData } = useAppointmentContext()
   const searchParams = useSearchParams()
   const doctorName = searchParams.get('doctorName')
   const facultyName = searchParams.get('facultyName')
-  // const doctorId = data.doctorId;
   const facultyId = data.facultyId
   const [isLoading, setIsLoading] = useState(false)
 
@@ -121,9 +121,9 @@ const ChooseService = () => {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
                   <circle cx="12" cy="7" r="4" />
                   <path d="M5.5 22h13a2.5 2.5 0 0 0 2.5-2.5v-1a4 4 0 0 0-4-4h-10a4 4 0 0 0-4 4v1A2.5 2.5 0 0 0 5.5 22z" />
@@ -171,10 +171,20 @@ const ChooseService = () => {
                   <Link
                     key={service.id}
                     href={{
-                      pathname: '/choose-schedule',
+                      pathname: `/doctor/${data.doctorId}/schedule`,
                       query: {
-                        doctorName: doctorName,
+                        facultyName,
+                        doctorName,
+                        serviceName: service.name,
                       },
+                    }}
+                    onClick={() => {
+                      setData({
+                        serviceId: service.id,
+                        facultyId: data.facultyId,
+                        doctorId: data.doctorId,
+                        userId: data.userId,
+                      })
                     }}
                     className="p-4 border border-slate-200 rounded-lg hover:bg-slate-100"
                   >

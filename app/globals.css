@@ -355,6 +355,35 @@
   .custom-select > option:first-of-type {
     @apply text-[#00b5f1] font-medium;
   }
+
+  /* Thêm các utility classes mới */
+  .primary-gradient {
+    @apply bg-gradient-to-r from-[#00b5f1] to-[#00e0ff];
+  }
+
+  .primary-gradient-hover {
+    @apply hover:bg-gradient-to-r hover:from-[#00b5f1] hover:to-[#00e0ff];
+  }
+
+  .primary-text {
+    @apply text-[#003553];
+  }
+
+  .primary-border {
+    @apply border-[#00e0ff];
+  }
+
+  .table-base {
+    @apply w-full border-collapse border border-slate-300;
+  }
+
+  .table-cell {
+    @apply border border-slate-300 px-4 py-2 text-sm text-left;
+  }
+
+  .table-header {
+    @apply bg-slate-200 font-semibold text-slate-600;
+  }
 }
 
 /* =====  REACT-DATEPICKER OVERRIDES */
@@ -511,4 +540,68 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #a0aec0;
+}
+
+/* Custom Swiper Styles */
+.custom-swiper {
+  position: relative;
+  padding: 0 50px;
+  min-height: 160px;
+}
+
+.custom-swiper .swiper {
+  position: static;
+}
+
+.custom-swiper .swiper-button-next,
+.custom-swiper .swiper-button-prev {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(to right, #00b5f1, #00e0ff);
+  border-radius: 50%;
+  color: white;
+  top: 55%;
+  transform: translateY(-50%);
+  position: absolute;
+}
+
+.custom-swiper .swiper-button-next:after,
+.custom-swiper .swiper-button-prev:after {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.custom-swiper .swiper-button-next {
+  right: 0;
+}
+
+.custom-swiper .swiper-button-prev {
+  left: 0;
+}
+
+.custom-swiper .swiper-button-next:hover,
+.custom-swiper .swiper-button-prev:hover {
+  background: linear-gradient(to right, #00a0d6, #00c9e6);
+  box-shadow: 0 4px 12px rgba(0, 181, 241, 0.3);
+}
+
+.custom-swiper .swiper-button-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.custom-swiper .swiper-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.custom-swiper .swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.custom-swiper .swiper-slide:hover {
+  z-index: 1;
 }

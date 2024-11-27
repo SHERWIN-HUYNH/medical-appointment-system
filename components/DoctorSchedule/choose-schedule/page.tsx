@@ -9,9 +9,12 @@ import clsx from 'clsx'
 import { DoctorScheduleResult, fetchEventsFromApi } from '@/helpers/formatTimeSlots'
 import React from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Schedule } from '@prisma/client'
 import { useSession } from 'next-auth/react'
+import { toast } from 'sonner'
+import { useAppointmentContext } from '@/context/AppointmentContext'
+
 type ChooseScheduleProps = {
   doctorId: string
   setSelectedDate: React.Dispatch<React.SetStateAction<string>>
@@ -24,6 +27,11 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
   const [eveningTimeslot, setEveningTimeslot] = useState<TimeSlot[]>([])
   const [availableDates, setAvailableDates] = useState<string[]>([])
   const [apiData, setApiData] = useState<DoctorScheduleResult[]>()
+  const router = useRouter()
+  const { data: session } = useSession()
+  const { data, setData } = useAppointmentContext()
+  const searchParams = useSearchParams()
+
   const updateAvailableDate = (date: string[]) => {
     setAvailableDates(date)
   }
@@ -81,7 +89,7 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
         .map(({ isAvailable, schedule }) => ({
           ...schedule,
           isAvailable,
-          period: 'morning' as const, // Thêm kiểu tường minh cho "period" mà không cần kiểu mở rộng
+          period: 'morning' as const,
         }))
       setMorningTimeslot(morningSchedules)
       const afternoonSchedules = schedules
@@ -92,25 +100,49 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
         .map(({ isAvailable, schedule }) => ({
           ...schedule,
           isAvailable,
-          period: 'afternoon' as const, // Tương tự, định nghĩa kiểu cho buổi chiều
+          period: 'afternoon' as const,
         }))
       setEveningTimeslot(afternoonSchedules)
       setShowTimeSlots(true)
     }
   }
-  const router = useRouter()
-  const { data: session } = useSession()
 
   const handleSelectTimeSlot = (item: Schedule) => {
-    const scheduleId = item.id
-    const facultyId = 'b0990c2e-0784-4781-b03e-b12c4fedee6e'
-    const userId = session?.user.id
-    const serviceId = 'cb407f19-b77e-493f-bd01-185991811840'
+    const { serviceId, facultyId, doctorId } = data
+    const doctorName = searchParams.get('doctorName')
+    const facultyName = searchParams.get('facultyName')
+    const serviceName = searchParams.get('serviceName')
 
-    // Set gia tri tam thoi de thuc hien goi du lieu
-    const profileId = 'dfb8c741-dedc-44d7-a734-23b16812ebe2'
+    // Kiểm tra context data
+    console.log('Context data:', data)
+
+    if (!serviceId || !facultyId || !doctorId) {
+      toast.error('Thiếu thông tin đặt khám')
+      console.log('Debug info:', {
+        serviceId,
+        facultyId,
+        doctorId,
+        fullContextData: data,
+      })
+      return
+    }
+
+    // Lưu các ID vào context
+    setData({
+      serviceId,
+      facultyId,
+      doctorId,
+      userId: session?.user.id,
+    })
+
+    // Chuyển hướng với query params
     router.push(
-      `/appointment?date=${item.date}&timeSlot=${item.timeSlot}&doctorId=${doctorId}&userId=${userId}&serviceId=${serviceId}&scheduleId=${scheduleId}&facultyId=${facultyId}&profileId=${profileId}`,
+      `/choose-profile?` +
+        `date=${item.date}&` +
+        `timeSlot=${item.timeSlot}&` +
+        `doctorName=${doctorName}&` +
+        `facultyName=${facultyName}&` +
+        `serviceName=${serviceName}`,
     )
   }
   return (

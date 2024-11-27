@@ -45,7 +45,11 @@ export class ServiceRepository {
 
   static async getAllServices() {
     try {
-      const services = await prisma.service.findMany()
+      const services = await prisma.service.findMany({
+        where: {
+          isDeleted: false,
+        },
+      })
       return services
     } catch (error) {
       console.error('Error retrieving services:', error)

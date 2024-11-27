@@ -114,7 +114,7 @@ const menuGroups = [
           </svg>
         ),
         label: 'Dich vụ',
-        route: '/service-admin',
+        route: '/admin/service',
       },
       {
         icon: (
