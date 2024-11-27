@@ -294,30 +294,28 @@ const Add_Profile = () => {
                 )}
               </div>
               <div className="rounded-lg bg-slate-100 ">
-                <Label className="block mt-5 mb-1 text-left">Triệu chứng</Label>
-                <Input
-                  type="text"
-                  name="symptom"
-                  value={formData.symptom}
+                <Label className="block mt-1 mb-1 text-left">Lịch sử bệnh án</Label>
+                <Textarea
+                  name="pastMedicalHistory"
+                  value={formData.pastMedicalHistory}
                   onChange={handleChange}
-                  required
-                  className="w-full mt-1 border border-slate-300 rounded text-sm"
-                  style={{ height: '30px', fontSize: '14px' }}
-                  placeholder="Nhập triệu chứng bệnh"
-                  customProp={''}
+                  className="w-full p-1 h-6  border border-slate-300 rounded text-sm"
+                  style={{ fontSize: '14px' }}
+                  placeholder="Nhập lịch sử bệnh án"
                 />
               </div>
             </div>
 
             <div className="rounded-lg bg-slate-100 p-1">
-              <Label className="block mb-1 text-left">Lịch sử bệnh án</Label>
+              <Label className="block mb-1 text-left">Triệu chứng</Label>
               <Textarea
-                name="pastMedicalHistory"
-                value={formData.pastMedicalHistory}
+                name="symptom"
+                value={formData.symptom}
                 onChange={handleChange}
+                required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: '100px', fontSize: '14px' }}
-                placeholder="Nhập lịch sử bệnh án"
+                style={{ height: '132px', fontSize: '14px' }}
+                placeholder="Nhập triệu chứng bệnh"
               />
             </div>
 

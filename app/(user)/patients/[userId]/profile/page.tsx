@@ -148,55 +148,59 @@ const Profile = () => {
               <div>
                 <h2 className="text-lg font-bold">Danh sách hồ sơ bệnh nhân</h2>
                 <hr className="w-full border-t-2 border-primary mt-4" />
-                <br />
-
                 {profiles.length > 0 ? (
                   profiles.map((profile) => (
                     <div
                       key={profile.id}
-                      className=" p-4 text-sm rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all ease-in-out duration-100 cursor-pointer mb-4"
+                      className="mt-6 text-sm rounded-xl shadow-md border border-slate-200 border-solid mb-2"
                     >
-                      <div className="flex flex-col gap-4 lg:flex-row lg:gap-8">
-                        <div className="rounded-lg bg-gray-200 flex-1">
-                          <p className="text-primary mt-2 flex items-center gap-2">
-                            <CircleUser className="w-5 h-5" />
-                            <span className=" uppercase">{profile.name}</span>
-                          </p>
-                          <p className="mt-2 flex items-center gap-2">
-                            <Mails className="w-5 h-5 text-slate-400" />
-                            <span className="text-slate-400">Email:</span>
-                            <span>{profile.email}</span>
-                          </p>
-                          <p className="mt-2 flex items-center gap-2">
-                            <Smartphone className="w-5 h-5 text-slate-400" />
-                            <span className="text-slate-400">Số điện thoại:</span>
-                            <span>
-                              {profile.phone
-                                ? profile.phone.replace(/(\d{3})\d{4}(\d{3})/, '$1****$2')
-                                : 'N/A'}
-                            </span>
-                          </p>
-                          <p className="mt-2 flex items-center gap-2">
-                            <Cake className="w-5 h-5 text-slate-400" />
-                            <span className="text-slate-400">Ngày sinh:</span>
-                            <span>
-                              {profile.birthDate
-                                ? new Date(profile.birthDate).toLocaleDateString()
-                                : 'N/A'}
-                            </span>
-                          </p>
-                          <p className="mt-2 flex items-center gap-2">
-                            <FaVenusMars className="w-5 h-5 text-slate-400" />
-                            <span className="text-slate-400">Giới tính:</span>
-                            <span>{profile.gender === 'FEMALE' ? 'Nữ' : 'Nam'}</span>
-                          </p>
+                      <div className=" p-4 flex flex-col gap-4 lg:flex-row ">
+                        <div className="rounded-lg flex-1">
+                          <ul className="list-none space-y-2">
+                            <li className="flex items-center gap-x-2 text-primary">
+                              <CircleUser className="w-5 h-5" />
+                              <span className=" uppercase font-medium">
+                                {profile.name}
+                              </span>
+                            </li>
+                            <li className="flex items-center gap-x-2 ">
+                              <Mails className="w-5 h-5 text-slate-400" />
+                              <span className="text-slate-400">Email:</span>
+                              <span>{profile.email}</span>
+                            </li>
+                            <li className="flex items-center gap-x-2">
+                              <Smartphone className="w-5 h-5 text-slate-400" />
+                              <span className="text-slate-400">Số điện thoại:</span>
+                              <span>
+                                {profile.phone
+                                  ? profile.phone.replace(
+                                      /(\d{3})\d{4}(\d{3})/,
+                                      '$1****$2',
+                                    )
+                                  : 'N/A'}
+                              </span>
+                            </li>
+                            <li className="flex items-center gap-x-2">
+                              <Cake className="w-5 h-5 text-slate-400" />
+                              <span className="text-slate-400">Ngày sinh:</span>
+                              <span>
+                                {profile.birthDate
+                                  ? new Date(profile.birthDate).toLocaleDateString()
+                                  : 'N/A'}
+                              </span>
+                            </li>
+                            <li className="flex items-center gap-x-2">
+                              <FaVenusMars className="w-5 h-5 text-slate-400" />
+                              <span className="text-slate-400">Giới tính:</span>
+                              <span>{profile.gender === 'FEMALE' ? 'Nữ' : 'Nam'}</span>
+                            </li>
+                          </ul>
                         </div>
                       </div>
 
-                      <hr className="mt-2" />
-                      <div className="mt-2 flex justify-end gap-2">
+                      <div className=" flex bg-[#f5f5f5] justify-end px-4 py-2">
                         <Button
-                          className="bg-white text-red-400 hover:bg-red-500 hover:text-white text-sm"
+                          className=" text-red-400  bg-transparent hover:bg-transparent text-sm"
                           onClick={() => {
                             setProfileToDelete(profile.id)
                             setIsModalOpen(true)
@@ -226,13 +230,13 @@ const Profile = () => {
                             },
                           }}
                         >
-                          <Button className="bg-white text-primary hover:bg-primary hover:text-white text-sm">
+                          <Button className=" text-primary bg-transparent hover:bg-transparent text-sm">
                             <PencilLine className="w-4 h-4 inline mr-1" />
                             Sửa hồ sơ
                           </Button>
                         </Link>
                         <Button
-                          className="bg-white text-black hover:bg-slate-400 hover:text-white text-sm px-4 py-2"
+                          className=" text-black bg-transparent hover:bg-transparent text-sm px-4 py-2"
                           onClick={() => handleShowProfile(profile)}
                         >
                           <CircleDot className="w-4 h-4 inline mr-1" />

@@ -55,7 +55,6 @@ const Edit_Profile = () => {
     symptom: symptom || '',
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const today = new Date().toISOString().split('T')[0]
   const [errorMessage, setErrorMessage] = useState('')
@@ -306,34 +305,32 @@ const Edit_Profile = () => {
                 )}
               </div>
               <div className="rounded-lg bg-slate-100 ">
-                <Label className="block mt-5 mb-1 text-left">Triệu chứng</Label>
-                <Input
-                  type="text"
-                  name="symptom"
-                  value={formData.symptom}
+                <Label className="block mt-1 mb-1 text-left">Lịch sử bệnh án</Label>
+                <Textarea
+                  name="pastMedicalHistory"
+                  value={formData.pastMedicalHistory}
                   onChange={handleChange}
-                  required
-                  className="w-full mt-1 border border-slate-300 rounded text-sm"
-                  style={{ height: '30px', fontSize: '14px' }}
-                  placeholder="Nhập triệu chứng bệnh"
-                  customProp={''}
+                  className="w-full mt-1 p-1 border border-slate-300 rounded text-sm"
+                  style={{ fontSize: '14px' }}
+                  placeholder="Nhập lịch sử bệnh án"
                 />
               </div>
             </div>
             <div className="rounded-lg bg-slate-100 p-1">
-              <Label className="block mb-1 text-left">Lịch sử bệnh án</Label>
+              <Label className="block mb-1 text-left">Triệu chứng</Label>
               <Textarea
-                name="pastMedicalHistory"
-                value={formData.pastMedicalHistory}
+                name="symptom"
+                value={formData.symptom}
                 onChange={handleChange}
+                required
                 className="w-full p-1 border border-slate-300 rounded text-sm"
-                style={{ height: '100px', fontSize: '14px' }}
-                placeholder="Nhập lịch sử bệnh án"
+                style={{ height: '133px', fontSize: '14px' }}
+                placeholder="Nhập triệu chứng bệnh"
               />
             </div>
 
             <div className="rounded-lg w-full bg-slate-100 p-1 lg:col-span-2">
-              <Label className="block mb-1 text-left">Đường dẫn giấy tờ</Label>
+              <Label className="block mb-1 text-left">Hình ảnh bảo hiểm y tế</Label>
               <Input
                 type="file"
                 accept="image/*"
@@ -358,7 +355,7 @@ const Edit_Profile = () => {
             <div className="lg:col-span-2 text-right">
               <Button
                 type="submit"
-                className="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-300 mr-2"
+                className="px-4 py-2 bg-primary text-white rounded hover:bg-blue-400 mr-2"
               >
                 <PenLine className="w-4 h-4 inline mr-1" />
                 Sửa hồ sơ

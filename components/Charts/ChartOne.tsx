@@ -108,6 +108,9 @@ const options: ApexOptions = {
     },
     min: 0,
     max: 100,
+    labels: {
+      formatter: (value) => value.toLocaleString('vi-VN'),
+    },
   },
 }
 
@@ -203,7 +206,7 @@ const ChartOne: React.FC = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-[#6577F3]"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-[#6577F3]">Doanh thu</p>
+              <p className="font-semibold text-[#6577F3]">Doanh thu (VND)</p>
               <p className="text-sm font-medium">
                 {viewBy === 'month' ? `Năm ${selectedYear}` : 'Theo năm'}
               </p>
@@ -250,6 +253,11 @@ const ChartOne: React.FC = () => {
               chart: { ...options.chart, type: currentData.chartType },
               xaxis: { ...options.xaxis, categories: currentData.categories },
               yaxis: { ...options.yaxis, max: currentData.yMax },
+              tooltip: {
+                y: {
+                  formatter: (val) => val.toLocaleString('vi-VN'),
+                },
+              },
             }}
             series={currentData.series}
             type={currentData.chartType}
