@@ -245,7 +245,7 @@ const Profile = () => {
                     </div>
                   ))
                 ) : (
-                  <p className="text-slate-400 text-xs">
+                  <p className="mt-4text-slate-400 text-base">
                     Bạn chưa có hồ sơ bệnh nhân. Vui lòng tạo mới hồ sơ để được đặt khám.
                   </p>
                 )}

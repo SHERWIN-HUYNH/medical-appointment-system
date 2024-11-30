@@ -9,6 +9,7 @@ export class ProfileRespository {
       const profiles = await prisma.profile.findMany({
         where: {
           userId: userId,
+          isDeleted: false,
         },
       })
       return profiles
@@ -25,10 +26,31 @@ export class ProfileRespository {
       const profile = await prisma.profile.findUnique({
         where: {
           id: id,
-          isDeleted: false,
         },
       })
       return profile
+    } catch (error) {
+      console.error('Lỗi khi truy xuất hồ sơ bệnh nhân: ', error)
+      throw error
+    } finally {
+      await prisma.$disconnect()
+    }
+  }
+
+  static async getListProfileNoAppoinmentByUserId(userId: string) {
+    try {
+      const profiles = await prisma.profile.findMany({
+        where: {
+          userId: userId,
+          isDeleted: false,
+          appointments: {
+            none: {
+              status: 'PENDING',
+            },
+          },
+        },
+      })
+      return profiles
     } catch (error) {
       console.error('Lỗi khi truy xuất hồ sơ bệnh nhân: ', error)
       throw error
