@@ -9,6 +9,7 @@ import { useParams } from 'next/navigation'
 const CalendarPage = () => {
   const [selectedDate, setSelectedDate] = React.useState<string>('')
   const params = useParams()
+
   const doctorId = params.doctorId
   return (
     <UserLayout>

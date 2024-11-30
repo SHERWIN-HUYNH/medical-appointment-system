@@ -44,6 +44,7 @@ const Doctor = () => {
         const response = await fetch('/api/doctor/user')
         const data = await response.json()
         if (response.ok) {
+          console.log('DOCTOR USER', data)
           setDoctors(data)
           setFilteredDoctors(data)
         } else {
@@ -221,8 +222,7 @@ const Doctor = () => {
                     >
                       <Button
                         className="w-32 text-white bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] hover:from-[#67e0f3] hover:to-[#e7f1f2] rounded-3xl"
-                        onClick={() => handleDoctorClick(doctor.facultyId, doctor.id)}
-                      >
+                        onClick={() => handleDoctorClick(doctor.facultyId, doctor.id)}>
                         Đặt khám
                       </Button>
                     </Link>

@@ -7,21 +7,23 @@ import {
 import { createAccount } from '@/lib/email/createAccount'
 import { sendMail } from '@/lib/send-email'
 import { UserRepository } from '@/repositories/user'
-import { RegisterSchema } from '@/validation/register'
+import { RegisterUser } from '@/validation/register'
 import { UserRole } from '@prisma/client'
 
 export const POST = async (request: Request) => {
   try {
     const body = await request.json()
     console.log('BODY', body)
-    const { username: name, email, password, phone, role } = RegisterSchema.parse(body)
-
+    const { username: name, email, password, phone } = RegisterUser.parse(body)
+    const { role } = body.role ?? UserRole.USER
     const user = await UserRepository.getUserByEmail(email)
+    if(!password)
+      return conflictResponse('Password is required')
     if (user) {
       return conflictResponse('User already exists.')
     }
     const hashedPassword = await hashPassword(password)
-    console.log('ROLE', role)
+    
     const account = await UserRepository.insert({
       name,
       email,

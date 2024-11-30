@@ -11,7 +11,6 @@ import { BillStatus } from '@prisma/client'
 import { sendMail } from '@/lib/send-email'
 import { createAppointmentEmailContent } from '@/lib/email/successful-appointment'
 import { ScheduleRespository } from '@/repositories/schedule'
-import { UserRepository } from '@/repositories/user'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
 export async function POST(req: NextRequest) {
@@ -33,7 +32,6 @@ export async function POST(req: NextRequest) {
     const service = await ServiceRepository.getServicesById(serviceId)
     const doctor = await DoctorRespository.getDoctorById(doctorId)
     const profile = await ProfileRespository.getProfileById(profileId)
-    const user = await UserRepository.getUserByUserId(userId)
     console.log('service', doctorId, scheduleId)
     if (!service || !doctor || !profile) {
       return notFoundResponse('NOT FOUND SERVICE OR DOCTOR')
@@ -64,8 +62,10 @@ export async function POST(req: NextRequest) {
     if (!bill) {
       return notFoundResponse('FAIL TO CREATE BILL')
     }
+    const receiptUrl = charge.receipt_url ?? ''
+    
     sendMail({
-      sendTo: user?.email,
+      sendTo: profile?.email,
       subject: 'Xác nhận Đặt lịch hẹn thành công',
       text: '',
       html: createAppointmentEmailContent(
@@ -76,6 +76,7 @@ export async function POST(req: NextRequest) {
         schedule.timeSlot,
         profile.phone,
         profile.email,
+        receiptUrl,
       ),
     })
     return successResponse(appointment)

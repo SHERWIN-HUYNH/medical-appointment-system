@@ -2,6 +2,7 @@ import { CheckoutForm } from '@/components/CheckoutForm'
 import UserLayout from '@/components/Layouts/userLayout'
 import { DoctorRespository } from '@/repositories/doctor'
 import { FacultyRepository } from '@/repositories/faculty'
+import { ProfileRespository } from '@/repositories/profile'
 import { ScheduleRespository } from '@/repositories/schedule'
 import { ServiceRepository } from '@/repositories/service'
 
@@ -26,17 +27,17 @@ const Appointment = async ({ searchParams }: { searchParams: AppointmentProps })
   const profileId = searchParams.profileId
   const timeSlot = searchParams.timeSlot as string
   const date = searchParams.date as string
-
   const doctor = await DoctorRespository.getDoctorById(doctorId)
   const service = await ServiceRepository.getServicesById(serviceId)
   const faculty = await FacultyRepository.getFacultyById(facultyId)
   const schedule = await ScheduleRespository.getScheduleByDateAndTime(date, timeSlot)
+  const profile = await ProfileRespository.getProfileById(profileId)
   const serviceInfor = {
     price: service?.price,
     name: faculty?.name,
     customerId: userId,
   }
-  if (!service || !doctor) {
+  if (!service || !doctor || !schedule || !profile || !faculty) {
     return <h1>Service or Doctor not found</h1>
   }
   const paymentIntent = await stripe.paymentIntents.create({
@@ -59,8 +60,13 @@ const Appointment = async ({ searchParams }: { searchParams: AppointmentProps })
         <CheckoutForm
           clientSecret={paymentIntent.client_secret}
           product={serviceInfor}
-          timeSlot={timeSlot}
-          date={date}
+          searchParams={{
+            profile:profile,
+            service:service,
+            doctor:doctor,
+            schedule:schedule,
+            faculty:faculty
+          }}
         />
       </div>
     </UserLayout>
