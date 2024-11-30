@@ -31,6 +31,7 @@ interface CustomProps {
   control: Control<any>
   name: string
   label?: string
+  type?: string
   placeholder?: string
   iconSrc?: string
   iconAlt?: string
@@ -64,6 +65,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
               placeholder={props.placeholder}
               {...field}
               className="shad-input border-0"
+              type={props.type || 'text'}
               disabled={props.disabled}
             />
           </FormControl>
@@ -200,7 +202,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
 }
 
 const CustomFormField = (props: CustomProps) => {
-  const { control, name, label, css } = props
+  const { control, name, label } = props
   return (
     <FormField
       control={control}

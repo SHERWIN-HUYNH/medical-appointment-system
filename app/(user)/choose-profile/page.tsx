@@ -49,7 +49,7 @@ const ChooseProfile: React.FC = () => {
   // Lấy thông tin từ URL query params
   const date = searchParams.get('date')
   const timeSlot = searchParams.get('timeSlot')
-
+  const price = searchParams.get('price')
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
@@ -65,7 +65,7 @@ const ChooseProfile: React.FC = () => {
       }
     }
     if (session?.user?.id) fetchProfiles()
-  }, [session])
+  }, [])
 
   const handleDeleteProfile = async () => {
     if (!profileToDelete) return
@@ -87,17 +87,15 @@ const ChooseProfile: React.FC = () => {
   }
 
   const handleProfileClick = (profileId: string) => {
-    setSelectedProfile((prev) => (prev === profileId ? '' : profileId))
+    setSelectedProfile(profileId)
+    console.log('Selected profile:', profileId)
   }
 
   const handleContinue = (profileId: string) => {
     const { serviceId, facultyId, doctorId } = data
     const selectedProfileData = profiles.find((p) => p.id === profileId)
-    const doctorName = searchParams.get('doctorName')
-    const facultyName = searchParams.get('facultyName')
-    const serviceName = searchParams.get('serviceName')
-
-    if (!serviceId || !facultyId || !doctorId || !date || !timeSlot) {
+    console.log('Context data:', data)
+    if (!date || !timeSlot) {
       toast.error('Thiếu thông tin đặt khám')
       console.log('Debug info:', {
         context: data,
@@ -111,14 +109,13 @@ const ChooseProfile: React.FC = () => {
       `/appointment?` +
         `date=${date}&` +
         `timeSlot=${timeSlot}&` +
-        `facultyId=${facultyId}&` +
-        `doctorId=${doctorId}&` +
-        `serviceId=${serviceId}&` +
-        `doctorName=${doctorName}&` +
-        `facultyName=${facultyName}&` +
-        `serviceName=${serviceName}&` +
+        `price=${price}&`+
         `profileName=${selectedProfileData?.name}&` +
-        `profilePhone=${selectedProfileData?.phone}`,
+        `profileId=${profileId}&` +
+        `doctorId=${doctorId}&` +
+        `facultyId=${facultyId}&` +
+        `userId=${session?.user?.id}&` +
+        `serviceId=${serviceId}&`
     )
   }
 
@@ -162,7 +159,6 @@ const ChooseProfile: React.FC = () => {
                 <span className="ml-2">{profile.phone}</span>
               </div>
 
-              {selectedProfile === profile.id && (
                 <div className="mt-2">
                   <div className="flex items-center mb-2">
                     <FaEnvelope className="mr-2 text-slate-400" />
@@ -214,7 +210,7 @@ const ChooseProfile: React.FC = () => {
                     </Button>
                   </div>
                 </div>
-              )}
+              
             </div>
           ))}
         </div>

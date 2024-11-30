@@ -151,4 +151,34 @@ export class AppointmentRepository {
       await prisma.$disconnect()
     }
   }
+  static async getAppointmentByDoctorAndSchedule(doctorId:string , scheduleId: string) {
+    try {
+      const doctorSchedule = await prisma.doctorSchedule.findFirst({
+        where: {
+          doctorId: doctorId,
+          scheduleId: scheduleId
+        }
+      })
+      if(doctorSchedule){
+        const appointment = await prisma.appointment.findFirst({
+          where: {
+            doctorScheduleId: doctorSchedule.id
+          },
+          include: {
+            doctorSchedule: {
+              include: {
+                schedule: true,
+                doctor: true,
+              },
+            }
+          }
+        })
+        return appointment
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  
 }

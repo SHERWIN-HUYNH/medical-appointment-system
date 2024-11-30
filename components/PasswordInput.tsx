@@ -1,25 +1,32 @@
-'use client'
+import React from 'react';
 
-import * as React from 'react'
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
+import { Input } from './ui/input';
+import { Button } from './ui/button';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
-import { Button } from '@/components/ui/button'
-import { Input, type InputProps } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
 
-const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, ...props }, ref) => {
-    const [showPassword, setShowPassword] = React.useState(false)
-    const disabled = props.value === '' || props.value === undefined || props.disabled
 
+interface PasswordInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  showPassword?: boolean;
+}
+const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
+  // eslint-disable-next-line react/prop-types
+  ({ className, value, onChange,...field }, ref) => {
+    const [showPassword, setShowPassword] = React.useState(false);
+
+    // eslint-disable-next-line react/prop-types
+    const disabled = value === '' || value === undefined || field.disabled;
+    
     return (
       <div className="relative">
         <Input
-          type={showPassword ? 'text' : 'password'}
-          className={cn('hide-password-toggle pr-10', className)}
+          customProp={''} type={showPassword ? 'text' : 'password'}
+          className={`hide-password-toggle pr-10 ${className}`}
           ref={ref}
-          {...props}
-        />
+          value={value}
+          onChange={onChange} 
+          {...field}
+          />
         <Button
           type="button"
           variant="ghost"
@@ -38,19 +45,20 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
           </span>
         </Button>
 
-        {/* hides browsers password toggles */}
+        {/* Ẩn chức năng bật tắt mật khẩu mặc định của trình duyệt */}
         <style>{`
-					.hide-password-toggle::-ms-reveal,
-					.hide-password-toggle::-ms-clear {
-						visibility: hidden;
-						pointer-events: none;
-						display: none;
-					}
-				`}</style>
+          .hide-password-toggle::-ms-reveal,
+          .hide-password-toggle::-ms-clear {
+            visibility: hidden;
+            pointer-events: none;
+            display: none;
+          }
+        `}</style>
       </div>
-    )
-  },
-)
-PasswordInput.displayName = 'PasswordInput'
+    );
+  }
+);
 
-export { PasswordInput }
+PasswordInput.displayName = 'PasswordInput';
+
+export { PasswordInput };

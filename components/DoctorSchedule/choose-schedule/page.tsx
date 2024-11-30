@@ -11,8 +11,6 @@ import React from 'react'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Schedule } from '@prisma/client'
-import { useSession } from 'next-auth/react'
-import { toast } from 'sonner'
 import { useAppointmentContext } from '@/context/AppointmentContext'
 
 type ChooseScheduleProps = {
@@ -28,9 +26,9 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
   const [availableDates, setAvailableDates] = useState<string[]>([])
   const [apiData, setApiData] = useState<DoctorScheduleResult[]>()
   const router = useRouter()
-  const { data: session } = useSession()
   const { data, setData } = useAppointmentContext()
   const searchParams = useSearchParams()
+  const price = searchParams.get('price')
 
   const updateAvailableDate = (date: string[]) => {
     setAvailableDates(date)
@@ -79,7 +77,6 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
     const date = info.dateStr
     const schedules = apiData?.filter((schedule) => schedule.schedule.date === date)
 
-    console.log('schedules', schedules)
     if (availableDates.includes(date) && schedules) {
       const morningSchedules = schedules
         .filter(({ schedule }) => {
@@ -113,36 +110,19 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
     const facultyName = searchParams.get('facultyName')
     const serviceName = searchParams.get('serviceName')
 
-    // Kiểm tra context data
-    console.log('Context data:', data)
-
-    if (!serviceId || !facultyId || !doctorId) {
-      toast.error('Thiếu thông tin đặt khám')
-      console.log('Debug info:', {
-        serviceId,
-        facultyId,
-        doctorId,
-        fullContextData: data,
-      })
-      return
-    }
-
-    // Lưu các ID vào context
     setData({
       serviceId,
       facultyId,
       doctorId,
-      userId: session?.user.id,
     })
-
-    // Chuyển hướng với query params
     router.push(
       `/choose-profile?` +
         `date=${item.date}&` +
         `timeSlot=${item.timeSlot}&` +
         `doctorName=${doctorName}&` +
         `facultyName=${facultyName}&` +
-        `serviceName=${serviceName}`,
+        `serviceName=${serviceName}&` +
+        `price=${price}`,
     )
   }
   return (
@@ -170,7 +150,7 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
             locale={viLocale}
             visibleRange={visibleRange}
             editable={true}
-            fixedWeekCount={false}
+            fixedWeekCount={true}
             selectable={true}
             selectMirror={true}
             dayCellClassNames={handleDateClassNames}

@@ -5,7 +5,6 @@ import Link from 'next/link'
 import ClickOutside from '@/components/ClickOutside'
 import { signOut, useSession } from 'next-auth/react'
 import { BellRing, BookPlus, CreditCard, LogOut, SquareUser } from 'lucide-react'
-import React from 'react'
 const Dropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const { data: session } = useSession()
