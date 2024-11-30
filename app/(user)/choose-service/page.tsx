@@ -178,12 +178,6 @@ const ChooseService = () => {
                         price: service.price,
                       },
                     }}
-                    onClick={() => {
-                      setData({
-                        serviceId: service.id,
-                        facultyId: data.facultyId,
-                      })
-                    }}
                     className="p-4 border border-slate-200 rounded-lg hover:bg-slate-100"
                   >
                     <div className="flex justify-between items-center">

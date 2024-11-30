@@ -104,6 +104,11 @@ export class ProfileRespository {
 
   static async deleteProfile({ profileData }: { profileData: Profile }) {
     try {
+      const hasPending = await this.hasPendingAppointments(profileData.id)
+
+      if (hasPending) {
+        throw new Error('Không thể xóa hồ sơ, hồ sơ này đang có lịch hẹn.')
+      }
       const deletedProfile = await prisma.profile.delete({
         where: {
           id: profileData.id,
@@ -114,9 +119,19 @@ export class ProfileRespository {
       return deletedProfile
     } catch (error) {
       console.error('Lỗi xóa hồ sơ bệnh nhân:', error)
-      throw new Error('Không thể xóa hồ sơ bệnh nhân. Vui lòng thử lại sau.')
+      throw error
     } finally {
       await prisma.$disconnect()
     }
+  }
+
+  static async hasPendingAppointments(profileId: string): Promise<boolean> {
+    const pendingAppointment = await prisma.appointment.findFirst({
+      where: {
+        profileId,
+        status: 'PENDING',
+      },
+    })
+    return !!pendingAppointment
   }
 }

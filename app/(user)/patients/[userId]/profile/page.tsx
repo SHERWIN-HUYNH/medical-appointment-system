@@ -86,15 +86,14 @@ const Profile = () => {
           profileValues: { id: profileToDelete },
         }),
       })
-
       if (!response.ok) {
-        toast.error('Lỗi khi xóa hồ sơ')
+        toast.error('Lỗi khi xóa hồ sơ, hồ sơ này đang có lịch hẹn.Vui lòng thử lại sau!')
+      } else {
+        setProfiles((prevProfiles) =>
+          prevProfiles.filter((profile) => profile.id !== profileToDelete),
+        )
+        toast.success('Xóa hồ sơ thành công')
       }
-
-      setProfiles((prevProfiles) =>
-        prevProfiles.filter((profile) => profile.id !== profileToDelete),
-      )
-      toast.success('Xóa hồ sơ thành công')
     } catch {
       toast.error('Lỗi khi xóa hồ sơ')
     } finally {

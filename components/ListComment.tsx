@@ -45,7 +45,6 @@ const ListComment = () => {
         setCommentData(comments)
       } catch (error) {
         console.error('Error fetching comments:', error)
-        toast.error('Lỗi khi tải đánh giá! Vui lòng thử lại.')
       }
     }
 
