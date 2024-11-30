@@ -3,9 +3,12 @@ import {
   notFoundResponse,
   successResponse,
   internalServerErrorResponse,
+  unauthorizedResponse,
 } from '@/helpers/response'
 import { ProfileRespository } from '@/repositories/profile'
-
+import { UserRepository } from '@/repositories/user'
+import Stripe from 'stripe'
+import { BillRespository } from '@/repositories/bill'
 export async function GET(req: Request, { params }: { params: { userId: string } }) {
   try {
     // First get all profiles for this user
@@ -49,5 +52,44 @@ export async function GET(req: Request, { params }: { params: { userId: string }
   } catch (error) {
     console.error('Error in GET /api/appointments/[userId]:', error);
     return internalServerErrorResponse('Lỗi khi lấy danh sách lịch khám')
+  }
+}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
+export async function PUT(req: Request, context: { params: { userId: string } }) {
+  try {
+    const body = await req.json()
+    const {paymentIntentId,cancellationReason} = body
+    const { userId } = context.params
+
+    if (!userId) {
+      return unauthorizedResponse('UNAUTHENTICATED')
+    }
+    const user = await UserRepository.getUserByUserId(userId)
+    if (!user) {
+      return notFoundResponse('Không tìm thấy người dụng')
+    }
+    const canceledPaymentIntent = await stripe.paymentIntents.cancel(paymentIntentId,{
+      cancellation_reason: cancellationReason
+    });
+    if(!canceledPaymentIntent) {
+      console.log('CANCELED PAYMENT INTENT')
+    }
+    const refundPaymentIntent = await stripe.refunds.create({
+      payment_intent: paymentIntentId,
+      amount: canceledPaymentIntent.amount
+    });
+    console.log('REFUND PAYMENT INTENT', refundPaymentIntent)
+    const cancelAppointment =await AppointmentRepository.cancelAppointment(paymentIntentId, cancellationReason)
+    if (!cancelAppointment?.payments) {
+      throw new Error("Cancel appointment operation failed; appointment not found.");
+    }
+    const cancelBill = BillRespository.cancelBill(cancelAppointment.payments?.id)
+    if(!cancelBill) {
+      throw new Error("Cancel bill operation failed; bill not found.");
+    }
+    // Send email to inform the patient that the appointment has been canceled
+    return successResponse({cancelAppointment})
+  } catch (error) {
+    return internalServerErrorResponse(`Lỗi khi lấy danh sách lịch khám ${error}`)
   }
 }

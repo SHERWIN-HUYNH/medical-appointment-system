@@ -34,6 +34,7 @@ model Profile {
   identificationType      String
   identificationNumber    String
   identificationDocumentUrl String
+  isDeleted               Boolean @default(false)
   userId                  String   @db.Uuid
   user                    User @relation(fields: [userId], references: [id],onDelete: Cascade)
   appointments            Appointment[]
@@ -95,6 +96,8 @@ model Appointment {
   doctorScheduleId   String @unique @db.Uuid
   Service            Service  @relation(fields: [serviceId],references:[id])
   payments           Bill?
+  stripeCustomerId   String
+  userId             String
   doctorSchedule     DoctorSchedule @relation(fields: [doctorScheduleId],references:[id])
 }
 
@@ -110,12 +113,7 @@ model Bill {
   userId       	  String     @db.Uuid
   appointmentId   String @unique @db.Uuid
 }
-model StripeCustomer{
-  id String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId String
-  stripeCustomerId String @unique
-  createdAt DateTime @default(now())
-}
+
 model Schedule {
   id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   date        String

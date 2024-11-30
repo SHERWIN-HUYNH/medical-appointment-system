@@ -8,7 +8,6 @@ export class BillRespository {
       const newBill = await prisma.bill.create({
         data: {
           price: billData.price,
-          note: billData.note,
           status: billData.status as BillStatus,
           userId: billData.userId,
           appointmentId: billData.appointmentId,
