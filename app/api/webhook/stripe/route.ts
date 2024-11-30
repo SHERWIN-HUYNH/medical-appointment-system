@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     process.env.STRIPE_WEBHOOK_SECRET as string,
   )
   console.log('STRIPE WEBHOOK', event)
-  if (event.type === 'charge.succeeded') {
+  if (event.type === 'charge.succeeded' || event.type === 'charge.updated') {
     const charge = event.data.object
     const doctorId = charge.metadata.doctorId
     const scheduleId = charge.metadata.scheduleId
@@ -48,10 +48,13 @@ export async function POST(req: NextRequest) {
       doctorScheduleId: doctorSchedule.id,
       serviceId: service.id,
       profileId: profile.id,
+      stripeCustomerId:charge.id
     })
     if (!appointment) {
+      console.log('fail to create appointment')
       return notFoundResponse('FAIL TO CREATE APPOINTMENT')
     }
+    console.log('APPOINTMENT webhook', appointment)
     const billInfor = {
       price: pricePaidInCents,
       userId: userId,

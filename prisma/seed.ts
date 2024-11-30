@@ -1,20 +1,15 @@
-import { FacultyRepository } from '@/repositories/faculty'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 async function main() {
-  const user = await prisma.user.update({
+  const doctorSchedule = await prisma.doctorSchedule.findFirst({
     where: {
-      id: '02822a38-de27-413e-89ee-8642ba558ce3',
-    },
-    data: {
-      name: 'Huynh Trung',
-      email: 'huynhchitrung020503@gmail.com',
-      phone: 'chitrung020503',
-      password: 'chitrung020503',
-    },
+      doctorId: '3663a05b-138a-443d-a7bc-6f04730d4753',
+      scheduleId: 'ae84fb6c-7ce4-488e-97db-7e3da16cf7d8'
+    }
   })
-  console.log(user)
+  console.log(doctorSchedule)
+  
 }
 main()
   .catch((e) => {

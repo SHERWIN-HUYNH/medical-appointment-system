@@ -96,6 +96,7 @@ export interface CreateAppointment {
   profileId: string
   doctorScheduleId: string
   serviceId: string
+  stripeCustomerId: string
 }
 
 interface DoctorSchedule {

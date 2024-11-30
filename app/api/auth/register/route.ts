@@ -13,7 +13,6 @@ import { UserRole } from '@prisma/client'
 export const POST = async (request: Request) => {
   try {
     const body = await request.json()
-    console.log('BODY', body)
     const { username: name, email, password, phone } = RegisterUser.parse(body)
     const { role } = body.role ?? UserRole.USER
     const user = await UserRepository.getUserByEmail(email)
