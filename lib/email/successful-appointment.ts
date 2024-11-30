@@ -6,6 +6,7 @@ export function createAppointmentEmailContent(
   appointmentTime: string,
   phone: string,
   supportEmail: string,
+  receiptUrl?: string,
 ) {
   return `
     <!DOCTYPE html>
@@ -80,6 +81,7 @@ export function createAppointmentEmailContent(
             <li><strong>Bác sĩ phụ trách:</strong> ${doctorName}</li>
             <li><strong>Ngày hẹn:</strong> ${appointmentDate}</li>
             <li><strong>Giờ hẹn:</strong> ${appointmentTime}</li>
+            <li><strong>Bạn có thể xem Hóa đơn tại:</strong> <a href="${receiptUrl}">here</a></li>
             <li><p><strong>Địa chỉ:</strong> Bệnh viện Đại học Y Dược TP.HCM</p>
                   <p className="text-[#858585] text-xs">
                     Cơ sở 201 Nguyễn Chí Thanh, Phường 12, Quận 5, TP. Hồ Chí Minh

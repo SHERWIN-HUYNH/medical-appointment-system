@@ -3,6 +3,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import { DateSelectArg, DatesSetArg, EventClickArg } from '@fullcalendar/core/index.js'
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
+import viLocale from '@fullcalendar/core/locales/vi'
 import { useState, useEffect, useRef } from 'react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import clsx from 'clsx'
@@ -218,6 +219,8 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
               minute: '2-digit',
               second: '2-digit',
             }}
+            fixedWeekCount={true}
+            locale={viLocale}
             slotMaxTime={'18:00:00'}
             slotMinTime={'07:00:00'}
             slotDuration="00:15:00"

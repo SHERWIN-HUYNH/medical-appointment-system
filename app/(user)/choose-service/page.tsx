@@ -25,7 +25,6 @@ const ChooseService = () => {
         router.push('/choose-faculty')
         return
       }
-
       try {
         setIsLoading(true)
         const response = await fetch(`/api/service/faculty/${facultyId}`)
@@ -176,14 +175,13 @@ const ChooseService = () => {
                         facultyName,
                         doctorName,
                         serviceName: service.name,
+                        price: service.price,
                       },
                     }}
                     onClick={() => {
                       setData({
                         serviceId: service.id,
                         facultyId: data.facultyId,
-                        doctorId: data.doctorId,
-                        userId: data.userId,
                       })
                     }}
                     className="p-4 border border-slate-200 rounded-lg hover:bg-slate-100"

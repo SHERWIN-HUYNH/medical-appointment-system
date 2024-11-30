@@ -4,16 +4,18 @@ import { Button } from '@/components/ui/button'
 import React from 'react'
 import { User } from 'lucide-react'
 import Stripe from 'stripe'
+import { AppointmentRepository } from '@/repositories/appointment'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 const RequestSuccess = async ({
-  searchParams,
+  searchParams
 }: {
-  searchParams: { payment_intent: string }
+  searchParams: { payment_intent: string; userId:string}
 }) => {
-  const userId = '243rwkefskf'
   const paymentIntent = await stripe.paymentIntents.retrieve(searchParams.payment_intent)
   console.log('PAYMENT INTENT', paymentIntent)
   if (paymentIntent.metadata.billId == null) return <h1>NOT FOUND</h1>
+  const appointment = await AppointmentRepository.getAppointmentByDoctorAndSchedule(paymentIntent.metadata.doctorId,paymentIntent.metadata.scheduleId)
+  if(!appointment) return <h1>NOT APPOINTMENT</h1>
   const isSuccess = paymentIntent.status === 'succeeded'
   return (
     <div className=" flex h-screen max-h-screen px-[5%] bg-[#4158D0] bg-[linear-gradient(43deg,#4158D0_0%,#C850C0_46%,#FFCC70_100%)]">
@@ -34,24 +36,16 @@ const RequestSuccess = async ({
         <section className="flex flex-col items-center">
           <Image src="/assets/gifs/success.gif" height={300} width={280} alt="success" />
           <h2 className="header mb-6 max-w-[600px] text-center">
-            Your <span className="text-green-500">appointment request</span> has been
-            successfully submitted!
+            Yêu cầu <span className="text-green-500">đặt lịch hẹn</span> của bạn đã thành công!
           </h2>
-          <p>We&apos;ll be in touch shortly to confirm.</p>
+          
         </section>
 
         <section className="request-details">
-          <p>Requested appointment details: </p>
+          <p>Thông tin cuộc hẹn:</p>
           <div className="flex items-center gap-3">
-            {/* <Image
-              src={doctor?.image!}
-              alt="doctor"
-              width={100}
-              height={100}
-              className="size-6"
-            /> */}
             <User />
-            <p className="whitespace-nowrap">Dr.Nguyen Minh Chau</p>
+            <p className="whitespace-nowrap">{appointment.doctorSchedule.doctor.name}</p>
           </div>
           <div className="flex gap-2">
             <Image
@@ -61,21 +55,15 @@ const RequestSuccess = async ({
               alt="calendar"
             />
             {/* <p> {formatDateTime(appointment.schedule).dateTime}</p> */}
-            <p>11/10/2024 12:00-12:30 PM</p>
+            <p>{appointment.doctorSchedule.schedule.date} {appointment.doctorSchedule.schedule.timeSlot}</p>
           </div>
         </section>
 
         <Button variant="outline" className="shad-primary-btn" asChild>
           {isSuccess ? (
-            <a
-            // href={`/products/download/${await createDownloadVerification(
-            //   product.id
-            // )}`}
-            >
-              Download
-            </a>
+            <Link href={`/`}>Quay lại trang chủ</Link>
           ) : (
-            <Link href={`/appointment/${userId}/payment`}>Quay lại trang thanh toán</Link>
+            <Link href={`/doctor`}>Chọn lại lịch hẹn</Link>
           )}
         </Button>
 

@@ -12,39 +12,25 @@ import {
   CardTitle,
 } from './ui/card'
 import { Button } from './ui/button'
-import { useSearchParams } from 'next/navigation'
 import { formatPrice } from '@/helpers/formatCurrency'
+import { useSession } from 'next-auth/react'
+import { Doctor, Faculty, Profile, Schedule, Service } from '@prisma/client'
 
+type AppointmentInfor = {
+  profile:Profile
+  service:Service
+  doctor:Doctor
+  schedule:Schedule
+  faculty:Faculty
+}
 type CheckoutFormProps = {
   clientSecret: string
   product: object
-  timeSlot: string
-  date: string
+  searchParams: AppointmentInfor
 }
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY as string)
-export function CheckoutForm({ clientSecret }: CheckoutFormProps) {
-  const searchParams = useSearchParams()
-
-  // Lấy dữ liệu từ query params
-  const date = searchParams.get('date') || ''
-  const timeSlot = searchParams.get('timeSlot') || ''
-  const doctorName = searchParams.get('doctorName') || ''
-  const facultyName = searchParams.get('facultyName') || ''
-  const serviceName = searchParams.get('serviceName') || ''
-  const profileName = searchParams.get('profileName') || ''
-  const profilePhone = searchParams.get('profilePhone') || ''
-
-  // Kiểm tra và log dữ liệu để debug
-  console.log('Checkout data:', {
-    date,
-    timeSlot,
-    doctorName,
-    facultyName,
-    serviceName,
-    profileName,
-    profilePhone,
-  })
-
+export function CheckoutForm({ clientSecret,searchParams }: CheckoutFormProps) {
+  
   if (clientSecret == '') return <h1>Chưa có sản phẩm</h1>
 
   return (
@@ -72,7 +58,7 @@ export function CheckoutForm({ clientSecret }: CheckoutFormProps) {
                   <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
                 </svg>
               </p>
-              <p>{profileName}</p>
+              <p>{searchParams.profile.name}</p>
             </li>
             <li className="card-item">
               <p className="mt-[6px]">
@@ -92,7 +78,7 @@ export function CheckoutForm({ clientSecret }: CheckoutFormProps) {
                   <path d="M12 18h.01" />
                 </svg>
               </p>
-              <p>{profilePhone}</p>
+              <p>{searchParams.profile.phone}</p>
             </li>
             <li className="card-item">
               <p className="mt-[6px]">
@@ -153,16 +139,16 @@ export function CheckoutForm({ clientSecret }: CheckoutFormProps) {
           </ul>
         </div>
       </div>
-      <div className="reset-css card basis-3/4 max-w-3/4">
+      <div className="reset-css card basis-3/4 max-w-3/4 bg-white">
         <h1 className="card-header">Thông tin thanh toán</h1>
         <div className="flex items-start justify-between">
           <div className="card-body card basis-1/2 max-w-1/2 bg-white h-full">
             <Elements stripe={stripePromise} options={{ clientSecret }}>
-              <Form price={'1000000'} />
+              <Form price={searchParams.service.price.toString()}/>
             </Elements>
           </div>
           <div className="card-body card basis-1/2 max-w-1/2 bg-white">
-            <Card className="mb-3 rounded-lg border border-solid border-[#00e0ff]">
+            <Card className="mb-3 rounded-lg border-none">
               <CardHeader>
                 <div className="flex items-center">
                   <p>
@@ -216,7 +202,7 @@ export function CheckoutForm({ clientSecret }: CheckoutFormProps) {
                       </p>
                       <p className="highlight-text">Chuyên khoa</p>
                     </div>
-                    <p className="li-payment-center">{facultyName}</p>
+                    <p className="li-payment-center">{searchParams.faculty.name}</p>
                   </li>
                   <li className="list-item-payment">
                     <div className="flex items-center gap-x-2">
@@ -225,7 +211,7 @@ export function CheckoutForm({ clientSecret }: CheckoutFormProps) {
                       </p>
                       <p className="highlight-text">Bác sĩ</p>
                     </div>
-                    <p className="li-payment-center">{doctorName}</p>
+                    <p className="li-payment-center">{searchParams.doctor.name}</p>
                   </li>
                   <li className="list-item-payment">
                     <div className="flex items-center gap-x-2">
@@ -251,7 +237,7 @@ export function CheckoutForm({ clientSecret }: CheckoutFormProps) {
                       </p>
                       <p className="highlight-text">Dịch vụ</p>
                     </div>
-                    <p className="li-payment-center">{serviceName}</p>
+                    <p className="li-payment-center">{searchParams.service.name}</p>
                   </li>
                   <li className="list-item-payment">
                     <div className="flex items-center gap-x-2">
@@ -277,7 +263,7 @@ export function CheckoutForm({ clientSecret }: CheckoutFormProps) {
                       </p>
                       <p className="highlight-text">Ngày khám</p>
                     </div>
-                    <p className="li-payment-center">{date}</p>
+                    <p className="li-payment-center">{searchParams.schedule.date}</p>
                   </li>
                   <li className="list-item-payment">
                     <div className="flex items-center gap-x-2">
@@ -303,7 +289,7 @@ export function CheckoutForm({ clientSecret }: CheckoutFormProps) {
                       </p>
                       <p className="highlight-text">Giờ khám</p>
                     </div>
-                    <p className="li-payment-center">{timeSlot}</p>
+                    <p className="li-payment-center">{searchParams.schedule.timeSlot}</p>
                   </li>
                 </ul>
               </CardContent>
@@ -315,10 +301,11 @@ export function CheckoutForm({ clientSecret }: CheckoutFormProps) {
   )
 }
 
-function Form({ price }: { price: string }) {
+function Form({ price }: { price: string}) { 
   const stripe = useStripe()
   const elements = useElements()
   const [isLoading, setIsLoading] = useState(false)
+  const {data:session} = useSession()
   const [errorMessage, setErrorMessage] = useState<string>()
   // const { userId } = useParams();
   const handleSumit = (e: FormEvent) => {
@@ -327,17 +314,16 @@ function Form({ price }: { price: string }) {
       return
     }
     setIsLoading(true)
-    // Check infor
-    console.log('NEXT PUBLIC', process.env.NEXT_PUBLIC_SERVER_URL)
     stripe
       .confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/appointment/success`,
+          return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/appointment/success/${session?.user.id}`,
         },
       })
       .then(({ error }) => {
         if (error.type === 'card_error' || error.type === 'validation_error') {
+          console.log(error)
           setErrorMessage(error.message)
         } else {
           setErrorMessage('An unknown error occurred')
@@ -345,6 +331,7 @@ function Form({ price }: { price: string }) {
       })
       .finally(() => setIsLoading(false))
   }
+
   return (
     <form onSubmit={handleSumit}>
       <Card className="mb-3 rounded-lg border border-solid border-[#00e0ff]">
