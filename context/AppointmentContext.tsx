@@ -8,7 +8,7 @@ type AppointmentData = {
   serviceId?: string
   doctorId?: string
   scheduleId?: string
-  userId?: string
+  price?: string
 }
 
 type AppointmentContextType = {

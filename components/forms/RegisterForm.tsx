@@ -5,7 +5,6 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Form } from '@/components/ui/form'
-import { RegisterFormValidation } from '@/lib/validation'
 import 'react-phone-number-input/style.css'
 import CustomFormField, { FormFieldType } from '../CustomFormField'
 import SubmitButton from '../SubmitButton'
@@ -13,24 +12,28 @@ import { toast } from 'sonner'
 import { Label } from '../ui/label'
 import { PasswordInput } from '../PasswordInput'
 import React from 'react'
+import { RegisterUser2 } from '@/validation/register'
 export const RegisterForm = () => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [currentPassword, setCurrentPassword] = useState('')
-  console.log('ENV', process.env.DATABASE_URL)
-  const form = useForm<z.infer<typeof RegisterFormValidation>>({
-    resolver: zodResolver(RegisterFormValidation),
+  const form = useForm<z.infer<typeof RegisterUser2>>({
+    resolver: zodResolver(RegisterUser2),
     defaultValues: {
-      name: '',
+      username: '',
       email: '',
-      phone: '',
+      phone: ''
     },
   })
-  const onSubmit = async (values: z.infer<typeof RegisterFormValidation>) => {
+  const onSubmit = async (values: z.infer<typeof RegisterUser2>) => {
+    console.log(form.formState.errors);
     console.log('IS LOADING', isLoading)
     setIsLoading(true)
     try {
       console.log('VALUES FROM REGISTER', values)
+      if(!currentPassword) {
+        throw new Error('Password is required')
+      }
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
@@ -39,15 +42,13 @@ export const RegisterForm = () => {
         body: JSON.stringify({
           email: values.email,
           password: currentPassword,
-          name: values.name,
+          username: values.username,
           phone: values.phone,
         }),
       })
-      console.log('RES', res)
       const responseData = await res.json()
 
       if (!res.ok) {
-        console.log('RESPOND DATA', responseData.error)
         throw new Error(responseData.error)
       }
 
@@ -62,7 +63,8 @@ export const RegisterForm = () => {
       setIsLoading(false)
     }
   }
-
+  console.log(form.formState.errors);
+  console.log(isLoading)
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
@@ -76,7 +78,7 @@ export const RegisterForm = () => {
         <CustomFormField
           fieldType={FormFieldType.INPUT}
           control={form.control}
-          name="name"
+          name="username"
           label="Họ và tên"
           placeholder="Ngô Thị Duyên"
           iconSrc="/assets/icons/user.svg"
@@ -92,26 +94,26 @@ export const RegisterForm = () => {
           iconSrc="/assets/icons/email.svg"
           iconAlt="email"
         />
-
         <CustomFormField
-          fieldType={FormFieldType.PHONE_INPUT}
+          fieldType={FormFieldType.INPUT}
           control={form.control}
           name="phone"
           label="Số điện thoại"
           placeholder="(555) 123-4567"
+          type='number'
         />
         <div className="space-y-2 flex-1 mt-2">
           <Label htmlFor="password" className="shad-input-label ">
             Mật khẩu
           </Label>
           <PasswordInput
-            customProp=""
             id="password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             autoComplete="password"
           />
         </div>
+        
         <SubmitButton isLoading={isLoading}>Đăng ký tài khoản </SubmitButton>
       </form>
     </Form>

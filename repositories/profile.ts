@@ -112,8 +112,8 @@ export class ProfileRespository {
 
       console.log('Hồ sơ đã bị xóa thành công:', deletedProfile)
       return deletedProfile
-    } catch (error: any) {
-      console.error('Lỗi xóa hồ sơ bệnh nhân:', error.message || error)
+    } catch (error) {
+      console.error('Lỗi xóa hồ sơ bệnh nhân:', error)
       throw new Error('Không thể xóa hồ sơ bệnh nhân. Vui lòng thử lại sau.')
     } finally {
       await prisma.$disconnect()
