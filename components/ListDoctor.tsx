@@ -200,6 +200,7 @@ const ListDoctor = () => {
           searchKey="name"
           filterOptions={{
             key: 'facultyId',
+            placeholder: 'Chuyên khoa',
             options: facultyData.map((faculty) => ({
               label: faculty.name,
               value: faculty.id,

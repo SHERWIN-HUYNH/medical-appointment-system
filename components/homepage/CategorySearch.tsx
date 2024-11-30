@@ -19,23 +19,41 @@ type Faculty = {
 }
 
 const CategorySearch = () => {
-  // State để lưu trữ danh sách faculty
+  // Khởi tạo state với mảng rỗng
   const [faculties, setFaculties] = useState<Faculty[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   // Fetch dữ liệu faculty khi component mount
   useEffect(() => {
     const fetchFaculties = async () => {
       try {
+        setIsLoading(true)
         const response = await fetch('/api/faculty')
+        if (!response.ok) {
+          throw new Error('Failed to fetch')
+        }
         const data = await response.json()
-        setFaculties(data)
+        // Đảm bảo data là một mảng
+        if (Array.isArray(data)) {
+          setFaculties(data)
+        } else {
+          console.error('Data is not an array:', data)
+          setFaculties([])
+        }
       } catch (error) {
         console.error('Failed to fetch faculties:', error)
+        setFaculties([])
+      } finally {
+        setIsLoading(false)
       }
     }
 
     fetchFaculties()
   }, [])
+
+  if (isLoading) {
+    return <div>Loading...</div> // Hoặc component loading của bạn
+  }
 
   return (
     <div className="mb-10 items-center flex flex-col gap-2 py-12">
@@ -51,7 +69,7 @@ const CategorySearch = () => {
           slidesPerView={5}
           className="!static py-8"
         >
-          {faculties.map((faculty) => (
+          {Array.isArray(faculties) && faculties.map((faculty) => (
             <SwiperSlide key={faculty.id} className="py-4">
               <Link href={`/faculty/${faculty.id}`}>
                 <div className="w-[160px] h-[160px] flex flex-col text-center items-center p-4 bg-white border border-slate-200 rounded-lg cursor-pointer shadow-lg hover:scale-105 transition-all ease-in-out gap-3">
