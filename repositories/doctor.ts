@@ -102,16 +102,34 @@ export class DoctorRespository {
             name: true,
           },
         },
+        comments: {
+          select: {
+            rating: true,
+          },
+        },
       },
-    })
-
-    const formattedDoctors = doctors.map((doctor) => ({
-      ...doctor,
-      facultyName: doctor.faculty?.name,
-    }))
-    await prisma.$disconnect()
-    return formattedDoctors
+    });
+  
+    const formattedDoctors = doctors.map((doctor) => {
+      const totalRatings = doctor.comments.reduce((sum, comment) => sum + comment.rating, 0);
+      const averageRating =
+        doctor.comments.length > 0 ? totalRatings / doctor.comments.length : 0;
+  
+      return {
+        id: doctor.id,
+        name: doctor.name,
+        facultyName: doctor.faculty?.name,
+        rating: Number(averageRating.toFixed(1)), 
+        academicTitle: doctor.academicTitle,
+        image: doctor.image, 
+        description: doctor.description, 
+      };
+    });
+  
+    await prisma.$disconnect();
+    return formattedDoctors;
   }
+  
   static async deleteDoctor(doctorId: string) {
     if (!doctorId) {
       throw new Error('Doctor ID is missing.')
