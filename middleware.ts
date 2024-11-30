@@ -7,9 +7,13 @@ export async function middleware(req: NextRequest) {
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
     const { pathname } = req.nextUrl
-    const publicPaths = ['/login', '/register', '/api/auth', '/api/auth/session']
+    
+    const publicPaths = ['/login', '/register', '/api/auth', '/api/auth/session','/api/webhook/stripe']
     if (publicPaths.some((path) => pathname.startsWith(path))) {
       return NextResponse.next()
+    }
+    if(!token) {
+      return NextResponse.redirect(new URL('/login', req.url))
     }
     // if (pathname.startsWith('/api/') && !token) {
     //   return NextResponse.json(
