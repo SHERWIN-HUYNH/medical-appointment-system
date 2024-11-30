@@ -72,7 +72,7 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
     const timeSlot = `${startTime}-${endTime}`
     const newEvent: Event = {
       id: `${date}-${timeSlot}`,
-      title: 'Trống',
+      title: '',
       start: selectInfo.start,
       end: selectInfo.end,
       date: date,

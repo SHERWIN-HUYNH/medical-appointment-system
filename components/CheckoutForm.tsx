@@ -307,7 +307,6 @@ function Form({ price }: { price: string}) {
   const [isLoading, setIsLoading] = useState(false)
   const {data:session} = useSession()
   const [errorMessage, setErrorMessage] = useState<string>()
-  // const { userId } = useParams();
   const handleSumit = (e: FormEvent) => {
     e.preventDefault()
     if (!stripe || !elements) {
