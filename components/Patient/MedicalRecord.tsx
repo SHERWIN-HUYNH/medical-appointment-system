@@ -20,6 +20,7 @@ import { toast } from 'sonner'
 import ModalMedicalBillDetail from './ModalMedicalBillDetail'
 import { shortenTitle } from '@/lib/utils'
 import clsx from 'clsx'
+import CancelModal from './CancelModal'
 
 type Medicalbill = {
   id: string
@@ -54,6 +55,8 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
   const [selectedAppointment, setSelectedAppointment] = useState<BillInfor[]>([])
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [selectedBillDetail, setSelectedBillDetail] = useState<BillInfor | null>(null)
+  const [showCancelModal, setShowCancelModal] = useState(false)
+  const [cancelReason, setCancelReason] = useState('')
 
   useEffect(() => {
     if (appointments) {
@@ -112,6 +115,11 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
   const handleDetailClick = (bill: BillInfor) => {
     setSelectedBillDetail(bill)
     setShowDetailModal(true)
+  }
+
+  const handleCancelClick = (bill: BillInfor) => {
+    setSelectedBillDetail(bill)
+    setShowCancelModal(true)
   }
 
   return (
@@ -196,6 +204,7 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
                       <Button
                         size="sm"
                         className="text-red-500 text-sm flex items-center bg-transparent hover:bg-transparent"
+                        onClick={() => handleCancelClick(bill)}
                       >
                         <TrashIcon className="w-4 h-4 mr-1" /> Hủy lịch hẹn
                       </Button>
@@ -246,6 +255,18 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
                 setShowDetailModal(false)
                 setSelectedBillDetail(null)
               }}
+            />
+          )}
+
+          {showCancelModal && (
+            <CancelModal
+              onClose={() => {
+                setShowCancelModal(false)
+                setCancelReason('')
+              }}
+              onSubmit={() => handleCancelClick(selectedBillDetail!)}
+              cancelReason={cancelReason}
+              setCancelReason={setCancelReason}
             />
           )}
         </>
