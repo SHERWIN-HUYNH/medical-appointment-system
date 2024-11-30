@@ -69,26 +69,27 @@ const CategorySearch = () => {
           slidesPerView={5}
           className="!static py-8"
         >
-          {Array.isArray(faculties) && faculties.map((faculty) => (
-            <SwiperSlide key={faculty.id} className="py-4">
-              <Link href={`/faculty/${faculty.id}`}>
-                <div className="w-[160px] h-[160px] flex flex-col text-center items-center p-4 bg-white border border-slate-200 rounded-lg cursor-pointer shadow-lg hover:scale-105 transition-all ease-in-out gap-3">
-                  <div className="p-4 rounded-2xl bg-primary">
-                    <CldImage
-                      src={`${faculty.image}`}
-                      alt={faculty.name}
-                      width={35}
-                      height={35}
-                      className="text-white h-9 w-9"
-                    />
+          {Array.isArray(faculties) &&
+            faculties.map((faculty) => (
+              <SwiperSlide key={faculty.id} className="py-4">
+                <Link href={`/faculty/${faculty.id}`}>
+                  <div className="w-[160px] h-[160px] flex flex-col text-center items-center p-4 bg-white border border-slate-200 rounded-lg cursor-pointer shadow-lg hover:scale-105 transition-all ease-in-out gap-3">
+                    <div className="p-4 rounded-2xl bg-primary">
+                      <CldImage
+                        src={`${faculty.image}`}
+                        alt={faculty.name}
+                        width={35}
+                        height={35}
+                        className="text-white h-9 w-9"
+                      />
+                    </div>
+                    <p className="text-sm text-blue-900 mt-1 min-h-[40px] line-clamp-2 break-words hyphens-auto">
+                      {faculty.name}
+                    </p>
                   </div>
-                  <p className="text-sm text-blue-900 mt-1 min-h-[40px] line-clamp-2 break-words hyphens-auto">
-                    {faculty.name}
-                  </p>
-                </div>
-              </Link>
-            </SwiperSlide>
-          ))}
+                </Link>
+              </SwiperSlide>
+            ))}
         </Swiper>
       </div>
 

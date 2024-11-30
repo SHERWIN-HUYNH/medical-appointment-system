@@ -45,8 +45,6 @@ const ChooseProfile: React.FC = () => {
   const router = useRouter()
   const { data } = useAppointmentContext()
   const searchParams = useSearchParams()
-
-  // Lấy thông tin từ URL query params
   const date = searchParams.get('date')
   const timeSlot = searchParams.get('timeSlot')
   const price = searchParams.get('price')
@@ -109,13 +107,13 @@ const ChooseProfile: React.FC = () => {
       `/appointment?` +
         `date=${date}&` +
         `timeSlot=${timeSlot}&` +
-        `price=${price}&`+
+        `price=${price}&` +
         `profileName=${selectedProfileData?.name}&` +
         `profileId=${profileId}&` +
         `doctorId=${doctorId}&` +
         `facultyId=${facultyId}&` +
         `userId=${session?.user?.id}&` +
-        `serviceId=${serviceId}&`
+        `serviceId=${serviceId}&`,
     )
   }
 
@@ -159,58 +157,57 @@ const ChooseProfile: React.FC = () => {
                 <span className="ml-2">{profile.phone}</span>
               </div>
 
-                <div className="mt-2">
-                  <div className="flex items-center mb-2">
-                    <FaEnvelope className="mr-2 text-slate-400" />
-                    <span className="text-slate-400">Email: </span>
-                    <span className="ml-2">{profile.email}</span>
-                  </div>
-                  <div className="flex items-center mb-4">
-                    <FaVenusMars className="mr-2 text-slate-400" />
-                    <span className="text-slate-400">Giới tính: </span>
-                    <span className="ml-2">
-                      {profile.gender === 'FEMALE' ? 'Nữ' : 'Nam'}
-                    </span>
-                  </div>
-                  <hr className="text-slate-400 mt-2 mb-2" />
-                  <div className="flex justify-between items-center">
-                    <div className="flex space-x-2">
-                      <Button
-                        className="flex items-center text-xs bg-red-50 text-red-400 py-1 px-4 rounded hover:bg-red-400 hover:text-white transition"
-                        onClick={() => {
-                          setProfileToDelete(profile.id)
-                          setIsModalOpen(true)
-                        }}
-                      >
-                        <FaTrash className="mr-2" />
-                        Xóa
-                      </Button>
-                      <Link
-                        href={{
-                          pathname: `/patients/${profile.id}/profile/edit-profile`,
-                          query: {
-                            id: profile.id,
-                            name: profile.name,
-                            phone: profile.phone,
-                          },
-                        }}
-                      >
-                        <Button className="flex items-center text-xs bg-blue-50 text-blue-400 py-1 px-4 rounded hover:bg-blue-400 hover:text-white transition">
-                          <FaEdit className="mr-2" />
-                          Sửa
-                        </Button>
-                      </Link>
-                    </div>
-                    <Button
-                      className="flex items-center bg-primary text-white py-1 px-4 rounded-lg shadow-md transform transition duration-200 hover:scale-105 hover:bg-blue-400"
-                      onClick={() => handleContinue(profile.id)}
-                    >
-                      <FaArrowRight className="mr-2" />
-                      Tiếp tục
-                    </Button>
-                  </div>
+              <div className="mt-2">
+                <div className="flex items-center mb-2">
+                  <FaEnvelope className="mr-2 text-slate-400" />
+                  <span className="text-slate-400">Email: </span>
+                  <span className="ml-2">{profile.email}</span>
                 </div>
-              
+                <div className="flex items-center mb-4">
+                  <FaVenusMars className="mr-2 text-slate-400" />
+                  <span className="text-slate-400">Giới tính: </span>
+                  <span className="ml-2">
+                    {profile.gender === 'FEMALE' ? 'Nữ' : 'Nam'}
+                  </span>
+                </div>
+                <hr className="text-slate-400 mt-2 mb-2" />
+                <div className="flex justify-between items-center">
+                  <div className="flex space-x-2">
+                    <Button
+                      className="flex items-center text-xs bg-red-50 text-red-400 py-1 px-4 rounded hover:bg-red-400 hover:text-white transition"
+                      onClick={() => {
+                        setProfileToDelete(profile.id)
+                        setIsModalOpen(true)
+                      }}
+                    >
+                      <FaTrash className="mr-2" />
+                      Xóa
+                    </Button>
+                    <Link
+                      href={{
+                        pathname: `/patients/${profile.id}/profile/edit-profile`,
+                        query: {
+                          id: profile.id,
+                          name: profile.name,
+                          phone: profile.phone,
+                        },
+                      }}
+                    >
+                      <Button className="flex items-center text-xs bg-blue-50 text-blue-400 py-1 px-4 rounded hover:bg-blue-400 hover:text-white transition">
+                        <FaEdit className="mr-2" />
+                        Sửa
+                      </Button>
+                    </Link>
+                  </div>
+                  <Button
+                    className="flex items-center bg-primary text-white py-1 px-4 rounded-lg shadow-md transform transition duration-200 hover:scale-105 hover:bg-blue-400"
+                    onClick={() => handleContinue(profile.id)}
+                  >
+                    <FaArrowRight className="mr-2" />
+                    Tiếp tục
+                  </Button>
+                </div>
+              </div>
             </div>
           ))}
         </div>

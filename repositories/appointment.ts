@@ -151,18 +151,18 @@ export class AppointmentRepository {
       await prisma.$disconnect()
     }
   }
-  static async getAppointmentByDoctorAndSchedule(doctorId:string , scheduleId: string) {
+  static async getAppointmentByDoctorAndSchedule(doctorId: string, scheduleId: string) {
     try {
       const doctorSchedule = await prisma.doctorSchedule.findFirst({
         where: {
           doctorId: doctorId,
-          scheduleId: scheduleId
-        }
+          scheduleId: scheduleId,
+        },
       })
-      if(doctorSchedule){
+      if (doctorSchedule) {
         const appointment = await prisma.appointment.findFirst({
           where: {
-            doctorScheduleId: doctorSchedule.id
+            doctorScheduleId: doctorSchedule.id,
           },
           include: {
             doctorSchedule: {
@@ -170,8 +170,8 @@ export class AppointmentRepository {
                 schedule: true,
                 doctor: true,
               },
-            }
-          }
+            },
+          },
         })
         return appointment
       }
@@ -179,6 +179,4 @@ export class AppointmentRepository {
       console.log(error)
     }
   }
-
-  
 }

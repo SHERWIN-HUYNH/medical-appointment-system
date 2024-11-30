@@ -25,6 +25,7 @@ export class ProfileRespository {
       const profile = await prisma.profile.findUnique({
         where: {
           id: id,
+          isDeleted: false,
         },
       })
       return profile
@@ -109,9 +110,12 @@ export class ProfileRespository {
       if (hasPending) {
         throw new Error('Không thể xóa hồ sơ, hồ sơ này đang có lịch hẹn.')
       }
-      const deletedProfile = await prisma.profile.delete({
+      const deletedProfile = await prisma.profile.update({
         where: {
           id: profileData.id,
+        },
+        data: {
+          isDeleted: true, 
         },
       })
 

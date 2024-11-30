@@ -49,7 +49,7 @@ const Doctor = () => {
           console.log('DOCTOR USER', data)
           setDoctors(data)
           setFilteredDoctors(data)
-        } 
+        }
       } catch (error) {
         console.log('ERROR', error)
         toast.error('Lỗi khi kết nối với máy chủ')
@@ -237,7 +237,7 @@ const Doctor = () => {
                 </div>
               ))
             ) : (
-              <p className="text-center text-slate-500">Không tìm thấy bác sĩ phù hợp.</p>
+              <p className="flex justify-center text-center text-slate-500">Không có dữ liệu bác sĩ.</p>
             )}
           </div>
         </div>

@@ -17,11 +17,11 @@ import { useSession } from 'next-auth/react'
 import { Doctor, Faculty, Profile, Schedule, Service } from '@prisma/client'
 
 type AppointmentInfor = {
-  profile:Profile
-  service:Service
-  doctor:Doctor
-  schedule:Schedule
-  faculty:Faculty
+  profile: Profile
+  service: Service
+  doctor: Doctor
+  schedule: Schedule
+  faculty: Faculty
 }
 type CheckoutFormProps = {
   clientSecret: string
@@ -29,8 +29,7 @@ type CheckoutFormProps = {
   searchParams: AppointmentInfor
 }
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY as string)
-export function CheckoutForm({ clientSecret,searchParams }: CheckoutFormProps) {
-  
+export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) {
   if (clientSecret == '') return <h1>Chưa có sản phẩm</h1>
 
   return (
@@ -144,7 +143,7 @@ export function CheckoutForm({ clientSecret,searchParams }: CheckoutFormProps) {
         <div className="flex items-start justify-between">
           <div className="card-body card basis-1/2 max-w-1/2 bg-white h-full">
             <Elements stripe={stripePromise} options={{ clientSecret }}>
-              <Form price={searchParams.service.price.toString()}/>
+              <Form price={searchParams.service.price.toString()} />
             </Elements>
           </div>
           <div className="card-body card basis-1/2 max-w-1/2 bg-white">
@@ -301,11 +300,11 @@ export function CheckoutForm({ clientSecret,searchParams }: CheckoutFormProps) {
   )
 }
 
-function Form({ price }: { price: string}) { 
+function Form({ price }: { price: string }) {
   const stripe = useStripe()
   const elements = useElements()
   const [isLoading, setIsLoading] = useState(false)
-  const {data:session} = useSession()
+  const { data: session } = useSession()
   const [errorMessage, setErrorMessage] = useState<string>()
   // const { userId } = useParams();
   const handleSumit = (e: FormEvent) => {

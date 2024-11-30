@@ -61,11 +61,11 @@ const Appointment = async ({ searchParams }: { searchParams: AppointmentProps })
           clientSecret={paymentIntent.client_secret}
           product={serviceInfor}
           searchParams={{
-            profile:profile,
-            service:service,
-            doctor:doctor,
-            schedule:schedule,
-            faculty:faculty
+            profile: profile,
+            service: service,
+            doctor: doctor,
+            schedule: schedule,
+            faculty: faculty,
           }}
         />
       </div>

@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       return notFoundResponse('FAIL TO CREATE BILL')
     }
     const receiptUrl = charge.receipt_url ?? ''
-    
+
     sendMail({
       sendTo: profile?.email,
       subject: 'Xác nhận Đặt lịch hẹn thành công',
