@@ -198,6 +198,7 @@ const ChooseProfile: React.FC = () => {
                     </Link>
                   </div>
                   <Button
+
                     className="flex items-center bg-primary text-white py-1 px-4 rounded-lg shadow-md transform transition duration-200 "
                     onClick={() => handleContinue(profile.id)}
                   >

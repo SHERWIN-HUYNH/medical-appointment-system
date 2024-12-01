@@ -18,7 +18,6 @@ const RequestSuccess = async ({
     paymentIntent.metadata.doctorId,
     paymentIntent.metadata.scheduleId,
   )
-  // if(!appointment) return <h1>NOT APPOINTMENT</h1>
   console.log('APPOINMENT SUCCESS', appointment)
   const isSuccess = paymentIntent.status === 'succeeded'
   return (
@@ -49,7 +48,7 @@ const RequestSuccess = async ({
           <p>Thông tin cuộc hẹn:</p>
           <div className="flex items-center gap-3">
             <User />
-            <p className="whitespace-nowrap"></p>
+            <p className="whitespace-nowrap">{appointment?.doctorSchedule.doctor.name}</p>
           </div>
           <div className="flex gap-2">
             <Image
@@ -59,7 +58,10 @@ const RequestSuccess = async ({
               alt="calendar"
             />
             {/* <p> {formatDateTime(appointment.schedule).dateTime}</p> */}
-            <p></p>
+            <p>
+              {appointment?.doctorSchedule.schedule.date}{' '}
+              {appointment?.doctorSchedule.schedule.timeSlot}
+            </p>
           </div>
         </section>
 

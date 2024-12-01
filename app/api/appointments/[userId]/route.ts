@@ -4,6 +4,7 @@ import {
   successResponse,
   internalServerErrorResponse,
   unauthorizedResponse,
+  badRequestResponse,
 } from '@/helpers/response'
 import { ProfileRespository } from '@/repositories/profile'
 import { UserRepository } from '@/repositories/user'
@@ -52,45 +53,47 @@ export async function GET(req: Request, { params }: { params: { userId: string }
     return internalServerErrorResponse('Lỗi khi lấy danh sách lịch khám')
   }
 }
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 export async function PUT(req: Request, context: { params: { userId: string } }) {
   try {
     const body = await req.json()
-    const { paymentIntentId, cancellationReason } = body
+    const { paymentIntentId, cancellationReason, appointmentId } = body
     const { userId } = context.params
-
+    console.log('body', body)
     if (!userId) {
       return unauthorizedResponse('UNAUTHENTICATED')
     }
     const user = await UserRepository.getUserByUserId(userId)
     if (!user) {
-      return notFoundResponse('Không tìm thấy người dụng')
+      return notFoundResponse('Không tìm thấy người dùng')
     }
-    const canceledPaymentIntent = await stripe.paymentIntents.cancel(paymentIntentId, {
-      cancellation_reason: cancellationReason,
-    })
-    if (!canceledPaymentIntent) {
-      console.log('CANCELED PAYMENT INTENT')
+    const oldAppointment = await AppointmentRepository.getAppoinmentById(appointmentId)
+    if (!oldAppointment) {
+      return notFoundResponse('Không tìm thấy lịch khám')
     }
-    const refundPaymentIntent = await stripe.refunds.create({
-      payment_intent: paymentIntentId,
-      amount: canceledPaymentIntent.amount,
-    })
-    console.log('REFUND PAYMENT INTENT', refundPaymentIntent)
-    const cancelAppointment = await AppointmentRepository.cancelAppointment(
-      paymentIntentId,
-      cancellationReason,
-    )
-    if (!cancelAppointment?.payments) {
-      throw new Error('Cancel appointment operation failed; appointment not found.')
+    if (oldAppointment.status === 'PENDING') {
+      const refundPaymentIntent = await stripe.refunds.create({
+        payment_intent: paymentIntentId,
+      })
+      console.log('refundPaymentIntent', refundPaymentIntent)
+      const cancelAppointment = await AppointmentRepository.cancelAppointment(
+        cancellationReason,
+        appointmentId,
+      )
+      if (!cancelAppointment?.payments) {
+        throw new Error('Cancel appointment operation failed; appointment not found.')
+      }
+
+      const cancelBill = await BillRespository.cancelBill(cancelAppointment.payments?.id)
+      if (!cancelBill) {
+        throw new Error('Cancel bill operation failed; bill not found.')
+      }
+      return successResponse({ cancelAppointment })
+    } else {
+      return badRequestResponse('Lịch khám đã hoàn thành hoặc đã bị hủy')
     }
-    const cancelBill = BillRespository.cancelBill(cancelAppointment.payments?.id)
-    if (!cancelBill) {
-      throw new Error('Cancel bill operation failed; bill not found.')
-    }
-    // Send email to inform the patient that the appointment has been canceled
-    return successResponse({ cancelAppointment })
   } catch (error) {
-    return internalServerErrorResponse(`Lỗi khi lấy danh sách lịch khám ${error}`)
+    console.error('Error occurred:', error)
+    return internalServerErrorResponse(`Lỗi khi xử lý: ${error}`)
   }
 }

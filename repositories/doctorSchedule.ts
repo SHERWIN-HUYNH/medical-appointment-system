@@ -52,7 +52,6 @@ export class DoctorScheduleRespository {
 
   static async saveSchedule(doctorId: string, schedules: Array<Schedule>) {
     return prisma.$transaction(async (tx) => {
-      console.log('RESPO SCHEDULE', schedules)
       const datesToDelete = Array.from(
         new Set(schedules.map((schedule) => schedule.date)),
       )

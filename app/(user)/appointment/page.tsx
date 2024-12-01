@@ -43,7 +43,7 @@ const Appointment = async ({ searchParams }: { searchParams: AppointmentProps })
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: serviceInfor.price ?? 0,
-    currency: 'usd',
+    currency: 'vnd',
     metadata: {
       billId: serviceInfor.customerId,
       doctorId: doctorId,
