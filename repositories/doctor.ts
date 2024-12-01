@@ -52,6 +52,10 @@ export class DoctorRespository {
   }
 
   static async getDoctorById(doctorId: string) {
+    if (!doctorId) {
+      throw new Error('Doctor ID is missing.')
+    }
+
     const doctor = await prisma.doctor.findUnique({
       where: {
         id: doctorId,
@@ -60,6 +64,11 @@ export class DoctorRespository {
         faculty: true,
       },
     })
+
+    if (!doctor) {
+      throw new Error('Doctor not found.')
+    }
+
     await prisma.$disconnect()
     return doctor
   }

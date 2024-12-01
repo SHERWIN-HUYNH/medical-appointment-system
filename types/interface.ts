@@ -66,8 +66,10 @@ export interface Doctor {
   description?: string
   isDeleted: boolean
   image?: string
+  gender: boolean
   facultyId: string
   isActive: boolean
+  averageRating?: number
   comments: Comment[]
   doctorSchedule: Schedule[]
   faculty: Faculty

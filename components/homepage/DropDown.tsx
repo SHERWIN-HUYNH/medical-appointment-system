@@ -42,7 +42,7 @@ const Dropdown = () => {
             </li>
             <li className="w-full">
               <Link
-                href={`/patients/${session?.user?.id}/profile`}
+                href={`/patients/${session?.user?.id}/profile?tab=2`}
                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:bg-slate-100 hover:text-primary dark:hover:bg-strokedark lg:text-base w-full px-6 py-2"
               >
                 <CreditCard className="h-5 w-5" />

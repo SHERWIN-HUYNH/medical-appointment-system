@@ -57,6 +57,7 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
   const [selectedBillDetail, setSelectedBillDetail] = useState<BillInfor | null>(null)
   const [showCancelModal, setShowCancelModal] = useState(false)
   const [cancelReason, setCancelReason] = useState('')
+  const [reviewedBills, setReviewedBills] = useState<string[]>([]);
 
   useEffect(() => {
     if (appointments) {
@@ -71,8 +72,13 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
     setSelectedStatus(value)
   }
 
-  const handleReviewClick = () => {
+  const handleReviewClick = (bill: BillInfor) => {
+    if (reviewedBills.includes(bill.id)) {
+      toast.error('Bạn đã đánh giá phiếu khám này rồi.')
+      return
+    }
     setShowReviewModal(true)
+    setSelectedAppointment([bill])
   }
 
   const handleSubmitReview = async () => {
@@ -99,8 +105,8 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
 
       if (response.ok) {
         toast.success('Đánh giá thành công!')
+        setReviewedBills((prev) => [...prev, selectedAppointment[0].id]);
         setShowReviewModal(false)
-        setSelectedAppointment([])
         setRating(0)
         setComment('')
       } else {
@@ -213,7 +219,7 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
                       <Button
                         size="sm"
                         className="text-yellow-500 text-sm flex items-center bg-transparent hover:bg-transparent"
-                        onClick={() => handleReviewClick()}
+                        onClick={() => handleReviewClick(bill)}
                       >
                         <FilePen className="w-4 h-4 mr-1" /> Đánh giá
                       </Button>

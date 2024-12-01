@@ -21,8 +21,18 @@ const CancelModal: React.FC<CancelModalProps> = ({
         <h2>Lý do hủy hẹn</h2>
         <Textarea value={cancelReason} onChange={(e) => setCancelReason(e.target.value)} />
         <div className="modal-buttons mt-4 flex justify-end gap-2">
-          <Button onClick={onSubmit}>Xác nhận</Button>
-          <Button onClick={onClose}>Hủy</Button>
+          <Button 
+            className="bg-primary hover:bg-primary/90 text-white"
+            onClick={onSubmit}
+          >
+            Xác nhận
+          </Button>
+          <Button 
+            className="bg-gray-200 hover:bg-slate-500 hover:text-white text-slate-700"
+            onClick={onClose}
+          >
+            Hủy
+          </Button>
         </div>
       </div>
     </div>
