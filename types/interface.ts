@@ -66,8 +66,10 @@ export interface Doctor {
   description?: string
   isDeleted: boolean
   image?: string
+  gender: boolean
   facultyId: string
   isActive: boolean
+  averageRating?: number
   comments: Comment[]
   doctorSchedule: Schedule[]
   faculty: Faculty
@@ -130,4 +132,7 @@ export interface BillInfor {
   status: string
   appointment: AppointmentSchedule
   user: UserInfor
+  payment?: {
+    paymentIntentId: string
+  }
 }

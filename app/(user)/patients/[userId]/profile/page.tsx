@@ -22,9 +22,13 @@ import Footer from '@/components/homepage/Footer'
 import MedicalRecord from '@/components/Patient/MedicalRecord'
 import PaymentHistory from '@/components/Patient/PaymentHistory'
 import ProfileDetailModal from '@/components/Patient/ProfileDetailModal'
+import { useSearchParams } from 'next/navigation'
 
 const Profile = () => {
-  const [selectedOption, setSelectedOption] = useState(1)
+  const searchParams = useSearchParams()
+  const [selectedOption, setSelectedOption] = useState(
+    Number(searchParams.get('tab')) || 1,
+  )
   const [profiles, setProfiles] = useState<Profile[]>([])
   const { data: session } = useSession()
   const [isModalOpen, setIsModalOpen] = useState(false)

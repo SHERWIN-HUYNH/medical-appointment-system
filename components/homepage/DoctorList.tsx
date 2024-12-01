@@ -6,25 +6,11 @@ import { Navigation } from 'swiper/modules'
 import Link from 'next/link'
 import { useAppointmentContext } from '@/context/AppointmentContext'
 import { Button } from '@/components/ui/button'
-import { shortenTitle } from '@/lib/utils'
 
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
-
-type Doctor = {
-  id: string
-  name: string
-  facultyId: string
-  faculty: {
-    name: string
-  }
-  image: string
-  academicTitle: string
-  gender: boolean
-  isActive: boolean
-  description: string
-}
+import { Doctor } from '@/types/interface'
 
 function DoctorList() {
   const [doctors, setDoctors] = useState<Doctor[]>([])
@@ -34,9 +20,33 @@ function DoctorList() {
     const fetchDoctors = async () => {
       try {
         const response = await fetch('/api/doctor')
-        const data = await response.json()
-        const activeDoctors = data.filter((doctor: Doctor) => doctor.isActive)
-        setDoctors(activeDoctors)
+        const data: Doctor[] = await response.json()
+        const activeDoctors = data.filter((doctor) => doctor.isActive)
+
+        // Lấy tất cả các đánh giá một lần
+        const ratingsResponse = await fetch('/api/comment')
+        const ratings = await ratingsResponse.json()
+
+        // Tính toán điểm trung bình cho từng bác sĩ
+        const doctorsWithRatings = activeDoctors.map((doctor: Doctor) => {
+          const doctorRatings = ratings.filter(
+            (rating: { doctorId: string }) => rating.doctorId === doctor.id,
+          )
+          let averageRating: number
+          if (doctorRatings.length > 0) {
+            const sum = doctorRatings.reduce(
+              (sum: number, rating: { rating: number }) => sum + rating.rating,
+              0,
+            )
+            averageRating = sum / doctorRatings.length
+          } else {
+            averageRating = 0
+          }
+
+          return { ...doctor, averageRating }
+        })
+
+        setDoctors(doctorsWithRatings)
       } catch (error) {
         console.error('Failed to fetch doctors:', error)
       }
@@ -78,9 +88,16 @@ function DoctorList() {
                   </div>
                   <div className="flex flex-col flex-grow justify-between">
                     <div className="mt-4 space-y-2">
-                      <span className="inline-block text-[13px] p-1 rounded-full px-2 bg-primary text-white w-fit">
-                        {shortenTitle(doctor.academicTitle)}
-                      </span>
+                      <div className="flex items-center justify-between">
+                        <span className="inline-block text-[13px] p-1 rounded-full px-2 bg-primary text-white w-fit">
+                          {doctor.academicTitle}
+                        </span>
+                        <span className="text-sm text-orange-500">
+                          Đánh giá:{' '}
+                          {doctor.averageRating ? doctor.averageRating.toFixed(1) : '0'}{' '}
+                          ⭐
+                        </span>
+                      </div>
                       <div className="space-y-2">
                         <h2 className="font-semibold text-base line-clamp-1">
                           {doctor.name}
