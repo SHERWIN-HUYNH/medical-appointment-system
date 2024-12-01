@@ -217,5 +217,4 @@ export class AppointmentRepository {
       console.log(error)
     }
   }
-
 }

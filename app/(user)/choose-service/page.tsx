@@ -12,7 +12,7 @@ const ChooseService = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [services, setServices] = useState<Service[]>([])
   const router = useRouter()
-  const { data, setData } = useAppointmentContext()
+  const { data} = useAppointmentContext()
   const searchParams = useSearchParams()
   const doctorName = searchParams.get('doctorName')
   const facultyName = searchParams.get('facultyName')
