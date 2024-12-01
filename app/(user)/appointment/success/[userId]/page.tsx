@@ -7,16 +7,18 @@ import Stripe from 'stripe'
 import { AppointmentRepository } from '@/repositories/appointment'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 const RequestSuccess = async ({
-  searchParams
+  searchParams,
 }: {
-  searchParams: { payment_intent: string; userId:string}
+  searchParams: { payment_intent: string; userId: string }
 }) => {
   const paymentIntent = await stripe.paymentIntents.retrieve(searchParams.payment_intent)
   console.log('PAYMENT INTENT SUCCESS', paymentIntent)
   if (paymentIntent.metadata.billId == null) return <h1>NOT FOUND</h1>
-  const appointment = await AppointmentRepository.getAppointmentByDoctorAndSchedule(paymentIntent.metadata.doctorId,paymentIntent.metadata.scheduleId)
-  // if(!appointment) return <h1>NOT APPOINTMENT</h1>
-  console.log('APPOINMENT SUCCESS',appointment)
+  const appointment = await AppointmentRepository.getAppointmentByDoctorAndSchedule(
+    paymentIntent.metadata.doctorId,
+    paymentIntent.metadata.scheduleId,
+  )
+  console.log('APPOINMENT SUCCESS', appointment)
   const isSuccess = paymentIntent.status === 'succeeded'
   return (
     <div className=" flex h-screen max-h-screen px-[5%] bg-[#4158D0] bg-[linear-gradient(43deg,#4158D0_0%,#C850C0_46%,#FFCC70_100%)]">
@@ -37,9 +39,9 @@ const RequestSuccess = async ({
         <section className="flex flex-col items-center">
           <Image src="/assets/gifs/success.gif" height={300} width={280} alt="success" />
           <h2 className="header mb-6 max-w-[600px] text-center">
-            Yêu cầu <span className="text-green-500">đặt lịch hẹn</span> của bạn đã thành công!
+            Yêu cầu <span className="text-green-500">đặt lịch hẹn</span> của bạn đã thành
+            công!
           </h2>
-          
         </section>
 
         <section className="request-details">
@@ -56,7 +58,10 @@ const RequestSuccess = async ({
               alt="calendar"
             />
             {/* <p> {formatDateTime(appointment.schedule).dateTime}</p> */}
-            <p>{appointment?.doctorSchedule.schedule.date} {appointment?.doctorSchedule.schedule.timeSlot}</p>
+            <p>
+              {appointment?.doctorSchedule.schedule.date}{' '}
+              {appointment?.doctorSchedule.schedule.timeSlot}
+            </p>
           </div>
         </section>
 

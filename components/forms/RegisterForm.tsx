@@ -22,16 +22,16 @@ export const RegisterForm = () => {
     defaultValues: {
       username: '',
       email: '',
-      phone: ''
+      phone: '',
     },
   })
   const onSubmit = async (values: z.infer<typeof RegisterUser2>) => {
-    console.log(form.formState.errors);
+    console.log(form.formState.errors)
     console.log('IS LOADING', isLoading)
     setIsLoading(true)
     try {
       console.log('VALUES FROM REGISTER', values)
-      if(!currentPassword) {
+      if (!currentPassword) {
         throw new Error('Password is required')
       }
       const res = await fetch('/api/auth/register', {
@@ -63,7 +63,7 @@ export const RegisterForm = () => {
       setIsLoading(false)
     }
   }
-  console.log(form.formState.errors);
+  console.log(form.formState.errors)
   console.log(isLoading)
   return (
     <Form {...form}>
@@ -100,7 +100,7 @@ export const RegisterForm = () => {
           name="phone"
           label="Số điện thoại"
           placeholder="(555) 123-4567"
-          type='number'
+          type="number"
         />
         <div className="space-y-2 flex-1 mt-2">
           <Label htmlFor="password" className="shad-input-label ">
@@ -113,7 +113,7 @@ export const RegisterForm = () => {
             autoComplete="password"
           />
         </div>
-        
+
         <SubmitButton isLoading={isLoading}>Đăng ký tài khoản </SubmitButton>
       </form>
     </Form>

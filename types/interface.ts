@@ -94,7 +94,7 @@ export interface AppointmentSchedule {
   Service: Service
 }
 export interface CreateAppointment {
-  userId:string
+  userId: string
   profileId: string
   doctorScheduleId: string
   serviceId: string

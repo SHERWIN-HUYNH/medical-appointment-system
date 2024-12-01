@@ -26,7 +26,7 @@ export const AppointmentForm = ({
   setOpen?: Dispatch<SetStateAction<boolean>>
 }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const {data:session} = useSession()
+  const { data: session } = useSession()
   console.log('appointment type', type)
   const AppointmentFormValidation = getAppointmentSchema(type)
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
@@ -57,7 +57,7 @@ export const AppointmentForm = ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         status = 'pending'
     }
-    if(type === 'cancel') {
+    if (type === 'cancel') {
       const res = await fetch(`/api/appointments/${session?.user.id}`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -66,13 +66,12 @@ export const AppointmentForm = ({
           appointmentId: appointment?.id,
         }),
       })
-      if(res.ok){
+      if (res.ok) {
         toast.success('Hủy thành công!')
-      }else{
+      } else {
         toast.error('Hủy không thành công, vui lòng thử lại!')
         console.log(res + 'KET QUA')
       }
-      
     }
     console.log('SHOW PATIENTID', patientId)
     setIsLoading(false)
