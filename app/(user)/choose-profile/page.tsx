@@ -45,15 +45,13 @@ const ChooseProfile: React.FC = () => {
   const router = useRouter()
   const { data } = useAppointmentContext()
   const searchParams = useSearchParams()
-
-  // Lấy thông tin từ URL query params
   const date = searchParams.get('date')
   const timeSlot = searchParams.get('timeSlot')
   const price = searchParams.get('price')
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
-        const response = await fetch(`/api/profile/${session?.user?.id}`, {
+        const response = await fetch(`/api/profile/${session?.user?.id}/chooseProfile`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         })
@@ -124,8 +122,6 @@ const ChooseProfile: React.FC = () => {
       <div className="text-primary text-center font-semibold text-lg mt-2 mb-4">
         CHỌN HỒ SƠ BỆNH NHÂN
       </div>
-
-      {/* Kiểm tra nếu không có hồ sơ */}
       {profiles.length === 0 ? (
         <div className="text-center text-slate-400 mt-6">
           Bạn chưa có hồ sơ bệnh nhân. Vui lòng tạo mới hồ sơ để được đặt khám.
@@ -202,7 +198,7 @@ const ChooseProfile: React.FC = () => {
                     </Link>
                   </div>
                   <Button
-                    className="flex items-center bg-primary text-white py-1 px-4 rounded-lg shadow-md transform transition duration-200 hover:scale-105 hover:bg-blue-400"
+                    className="flex items-center bg-primary text-white py-1 px-4 rounded-lg shadow-md transform transition duration-200 "
                     onClick={() => handleContinue(profile.id)}
                   >
                     <FaArrowRight className="mr-2" />
@@ -225,7 +221,7 @@ const ChooseProfile: React.FC = () => {
           Quay lại
         </Button>
         <Button
-          className="bg-primary text-white py-2 px-4 rounded-lg hover:bg-blue-400 shadow-md transform transition duration-200 hover:scale-105"
+          className="bg-primary text-white py-2 px-4 rounded-lg shadow-md transform transition duration-200 hover:scale-105"
           onClick={() => router.push(`/patients/${session?.user.id}/profile/add-profile`)}
         >
           <FaPlus className="mr-2" />

@@ -12,7 +12,7 @@ const ChooseService = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [services, setServices] = useState<Service[]>([])
   const router = useRouter()
-  const { data, setData } = useAppointmentContext()
+  const { data} = useAppointmentContext()
   const searchParams = useSearchParams()
   const doctorName = searchParams.get('doctorName')
   const facultyName = searchParams.get('facultyName')
@@ -177,12 +177,6 @@ const ChooseService = () => {
                         serviceName: service.name,
                         price: service.price,
                       },
-                    }}
-                    onClick={() => {
-                      setData({
-                        serviceId: service.id,
-                        facultyId: data.facultyId,
-                      })
                     }}
                     className="p-4 border border-slate-200 rounded-lg hover:bg-slate-100"
                   >

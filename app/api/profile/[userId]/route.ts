@@ -82,9 +82,10 @@ export async function DELETE(req: Request) {
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error('Error deleting profile:', error.message)
+      return internalServerErrorResponse(error.message)
     } else {
       console.error('Error deleting profile:', error)
+      return internalServerErrorResponse('FAIL TO DELETE PROFILE')
     }
-    return internalServerErrorResponse('FAIL TO DELETE PROFILE')
   }
 }

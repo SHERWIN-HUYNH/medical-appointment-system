@@ -73,7 +73,7 @@ const ChartTwo: React.FC = () => {
     try {
       const response = await fetch(`/api/chart/chart2`)
       const data: AppointmentData[] = await response.json()
-      setAppointmentsData(data)
+      setAppointmentsData(Array.isArray(data) ? data : [])
     } catch (error) {
       console.error('Error fetching appointment data:', error)
     }

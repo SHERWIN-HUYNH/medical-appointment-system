@@ -9,6 +9,7 @@ export class ProfileRespository {
       const profiles = await prisma.profile.findMany({
         where: {
           userId: userId,
+          isDeleted: false,
         },
       })
       return profiles
@@ -28,6 +29,28 @@ export class ProfileRespository {
         },
       })
       return profile
+    } catch (error) {
+      console.error('Lỗi khi truy xuất hồ sơ bệnh nhân: ', error)
+      throw error
+    } finally {
+      await prisma.$disconnect()
+    }
+  }
+
+  static async getListProfileNoAppoinmentByUserId(userId: string) {
+    try {
+      const profiles = await prisma.profile.findMany({
+        where: {
+          userId: userId,
+          isDeleted: false,
+          appointments: {
+            none: {
+              status: 'PENDING',
+            },
+          },
+        },
+      })
+      return profiles
     } catch (error) {
       console.error('Lỗi khi truy xuất hồ sơ bệnh nhân: ', error)
       throw error
@@ -104,9 +127,17 @@ export class ProfileRespository {
 
   static async deleteProfile({ profileData }: { profileData: Profile }) {
     try {
-      const deletedProfile = await prisma.profile.delete({
+      const hasPending = await this.hasPendingAppointments(profileData.id)
+
+      if (hasPending) {
+        throw new Error('Không thể xóa hồ sơ, hồ sơ này đang có lịch hẹn.')
+      }
+      const deletedProfile = await prisma.profile.update({
         where: {
           id: profileData.id,
+        },
+        data: {
+          isDeleted: true,
         },
       })
 
@@ -114,9 +145,19 @@ export class ProfileRespository {
       return deletedProfile
     } catch (error) {
       console.error('Lỗi xóa hồ sơ bệnh nhân:', error)
-      throw new Error('Không thể xóa hồ sơ bệnh nhân. Vui lòng thử lại sau.')
+      throw error
     } finally {
       await prisma.$disconnect()
     }
+  }
+
+  static async hasPendingAppointments(profileId: string): Promise<boolean> {
+    const pendingAppointment = await prisma.appointment.findFirst({
+      where: {
+        profileId,
+        status: 'PENDING',
+      },
+    })
+    return !!pendingAppointment
   }
 }

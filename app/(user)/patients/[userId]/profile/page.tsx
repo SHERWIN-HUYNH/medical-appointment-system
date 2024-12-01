@@ -90,15 +90,14 @@ const Profile = () => {
           profileValues: { id: profileToDelete },
         }),
       })
-
       if (!response.ok) {
-        toast.error('Lỗi khi xóa hồ sơ')
+        toast.error('Lỗi khi xóa hồ sơ, hồ sơ này đang có lịch hẹn.Vui lòng thử lại sau!')
+      } else {
+        setProfiles((prevProfiles) =>
+          prevProfiles.filter((profile) => profile.id !== profileToDelete),
+        )
+        toast.success('Xóa hồ sơ thành công')
       }
-
-      setProfiles((prevProfiles) =>
-        prevProfiles.filter((profile) => profile.id !== profileToDelete),
-      )
-      toast.success('Xóa hồ sơ thành công')
     } catch {
       toast.error('Lỗi khi xóa hồ sơ')
     } finally {
@@ -250,7 +249,7 @@ const Profile = () => {
                     </div>
                   ))
                 ) : (
-                  <p className="text-slate-400 text-xs">
+                  <p className="mt-4text-slate-400 text-base">
                     Bạn chưa có hồ sơ bệnh nhân. Vui lòng tạo mới hồ sơ để được đặt khám.
                   </p>
                 )}

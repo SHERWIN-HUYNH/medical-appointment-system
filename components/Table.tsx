@@ -40,6 +40,13 @@ interface DataTableProps<TData, TValue> {
   filterOptions?: {
     key: string
     options: { label: string; value: string }[]
+    placeholder: string
+  }
+  showSTT?: boolean
+  initialState?: {
+    pagination?: {
+      pageSize?: number
+    }
   }
 }
 
@@ -48,13 +55,28 @@ export function DataTable<TData, TValue>({
   data,
   searchKey,
   filterOptions,
+  showSTT = true,
+  initialState,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 
+  const sttColumn: ColumnDef<TData, TValue> = {
+    id: 'stt',
+    header: 'STT',
+    enableSorting: false,
+    cell: ({ row }) => {
+      const pageIndex = table.getState().pagination.pageIndex
+      const pageSize = table.getState().pagination.pageSize
+      return pageIndex * pageSize + row.index + 1
+    },
+  }
+
+  const allColumns = showSTT ? [sttColumn, ...columns] : columns
+
   const table = useReactTable({
     data,
-    columns,
+    columns: allColumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -68,6 +90,7 @@ export function DataTable<TData, TValue>({
     initialState: {
       pagination: {
         pageSize: 5,
+        ...initialState?.pagination,
       },
     },
   })
@@ -103,14 +126,14 @@ export function DataTable<TData, TValue>({
             <div className="flex items-center gap-2">
               <Select onValueChange={handleFilter}>
                 <SelectTrigger className="w-[180px] border-slate-500 focus-visible:ring-0 focus:ring-0">
-                  <SelectValue placeholder="Chuyên khoa" />
+                  <SelectValue placeholder={filterOptions.placeholder} />
                 </SelectTrigger>
                 <SelectContent className="border-slate-500">
                   <SelectItem
                     value="all"
                     className="bg-white hover:bg-primary hover:text-white text-slate-700 cursor-pointer transition-all duration-100"
                   >
-                    Tất cả chuyên khoa
+                    Tất cả
                   </SelectItem>
                   {filterOptions.options.map((option) => (
                     <SelectItem

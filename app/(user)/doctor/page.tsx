@@ -10,6 +10,7 @@ import Image from 'next/image'
 import { CldImage } from 'next-cloudinary'
 import { useAppointmentContext } from '@/context/AppointmentContext'
 import Link from 'next/link'
+import { Star } from 'lucide-react'
 
 interface Doctor {
   id: string
@@ -17,6 +18,7 @@ interface Doctor {
   academicTitle: string
   image: string
   description: string
+  rating: number
   facultyName: string
   facultyId: string
 }
@@ -47,8 +49,6 @@ const Doctor = () => {
           console.log('DOCTOR USER', data)
           setDoctors(data)
           setFilteredDoctors(data)
-        } else {
-          toast.error('Lỗi khi tải dữ liệu bác sĩ')
         }
       } catch (error) {
         console.log('ERROR', error)
@@ -63,7 +63,6 @@ const Doctor = () => {
         setFaculties(data)
       } catch (error) {
         console.log('ERROR', error)
-        toast.error('Lỗi khi tải dữ liệu chuyên khoa')
       }
     }
 
@@ -193,22 +192,29 @@ const Doctor = () => {
                       className="w-24 h-24 rounded-lg object-cover mr-4"
                     />
                     <div className="flex-grow">
-                      <h3 className="text-lg font-semibold text-primary">
+                      <h3 className="text-lg font-semibold text-primary flex items-center">
                         {doctor.name}
+                        <Star size={20} fill="gold" stroke="none" className="ml-2" />
+                        <span className="ml-1 text-slate-500">{doctor.rating}</span>
                       </h3>
-                      <p className="text-sm text-slate-500 mt-2">
-                        <span className="font-bold">Học hàm:</span> {doctor.academicTitle}
-                      </p>
-                      <p className="text-sm text-slate-500">
-                        <span className="font-bold">Chuyên khoa:</span>{' '}
-                        {doctor.facultyName}
-                      </p>
-                      <p className="text-sm text-slate-500">
-                        <span className="font-bold">Giới thiệu:</span>{' '}
-                        {doctor.description}
-                      </p>
+
+                      <ul className="text-sm text-slate-500 mt-2">
+                        <li>
+                          <span className="font-bold">Học hàm:</span>{' '}
+                          {doctor.academicTitle}
+                        </li>
+                        <li>
+                          <span className="font-bold">Chuyên khoa:</span>{' '}
+                          {doctor.facultyName}
+                        </li>
+                        <li>
+                          <span className="font-bold">Giới thiệu:</span>{' '}
+                          {doctor.description}
+                        </li>
+                      </ul>
                     </div>
                   </div>
+
                   <hr className="mt-2 text-slate-300" />
                   <div className="flex justify-end mt-2">
                     <Link
@@ -231,7 +237,9 @@ const Doctor = () => {
                 </div>
               ))
             ) : (
-              <p className="text-center text-slate-500">Không tìm thấy bác sĩ phù hợp.</p>
+              <p className="flex justify-center text-center text-slate-500">
+                Không có dữ liệu bác sĩ.
+              </p>
             )}
           </div>
         </div>
