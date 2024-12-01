@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import ClickOutside from '@/components/ClickOutside'
 import { signOut, useSession } from 'next-auth/react'
 import React from 'react'
+import { CldImage } from 'next-cloudinary'
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const { data: session } = useSession()
@@ -20,11 +20,11 @@ const DropdownUser = () => {
           </span>
         </span>
 
-        <span className="h-12 w-12 rounded-full">
-          <Image
+        <span className="h-12 w-12 rounded-full overflow-hidden">
+          <CldImage
             width={112}
             height={112}
-            src={'/assets/images/admin.png'}
+            src={'doctor_czjmzr_Circle_ibajnf'}
             style={{
               width: 'auto',
               height: 'auto',
