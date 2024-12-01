@@ -40,6 +40,7 @@ export class AppointmentRepository {
   }
 
   static async createAppointment({
+    userId,
     doctorScheduleId,
     serviceId,
     profileId,
@@ -48,6 +49,7 @@ export class AppointmentRepository {
     try {
       const newAppointment = await prisma.appointment.create({
         data: {
+          userId,
           doctorScheduleId,
           serviceId,
           profileId,
@@ -184,11 +186,12 @@ export class AppointmentRepository {
     }
   }
 
-  static async cancelAppointment(appointmentId: string, cancellationReason: string) {
+  static async cancelAppointment( cancellationReason: string, appointmentId: string) {
     try {
+      
       const appointment = await prisma.appointment.update({
         where: {
-          id: appointmentId,
+          id: appointmentId
         },
         data: {
           status: AppointmentStatus.CANCELLED,

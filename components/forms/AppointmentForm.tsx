@@ -1,5 +1,4 @@
 'use client'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,19 +9,24 @@ import CustomFormField, { FormFieldType } from '../CustomFormField'
 import SubmitButton from '../SubmitButton'
 import { Form } from '../ui/form'
 import { AppointmentSchedule } from '@/types/interface'
+import { useSession } from 'next-auth/react'
+import { toast } from 'sonner'
 
 export const AppointmentForm = ({
   patientId,
   type = 'create',
   appointment,
+  stripeCustomerId,
 }: {
   userId: string
   patientId: string
   type: 'create' | 'schedule' | 'cancel' | 'Chi tiết' | 'Hủy'
   appointment?: AppointmentSchedule
+  stripeCustomerId?: string
   setOpen?: Dispatch<SetStateAction<boolean>>
 }) => {
   const [isLoading, setIsLoading] = useState(false)
+  const {data:session} = useSession()
   console.log('appointment type', type)
   const AppointmentFormValidation = getAppointmentSchema(type)
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
@@ -52,6 +56,23 @@ export const AppointmentForm = ({
       default:
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         status = 'pending'
+    }
+    if(type === 'cancel') {
+      const res = await fetch(`/api/appointments/${session?.user.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          paymentIntentId: stripeCustomerId,
+          cancellationReason: form.getValues('cancellationReason'),
+          appointmentId: appointment?.id,
+        }),
+      })
+      if(res.ok){
+        toast.success('Hủy thành công!')
+      }else{
+        toast.error('Hủy không thành công, vui lòng thử lại!')
+        console.log(res + 'KET QUA')
+      }
+      
     }
     console.log('SHOW PATIENTID', patientId)
     setIsLoading(false)
