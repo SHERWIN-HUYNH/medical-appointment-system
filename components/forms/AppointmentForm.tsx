@@ -100,7 +100,7 @@ export const AppointmentForm = ({
           </section>
         )}
 
-        {type !== 'cancel' && (
+        {type !== 'Hủy' && (
           <>
             <CustomFormField
               fieldType={FormFieldType.INPUT}
@@ -127,16 +127,17 @@ export const AppointmentForm = ({
                 control={form.control}
                 name="reason"
                 label="Lí do khám bệnh"
-                placeholder="Annual montly check-up"
-                disabled={type === 'schedule'}
+                
+                disabled={true}
+
               />
               <CustomFormField
                 fieldType={FormFieldType.INPUT}
                 control={form.control}
                 name="medicalHistory"
                 label="Tiền sử bệnh án"
-                placeholder="Prefer afternoon appointments, if possible"
-                disabled={type === 'schedule'}
+                placeholder='Không'
+                disabled={true}
               />
               <CustomFormField
                 fieldType={FormFieldType.TEXTAREA}
@@ -150,7 +151,7 @@ export const AppointmentForm = ({
           </>
         )}
 
-        {type === 'cancel' && (
+        {type === 'Hủy' && (
           <>
             <CustomFormField
               fieldType={FormFieldType.INPUT}
