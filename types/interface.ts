@@ -96,7 +96,7 @@ export interface AppointmentSchedule {
   Service: Service
 }
 export interface CreateAppointment {
-  userId:string
+  userId: string
   profileId: string
   doctorScheduleId: string
   serviceId: string
@@ -132,4 +132,7 @@ export interface BillInfor {
   status: string
   appointment: AppointmentSchedule
   user: UserInfor
+  payment?: {
+    paymentIntentId: string
+  }
 }

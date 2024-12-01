@@ -29,13 +29,18 @@ function DoctorList() {
 
         // Tính toán điểm trung bình cho từng bác sĩ
         const doctorsWithRatings = activeDoctors.map((doctor: Doctor) => {
-          const doctorRatings = ratings.filter((rating: { doctorId: string }) => rating.doctorId === doctor.id)
-          let averageRating: number;
+          const doctorRatings = ratings.filter(
+            (rating: { doctorId: string }) => rating.doctorId === doctor.id,
+          )
+          let averageRating: number
           if (doctorRatings.length > 0) {
-            const sum = doctorRatings.reduce((sum: number, rating: { rating: number }) => sum + rating.rating, 0);
-            averageRating = sum / doctorRatings.length;
+            const sum = doctorRatings.reduce(
+              (sum: number, rating: { rating: number }) => sum + rating.rating,
+              0,
+            )
+            averageRating = sum / doctorRatings.length
           } else {
-            averageRating = 0;
+            averageRating = 0
           }
 
           return { ...doctor, averageRating }
@@ -88,7 +93,9 @@ function DoctorList() {
                           {doctor.academicTitle}
                         </span>
                         <span className="text-sm text-orange-500">
-                          Đánh giá: {doctor.averageRating ? doctor.averageRating.toFixed(1) : '0'} ⭐
+                          Đánh giá:{' '}
+                          {doctor.averageRating ? doctor.averageRating.toFixed(1) : '0'}{' '}
+                          ⭐
                         </span>
                       </div>
                       <div className="space-y-2">

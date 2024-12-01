@@ -20,7 +20,8 @@ import { toast } from 'sonner'
 import ModalMedicalBillDetail from './ModalMedicalBillDetail'
 import { shortenTitle } from '@/lib/utils'
 import clsx from 'clsx'
-import CancelModal from './CancelModal'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { AppointmentForm } from '../forms/AppointmentForm'
 
 type Medicalbill = {
   id: string
@@ -45,7 +46,7 @@ interface Props {
   appointments: BillInfor[] | undefined
 }
 const Medicalbill: React.FC<Props> = ({ appointments }) => {
-  const params = useParams()
+  const params = useParams() as { userId: string }
   const [selectedStatus, setSelectedStatus] = useState<AppointmentStatus>(
     AppointmentStatus.PENDING,
   )
@@ -56,9 +57,7 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [selectedBillDetail, setSelectedBillDetail] = useState<BillInfor | null>(null)
   const [showCancelModal, setShowCancelModal] = useState(false)
-  const [cancelReason, setCancelReason] = useState('')
-  const [reviewedBills, setReviewedBills] = useState<string[]>([]);
-
+  const [reviewedBills, setReviewedBills] = useState<string[]>([])
   useEffect(() => {
     if (appointments) {
       const filteredAppointments = appointments.filter(
@@ -105,7 +104,7 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
 
       if (response.ok) {
         toast.success('Đánh giá thành công!')
-        setReviewedBills((prev) => [...prev, selectedAppointment[0].id]);
+        setReviewedBills((prev) => [...prev, selectedAppointment[0].id])
         setShowReviewModal(false)
         setRating(0)
         setComment('')
@@ -264,16 +263,22 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
             />
           )}
 
-          {showCancelModal && (
-            <CancelModal
-              onClose={() => {
-                setShowCancelModal(false)
-                setCancelReason('')
-              }}
-              onSubmit={() => handleCancelClick(selectedBillDetail!)}
-              cancelReason={cancelReason}
-              setCancelReason={setCancelReason}
-            />
+          {showCancelModal && selectedBillDetail && (
+            <Dialog open={showCancelModal} onOpenChange={setShowCancelModal}>
+              <DialogContent className="sm:max-w-[500px] bg-white rounded-lg">
+                <DialogHeader>
+                  <DialogTitle>Hủy lịch hẹn</DialogTitle>
+                </DialogHeader>
+                <AppointmentForm
+                  userId={params.userId}
+                  patientId={selectedBillDetail.appointment.profileId}
+                  type="cancel"
+                  appointment={selectedBillDetail.appointment}
+                  stripeCustomerId={selectedBillDetail.appointment.stripeCustomerId}
+                  setOpen={setShowCancelModal}
+                />
+              </DialogContent>
+            </Dialog>
           )}
         </>
       )}

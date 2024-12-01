@@ -26,7 +26,9 @@ import { useSearchParams } from 'next/navigation'
 
 const Profile = () => {
   const searchParams = useSearchParams()
-  const [selectedOption, setSelectedOption] = useState(Number(searchParams.get('tab')) || 1)
+  const [selectedOption, setSelectedOption] = useState(
+    Number(searchParams.get('tab')) || 1,
+  )
   const [profiles, setProfiles] = useState<Profile[]>([])
   const { data: session } = useSession()
   const [isModalOpen, setIsModalOpen] = useState(false)

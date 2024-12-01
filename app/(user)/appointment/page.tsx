@@ -40,7 +40,7 @@ const Appointment = async ({ searchParams }: { searchParams: AppointmentProps })
   if (!service || !doctor || !schedule || !profile || !faculty) {
     return <h1>Service or Doctor not found</h1>
   }
-  
+
   const paymentIntent = await stripe.paymentIntents.create({
     amount: serviceInfor.price ?? 0,
     currency: 'vnd',
@@ -55,7 +55,7 @@ const Appointment = async ({ searchParams }: { searchParams: AppointmentProps })
   if (paymentIntent.client_secret == null) {
     throw new Error('Stripe failed to create payment intent')
   }
-  
+
   return (
     <UserLayout>
       <div className="style_body">
@@ -63,11 +63,11 @@ const Appointment = async ({ searchParams }: { searchParams: AppointmentProps })
           clientSecret={paymentIntent.client_secret}
           product={serviceInfor}
           searchParams={{
-            profile:profile,
-            service:service,
-            doctor:doctor,
-            schedule:schedule,
-            faculty:faculty
+            profile: profile,
+            service: service,
+            doctor: doctor,
+            schedule: schedule,
+            faculty: faculty,
           }}
         />
       </div>

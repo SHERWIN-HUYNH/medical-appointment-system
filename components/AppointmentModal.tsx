@@ -22,7 +22,7 @@ export const AppointmentModal = ({
   userId,
   appointment,
   type,
-  stripeCustomerId
+  stripeCustomerId,
 }: {
   patientId: string
   userId: string

@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       doctorScheduleId: doctorSchedule.id,
       serviceId: service.id,
       profileId: profile.id,
-      stripeCustomerId:charge.payment_intent as string
+      stripeCustomerId: charge.payment_intent as string,
     })
     if (!appointment) {
       console.log('fail to create appointment')
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       return notFoundResponse('FAIL TO CREATE BILL')
     }
     const receiptUrl = charge.receipt_url ?? ''
-    
+
     sendMail({
       sendTo: profile?.email,
       subject: 'Xác nhận Đặt lịch hẹn thành công',

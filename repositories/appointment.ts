@@ -1,7 +1,6 @@
 import { CreateAppointment } from '@/types/interface'
 import { AppointmentStatus, PrismaClient } from '@prisma/client'
 
-
 const prisma = new PrismaClient()
 
 export class AppointmentRepository {
@@ -44,7 +43,7 @@ export class AppointmentRepository {
     doctorScheduleId,
     serviceId,
     profileId,
-    stripeCustomerId
+    stripeCustomerId,
   }: CreateAppointment) {
     try {
       const newAppointment = await prisma.appointment.create({
@@ -53,7 +52,7 @@ export class AppointmentRepository {
           doctorScheduleId,
           serviceId,
           profileId,
-          stripeCustomerId
+          stripeCustomerId,
         },
       })
       return newAppointment
@@ -156,19 +155,19 @@ export class AppointmentRepository {
       await prisma.$disconnect()
     }
   }
-  static async getAppointmentByDoctorAndSchedule(doctorId:string , scheduleId: string) {
+  static async getAppointmentByDoctorAndSchedule(doctorId: string, scheduleId: string) {
     try {
       const doctorSchedule = await prisma.doctorSchedule.findFirst({
         where: {
           doctorId: doctorId,
-          scheduleId: scheduleId
-        }
+          scheduleId: scheduleId,
+        },
       })
-      if(doctorSchedule){
-        console.log('DOCTORSHCEDUE',doctorSchedule)
+      if (doctorSchedule) {
+        console.log('DOCTORSHCEDUE', doctorSchedule)
         const appointment = await prisma.appointment.findFirst({
           where: {
-            doctorScheduleId: doctorSchedule.id
+            doctorScheduleId: doctorSchedule.id,
           },
           include: {
             doctorSchedule: {
@@ -176,8 +175,8 @@ export class AppointmentRepository {
                 schedule: true,
                 doctor: true,
               },
-            }
-          }
+            },
+          },
         })
         return appointment
       }
@@ -186,26 +185,23 @@ export class AppointmentRepository {
     }
   }
 
-  static async cancelAppointment( cancellationReason: string, appointmentId: string) {
+  static async cancelAppointment(cancellationReason: string, appointmentId: string) {
     try {
-      
       const appointment = await prisma.appointment.update({
         where: {
-          id: appointmentId
+          id: appointmentId,
         },
         data: {
           status: AppointmentStatus.CANCELLED,
-          cancellationReason
+          cancellationReason,
         },
-        include:{
-          payments:true
-        }
+        include: {
+          payments: true,
+        },
       })
       return appointment
     } catch (error) {
       console.log(error)
     }
   }
-
-  
 }
