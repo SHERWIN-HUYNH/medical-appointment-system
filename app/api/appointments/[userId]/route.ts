@@ -59,7 +59,6 @@ export async function PUT(req: Request, context: { params: { userId: string } })
     const body = await req.json()
     const { paymentIntentId, cancellationReason, appointmentId } = body
     const { userId } = context.params
-    console.log('body', body)
     if (!userId) {
       return unauthorizedResponse('UNAUTHENTICATED')
     }

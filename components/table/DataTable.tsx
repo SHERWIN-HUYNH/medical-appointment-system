@@ -81,7 +81,7 @@ export function DataTable<TData, TValue>({
           </div>
           <div>
             <label htmlFor="status-filter" className="mr-2">
-              Status:
+              Trạng thái:
             </label>
             <select
               id="status-filter"
