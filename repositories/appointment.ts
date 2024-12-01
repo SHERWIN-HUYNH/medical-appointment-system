@@ -1,7 +1,6 @@
 import { CreateAppointment } from '@/types/interface'
 import { AppointmentStatus, PrismaClient } from '@prisma/client'
 
-
 const prisma = new PrismaClient()
 
 export class AppointmentRepository {
@@ -40,18 +39,20 @@ export class AppointmentRepository {
   }
 
   static async createAppointment({
+    userId,
     doctorScheduleId,
     serviceId,
     profileId,
-    stripeCustomerId
+    stripeCustomerId,
   }: CreateAppointment) {
     try {
       const newAppointment = await prisma.appointment.create({
         data: {
+          userId,
           doctorScheduleId,
           serviceId,
           profileId,
-          stripeCustomerId
+          stripeCustomerId,
         },
       })
       return newAppointment
@@ -162,7 +163,6 @@ export class AppointmentRepository {
           scheduleId: scheduleId,
         },
       })
-
       if(doctorSchedule){
         console.log('DOCTORSHCEDUE',doctorSchedule)
         const appointment = await prisma.appointment.findFirst({
@@ -185,7 +185,7 @@ export class AppointmentRepository {
     }
   }
 
-  static async cancelAppointment(appointmentId: string, cancellationReason: string) {
+  static async cancelAppointment(cancellationReason: string, appointmentId: string) {
     try {
       const appointment = await prisma.appointment.update({
         where: {
@@ -193,11 +193,11 @@ export class AppointmentRepository {
         },
         data: {
           status: AppointmentStatus.CANCELLED,
-          cancellationReason
+          cancellationReason,
         },
-        include:{
-          payments:true
-        }
+        include: {
+          payments: true,
+        },
       })
       return appointment
     } catch (error) {
@@ -205,4 +205,16 @@ export class AppointmentRepository {
     }
   }
 
+  static async getAppoinmentById(appointmentId: string) {
+    try {
+      const appointment = await prisma.appointment.findFirst({
+        where: {
+          id: appointmentId,
+        },
+      })
+      return appointment
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }

@@ -382,7 +382,7 @@
   }
 
   .table-header {
-    @apply bg-slate-200 font-semibold text-slate-600;
+    @apply font-semibold text-slate-600;
   }
 }
 

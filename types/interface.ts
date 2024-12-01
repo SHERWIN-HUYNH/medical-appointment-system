@@ -87,12 +87,14 @@ export interface AppointmentSchedule {
   cancellationReason: string | null
   profileId: string
   serviceId: string
+  stripeCustomerId: string
   doctorScheduleId: string
   profile: Profile
   doctorSchedule: DoctorSchedule
   Service: Service
 }
 export interface CreateAppointment {
+  userId: string
   profileId: string
   doctorScheduleId: string
   serviceId: string

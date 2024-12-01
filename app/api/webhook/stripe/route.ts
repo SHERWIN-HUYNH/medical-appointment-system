@@ -44,11 +44,13 @@ export async function POST(req: NextRequest) {
       return notFoundResponse('NOT FOUND DOCTOR SCHEDULE')
     }
     await DoctorScheduleRespository.updateStateSchedule(doctorSchedule.id)
+    console.log('DS webhook', doctorSchedule)
     const appointment = await AppointmentRepository.createAppointment({
+      userId: userId,
       doctorScheduleId: doctorSchedule.id,
       serviceId: service.id,
       profileId: profile.id,
-      stripeCustomerId:charge.id
+      stripeCustomerId: charge.payment_intent as string,
     })
     if (!appointment) {
       console.log('fail to create appointment')

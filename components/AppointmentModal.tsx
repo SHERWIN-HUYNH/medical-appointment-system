@@ -22,6 +22,7 @@ export const AppointmentModal = ({
   userId,
   appointment,
   type,
+  stripeCustomerId,
 }: {
   patientId: string
   userId: string
@@ -29,6 +30,7 @@ export const AppointmentModal = ({
   type: 'schedule' | 'cancel' | 'Chi tiết' | 'Hủy'
   title: string
   description: string
+  stripeCustomerId?: string
 }) => {
   const [open, setOpen] = useState(false)
   const title = type == 'Chi tiết' ? 'Chi tiết cuộc hẹn' : 'Hủy lịch hẹn'
@@ -50,6 +52,7 @@ export const AppointmentModal = ({
         <AppointmentForm
           userId={userId}
           patientId={patientId}
+          stripeCustomerId={stripeCustomerId}
           type={type}
           appointment={appointment}
           setOpen={setOpen}
