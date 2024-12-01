@@ -1,7 +1,6 @@
 import { CreateAppointment } from '@/types/interface'
 import { AppointmentStatus, PrismaClient } from '@prisma/client'
 
-
 const prisma = new PrismaClient()
 
 export class AppointmentRepository {
@@ -43,7 +42,7 @@ export class AppointmentRepository {
     doctorScheduleId,
     serviceId,
     profileId,
-    stripeCustomerId
+    stripeCustomerId,
   }: CreateAppointment) {
     try {
       const newAppointment = await prisma.appointment.create({
@@ -51,7 +50,7 @@ export class AppointmentRepository {
           doctorScheduleId,
           serviceId,
           profileId,
-          stripeCustomerId
+          stripeCustomerId,
         },
       })
       return newAppointment
@@ -163,8 +162,8 @@ export class AppointmentRepository {
         },
       })
 
-      if(doctorSchedule){
-        console.log('DOCTORSHCEDUE',doctorSchedule)
+      if (doctorSchedule) {
+        console.log('DOCTORSHCEDUE', doctorSchedule)
         const appointment = await prisma.appointment.findFirst({
           where: {
             doctorScheduleId: doctorSchedule.id,
@@ -193,16 +192,15 @@ export class AppointmentRepository {
         },
         data: {
           status: AppointmentStatus.CANCELLED,
-          cancellationReason
+          cancellationReason,
         },
-        include:{
-          payments:true
-        }
+        include: {
+          payments: true,
+        },
       })
       return appointment
     } catch (error) {
       console.log(error)
     }
   }
-
 }

@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       doctorScheduleId: doctorSchedule.id,
       serviceId: service.id,
       profileId: profile.id,
-      stripeCustomerId:charge.id
+      stripeCustomerId: charge.id,
     })
     if (!appointment) {
       console.log('fail to create appointment')

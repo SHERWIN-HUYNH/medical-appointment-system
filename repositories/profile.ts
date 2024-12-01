@@ -137,7 +137,7 @@ export class ProfileRespository {
           id: profileData.id,
         },
         data: {
-          isDeleted: true, 
+          isDeleted: true,
         },
       })
 

@@ -237,7 +237,9 @@ const Doctor = () => {
                 </div>
               ))
             ) : (
-              <p className="flex justify-center text-center text-slate-500">Không có dữ liệu bác sĩ.</p>
+              <p className="flex justify-center text-center text-slate-500">
+                Không có dữ liệu bác sĩ.
+              </p>
             )}
           </div>
         </div>
