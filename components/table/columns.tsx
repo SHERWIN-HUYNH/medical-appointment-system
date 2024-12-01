@@ -104,6 +104,7 @@ export const columns: ColumnDef<AppointmentSchedule>[] = [
             appointment={appointment}
             type="cancel"
             title="Cancel Appointment"
+            stripeCustomerId = {appointment.stripeCustomerId}
             description="Are you sure you want to cancel your appointment?"
           />
         </div>
