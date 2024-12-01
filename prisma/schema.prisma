@@ -93,7 +93,7 @@ model Appointment {
   profile            Profile   @relation(fields: [profileId], references: [id])
   profileId          String    @db.Uuid
   serviceId          String    @db.Uuid
-  doctorScheduleId   String    @unique @db.Uuid
+  doctorScheduleId   String    @unique
   Service            Service  @relation(fields: [serviceId],references:[id])
   payments           Bill?
   stripeCustomerId   String

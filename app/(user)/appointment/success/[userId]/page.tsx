@@ -18,7 +18,6 @@ const RequestSuccess = async ({
     paymentIntent.metadata.doctorId,
     paymentIntent.metadata.scheduleId,
   )
-  // if(!appointment) return <h1>NOT APPOINTMENT</h1>
   console.log('APPOINMENT SUCCESS', appointment)
   const isSuccess = paymentIntent.status === 'succeeded'
   return (

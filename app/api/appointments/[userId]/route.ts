@@ -4,6 +4,7 @@ import {
   successResponse,
   internalServerErrorResponse,
   unauthorizedResponse,
+  badRequestResponse,
 } from '@/helpers/response'
 import { ProfileRespository } from '@/repositories/profile'
 import { UserRepository } from '@/repositories/user'
@@ -68,25 +69,31 @@ export async function PUT(req: Request, context: { params: { userId: string } })
     if (!user) {
       return notFoundResponse('Không tìm thấy người dùng')
     }
-
-    const refundPaymentIntent = await stripe.refunds.create({
-      payment_intent: paymentIntentId,
-    })
-    console.log('refundPaymentIntent', refundPaymentIntent)
-    const cancelAppointment = await AppointmentRepository.cancelAppointment(
-      cancellationReason,
-      appointmentId,
-    )
-    if (!cancelAppointment?.payments) {
-      throw new Error('Cancel appointment operation failed; appointment not found.')
+    const oldAppointment = await AppointmentRepository.getAppoinmentById(appointmentId)
+    if (!oldAppointment) {
+      return notFoundResponse('Không tìm thấy lịch khám')
     }
+    if (oldAppointment.status === 'PENDING') {
+      const refundPaymentIntent = await stripe.refunds.create({
+        payment_intent: paymentIntentId,
+      })
+      console.log('refundPaymentIntent', refundPaymentIntent)
+      const cancelAppointment = await AppointmentRepository.cancelAppointment(
+        cancellationReason,
+        appointmentId,
+      )
+      if (!cancelAppointment?.payments) {
+        throw new Error('Cancel appointment operation failed; appointment not found.')
+      }
 
-    const cancelBill = await BillRespository.cancelBill(cancelAppointment.payments?.id)
-    if (!cancelBill) {
-      throw new Error('Cancel bill operation failed; bill not found.')
+      const cancelBill = await BillRespository.cancelBill(cancelAppointment.payments?.id)
+      if (!cancelBill) {
+        throw new Error('Cancel bill operation failed; bill not found.')
+      }
+      return successResponse({ cancelAppointment })
+    } else {
+      return badRequestResponse('Lịch khám đã hoàn thành hoặc đã bị hủy')
     }
-
-    return successResponse({ cancelAppointment })
   } catch (error) {
     console.error('Error occurred:', error)
     return internalServerErrorResponse(`Lỗi khi xử lý: ${error}`)

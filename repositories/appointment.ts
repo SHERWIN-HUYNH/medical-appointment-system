@@ -204,4 +204,17 @@ export class AppointmentRepository {
       console.log(error)
     }
   }
+
+  static async getAppoinmentById(appointmentId: string) {
+    try {
+      const appointment = await prisma.appointment.findFirst({
+        where: {
+          id: appointmentId,
+        },
+      })
+      return appointment
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
