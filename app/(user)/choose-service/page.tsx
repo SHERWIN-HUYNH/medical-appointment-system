@@ -12,7 +12,7 @@ const ChooseService = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [services, setServices] = useState<Service[]>([])
   const router = useRouter()
-  const { data} = useAppointmentContext()
+  const { data, setData } = useAppointmentContext()
   const searchParams = useSearchParams()
   const doctorName = searchParams.get('doctorName')
   const facultyName = searchParams.get('facultyName')
@@ -179,6 +179,12 @@ const ChooseService = () => {
                       },
                     }}
                     className="p-4 border border-slate-200 rounded-lg hover:bg-slate-100"
+                    onClick={() => {
+                      setData({
+                        ...data,
+                        serviceId: service.id,
+                      })
+                    }}
                   >
                     <div className="flex justify-between items-center">
                       <div>
