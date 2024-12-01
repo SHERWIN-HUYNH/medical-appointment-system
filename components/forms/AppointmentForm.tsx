@@ -127,16 +127,14 @@ export const AppointmentForm = ({
                 control={form.control}
                 name="reason"
                 label="Lí do khám bệnh"
-                
                 disabled={true}
-
               />
               <CustomFormField
                 fieldType={FormFieldType.INPUT}
                 control={form.control}
                 name="medicalHistory"
                 label="Tiền sử bệnh án"
-                placeholder='Không'
+                placeholder="Không"
                 disabled={true}
               />
               <CustomFormField
