@@ -65,5 +65,4 @@ export class BillRespository {
       throw new Error('Error retrieving bills', error as Error)
     }
   }
-  
 }

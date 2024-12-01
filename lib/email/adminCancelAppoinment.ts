@@ -1,15 +1,13 @@
-
-
 export function adminCancelAppoinment(
-    name:string,
-    doctorName:string,
-    appointmentDate:string,
-    appointmentTime:string,
-    service:string,
-    faculty:string,
-    cancellationReason:string
+  name: string,
+  doctorName: string,
+  appointmentDate: string,
+  appointmentTime: string,
+  service: string,
+  faculty: string,
+  cancellationReason: string,
 ) {
-    return `
+  return `
     <!DOCTYPE html>
 <html lang="vi">
 <head>

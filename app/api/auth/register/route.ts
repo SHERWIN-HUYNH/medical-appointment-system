@@ -16,13 +16,12 @@ export const POST = async (request: Request) => {
     const { username: name, email, password, phone } = RegisterUser.parse(body)
     const { role } = body.role ?? UserRole.USER
     const user = await UserRepository.getUserByEmail(email)
-    if(!password)
-      return conflictResponse('Password is required')
+    if (!password) return conflictResponse('Password is required')
     if (user) {
       return conflictResponse('User already exists.')
     }
     const hashedPassword = await hashPassword(password)
-    
+
     const account = await UserRepository.insert({
       name,
       email,

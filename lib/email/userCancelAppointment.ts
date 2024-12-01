@@ -1,12 +1,12 @@
 export function userCancelAppointment(
-    name:string,
-    doctorName:string,
-    appointmentDate:string,
-    appointmentTime:string,
-    service:string,
-    faculty:string,
+  name: string,
+  doctorName: string,
+  appointmentDate: string,
+  appointmentTime: string,
+  service: string,
+  faculty: string,
 ) {
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">

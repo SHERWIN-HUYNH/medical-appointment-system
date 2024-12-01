@@ -1,32 +1,31 @@
-import React from 'react';
+import React from 'react'
 
-import { Input } from './ui/input';
-import { Button } from './ui/button';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
-
-
+import { Input } from './ui/input'
+import { Button } from './ui/button'
+import { EyeIcon, EyeOffIcon } from 'lucide-react'
 
 interface PasswordInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  showPassword?: boolean;
+  showPassword?: boolean
 }
 const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
   // eslint-disable-next-line react/prop-types
-  ({ className, value, onChange,...field }, ref) => {
-    const [showPassword, setShowPassword] = React.useState(false);
+  ({ className, value, onChange, ...field }, ref) => {
+    const [showPassword, setShowPassword] = React.useState(false)
 
     // eslint-disable-next-line react/prop-types
-    const disabled = value === '' || value === undefined || field.disabled;
-    
+    const disabled = value === '' || value === undefined || field.disabled
+
     return (
       <div className="relative">
         <Input
-          customProp={''} type={showPassword ? 'text' : 'password'}
+          customProp={''}
+          type={showPassword ? 'text' : 'password'}
           className={`hide-password-toggle pr-10 ${className}`}
           ref={ref}
           value={value}
-          onChange={onChange} 
+          onChange={onChange}
           {...field}
-          />
+        />
         <Button
           type="button"
           variant="ghost"
@@ -55,10 +54,10 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
           }
         `}</style>
       </div>
-    );
-  }
-);
+    )
+  },
+)
 
-PasswordInput.displayName = 'PasswordInput';
+PasswordInput.displayName = 'PasswordInput'
 
-export { PasswordInput };
+export { PasswordInput }
