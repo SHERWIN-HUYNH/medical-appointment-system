@@ -179,6 +179,12 @@ const ChooseService = () => {
                       },
                     }}
                     className="p-4 border border-slate-200 rounded-lg hover:bg-slate-100"
+                    onClick={() => {
+                      setData({
+                        ...data,
+                        serviceId: service.id,
+                      })
+                    }}
                   >
                     <div className="flex justify-between items-center">
                       <div>
