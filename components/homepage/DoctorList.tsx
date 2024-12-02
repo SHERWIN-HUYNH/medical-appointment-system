@@ -6,46 +6,58 @@ import { Navigation } from 'swiper/modules'
 import Link from 'next/link'
 import { useAppointmentContext } from '@/context/AppointmentContext'
 import { Button } from '@/components/ui/button'
+import { useSession } from 'next-auth/react'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { Doctor } from '@/types/interface'
-import { shortenTitle } from '@/lib/utils'
 
 function DoctorList() {
   const [doctors, setDoctors] = useState<Doctor[]>([])
   const { setData } = useAppointmentContext()
+  const { data: session } = useSession()
+  const router = useRouter()
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await fetch(`/api/doctor`)
+        // Fetch doctors
+        const response = await fetch('/api/doctor')
         const data: Doctor[] = await response.json()
         const activeDoctors = data.filter((doctor) => doctor.isActive)
 
-        // Lấy tất cả các đánh giá một lần
-        const ratingsResponse = await fetch(`/api/comment`)
-        const ratingsData = await ratingsResponse.json()
-        // Đảm bảo ratings là một mảng
-        const ratings = Array.isArray(ratingsData) ? ratingsData : []
+        try {
+          // Fetch ratings trong try-catch riêng
+          const ratingsResponse = await fetch('/api/comment')
+          const ratings = await ratingsResponse.json()
 
-        // Tính toán điểm trung bình cho từng bác sĩ
-        const doctorsWithRatings = activeDoctors.map((doctor: Doctor) => {
-          const doctorRatings = ratings.filter((rating) => rating?.doctorId === doctor.id)
-          let averageRating = 0
-          if (doctorRatings.length > 0) {
-            const sum = doctorRatings.reduce(
-              (acc, rating) => acc + (rating?.rating || 0),
-              0,
-            )
-            averageRating = sum / doctorRatings.length
-          }
+          // Tính rating chỉ khi có data
+          const doctorsWithRatings = activeDoctors.map((doctor: Doctor) => {
+            const doctorRatings = Array.isArray(ratings)
+              ? ratings.filter((rating) => rating?.doctorId === doctor.id)
+              : []
 
-          return { ...doctor, averageRating }
-        })
+            let averageRating = 0
+            if (doctorRatings.length > 0) {
+              const sum = doctorRatings.reduce(
+                (acc, rating) => acc + (rating?.rating || 0),
+                0,
+              )
+              averageRating = sum / doctorRatings.length
+            }
 
-        setDoctors(doctorsWithRatings)
+            return { ...doctor, averageRating }
+          })
+
+          setDoctors(doctorsWithRatings)
+        } catch (ratingError) {
+          // Nếu không lấy được ratings, vẫn hiển thị doctors với rating = 0
+          console.error('Failed to fetch ratings:', ratingError)
+          setDoctors(activeDoctors.map((doctor) => ({ ...doctor, averageRating: 0 })))
+        }
       } catch (error) {
         console.error('Failed to fetch doctors:', error)
       }
@@ -54,8 +66,31 @@ function DoctorList() {
     fetchDoctors()
   }, [])
 
-  const handleDoctorClick = (facultyId: string, doctorId: string) => {
+  const handleDoctorClick = (
+    e: React.MouseEvent,
+    facultyId: string,
+    doctorId: string,
+  ) => {
+    if (!session) {
+      e.preventDefault()
+      toast.error('Vui lòng đăng nhập để đặt lịch khám')
+      setTimeout(() => {
+        router.push('/login')
+      }, 1500)
+      return
+    }
     setData({ facultyId, doctorId })
+  }
+
+  const handleViewMoreClick = (e: React.MouseEvent) => {
+    if (!session) {
+      e.preventDefault()
+      toast.error('Vui lòng đăng nhập để xem danh sách bác sĩ')
+      setTimeout(() => {
+        router.push('/login')
+      }, 1500)
+      return
+    }
   }
 
   return (
@@ -88,7 +123,7 @@ function DoctorList() {
                   <div className="mt-4 space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="inline-block text-[13px] p-1 rounded-full px-2 bg-primary text-white w-fit">
-                        {shortenTitle(doctor.academicTitle)}
+                        {doctor.academicTitle}
                       </span>
                       <span className="text-sm text-orange-500">
                         Đánh giá:{' '}
@@ -118,11 +153,9 @@ function DoctorList() {
                         facultyName: doctor.faculty.name,
                       },
                     }}
+                    onClick={(e) => handleDoctorClick(e, doctor.facultyId, doctor.id)}
                   >
-                    <Button
-                      className="mt-4 p-2.5 bg-transparent border border-primary text-primary rounded-full w-full text-center text-sm hover:bg-primary hover:text-white transition-all duration-300"
-                      onClick={() => handleDoctorClick(doctor.facultyId, doctor.id)}
-                    >
+                    <Button className="mt-4 p-2.5 bg-transparent border border-primary text-primary rounded-full w-full text-center text-sm hover:bg-primary hover:text-white transition-all duration-300">
                       Đặt ngay
                     </Button>
                   </Link>
@@ -132,6 +165,12 @@ function DoctorList() {
           ))}
         </Swiper>
       </div>
+
+      <Link href="/doctor" onClick={handleViewMoreClick}>
+        <Button className="mt-6 px-8 py-2.5 bg-transparent text-primary border-2 border-primary rounded-full hover:bg-primary hover:text-white transition-all duration-300 font-medium">
+          Xem thêm
+        </Button>
+      </Link>
     </div>
   )
 }

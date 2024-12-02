@@ -14,6 +14,9 @@ export async function middleware(req: NextRequest) {
       '/api/auth',
       '/api/auth/session',
       '/api/webhook/stripe',
+      '/api/doctor',
+      '/api/faculty',
+      '/api/service',
     ]
     if (publicPaths.some((path) => pathname.startsWith(path))) {
       return NextResponse.next()
