@@ -14,6 +14,7 @@ model User {
   email   String @unique
   name    String
   password String
+  image    String?
   phone    String @unique
   roleName UserRole @default(USER)
   profile Profile[] 
@@ -93,7 +94,7 @@ model Appointment {
   profile            Profile   @relation(fields: [profileId], references: [id])
   profileId          String    @db.Uuid
   serviceId          String    @db.Uuid
-  doctorScheduleId   String    @unique
+  doctorScheduleId   String    @unique @db.Uuid
   Service            Service  @relation(fields: [serviceId],references:[id])
   payments           Bill?
   stripeCustomerId   String
