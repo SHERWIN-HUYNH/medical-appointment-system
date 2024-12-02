@@ -15,8 +15,12 @@ import Image from 'next/image'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Input } from '@/components/ui/input'
 import { uploadFileToCloudinary } from '@/helpers/upload-image'
+import { Button } from '@/components/ui/button'
+import { ArrowLeft } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 const AddDoctorPage = () => {
+  const router = useRouter()
   const [facultyData, setFacultyData] = useState<Faculty[]>([])
   const [loading, setLoading] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
@@ -124,6 +128,14 @@ const AddDoctorPage = () => {
     <FormProvider {...form}>
       <DefaultLayout>
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+          <Button
+            onClick={() => router.push('/admin/doctor')}
+            variant="ghost"
+            className="flex items-center gap-2 hover:bg-transparent hover:text-primary"
+          >
+            <ArrowLeft size={16} />
+            Quay lại
+          </Button>
           <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
             <h3 className="font-medium text-black dark:text-white">Thêm bác sĩ</h3>
           </div>
