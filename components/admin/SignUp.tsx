@@ -19,6 +19,7 @@ import { PasswordInput } from '../PasswordInput'
 import { toast } from 'sonner'
 import { RegisterSchema } from '@/validation/register'
 import SubmitButton from '../SubmitButton'
+import { UserRole } from '@prisma/client'
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -347,7 +348,6 @@ const SignUp = () => {
 
                         <FormControl>
                           <PasswordInput
-                            customProp={''}
                             placeholder="Password"
                             {...field}
                             className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
@@ -420,13 +420,13 @@ const SignUp = () => {
                           >
                             <FormItem className="flex items-center space-x-2">
                               <FormControl>
-                                <RadioGroupItem value="DOCTOR" id="option-one" />
+                                <RadioGroupItem value={UserRole.DOCTOR} id="option-one" />
                               </FormControl>
                               <FormLabel htmlFor="option-one">Bác sĩ</FormLabel>
                             </FormItem>
                             <FormItem className="flex items-center space-x-2">
                               <FormControl>
-                                <RadioGroupItem value="ADMIN" id="option-two" />
+                                <RadioGroupItem value={UserRole.ADMIN} id="option-two" />
                               </FormControl>
                               <FormLabel htmlFor="option-two">Quản trị viên</FormLabel>
                             </FormItem>

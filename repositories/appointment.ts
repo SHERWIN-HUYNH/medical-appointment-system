@@ -75,6 +75,14 @@ export class AppointmentRepository {
             },
           },
         },
+        orderBy: {
+          doctorSchedule:{
+            schedule:{
+              date:'asc'
+              
+            }
+          }
+        },
       })
       return appointments
     } catch (error) {
