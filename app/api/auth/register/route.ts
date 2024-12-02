@@ -14,7 +14,8 @@ export const POST = async (request: Request) => {
   try {
     const body = await request.json()
     const { username: name, email, password, phone } = RegisterUser.parse(body)
-    const { role } = body.role ?? UserRole.USER
+    const role  = body.role ?? UserRole.USER
+    console.log('VALUE',role,body)
     const user = await UserRepository.getUserByEmail(email)
     if (!password) return conflictResponse('Password is required')
     if (user) {
@@ -27,7 +28,7 @@ export const POST = async (request: Request) => {
       email,
       password: hashedPassword,
       phone,
-      roleName: role ?? UserRole.USER,
+      roleName: role
     })
     if (account) {
       if (role == UserRole.ADMIN || role == UserRole.DOCTOR) {
