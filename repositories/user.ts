@@ -4,6 +4,7 @@ export interface CreateUserDto {
   name: string
   email: string
   password: string
+  image: string
   phone: string
   roleName: string
 }
@@ -12,6 +13,10 @@ export interface UserUpdate {
   email: string
   password: string
   phone: string
+}
+
+export interface UpdateImage {
+  image: string
 }
 export class UserRepository {
   static async getUserByEmail(email: string) {
@@ -42,6 +47,18 @@ export class UserRepository {
         email: data.email,
         phone: data.phone,
         password: data.password,
+      },
+    })
+    return user
+  }
+
+  static async updateImage(id: string, data: UpdateImage) {
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        image: data.image,
       },
     })
     return user

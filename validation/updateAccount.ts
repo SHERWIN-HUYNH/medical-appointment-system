@@ -9,4 +9,5 @@ export const UpdateAccountValidation = z.object({
     .min(10, 'Số điện thoại phải có ít nhất 10 chữ số')
     .max(15, 'Số điện thoại không quá 15 chữ số'),
   newPassword: z.string().min(6, {}),
+  image: z.string().min(1, 'Vui lòng chọn ảnh đại diện'),
 })
