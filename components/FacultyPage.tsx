@@ -3,7 +3,7 @@ import { CldImage } from 'next-cloudinary'
 import React, { useEffect, useState } from 'react'
 import FacultyLayout from './Layouts/facultyLayout'
 import Link from 'next/link'
-// import Pagination from './Pagination'
+import Pagination from './Pagination'
 
 interface Faculty {
   id: string
@@ -16,30 +16,37 @@ const FacultyPage = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  // const [currentPage, setCurrentPage] = useState(1)
-  // const itemsPerPage = 6 // Số faculty hiển thị trên mỗi trang
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 8 // Số faculty hiển thị trên mỗi trang
 
-  // // Tính toán faculty hiển thị cho trang hiện tại
-  // const indexOfLastItem = currentPage * itemsPerPage
-  // const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  // const currentFaculties = facultyData.slice(indexOfFirstItem, indexOfLastItem)
-  // const totalPages = Math.ceil(facultyData.length / itemsPerPage)
+  // Tính toán faculty hiển thị cho trang hiện tại
+  const indexOfLastItem = currentPage * itemsPerPage
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage
+  const currentFaculties = facultyData.slice(indexOfFirstItem, indexOfLastItem)
+  const totalPages = Math.ceil(facultyData.length / itemsPerPage)
 
   useEffect(() => {
+    const cachedFaculties = sessionStorage.getItem('facultyData')
+
     const fetchFaculties = async () => {
       try {
-        const response = await fetch('/api/faculty')
-        if (response.ok) {
-          const data = await response.json()
-          setFacultyData(data)
+        if (cachedFaculties) {
+          setFacultyData(JSON.parse(cachedFaculties))
           setLoading(false)
         } else {
-          setError('Không thể tải dữ liệu chuyên khoa')
-          setLoading(false)
+          const response = await fetch('/api/faculty')
+          if (response.ok) {
+            const data = await response.json()
+            setFacultyData(data)
+            sessionStorage.setItem('facultyData', JSON.stringify(data))
+          } else {
+            setError('Không thể tải dữ liệu chuyên khoa')
+          }
         }
       } catch (error) {
         console.error(error)
         setError('Đã có lỗi xảy ra')
+      } finally {
         setLoading(false)
       }
     }
@@ -69,15 +76,17 @@ const FacultyPage = () => {
         {/* Faculty Grid */}
         <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4 w-full px-32 py-8">
           {loading ? (
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center col-span-2">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-400"></div>
             </div>
           ) : error ? (
-            <div className="text-center text-red-500">{error}</div>
-          ) : facultyData.length === 0 ? (
-            <div className="text-center text-gray-500">Không có dữ liệu chuyên khoa</div>
+            <div className="text-center text-red-500 col-span-2">{error}</div>
+          ) : currentFaculties.length === 0 ? (
+            <div className="text-center text-gray-500 col-span-2">
+              Không có dữ liệu chuyên khoa
+            </div>
           ) : (
-            facultyData.map((faculty) => (
+            currentFaculties.map((faculty) => (
               <a
                 key={faculty.id}
                 href={`/faculty/${faculty.id}`}
@@ -112,7 +121,7 @@ const FacultyPage = () => {
           )}
         </div>
 
-        {/* Fixed Pagination
+        {/* Pagination */}
         <div className="flex justify-center mt-4 mb-4">
           {!loading && !error && facultyData.length > itemsPerPage && (
             <Pagination
@@ -121,7 +130,7 @@ const FacultyPage = () => {
               onPageChange={setCurrentPage}
             />
           )}
-        </div> */}
+        </div>
       </div>
     </FacultyLayout>
   )

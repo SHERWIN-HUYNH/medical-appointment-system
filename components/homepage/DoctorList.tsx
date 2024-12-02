@@ -17,49 +17,60 @@ import { Doctor } from '@/types/interface'
 
 function DoctorList() {
   const [doctors, setDoctors] = useState<Doctor[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const { setData } = useAppointmentContext()
   const { data: session } = useSession()
   const router = useRouter()
 
   useEffect(() => {
     const fetchDoctors = async () => {
+      setIsLoading(true)
       try {
-        // Fetch doctors
-        const response = await fetch('/api/doctor')
-        const data: Doctor[] = await response.json()
-        const activeDoctors = data.filter((doctor) => doctor.isActive)
+        const cachedDoctors = sessionStorage.getItem('doctorData')
+        const cachedRatings = sessionStorage.getItem('ratingsData')
 
-        try {
-          // Fetch ratings trong try-catch riêng
-          const ratingsResponse = await fetch('/api/comment')
-          const ratings = await ratingsResponse.json()
-
-          // Tính rating chỉ khi có data
-          const doctorsWithRatings = activeDoctors.map((doctor: Doctor) => {
-            const doctorRatings = Array.isArray(ratings)
-              ? ratings.filter((rating) => rating?.doctorId === doctor.id)
-              : []
-
-            let averageRating = 0
-            if (doctorRatings.length > 0) {
-              const sum = doctorRatings.reduce(
-                (acc, rating) => acc + (rating?.rating || 0),
-                0,
-              )
-              averageRating = sum / doctorRatings.length
-            }
-
-            return { ...doctor, averageRating }
-          })
-
-          setDoctors(doctorsWithRatings)
-        } catch (ratingError) {
-          // Nếu không lấy được ratings, vẫn hiển thị doctors với rating = 0
-          console.error('Failed to fetch ratings:', ratingError)
-          setDoctors(activeDoctors.map((doctor) => ({ ...doctor, averageRating: 0 })))
+        let doctorsData;
+        if (cachedDoctors) {
+          doctorsData = JSON.parse(cachedDoctors)
+        } else {
+          const response = await fetch('/api/doctor')
+          doctorsData = await response.json()
+          sessionStorage.setItem('doctorData', JSON.stringify(doctorsData))
         }
+
+        const activeDoctors = doctorsData.filter((doctor: Doctor) => doctor.isActive)
+
+        let ratings;
+        if (cachedRatings) {
+          ratings = JSON.parse(cachedRatings)
+        } else {
+          const ratingsResponse = await fetch('/api/comment')
+          ratings = await ratingsResponse.json()
+          sessionStorage.setItem('ratingsData', JSON.stringify(ratings))
+        }
+
+        const doctorsWithRatings = activeDoctors.map((doctor: Doctor) => {
+          const doctorRatings = Array.isArray(ratings)
+            ? ratings.filter((rating) => rating?.doctorId === doctor.id)
+            : []
+
+          let averageRating = 0
+          if (doctorRatings.length > 0) {
+            const sum = doctorRatings.reduce(
+              (acc, rating) => acc + (rating?.rating || 0),
+              0,
+            )
+            averageRating = sum / doctorRatings.length
+          }
+
+          return { ...doctor, averageRating }
+        })
+
+        setDoctors(doctorsWithRatings)
       } catch (error) {
-        console.error('Failed to fetch doctors:', error)
+        console.error('Failed to fetch data:', error)
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -99,72 +110,78 @@ function DoctorList() {
         <span className="text-primary">Bác sĩ nổi bật</span>
       </h2>
 
-      <div className="w-[1200px] custom-swiper">
-        <Swiper
-          modules={[Navigation]}
-          navigation={true}
-          spaceBetween={24}
-          slidesPerView={4}
-          className="!static py-8"
-        >
-          {doctors.map((doctor) => (
-            <SwiperSlide key={doctor.id} className="h-full py-8">
-              <div className="w-[280px] h-full bg-white border border-slate-200 rounded-lg p-4 cursor-pointer shadow-lg hover:scale-105 transition-all ease-in-out flex flex-col">
-                <div className="w-full h-[200px] overflow-hidden rounded-lg flex-shrink-0">
-                  <CldImage
-                    src={`${doctor.image}`}
-                    alt={`Doctor ${doctor.name}`}
-                    width={400}
-                    height={200}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="flex flex-col flex-grow justify-between">
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="inline-block text-[13px] p-1 rounded-full px-2 bg-primary text-white w-fit">
-                        {doctor.academicTitle}
-                      </span>
-                      <span className="text-sm text-orange-500">
-                        Đánh giá:{' '}
-                        {doctor.averageRating ? doctor.averageRating.toFixed(1) : '0'} ⭐
-                      </span>
-                    </div>
-                    <div className="space-y-2">
-                      <h2 className="font-semibold text-base line-clamp-1">
-                        {doctor.name}
-                      </h2>
-                      <h2 className="text-sm line-clamp-1">
-                        Chuyên khoa: {doctor.faculty.name}
-                      </h2>
-                      <h2 className="text-sm">
-                        Giới tính: {doctor.gender ? 'Nam' : 'Nữ'}
-                      </h2>
-                      <h2 className="text-sm line-clamp-1">
-                        Giới thiệu: {doctor.description}
-                      </h2>
-                    </div>
+      {isLoading ? (
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      ) : (
+        <div className="w-[1200px] custom-swiper">
+          <Swiper
+            modules={[Navigation]}
+            navigation={true}
+            spaceBetween={24}
+            slidesPerView={4}
+            className="!static py-8"
+          >
+            {doctors.map((doctor) => (
+              <SwiperSlide key={doctor.id} className="h-full py-8">
+                <div className="w-[280px] h-full bg-white border border-slate-200 rounded-lg p-4 cursor-pointer shadow-lg hover:scale-105 transition-all ease-in-out flex flex-col">
+                  <div className="w-full h-[200px] overflow-hidden rounded-lg flex-shrink-0">
+                    <CldImage
+                      src={`${doctor.image}`}
+                      alt={`Doctor ${doctor.name}`}
+                      width={400}
+                      height={200}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <Link
-                    href={{
-                      pathname: '/choose-service',
-                      query: {
-                        doctorName: doctor.name,
-                        facultyName: doctor.faculty.name,
-                      },
-                    }}
-                    onClick={(e) => handleDoctorClick(e, doctor.facultyId, doctor.id)}
-                  >
-                    <Button className="mt-4 p-2.5 bg-transparent border border-primary text-primary rounded-full w-full text-center text-sm hover:bg-primary hover:text-white transition-all duration-300">
-                      Đặt ngay
-                    </Button>
-                  </Link>
+                  <div className="flex flex-col flex-grow justify-between">
+                    <div className="mt-4 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="inline-block text-[13px] p-1 rounded-full px-2 bg-primary text-white w-fit">
+                          {doctor.academicTitle}
+                        </span>
+                        <span className="text-sm text-orange-500">
+                          Đánh giá:{' '}
+                          {doctor.averageRating ? doctor.averageRating.toFixed(1) : '0'} ⭐
+                        </span>
+                      </div>
+                      <div className="space-y-2">
+                        <h2 className="font-semibold text-base line-clamp-1">
+                          {doctor.name}
+                        </h2>
+                        <h2 className="text-sm line-clamp-1">
+                          Chuyên khoa: {doctor.faculty.name}
+                        </h2>
+                        <h2 className="text-sm">
+                          Giới tính: {doctor.gender ? 'Nam' : 'Nữ'}
+                        </h2>
+                        <h2 className="text-sm line-clamp-1">
+                          Giới thiệu: {doctor.description}
+                        </h2>
+                      </div>
+                    </div>
+                    <Link
+                      href={{
+                        pathname: '/choose-service',
+                        query: {
+                          doctorName: doctor.name,
+                          facultyName: doctor.faculty.name,
+                        },
+                      }}
+                      onClick={(e) => handleDoctorClick(e, doctor.facultyId, doctor.id)}
+                    >
+                      <Button className="mt-4 p-2.5 bg-transparent border border-primary text-primary rounded-full w-full text-center text-sm hover:bg-primary hover:text-white transition-all duration-300">
+                        Đặt ngay
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      )}
 
       <Link href="/doctor" onClick={handleViewMoreClick}>
         <Button className="mt-6 px-8 py-2.5 bg-transparent text-primary border-2 border-primary rounded-full hover:bg-primary hover:text-white transition-all duration-300 font-medium">
