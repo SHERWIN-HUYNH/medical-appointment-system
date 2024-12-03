@@ -85,6 +85,8 @@ model Comment {
   doctor    Doctor     @relation(fields: [doctorId], references: [id], onDelete: Cascade)
   userId    String     @db.Uuid
   user      User       @relation(fields: [userId], references: [id])
+  appointmentId  String?    @unique @db.Uuid
+  appointment    Appointment? @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
 }
 
 model Appointment {
@@ -97,6 +99,7 @@ model Appointment {
   doctorScheduleId   String    @unique @db.Uuid
   Service            Service  @relation(fields: [serviceId],references:[id])
   payments           Bill?
+  comment            Comment?
   stripeCustomerId   String
   userId             String
   doctorSchedule     DoctorSchedule @relation(fields: [doctorScheduleId],references:[id])
