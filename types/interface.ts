@@ -57,6 +57,7 @@ export interface Comment {
   rating: number
   doctorId: string
   userId: string
+  appointmentId: string
 }
 
 export interface Doctor {

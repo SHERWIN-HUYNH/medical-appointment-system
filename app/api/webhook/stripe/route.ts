@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     if (!doctorSchedule) {
       return notFoundResponse('NOT FOUND DOCTOR SCHEDULE')
     }
-    
+
     const appointment = await AppointmentRepository.createAppointment({
       userId: userId,
       doctorScheduleId: doctorSchedule.id,
