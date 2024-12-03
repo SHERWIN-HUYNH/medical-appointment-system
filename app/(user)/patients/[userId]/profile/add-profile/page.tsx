@@ -333,7 +333,8 @@ const Add_Profile = () => {
                   <Image
                     src={formData.identificationDocumentUrl}
                     alt="Document Preview"
-                    className="w-full object-cover"
+                    className="w-1/2 object-cover"
+                    style={{ aspectRatio: 'auto' }}
                     width={100}
                     height={100}
                   />
