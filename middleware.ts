@@ -16,6 +16,7 @@ export async function middleware(req: NextRequest) {
       '/api/webhook/stripe',
       '/api/doctor',
       '/api/faculty',
+      '/api/comment',
       '/api/service',
     ]
     if (publicPaths.some((path) => pathname.startsWith(path))) {
