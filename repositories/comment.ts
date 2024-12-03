@@ -88,19 +88,24 @@ export class CommentRespository {
         doctorId: commentData.doctorId,
         userId: commentData.userId,
         createdAt: new Date(currentDate), // Lưu chỉ ngày không có giờ
+        appointmentId: commentData.appointmentId,
       },
     })
     return comment
   }
 
-  static async checkExistingCommentByAppointment(doctorId: string, userId: string, appointmentId: string) {
+  static async checkExistingCommentByAppointment(
+    doctorId: string,
+    userId: string,
+    appointmentId: string,
+  ) {
     const comment = await prisma.comment.findFirst({
       where: {
         doctorId: doctorId,
         userId: userId,
         appointmentId: appointmentId,
       },
-    });
-    return comment;
+    })
+    return comment
   }
 }

@@ -46,25 +46,17 @@ export async function DELETE(req: Request) {
 
 export async function POST(req: Request) {
   const commentData = await req.json()
-  try {
-    const existingComment = await CommentRespository.checkExistingCommentByAppointment(
-      commentData.doctorId,
-      commentData.userId,
-      commentData.appointmentId,
-    )
+  // Kiểm tra xem người dùng đã đánh giá cuộc hẹn này chưa
+  const existingComment = await CommentRespository.checkExistingCommentByAppointment(
+    commentData.doctorId,
+    commentData.userId,
+    commentData.appointmentId,
+  )
 
-    if (existingComment) {
-      return badRequestResponse('Bạn đã đánh giá bác sĩ này rồi')
-    }
-
-    const comment = await CommentRespository.createComment(commentData)
-    return successResponse(comment)
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error('Error creating comment:', error.message)
-    } else {
-      console.error('Unknown error creating comment:', JSON.stringify(error))
-    }
-    return internalServerErrorResponse('Lỗi khi tạo đánh giá')
+  if (existingComment) {
+    return badRequestResponse('Bạn đã đánh giá cuộc hẹn này với bác sĩ rồi')
   }
+
+  const comment = await CommentRespository.createComment(commentData)
+  return successResponse(comment)
 }

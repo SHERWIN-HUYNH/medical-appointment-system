@@ -58,6 +58,9 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
   const [selectedBillDetail, setSelectedBillDetail] = useState<BillInfor | null>(null)
   const [showCancelModal, setShowCancelModal] = useState(false)
   const [reviewedBills, setReviewedBills] = useState<string[]>([])
+  const [currentReviewAppointment, setCurrentReviewAppointment] =
+    useState<BillInfor | null>(null)
+
   useEffect(() => {
     if (appointments) {
       const filteredAppointments = appointments.filter(
@@ -76,8 +79,8 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
       toast.error('Bạn đã đánh giá phiếu khám này rồi.')
       return
     }
+    setCurrentReviewAppointment(bill)
     setShowReviewModal(true)
-    setSelectedAppointment([bill])
   }
 
   const handleSubmitReview = async () => {
@@ -86,7 +89,7 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
       return
     }
 
-    if (!selectedAppointment.length) return
+    if (!currentReviewAppointment) return
 
     try {
       const response = await fetch('/api/comment', {
@@ -97,8 +100,9 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
         body: JSON.stringify({
           content: comment,
           rating: rating,
-          doctorId: selectedAppointment[0].appointment.doctorSchedule.doctor.id,
+          doctorId: currentReviewAppointment.appointment.doctorSchedule.doctor.id,
           userId: params.userId,
+          appointmentId: currentReviewAppointment.appointmentId,
         }),
       })
 
@@ -106,10 +110,23 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
 
       if (response.ok) {
         toast.success('Đánh giá thành công!')
-        setReviewedBills((prev) => [...prev, selectedAppointment[0].id])
+        setReviewedBills((prev) => [...prev, currentReviewAppointment.id])
         setShowReviewModal(false)
         setRating(0)
         setComment('')
+
+        const updatedAppointments =
+          appointments?.map((bill) => {
+            if (bill.id === currentReviewAppointment.id) {
+              return {
+                ...bill,
+                appointment: { ...bill.appointment, status: AppointmentStatus.SCHEDULED },
+              }
+            }
+            return bill
+          }) || []
+
+        setSelectedAppointment(updatedAppointments)
       } else {
         toast.error(data.error || 'Có lỗi xảy ra khi gửi đánh giá')
       }
