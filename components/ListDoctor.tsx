@@ -29,26 +29,34 @@ const ListDoctor = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([])
   const [showModal, setShowModal] = useState(false)
   const [doctorToDelete, setDoctorToDelete] = useState<Doctor | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const fetchDoctorData = async () => {
-      const response = await fetch(`/api/doctor`)
-      if (response.ok) {
-        const data = await response.json()
-        setDoctorData(data)
+    const fetchData = async () => {
+      setIsLoading(true)
+      try {
+        // Fetch doctor data
+        const doctorResponse = await fetch(`/api/doctor`)
+        if (doctorResponse.ok) {
+          const doctorData = await doctorResponse.json()
+          setDoctorData(doctorData)
+        }
+
+        // Fetch faculty data
+        const facultyResponse = await fetch(`/api/faculty`)
+        if (facultyResponse.ok) {
+          const facultyData = await facultyResponse.json()
+          setFacultyData(facultyData)
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error)
+        toast.error('Đã xảy ra lỗi khi tải dữ liệu!')
+      } finally {
+        setIsLoading(false)
       }
     }
 
-    const fetchFacultyData = async () => {
-      const response = await fetch(`/api/faculty`)
-      if (response.ok) {
-        const data = await response.json()
-        setFacultyData(data)
-      }
-    }
-
-    fetchDoctorData()
-    fetchFacultyData()
+    fetchData()
   }, [])
 
   const getFacultyName = (facultyId: string) => {
@@ -194,19 +202,25 @@ const ListDoctor = () => {
         </Link>
       </div>
       <div className="flex-1 overflow-x-auto w-full">
-        <DataTable
-          columns={columns}
-          data={doctorData}
-          searchKey="name"
-          filterOptions={{
-            key: 'facultyId',
-            placeholder: 'Chuyên khoa',
-            options: facultyData.map((faculty) => ({
-              label: faculty.name,
-              value: faculty.id,
-            })),
-          }}
-        />
+        {isLoading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <DataTable
+            columns={columns}
+            data={doctorData}
+            searchKey="name"
+            filterOptions={{
+              key: 'facultyId',
+              placeholder: 'Chuyên khoa',
+              options: facultyData.map((faculty) => ({
+                label: faculty.name,
+                value: faculty.id,
+              })),
+            }}
+          />
+        )}
       </div>
 
       {showModal && (

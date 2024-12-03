@@ -2,6 +2,15 @@
 import React, { useEffect, useState } from 'react'
 import FacultyLayout from '@/components/Layouts/facultyLayout'
 import Link from 'next/link'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation } from 'swiper/modules'
+import { CldImage } from 'next-cloudinary'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import { toast } from 'sonner'
+import { useAppointmentContext } from '@/context/AppointmentContext'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 interface Service {
   id: string
@@ -22,7 +31,10 @@ export default function FacultyDetailPage({ params }: { params: { facultyId: str
   const [faculty, setFaculty] = useState<FacultyDetail | null>(null)
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [otherFaculties, setOtherFaculties] = useState<FacultyDetail[]>([])
+  const { setData } = useAppointmentContext()
+  const { data: session } = useSession()
+  const router = useRouter()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,16 +56,40 @@ export default function FacultyDetailPage({ params }: { params: { facultyId: str
           setServices(servicesData)
         }
 
+        // Fetch other faculties
+        const otherFacultiesResponse = await fetch('/api/faculty')
+        const otherFacultiesData = await otherFacultiesResponse.json()
+
+        if (otherFacultiesResponse.ok) {
+          // Filter out current faculty
+          const filteredFaculties = otherFacultiesData.filter(
+            (f: FacultyDetail) => f.id !== params.facultyId,
+          )
+          setOtherFaculties(filteredFaculties)
+        }
+
         setLoading(false)
       } catch (error) {
         console.error('Error:', error)
-        setError(error instanceof Error ? error.message : 'Đã có lỗi xảy ra')
+        toast.error(error instanceof Error ? error.message : 'Đã có lỗi xảy ra')
         setLoading(false)
       }
     }
 
     fetchData()
   }, [params.facultyId])
+
+  const handleServiceClick = (e: React.MouseEvent) => {
+    if (!session) {
+      e.preventDefault()
+      toast.error('Vui lòng đăng nhập để đặt lịch khám')
+      setTimeout(() => {
+        router.push('/login')
+      }, 1500)
+      return
+    }
+    setData({ facultyId: params.facultyId })
+  }
 
   if (loading) {
     return (
@@ -65,11 +101,11 @@ export default function FacultyDetailPage({ params }: { params: { facultyId: str
     )
   }
 
-  if (error || !faculty) {
+  if (!faculty) {
     return (
       <FacultyLayout>
         <div className="text-center text-red-500">
-          {error || 'Không tìm thấy thông tin chuyên khoa'}
+          {'Không tìm thấy thông tin chuyên khoa'}
         </div>
       </FacultyLayout>
     )
@@ -102,12 +138,12 @@ export default function FacultyDetailPage({ params }: { params: { facultyId: str
         </div>
 
         {/* Main Content Container */}
-        <div className="rounded-lg shadow-md p-8">
+        <div className="rounded-lg p-8">
           {/* Description Section */}
           <div className="mb-8">
             <h2 className="text-xl font-bold text-blue-800 mb-4">I. Giới thiệu chung</h2>
             <div
-              className="text-slate-700 leading-relaxed"
+              className="text-slate-700 text-lg leading-relaxed font-medium"
               dangerouslySetInnerHTML={{ __html: faculty.description }}
             ></div>
           </div>
@@ -115,43 +151,87 @@ export default function FacultyDetailPage({ params }: { params: { facultyId: str
           {/* Services Section */}
           <div>
             <h2 className="text-xl font-bold text-blue-800 mb-4">II. Dịch vụ</h2>
-            <div className="max-w-3xl">
+            <div className="w-full">
+              <p className="mb-4 text-lg text-slate-700">
+                Bạn có thể đặt lịch hẹn với chuyên khoa này{' '}
+                <Link
+                  href={{
+                    pathname: '/choose-doctor',
+                    query: { facultyName: faculty.name },
+                  }}
+                  className="text-primary hover:underline font-medium"
+                  onClick={handleServiceClick}
+                >
+                  tại đây
+                </Link>
+                .
+              </p>
+
               {services.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="table-base">
-                    <thead>
-                      <tr>
-                        <th className="table-cell table-header w-[250px]">TÊN DỊCH VỤ</th>
-                        <th className="table-cell table-header">MÔ TẢ</th>
-                        <th className="table-cell table-header w-[150px]">GIÁ DỊCH VỤ</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {services.map((service) => (
-                        <tr key={service.id} className="hover:bg-slate-50">
-                          <td className="table-cell primary-text">{service.name}</td>
-                          <td className="table-cell text-slate-600">
-                            {service.description}
-                          </td>
-                          <td className="table-cell text-blue-600 text-right">
-                            {new Intl.NumberFormat('vi-VN', {
-                              style: 'currency',
-                              currency: 'VND',
-                            }).format(service.price)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <ul className="pl-6 space-y-4 list-none">
+                  {services.map((service) => (
+                    <li
+                      key={service.id}
+                      className="text-lg text-slate-700 before:content-['-'] before:mr-2"
+                    >
+                      {service.name}: {service.description}
+                    </li>
+                  ))}
+                </ul>
               ) : (
                 <div className="text-center py-8 bg-slate-50 border border-slate-200 rounded-md">
-                  <p className="text-slate-500">
+                  <p className="text-lg text-slate-500">
                     Chuyên khoa này chưa có dịch vụ nào được cung cấp
                   </p>
                 </div>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Thêm divider */}
+        <div className="w-full max-w-[1200px] mx-auto">
+          <div className="h-[1px] bg-slate-400"></div>
+        </div>
+
+        {/* Other Faculties Section */}
+        <div className="mt-12 mb-16">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-blue-800 uppercase">
+              Chuyên Khoa Khác
+            </h2>
+            <div className="w-24 h-1 bg-blue-500 mx-auto mt-4"></div>
+          </div>
+
+          <div className="w-full mx-auto custom-swiper">
+            <Swiper
+              modules={[Navigation]}
+              navigation={true}
+              spaceBetween={20}
+              slidesPerView={5}
+              className="!static py-8"
+            >
+              {otherFaculties.map((faculty) => (
+                <SwiperSlide key={faculty.id} className="py-4">
+                  <Link href={`/faculty/${faculty.id}`}>
+                    <div className="w-[160px] h-[160px] flex flex-col text-center items-center p-4 bg-white border border-slate-200 rounded-lg cursor-pointer shadow-lg hover:scale-105 transition-all ease-in-out gap-3">
+                      <div className="p-4 rounded-2xl bg-primary">
+                        <CldImage
+                          src={`${faculty.image}`}
+                          alt={faculty.name}
+                          width={35}
+                          height={35}
+                          className="text-white h-9 w-9"
+                        />
+                      </div>
+                      <p className="text-sm text-blue-900 mt-1 min-h-[40px] line-clamp-2 break-words hyphens-auto">
+                        {faculty.name}
+                      </p>
+                    </div>
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
       </div>

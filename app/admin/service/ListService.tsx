@@ -27,26 +27,32 @@ const ListService = () => {
   const [serviceData, setServiceData] = useState<Service[]>([])
   const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null)
   const [showModal, setShowModal] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const fetchServiceData = async () => {
-      const response = await fetch(`/api/service`)
-      if (response.ok) {
-        const data = await response.json()
-        setServiceData(data)
+    const fetchData = async () => {
+      setIsLoading(true)
+      try {
+        const serviceResponse = await fetch(`/api/service`)
+        if (serviceResponse.ok) {
+          const serviceData = await serviceResponse.json()
+          setServiceData(serviceData)
+        }
+
+        const facultyResponse = await fetch(`/api/faculty`)
+        if (facultyResponse.ok) {
+          const facultyData = await facultyResponse.json()
+          setFacultyData(facultyData)
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error)
+        toast.error('Đã xảy ra lỗi khi tải dữ liệu!')
+      } finally {
+        setIsLoading(false)
       }
     }
 
-    const fetchFacultyData = async () => {
-      const response = await fetch(`/api/faculty`)
-      if (response.ok) {
-        const data = await response.json()
-        setFacultyData(data)
-      }
-    }
-
-    fetchServiceData()
-    fetchFacultyData()
+    fetchData()
   }, [])
 
   const getFacultyName = (facultyId: string) => {
@@ -155,19 +161,25 @@ const ListService = () => {
       </div>
 
       <div className="flex-1 overflow-x-auto w-full">
-        <DataTable
-          columns={columns}
-          data={serviceData}
-          searchKey="name"
-          filterOptions={{
-            key: 'facultyId',
-            placeholder: 'Dịch vụ',
-            options: facultyData.map((faculty) => ({
-              label: faculty.name,
-              value: faculty.id,
-            })),
-          }}
-        />
+        {isLoading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <DataTable
+            columns={columns}
+            data={serviceData}
+            searchKey="name"
+            filterOptions={{
+              key: 'facultyId',
+              placeholder: 'Chuyên khoa',
+              options: facultyData.map((faculty) => ({
+                label: faculty.name,
+                value: faculty.id,
+              })),
+            }}
+          />
+        )}
       </div>
 
       {showModal && (

@@ -55,6 +55,12 @@ const CreateServiceForm = () => {
 
     if (response.ok) {
       toast.success('Thêm dịch vụ thành công!')
+      form.reset({
+        name: '',
+        price: '',
+        description: '',
+        facultyId: '',
+      })
     } else {
       const message = await response.json()
       toast.error(message.error)
@@ -103,6 +109,7 @@ const CreateServiceForm = () => {
                   name="facultyId"
                   label="Chọn chuyên khoa"
                   placeholder="Select a faculty"
+                  key={form.getValues('facultyId')}
                 >
                   {facultyData.map((faculty) => (
                     <SelectItem key={faculty.id} value={faculty.id}>

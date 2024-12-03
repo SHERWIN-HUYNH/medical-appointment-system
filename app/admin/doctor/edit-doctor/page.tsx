@@ -28,6 +28,8 @@ const EditDoctor = () => {
   const [gender, setGender] = useState<boolean>(true)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [pendingStatus, setPendingStatus] = useState<boolean | null>(null)
+  // State để lưu trữ faculty ban đầu
+  const [initialFaculty, setInitialFaculty] = useState<string>('')
   const form = useForm<z.infer<typeof DoctorFormValidation>>({
     resolver: zodResolver(DoctorFormValidation),
     defaultValues: {
@@ -68,15 +70,19 @@ const EditDoctor = () => {
     const response = await fetch(`/api/doctor/${id}`)
     if (response.ok) {
       const doctor = await response.json()
+      // Tìm ID của academic title dựa trên tên
+      const academicTitleId = getAcademicTitleId(doctor.academicTitle)
+      setInitialFaculty(doctor.facultyId)
       form.reset({
         name: doctor.name,
-        academicTitle: getAcademicTitleId(doctor.academicTitle),
+        academicTitle: academicTitleId, // Sử dụng ID thay vì name
         faculty: doctor.facultyId,
         image: doctor.image,
         description: doctor.description,
         isActive: doctor.isActive,
         gender: doctor.gender,
       })
+
       if (!selectedFile) {
         setImagePreview(doctor.image)
         setFileUrl(doctor.image)
@@ -122,10 +128,6 @@ const EditDoctor = () => {
     setGender(genderValue)
     form.setValue('gender', genderValue)
   }
-
-  const academicTitleName =
-    academicTitles.find((title) => title.id === form.getValues('academicTitle'))?.name ||
-    form.getValues('academicTitle')
 
   const handleConfirmStatusChange = async () => {
     if (pendingStatus === null) return
@@ -174,25 +176,44 @@ const EditDoctor = () => {
       }
     }
 
+    // Lấy tên của academic title từ ID
+    const academicTitleName = academicTitles.find(
+      (title) => title.id === values.academicTitle,
+    )?.name
+
+    if (!academicTitleName) {
+      toast.error('Học hàm/học vị không hợp lệ')
+      return
+    }
+
     const response = await fetch(`/api/doctor`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        doctor: { id, ...values, image: uploadedUrl, academicTitle: academicTitleName },
+        doctor: {
+          id,
+          ...values,
+          image: uploadedUrl,
+          academicTitle: academicTitleName, // Gửi tên thay vì ID
+        },
       }),
     })
-
-    const data = await response.json()
 
     if (response.ok) {
       toast.success('Cập nhật thông tin bác sĩ thành công')
       router.push('/admin/doctor')
     } else {
-      toast.error(data.message || 'Cập nhật thông tin bác sĩ thất bại')
+      const message = await response.json()
+      toast.error(message.error)
       // Nếu cập nhật thất bại do bác sĩ có lịch hẹn, reset trạng thái
-      if (data.message === 'Bác sĩ này đang có cuộc hẹn không thể chuyển trạng thái') {
+      if (message.error === 'Bác sĩ này đang có cuộc hẹn không thể chuyển trạng thái') {
         setIsActive(true)
         form.setValue('isActive', true)
+      }
+      if (
+        message.error === 'Bác sĩ này đang có cuộc hẹn không thể thay đổi chuyên khoa'
+      ) {
+        form.setValue('faculty', initialFaculty)
       }
     }
   }

@@ -66,9 +66,9 @@ export function DataTable<TData, TValue>({
     header: 'STT',
     enableSorting: false,
     cell: ({ row }) => {
-      const pageIndex = table.getState().pagination.pageIndex
-      const pageSize = table.getState().pagination.pageSize
-      return pageIndex * pageSize + row.index + 1
+      const allFilteredRows = table.getFilteredRowModel().rows
+      const rowIndex = allFilteredRows.findIndex(r => r.id === row.id)
+      return rowIndex + 1
     },
   }
 
