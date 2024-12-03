@@ -49,12 +49,10 @@ const Doctor = () => {
         const response = await fetch('/api/doctor/user')
         const data = await response.json()
         if (response.ok) {
-          console.log('DOCTOR USER', data)
           setDoctors(data)
           setFilteredDoctors(data)
         }
       } catch (error) {
-        console.log('ERROR', error)
         toast.error('Lỗi khi kết nối với máy chủ')
       }
     }

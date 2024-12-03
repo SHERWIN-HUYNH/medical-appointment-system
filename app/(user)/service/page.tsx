@@ -47,7 +47,6 @@ const ServiceList = () => {
           toast.error('Lỗi khi tải dữ liệu dịch vụ')
         }
       } catch (error) {
-        console.log('ERROR', error)
         toast.error('Lỗi khi kết nối với máy chủ')
       }
     }
@@ -57,7 +56,6 @@ const ServiceList = () => {
         const data = await response.json()
         setFaculties(data)
       } catch (error) {
-        console.log('ERROR', error)
         toast.error('Lỗi khi tải dữ liệu chuyên khoa')
       }
     }

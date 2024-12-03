@@ -23,9 +23,9 @@ const CalendarPage = () => {
                   <HousePlus />
                 </p>
                 <p>
-                Bệnh viện Đại học Y Dược TP.HCM<br></br>
+                  Bệnh viện Đại học Y Dược TP.HCM<br></br>
                   <span className=" text-[#8a8a8a]">
-                  215 Đ. Hồng Bàng, Phường 11, Quận 5, Hồ Chí Minh
+                    215 Đ. Hồng Bàng, Phường 11, Quận 5, Hồ Chí Minh
                   </span>
                 </p>
               </li>
@@ -49,7 +49,7 @@ const CalendarPage = () => {
                 </p>
                 <p className="mt-1">0969239222</p>
               </li>
-              
+
               {selectedDate ? (
                 <li className="card-item">
                   <p className=" mt-[6px]">

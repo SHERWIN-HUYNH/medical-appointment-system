@@ -86,7 +86,6 @@ const ListComment = () => {
         toast.error(message.error)
       }
     } catch (error) {
-      console.error('Error deleting comment:', error)
       toast.error('Đã xảy ra lỗi khi xóa đánh giá!')
     } finally {
       setCommentToDelete(null)

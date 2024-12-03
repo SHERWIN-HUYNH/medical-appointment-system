@@ -43,7 +43,6 @@ export class ChartRepository {
 
       const totalAppointments = appointments.length
       if (totalAppointments === 0) {
-        console.warn('Không có lịch hẹn nào thỏa mãn điều kiện.')
         return []
       }
 
@@ -58,10 +57,6 @@ export class ChartRepository {
 
       appointments.forEach((appointment) => {
         if (!appointment.Service?.faculty) {
-          console.warn(
-            'Dữ liệu lịch hẹn thiếu thông tin Service hoặc faculty:',
-            appointment,
-          )
           return
         }
 
@@ -97,7 +92,6 @@ export class ChartRepository {
 
       return chart
     } catch (error) {
-      console.error('Lỗi khi truy xuất thông tin lịch hẹn theo chuyên khoa: ', error)
       throw error
     } finally {
       await prisma.$disconnect()
@@ -162,7 +156,6 @@ export class ChartRepository {
 
       return result
     } catch (error) {
-      console.error('Error retrieving and grouping appointments:', error)
       throw error
     } finally {
       await prisma.$disconnect()

@@ -104,9 +104,9 @@ export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) 
                 </svg>
               </p>
               <p className="mt-1">
-              Bệnh viện Đại học Y Dược TP.HCM<br></br>
+                Bệnh viện Đại học Y Dược TP.HCM<br></br>
                 <span className="text-[#8a8a8a]">
-                215 Đ. Hồng Bàng, Phường 11, Quận 5, Hồ Chí Minh
+                  215 Đ. Hồng Bàng, Phường 11, Quận 5, Hồ Chí Minh
                 </span>
               </p>
             </li>
@@ -180,7 +180,7 @@ export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) 
                   </li>
                   <li className="list-item-payment">
                     <div className="flex items-center gap-x-2">
-                      <p className='text-iconGray'>
+                      <p className="text-iconGray">
                         <UserRound />
                       </p>
                       <p className="highlight-text">Bác sĩ</p>
