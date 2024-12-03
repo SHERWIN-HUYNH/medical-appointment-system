@@ -26,6 +26,7 @@ const WorkingSchedulePage = () => {
     }
     fetchDoctor()
   }, [doctorId])
+
   if (!doctor) return null
   const doctorIdString =
     typeof doctorId === 'string' ? doctorId : JSON.stringify(doctorId)

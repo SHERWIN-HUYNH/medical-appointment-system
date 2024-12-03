@@ -20,8 +20,6 @@ export async function GET(request: Request, context: { params: { userId: string 
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error('Error fetching profiles:', error.message)
-    } else {
-      console.error('Error fetching profiles:', error)
     }
     return internalServerErrorResponse('FAIL TO GET LIST PROFILE')
   }

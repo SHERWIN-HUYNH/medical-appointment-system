@@ -96,7 +96,6 @@ const Doctor = () => {
     setFilteredDoctors(filtered)
     setCurrentPage(1)
   }
-
   const handleDoctorClick = (
     e: React.MouseEvent,
     facultyId: string,

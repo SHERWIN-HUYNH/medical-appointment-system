@@ -30,7 +30,7 @@ type CheckoutFormProps = {
 }
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY as string)
 export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) {
-  if (clientSecret == '') return <h1>Chưa có sản phẩm</h1>
+  if (clientSecret == '') return <h1>Chưa có thông tin</h1>
 
   return (
     <div className="mx-auto card-container animation">

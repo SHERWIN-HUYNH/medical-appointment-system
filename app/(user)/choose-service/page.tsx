@@ -22,7 +22,6 @@ const ChooseService = () => {
   useEffect(() => {
     const fetchServices = async () => {
       if (!facultyId) {
-        console.log('KHONG CO FACULTYID', facultyId)
         router.push('/choose-faculty')
         return
       }
@@ -30,7 +29,6 @@ const ChooseService = () => {
         setIsLoading(true)
         const response = await fetch(`/api/service/faculty/${facultyId}`)
         const serviceData = await response.json()
-        console.log('Response data:', serviceData)
 
         if (Array.isArray(serviceData)) {
           setServices(serviceData)
@@ -81,10 +79,10 @@ const ChooseService = () => {
                 </svg>
               </p>
               <p>
-                Bệnh Viện Quận Bình Thạnh
+                Bệnh viện Đại học Y Dược TP.HCM
                 <br />
                 <span className="text-slate-600">
-                  132 Lê Văn Duyệt, Phường 1, Bình Thạnh, Thành phố Hồ Chí Minh
+                  215 Đ. Hồng Bàng, Phường 11, Quận 5, Hồ Chí Minh
                 </span>
               </p>
             </li>

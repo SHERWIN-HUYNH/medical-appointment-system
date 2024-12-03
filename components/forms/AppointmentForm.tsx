@@ -27,7 +27,6 @@ export const AppointmentForm = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   const { data: session } = useSession()
-  console.log('appointment type', type)
   const AppointmentFormValidation = getAppointmentSchema(type)
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
@@ -70,10 +69,8 @@ export const AppointmentForm = ({
         toast.success('Hủy thành công!')
       } else {
         toast.error('Hủy không thành công, vui lòng thử lại!')
-        console.log(res + 'KET QUA')
       }
     }
-    console.log('SHOW PATIENTID', patientId)
     setIsLoading(false)
   }
 

@@ -28,7 +28,7 @@ const startCronJob = async () => {
 
       return scheduleStartDateTime < currentDate
     })
-    const updatedAppointments = await Promise.all(
+    await Promise.all(
       appointmentsToUpdate.map((appointment) =>
         prisma.appointment.update({
           where: { id: appointment.id },
@@ -36,7 +36,6 @@ const startCronJob = async () => {
         }),
       ),
     )
-    console.log('RUNNING', updatedAppointments)
   } catch (error) {
     console.error('Error updating statuses:', error)
   }
