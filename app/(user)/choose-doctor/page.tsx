@@ -29,7 +29,6 @@ const ChooseDoctor = () => {
 
   const facultyId = data.facultyId
   const facultyName = searchParams.get('facultyName')
-  const price = searchParams.get('price')
   const [searchQuery, setSearchQuery] = useState('')
   const [doctors, setDoctors] = useState<Doctor[]>([])
   const [selectedTitle, setSelectedTitle] = useState('')
