@@ -31,7 +31,6 @@ const CategorySearch = () => {
         const response = await fetch('/api/faculty')
         if (!response.ok) throw new Error('Failed to fetch')
         const data = await response.json()
-        
         if (Array.isArray(data)) {
           setFaculties(data)
         } else {

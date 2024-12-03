@@ -49,7 +49,6 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
     })
     async function loadEvents() {
       const data = await fetchEventsFromApi(doctorId as string)
-      // setApiData(data);
       handleUpdateSchedule(data)
       dateFromApi = data
         .filter((item) => item.isAvailable)
@@ -74,11 +73,11 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
     return ['valid-date-class']
   }
   const handleDateClick = (info: DateClickArg) => {
-    const selectedDate = info.date
-    const today = new Date()
+    // const selectedDate = info.date
+    // const today = new Date()
 
-    // So sánh ngày (chỉ tính ngày, bỏ qua giờ phút giây)
-    const isFutureDate = selectedDate.setHours(0, 0, 0, 0) >= today.setHours(0, 0, 0, 0)
+    // // So sánh ngày (chỉ tính ngày, bỏ qua giờ phút giây)
+    // const isFutureDate = selectedDate.setHours(0, 0, 0, 0) > today.setHours(0, 0, 0, 0)
     setSelectedDate(info.dateStr)
     const date = info.dateStr
     const schedules = apiData?.filter((schedule) => schedule.schedule.date === date)
@@ -106,7 +105,7 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
           period: 'afternoon' as const,
         }))
       setEveningTimeslot(afternoonSchedules)
-      setShowTimeSlots(isFutureDate)
+      setShowTimeSlots(true)
     }
   }
 
@@ -161,17 +160,16 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
             selectMirror={true}
             dayCellClassNames={handleDateClassNames}
             dateClick={handleDateClick}
-            selectAllow={(selectInfo: DateSpanApi) => {
-              const selectedDate = new Date(selectInfo.start)
-              const today1 = new Date(today)
-              return selectedDate >= today1
-            }}
-            eventAllow={(span: DateSpanApi) => {
-              const eventDate = new Date(span.start)
-              const today1 = new Date(today)
-
-              return eventDate >= today1
-            }}
+            // selectAllow={(selectInfo: DateSpanApi) => {
+            //   const selectedDate = new Date(selectInfo.start)
+            //   const today1 = new Date(today)
+            //   return selectedDate >= today1
+            // }}
+            // eventAllow={(span: DateSpanApi) => {
+            //   const eventDate = new Date(span.start)
+            //   const today1 = new Date(today)
+            //   return eventDate >= today1
+            // }}
           />
         </div>
       ) : (
@@ -235,6 +233,28 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
                 }}
               ></Image>
             </div>
+          </div>
+          <div className="mt-3  pt-3">
+            <Button
+              className="text-sm bg-transparent text-slate-500 hover:text-primary flex items-center gap-1"
+              onClick={() => setShowTimeSlots(false)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m12 19-7-7 7-7" />
+                <path d="M19 12H5" />
+              </svg>
+              Quay lại
+            </Button>
           </div>
         </div>
       )}

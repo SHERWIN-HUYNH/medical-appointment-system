@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Form } from '@/components/ui/form'
@@ -15,13 +15,11 @@ import { PasswordInput } from '../PasswordInput'
 import { Label } from '../ui/label'
 import { signIn, useSession } from 'next-auth/react'
 import React from 'react'
-import { useAppointmentContext } from '@/context/AppointmentContext'
 export const LoginForm = () => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [currentPassword, setCurrentPassword] = useState('')
   const { data: session } = useSession()
-  const { data, setData } = useAppointmentContext()
   const form = useForm<z.infer<typeof UserLogin>>({
     resolver: zodResolver(UserLogin),
     defaultValues: {
@@ -29,6 +27,14 @@ export const LoginForm = () => {
       password: '',
     },
   })
+  useEffect(() => {
+    if (session?.user.roleName === 'USER') {
+      router.push('/')
+    }
+    if (session?.user.roleName === 'ADMIN') {
+      router.push('/admin')
+    }
+  }, [session, router])
   const onSubmit = async (values: z.infer<typeof UserLogin>) => {
     setIsLoading(true)
     try {
@@ -39,20 +45,6 @@ export const LoginForm = () => {
       })
       if (res?.error) {
         toast.error(res.error)
-      }
-      if (res?.ok) {
-        setIsLoading(false)
-        setData({ userId: session?.user.id })
-        console.log('CONTEXT USERID', data.userId)
-        toast.success('Đăng nhập thành công')
-        if (session?.user.roleName === 'USER') {
-          router.push('/')
-        }
-        if (session?.user.roleName === 'ADMIN') {
-          router.push('/admin')
-        }
-      } else {
-        console.log('ERRPR SESSION', session)
       }
     } catch (error) {
       console.log(error)
@@ -84,7 +76,6 @@ export const LoginForm = () => {
             Mật khẩu
           </Label>
           <PasswordInput
-            customProp=""
             id="current_password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}

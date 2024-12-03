@@ -45,8 +45,12 @@ export class AppointmentRepository {
     profileId,
     stripeCustomerId,
   }: CreateAppointment) {
-    try {
-      const newAppointment = await prisma.appointment.create({
+    return await prisma.$transaction(async (tx) => {
+      await tx.doctorSchedule.update({
+        where: { id: doctorScheduleId },
+        data: { isAvailable: false },
+      });
+      return await tx.appointment.create({
         data: {
           userId,
           doctorScheduleId,
@@ -54,14 +58,8 @@ export class AppointmentRepository {
           profileId,
           stripeCustomerId,
         },
-      })
-      return newAppointment
-    } catch (error) {
-      console.error('Error creating appointment:', error)
-      throw error
-    } finally {
-      await prisma.$disconnect()
-    }
+      });
+    });
   }
   static async getAllAppointments() {
     try {

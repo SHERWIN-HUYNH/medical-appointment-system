@@ -30,7 +30,7 @@ type CheckoutFormProps = {
 }
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY as string)
 export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) {
-  if (clientSecret == '') return <h1>Chưa có sản phẩm</h1>
+  if (clientSecret == '') return <h1>Chưa có thông tin</h1>
 
   return (
     <div className="mx-auto card-container animation">
@@ -129,9 +129,9 @@ export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) 
                 </svg>
               </p>
               <p>
-                Bệnh Viện Quận Bình Thạnh<br></br>
+                Bệnh viện Đại học Y Dược TP.HCM<br></br>
                 <span className="text-[#8a8a8a]">
-                  132 Lê Văn Duyệt, Phường 1, Bình Thạnh, Thành phố Hồ Chí Minh
+                  Cơ sở 201 Nguyễn Chí Thanh, Phường 12, Quận 5, TP. Hồ Chí Minh
                 </span>
               </p>
             </li>
