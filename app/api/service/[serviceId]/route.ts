@@ -29,7 +29,7 @@ export async function PUT(req: Request, { params }: { params: { serviceId: strin
   const pendingAppointments =
     await AppointmentRepository.getAppointmentByServiceId(serviceId)
   if (pendingAppointments?.length > 0) {
-    return forbiddenResponse('Không thể cập nhật dịch vụ đang có lịch hẹn chờ duyệt')
+    return forbiddenResponse('Không thể cập nhật dịch vụ đang có lịch hẹn')
   }
 
   const updateData = {

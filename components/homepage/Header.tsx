@@ -15,21 +15,16 @@ function Header() {
     },
     {
       id: 2,
-      name: 'Giới thiệu',
-      path: '/',
-    },
-    {
-      id: 3,
       name: 'Dịch vụ',
       path: '/service',
     },
     {
-      id: 4,
+      id: 3,
       name: 'Chuyên khoa',
       path: '/faculty',
     },
     {
-      id: 5,
+      id: 4,
       name: 'Đội ngũ bác sĩ',
       path: '/doctor',
     },

@@ -15,7 +15,7 @@ const ChooseFaculty = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [faculties, setFaculties] = useState<Faculty[]>([])
   const { setData } = useAppointmentContext()
-
+  const router = useRouter()
   useEffect(() => {
     const fetchFaculties = async () => {
       try {
@@ -36,6 +36,10 @@ const ChooseFaculty = () => {
 
   const handleFacultyClick = (facultyId: string) => {
     setData({ facultyId })
+  }
+
+  const handleBackHome = () => {
+    router.push('/')
   }
 
   return (
@@ -66,12 +70,12 @@ const ChooseFaculty = () => {
                   <path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18" />
                 </svg>
               </div>
-              <div className="flex justify-center flex-col text-sm">
+              <div className="flex justify-center flex-col">
                 <p>
-                  Bệnh Viện Quận Bình Thạnh
+                  Bệnh viện Đại học Y Dược TP.HCM
                   <br />
                   <span className="text-slate-600">
-                    132 Lê Văn Duyệt, Phường 1, Bình Thạnh, Thành phố Hồ Chí Minh
+                    215 Đ. Hồng Bàng, Phường 11, Quận 5, Hồ Chí Minh
                   </span>
                 </p>
               </div>
@@ -131,7 +135,10 @@ const ChooseFaculty = () => {
               )}
             </div>
             <div className="mt-3 border-t pt-3">
-              <Button className="text-sm bg-transparent text-slate-500 hover:text-primary flex items-center gap-1">
+              <Button
+                className="text-sm bg-transparent text-slate-500 hover:text-primary flex items-center gap-1"
+                onClick={handleBackHome}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
