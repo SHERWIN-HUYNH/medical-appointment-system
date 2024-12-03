@@ -125,24 +125,23 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
   }
 
   const handleCancelClick = (bill: BillInfor) => {
-    const appointmentDate = new Date(bill.appointment.doctorSchedule.schedule.date);
-    const currentDate = new Date();
-    const datePlusOneDay = new Date(currentDate);
-    datePlusOneDay.setDate(currentDate.getDate() + 1);
-    
-    if(appointmentDate > datePlusOneDay) {
+    const appointmentDate = new Date(bill.appointment.doctorSchedule.schedule.date)
+    const currentDate = new Date()
+    const datePlusOneDay = new Date(currentDate)
+    datePlusOneDay.setDate(currentDate.getDate() + 1)
+
+    if (appointmentDate > datePlusOneDay) {
       setShowCancelModal(true)
-    }else {
+    } else {
       toast.error('Bạn chỉ có thể hủy hẹn trước 1 ngày')
     }
-    
-    if(appointmentDate > currentDate) {
+
+    if (appointmentDate > currentDate) {
       setShowCancelModal(true)
-    }else {
+    } else {
       toast.error('Bạn chỉ có thể hủy hẹn trước 1 ngày')
     }
     setSelectedBillDetail(bill)
-    
   }
 
   return (

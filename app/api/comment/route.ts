@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     const existingComment = await CommentRespository.checkExistingCommentByAppointment(
       commentData.doctorId,
       commentData.userId,
-      // commentData.appointmentId
+      commentData.appointmentId,
     )
 
     if (existingComment) {
