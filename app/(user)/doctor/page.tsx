@@ -47,8 +47,9 @@ const Doctor = () => {
     const fetchDoctors = async () => {
       try {
         const response = await fetch('/api/doctor/user')
-        const data = await response.json()
+        const doctorsData = await response.json()
         if (response.ok) {
+          const data = doctorsData.sort((a: Doctor, b: Doctor) => b.rating - a.rating)
           setDoctors(data)
           setFilteredDoctors(data)
         }
