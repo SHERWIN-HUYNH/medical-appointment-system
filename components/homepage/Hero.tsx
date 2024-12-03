@@ -3,20 +3,15 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 const Hero = () => {
   const { data: session } = useSession()
-  const router = useRouter()
-
   const handleBookingClick = (e: React.MouseEvent) => {
     if (!session) {
       e.preventDefault()
       toast.error('Vui lòng đăng nhập để đặt lịch khám')
-      setTimeout(() => {
-        router.push('/login')
-      }, 1500)
+      setTimeout(() => {}, 1500)
       return
     }
   }

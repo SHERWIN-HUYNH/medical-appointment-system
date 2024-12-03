@@ -22,7 +22,6 @@ const PaymentHistory: React.FC<Props> = ({ bills }) => {
     return <h1>Yeu cau dang nhap</h1>
   }
 
-  console.log('BILLS', bills)
   return (
     <div>
       <div className="mt-5">

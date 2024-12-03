@@ -224,7 +224,7 @@ const Profile = () => {
                               identificationType: profile.identificationType,
                               identificationNumber: profile.identificationNumber,
                               identificationDocumentUrl:
-                                profile.identificationDocumentUrl,
+                              profile.identificationDocumentUrl,
                               pastMedicalHistory: profile.pastMedicalHistory,
                               symptom: profile.symptom,
                               birthDate: profile.birthDate

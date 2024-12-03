@@ -8,6 +8,8 @@ import DoctorLayout from '@/components/Layouts/doctorLayout'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Input } from '@/components/ui/input'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 interface Service {
   id: string
@@ -29,6 +31,7 @@ const ServiceList = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedFaculty, setSelectedFaculty] = useState('')
+  const { data: session } = useSession()
   const [faculties, setFaculties] = useState<Faculty[]>([])
   const itemsPerPage = 6
 
@@ -44,7 +47,6 @@ const ServiceList = () => {
           toast.error('Lỗi khi tải dữ liệu dịch vụ')
         }
       } catch (error) {
-        console.log('ERROR', error)
         toast.error('Lỗi khi kết nối với máy chủ')
       }
     }
@@ -54,7 +56,6 @@ const ServiceList = () => {
         const data = await response.json()
         setFaculties(data)
       } catch (error) {
-        console.log('ERROR', error)
         toast.error('Lỗi khi tải dữ liệu chuyên khoa')
       }
     }
@@ -90,6 +91,15 @@ const ServiceList = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   )
+
+  const handleBookingClick = (e: React.MouseEvent) => {
+    if (!session) {
+      e.preventDefault()
+      toast.error('Vui lòng đăng nhập để đặt lịch khám')
+      setTimeout(() => {}, 1500)
+      return
+    }
+  }
 
   return (
     <div>
@@ -167,9 +177,9 @@ const ServiceList = () => {
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="#3dd6f5"
-                      stroke-width="0.75"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="0.75"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       className="lucide lucide-earth"
                     >
                       <path d="M21.54 15H17a2 2 0 0 0-2 2v4.54" />
@@ -220,7 +230,10 @@ const ServiceList = () => {
                         pathname: '/choose-faculty',
                       }}
                     >
-                      <Button className="w-32 mb-2 text-white bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] rounded-3xl">
+                      <Button
+                        className="w-32 mb-2 text-white bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] rounded-3xl"
+                        onClick={(e) => handleBookingClick(e)}
+                      >
                         Đặt khám ngay
                       </Button>
                     </Link>

@@ -86,7 +86,6 @@ const ListComment = () => {
         toast.error(message.error)
       }
     } catch (error) {
-      console.error('Error deleting comment:', error)
       toast.error('Đã xảy ra lỗi khi xóa đánh giá!')
     } finally {
       setCommentToDelete(null)
@@ -139,9 +138,10 @@ const ListComment = () => {
       enableSorting: true,
       cell: ({ row }) => renderStars(row.original.rating),
       sortingFn: (rowA, rowB) => rowA.original.rating - rowB.original.rating,
-      filterFn: (row, filterValue) => {
-        if (!filterValue.length) return true
-        return filterValue.includes(row.original.rating.toString())
+      filterFn: (row, id, filterValue) => {
+        if (!filterValue || filterValue.length === 0) return true
+        const filterValues = filterValue.map(Number)
+        return filterValues.includes(row.getValue('rating'))
       },
     },
     {

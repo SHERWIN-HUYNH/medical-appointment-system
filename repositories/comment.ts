@@ -24,7 +24,6 @@ export class CommentRespository {
 
       return formattedComments
     } catch (error) {
-      console.error('Lỗi khi truy xuất đánh giá của bệnh nhân: ', error)
       throw error
     } finally {
       await prisma.$disconnect()
@@ -48,7 +47,6 @@ export class CommentRespository {
       })
       return comments
     } catch (error) {
-      console.error('Lỗi truy xuất đánh gia theo tên bác sĩ', error)
       throw error
     }
   }
@@ -61,7 +59,6 @@ export class CommentRespository {
       })
       return comment
     } catch (error) {
-      console.error('Lỗi khi truy xuất đánh giá: ', error)
       throw error
     } finally {
       await prisma.$disconnect()
@@ -76,7 +73,6 @@ export class CommentRespository {
       })
       return deletedComment
     } catch (error) {
-      console.error('Lỗi khi xóa đánh giá:', error)
       throw new Error('Không thể xóa đánh giá với id đã cho')
     }
   }
@@ -96,7 +92,6 @@ export class CommentRespository {
       })
       return comment
     } catch (error) {
-      console.error('Lỗi khi tạo đánh giá:', error)
       throw error
     } finally {
       await prisma.$disconnect()

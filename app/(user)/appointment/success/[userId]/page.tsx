@@ -12,13 +12,11 @@ const RequestSuccess = async ({
   searchParams: { payment_intent: string; userId: string }
 }) => {
   const paymentIntent = await stripe.paymentIntents.retrieve(searchParams.payment_intent)
-  console.log('PAYMENT INTENT SUCCESS', paymentIntent)
   if (paymentIntent.metadata.billId == null) return <h1>NOT FOUND</h1>
   const appointment = await AppointmentRepository.getAppointmentByDoctorAndSchedule(
     paymentIntent.metadata.doctorId,
     paymentIntent.metadata.scheduleId,
   )
-  console.log('APPOINMENT SUCCESS', appointment)
   const isSuccess = paymentIntent.status === 'succeeded'
   return (
     <div className=" flex h-screen max-h-screen px-[5%] bg-[#4158D0] bg-[linear-gradient(43deg,#4158D0_0%,#C850C0_46%,#FFCC70_100%)]">

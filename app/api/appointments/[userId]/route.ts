@@ -47,8 +47,6 @@ export async function GET(req: Request, { params }: { params: { userId: string }
       cancellationReason: appointment.cancellationReason || null,
     }))
 
-    console.log('Formatted appointments:', formattedAppointments)
-
     return successResponse(formattedAppointments)
   } catch (error) {
     console.error('Error in GET /api/appointments/[userId]:', error)

@@ -128,7 +128,6 @@ const Add_Profile = () => {
         toast.error(`Thêm hồ sơ khám bệnh thất bại: ${errorText}`)
       }
     } catch (error) {
-      console.error(error)
       toast.error('Có lỗi xảy ra khi thêm hồ sơ khám bệnh.')
     }
   }

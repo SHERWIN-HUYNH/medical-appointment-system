@@ -17,7 +17,6 @@ const ChooseFaculty = () => {
   const [faculties, setFaculties] = useState<Faculty[]>([])
   const { setData } = useAppointmentContext()
   const router = useRouter()
-
   useEffect(() => {
     const fetchFaculties = async () => {
       try {

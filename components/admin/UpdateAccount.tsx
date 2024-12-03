@@ -24,6 +24,7 @@ import { CldImage } from 'next-cloudinary'
 
 const UpdateAccount = () => {
   const [isLoading, setIsLoading] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [data, setData] = useState<UserUpdate>()
   const { data: session } = useSession()
   const [uploadedImage, setUploadedImage] = useState<string | null>(

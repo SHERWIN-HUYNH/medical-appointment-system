@@ -11,6 +11,8 @@ import { CldImage } from 'next-cloudinary'
 import { useAppointmentContext } from '@/context/AppointmentContext'
 import Link from 'next/link'
 import { Star } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 interface Doctor {
   id: string
@@ -36,6 +38,7 @@ const Doctor = () => {
   const [selectedTitle, setSelectedTitle] = useState('')
   const [selectedFaculty, setSelectedFaculty] = useState('')
   const [faculties, setFaculties] = useState<Faculty[]>([])
+  const { data: session } = useSession()
   const { data, setData } = useAppointmentContext()
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
@@ -46,12 +49,10 @@ const Doctor = () => {
         const response = await fetch('/api/doctor/user')
         const data = await response.json()
         if (response.ok) {
-          console.log('DOCTOR USER', data)
           setDoctors(data)
           setFilteredDoctors(data)
         }
       } catch (error) {
-        console.log('ERROR', error)
         toast.error('Lỗi khi kết nối với máy chủ')
       }
     }
@@ -95,11 +96,18 @@ const Doctor = () => {
     setFilteredDoctors(filtered)
     setCurrentPage(1)
   }
-
-  const handleDoctorClick = (facultyId: string, doctorId: string) => {
-    console.log('RUNNING SET DATA')
+  const handleDoctorClick = (
+    e: React.MouseEvent,
+    facultyId: string,
+    doctorId: string,
+  ) => {
+    if (!session) {
+      e.preventDefault()
+      toast.error('Vui lòng đăng nhập để đặt lịch khám')
+      setTimeout(() => {}, 1500)
+      return
+    }
     setData({ facultyId, doctorId })
-    console.log('RUNNING SET DATA', data.facultyId, data.doctorId)
   }
 
   const totalPages = Math.ceil(filteredDoctors.length / itemsPerPage)
@@ -210,8 +218,8 @@ const Doctor = () => {
                           {doctor.facultyName}
                         </li>
                         <li>
-                          <span className="font-bold">Giới thiệu:</span>{' '}
-                          {doctor.description}
+                          <span className="font-bold ">Giới thiệu:</span>{' '}
+                          <span className="line-clamp-1">{doctor.description}</span>
                         </li>
                       </ul>
                     </div>
@@ -229,10 +237,10 @@ const Doctor = () => {
                       }}
                     >
                       <Button
-                        className="w-32 text-white bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] hover:from-[#67e0f3] hover:to-[#e7f1f2] rounded-3xl"
-                        onClick={() => handleDoctorClick(doctor.facultyId, doctor.id)}
+                        className="w-32 text-white bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] rounded-3xl"
+                        onClick={(e) => handleDoctorClick(e, doctor.facultyId, doctor.id)}
                       >
-                        Đặt khám
+                        Đặt khám ngay
                       </Button>
                     </Link>
                   </div>

@@ -3,14 +3,10 @@ import React, { useState, useEffect } from 'react'
 import { CldImage } from 'next-cloudinary'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
-
-// Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { Button } from '../ui/button'
 import Link from 'next/link'
-
-// Định nghĩa type Faculty
 type Faculty = {
   id: string
   name: string
@@ -19,11 +15,8 @@ type Faculty = {
 }
 
 const CategorySearch = () => {
-  // Khởi tạo state với mảng rỗng
   const [faculties, setFaculties] = useState<Faculty[]>([])
   const [isLoading, setIsLoading] = useState(true)
-
-  // Fetch dữ liệu faculty khi component mount
   useEffect(() => {
     const fetchFaculties = async () => {
       try {
@@ -31,7 +24,6 @@ const CategorySearch = () => {
         const response = await fetch('/api/faculty')
         if (!response.ok) throw new Error('Failed to fetch')
         const data = await response.json()
-
         if (Array.isArray(data)) {
           setFaculties(data)
         } else {
@@ -62,7 +54,6 @@ const CategorySearch = () => {
       <h2 className="font-bold text-4xl tracking-wide mb-8">
         <span className="text-primary uppercase">Chuyên khoa</span>
       </h2>
-      {/* Faculty List with Swiper */}
       <div className="w-[1000px] mt-5 custom-swiper">
         <Swiper
           modules={[Navigation]}
@@ -94,8 +85,6 @@ const CategorySearch = () => {
             ))}
         </Swiper>
       </div>
-
-      {/* Thêm button Xem thêm */}
       <Link href="/faculty">
         <Button className="mt-6 px-8 py-2.5 bg-transparent text-primary border-2 border-primary rounded-full hover:bg-primary hover:text-white transition-all duration-300 font-medium">
           Xem thêm
