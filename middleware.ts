@@ -43,6 +43,7 @@ export async function middleware(req: NextRequest) {
         }
       }
     }
+    return NextResponse.next()
   } catch (error) {
     console.error('Error in middleware:', error)
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 })
