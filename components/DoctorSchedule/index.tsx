@@ -234,7 +234,6 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
             eventAdd={handleEventAdd}
             eventMinHeight={30}
             editable={false}
-            fixedWeekCount={false}
             eventOverlap={false}
             selectable={isSelectable}
             events={allEvents}

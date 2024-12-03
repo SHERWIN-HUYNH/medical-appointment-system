@@ -86,6 +86,7 @@ const ChooseDoctor = () => {
   }
 
   const handleDoctorClick = (facultyId: string, doctorId: string) => {
+    console.log('RUNNING SET DATA', facultyId, doctorId)
     setData({ facultyId, doctorId })
   }
 

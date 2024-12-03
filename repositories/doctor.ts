@@ -109,6 +109,7 @@ export class DoctorRespository {
         faculty: {
           select: {
             name: true,
+            id: true,
           },
         },
         comments: {
@@ -135,6 +136,7 @@ export class DoctorRespository {
         academicTitle: doctor.academicTitle,
         image: doctor.image,
         description: doctor.description,
+        facultyId: doctor.facultyId,
       }
     })
 
