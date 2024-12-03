@@ -173,14 +173,15 @@ export const AppointmentForm = ({
               label="Lí do hủy hẹn"
               placeholder="Họp đột xuất"
             />
-          </>
-        )}
-        <SubmitButton
+            <SubmitButton
           isLoading={isLoading}
-          className={`${type === 'cancel' ? 'shad-danger-btn' : 'shad-primary-btn'} w-full`}
+          className={`shad-danger-btn w-full`}
         >
           {title}
         </SubmitButton>
+          </>
+        )}
+        
       </form>
     </Form>
   )
