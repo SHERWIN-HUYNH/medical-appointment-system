@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import SidebarItem from './SidebarItem'
 import useLocalStorage from '@/hooks/useLocalStorage'
-import { CircleUser} from 'lucide-react'
+import { CircleUser } from 'lucide-react'
 
 interface SidebarProps {
   sidebarOpen: boolean

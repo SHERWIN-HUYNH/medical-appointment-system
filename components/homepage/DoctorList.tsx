@@ -16,8 +16,8 @@ import 'swiper/css/navigation'
 import { Doctor } from '@/types/interface'
 
 interface Rating {
-  doctorId: string;
-  rating: number;
+  doctorId: string
+  rating: number
 }
 
 function DoctorList() {
@@ -49,13 +49,13 @@ function DoctorList() {
 
         const doctorsWithRatings = activeDoctors.map((doctor: Doctor) => {
           const doctorRatings = ratingsData.filter(
-            (rating: Rating) => rating.doctorId === doctor.id
+            (rating: Rating) => rating.doctorId === doctor.id,
           )
           let averageRating = 0
           if (doctorRatings.length > 0) {
             const sum = doctorRatings.reduce(
               (acc: number, rating: Rating) => acc + rating.rating,
-              0
+              0,
             )
             averageRating = sum / doctorRatings.length
           }
