@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import UserLayout from '@/components/Layouts/userLayout'
 import { useAppointmentContext } from '@/context/AppointmentContext'
+import { useRouter } from 'next/navigation'
 
 interface Faculty {
   id: string

@@ -24,6 +24,7 @@ export const POST = async (request: Request) => {
     const hashedPassword = await hashPassword(password)
 
     const account = await UserRepository.insert({
+      image: '',
       name,
       email,
       password: hashedPassword,
