@@ -81,10 +81,10 @@ const ChooseService = () => {
                 </svg>
               </p>
               <p>
-                Bệnh Viện Quận Bình Thạnh
+                Bệnh viện Đại học Y Dược TP.HCM
                 <br />
                 <span className="text-slate-600">
-                  132 Lê Văn Duyệt, Phường 1, Bình Thạnh, Thành phố Hồ Chí Minh
+                  215 Đ. Hồng Bàng, Phường 11, Quận 5, Hồ Chí Minh
                 </span>
               </p>
             </li>

@@ -119,18 +119,18 @@ const ChooseDoctor = () => {
                     <path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18" />
                   </svg>
                 </div>
-                <div className="flex justify-center flex-col text-sm">
+                <div className="flex justify-center flex-col">
                   <p>
-                    Bệnh Viện Quận Bình Thạnh
+                    Bệnh viện Đại học Y Dược TP.HCM
                     <br />
                     <span className="text-slate-600">
-                      132 Lê Văn Duyệt, Phường 1, Bình Thạnh, Thành phố Hồ Chí Minh
+                      215 Đ. Hồng Bàng, Phường 11, Quận 5, Hồ Chí Minh
                     </span>
                   </p>
                 </div>
               </li>
               <li className="text-16-normal flex">
-                <div className="flex justify-center text-sm gap-2">
+                <div className="flex justify-center gap-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
@@ -264,28 +264,6 @@ const ChooseDoctor = () => {
                               <path d="M6 12v5c3 3 9 3 12 0v-5" />
                             </svg>
                             <span>Học hàm/học vị: {doctor.academicTitle}</span>
-                          </div>
-
-                          <div className="flex items-center gap-1">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="lucide lucide-stethoscope text-slate-400"
-                            >
-                              <path d="M11 2v2" />
-                              <path d="M5 2v2" />
-                              <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" />
-                              <path d="M8 15a6 6 0 0 0 12 0v-3" />
-                              <circle cx="20" cy="10" r="2" />
-                            </svg>
-                            <span>Chuyên khoa: {facultyName}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <svg

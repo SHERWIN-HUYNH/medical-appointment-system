@@ -3,20 +3,16 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 function Footer() {
   const { data: session } = useSession()
-  const router = useRouter()
 
   const handleServiceClick = (e: React.MouseEvent) => {
     if (!session) {
       e.preventDefault()
       toast.error('Vui lòng đăng nhập để sử dụng dịch vụ')
-      setTimeout(() => {
-        router.push('/login')
-      }, 1500)
+      setTimeout(() => 1500)
       return
     }
   }
@@ -65,7 +61,7 @@ function Footer() {
               <ul className="mt-6 space-y-4 text-base">
                 <li>
                   <Link
-                    href="/dat-lich-kham"
+                    href="/choose-faculty"
                     onClick={handleServiceClick}
                     className="text-slate-700 hover:text-primary cursor-pointer"
                   >
@@ -74,7 +70,7 @@ function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="/goi-kham-dich-vu"
+                    href="/service"
                     onClick={handleServiceClick}
                     className="text-slate-700 hover:text-primary cursor-pointer"
                   >
