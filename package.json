@@ -80,6 +80,7 @@
     "resend": "4.0.1-alpha.0",
     "socket.io": "^4.8.1",
     "sonner": "^1.5.0",
+    "stripe": "^17.4.0",
     "swiper": "^11.1.15",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
