@@ -32,8 +32,6 @@ const ListDoctor = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const cachedFaculties = sessionStorage.getItem('facultyData')
-    
     const fetchData = async () => {
       setIsLoading(true)
       try {
@@ -44,16 +42,11 @@ const ListDoctor = () => {
           setDoctorData(doctorData)
         }
 
-        // Handle faculty data
-        if (cachedFaculties) {
-          setFacultyData(JSON.parse(cachedFaculties))
-        } else {
-          const facultyResponse = await fetch(`/api/faculty`)
-          if (facultyResponse.ok) {
-            const facultyData = await facultyResponse.json()
-            setFacultyData(facultyData)
-            sessionStorage.setItem('facultyData', JSON.stringify(facultyData))
-          }
+        // Fetch faculty data
+        const facultyResponse = await fetch(`/api/faculty`)
+        if (facultyResponse.ok) {
+          const facultyData = await facultyResponse.json()
+          setFacultyData(facultyData)
         }
       } catch (error) {
         console.error('Error fetching data:', error)

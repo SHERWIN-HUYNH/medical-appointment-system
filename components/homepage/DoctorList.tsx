@@ -15,6 +15,11 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { Doctor } from '@/types/interface'
 
+interface Rating {
+  doctorId: string;
+  rating: number;
+}
+
 function DoctorList() {
   const [doctors, setDoctors] = useState<Doctor[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -26,39 +31,31 @@ function DoctorList() {
     const fetchDoctors = async () => {
       setIsLoading(true)
       try {
-        const cachedDoctors = sessionStorage.getItem('doctorData')
-        const cachedRatings = sessionStorage.getItem('ratingsData')
-
-        let doctorsData;
-        if (cachedDoctors) {
-          doctorsData = JSON.parse(cachedDoctors)
-        } else {
-          const response = await fetch('/api/doctor')
-          doctorsData = await response.json()
-          sessionStorage.setItem('doctorData', JSON.stringify(doctorsData))
-        }
+        const response = await fetch('/api/doctor')
+        const doctorsData = await response.json()
 
         const activeDoctors = doctorsData.filter((doctor: Doctor) => doctor.isActive)
 
-        let ratings;
-        if (cachedRatings) {
-          ratings = JSON.parse(cachedRatings)
-        } else {
+        const ratingsData: Rating[] = []
+        try {
           const ratingsResponse = await fetch('/api/comment')
-          ratings = await ratingsResponse.json()
-          sessionStorage.setItem('ratingsData', JSON.stringify(ratings))
+          if (ratingsResponse.ok) {
+            const data = await ratingsResponse.json()
+            ratingsData.push(...data)
+          }
+        } catch (error) {
+          console.error('Failed to fetch ratings:', error)
         }
 
         const doctorsWithRatings = activeDoctors.map((doctor: Doctor) => {
-          const doctorRatings = Array.isArray(ratings)
-            ? ratings.filter((rating) => rating?.doctorId === doctor.id)
-            : []
-
+          const doctorRatings = ratingsData.filter(
+            (rating: Rating) => rating.doctorId === doctor.id
+          )
           let averageRating = 0
           if (doctorRatings.length > 0) {
             const sum = doctorRatings.reduce(
-              (acc, rating) => acc + (rating?.rating || 0),
-              0,
+              (acc: number, rating: Rating) => acc + rating.rating,
+              0
             )
             averageRating = sum / doctorRatings.length
           }
@@ -143,7 +140,8 @@ function DoctorList() {
                         </span>
                         <span className="text-sm text-orange-500">
                           Đánh giá:{' '}
-                          {doctor.averageRating ? doctor.averageRating.toFixed(1) : '0'} ⭐
+                          {doctor.averageRating ? doctor.averageRating.toFixed(1) : '0'}{' '}
+                          ⭐
                         </span>
                       </div>
                       <div className="space-y-2">

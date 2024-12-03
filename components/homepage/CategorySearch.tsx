@@ -28,22 +28,15 @@ const CategorySearch = () => {
     const fetchFaculties = async () => {
       try {
         setIsLoading(true)
-        const cachedFaculties = sessionStorage.getItem('facultyData')
-
-        if (cachedFaculties) {
-          setFaculties(JSON.parse(cachedFaculties))
+        const response = await fetch('/api/faculty')
+        if (!response.ok) throw new Error('Failed to fetch')
+        const data = await response.json()
+        
+        if (Array.isArray(data)) {
+          setFaculties(data)
         } else {
-          const response = await fetch('/api/faculty')
-          if (!response.ok) throw new Error('Failed to fetch')
-          const data = await response.json()
-          
-          if (Array.isArray(data)) {
-            setFaculties(data)
-            sessionStorage.setItem('facultyData', JSON.stringify(data))
-          } else {
-            console.error('Data is not an array:', data)
-            setFaculties([])
-          }
+          console.error('Data is not an array:', data)
+          setFaculties([])
         }
       } catch (error) {
         console.error('Failed to fetch faculties:', error)

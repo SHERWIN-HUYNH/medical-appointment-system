@@ -26,22 +26,14 @@ const FacultyPage = () => {
   const totalPages = Math.ceil(facultyData.length / itemsPerPage)
 
   useEffect(() => {
-    const cachedFaculties = sessionStorage.getItem('facultyData')
-
     const fetchFaculties = async () => {
       try {
-        if (cachedFaculties) {
-          setFacultyData(JSON.parse(cachedFaculties))
-          setLoading(false)
+        const response = await fetch('/api/faculty')
+        if (response.ok) {
+          const data = await response.json()
+          setFacultyData(data)
         } else {
-          const response = await fetch('/api/faculty')
-          if (response.ok) {
-            const data = await response.json()
-            setFacultyData(data)
-            sessionStorage.setItem('facultyData', JSON.stringify(data))
-          } else {
-            setError('Không thể tải dữ liệu chuyên khoa')
-          }
+          setError('Không thể tải dữ liệu chuyên khoa')
         }
       } catch (error) {
         console.error(error)
