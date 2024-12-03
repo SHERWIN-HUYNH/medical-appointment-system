@@ -102,4 +102,20 @@ export class CommentRespository {
       await prisma.$disconnect()
     }
   }
+
+  static async checkExistingCommentByAppointment(doctorId: string, userId: string) {
+    try {
+      const comment = await prisma.comment.findFirst({
+        where: {
+          doctorId: doctorId,
+          userId: userId,
+          // appointmentId: appointmentId,
+        },
+      });
+      return comment;
+    } catch (error) {
+      console.error('Lỗi khi kiểm tra đánh giá:', error);
+      throw error;
+    }
+  }
 }

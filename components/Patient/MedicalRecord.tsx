@@ -102,6 +102,8 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
         }),
       })
 
+      const data = await response.json()
+
       if (response.ok) {
         toast.success('Đánh giá thành công!')
         setReviewedBills((prev) => [...prev, selectedAppointment[0].id])
@@ -109,11 +111,11 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
         setRating(0)
         setComment('')
       } else {
-        throw new Error('Failed to submit review')
+        toast.error(data.error || 'Có lỗi xảy ra khi gửi đánh giá')
       }
     } catch (error) {
       console.error('Error submitting review:', error)
-      alert('Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại sau.')
+      toast.error('Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại sau.')
     }
   }
 
