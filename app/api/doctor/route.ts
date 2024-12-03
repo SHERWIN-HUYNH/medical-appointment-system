@@ -31,6 +31,17 @@ export async function PUT(req: Request) {
   if (!doctorData) {
     return notFoundResponse('DOCTOR NOT FOUND')
   }
+
+  // Kiểm tra nếu đang thay đổi chuyên khoa
+  if (doctorData.facultyId !== doctor.faculty) {
+    const hasAppointments = await DoctorRespository.hasAppointments(doctor.id)
+    if (hasAppointments) {
+      return forbiddenResponse(
+        'Bác sĩ này đang có cuộc hẹn không thể thay đổi chuyên khoa',
+      )
+    }
+  }
+
   // Kiểm tra nếu đang chuyển trạng thái từ active sang inactive
   if (doctorData.isActive && !doctor.isActive) {
     const hasAppointments = await DoctorRespository.hasAppointments(doctor.id)
@@ -38,11 +49,16 @@ export async function PUT(req: Request) {
       return forbiddenResponse('Bác sĩ này đang có cuộc hẹn không thể chuyển trạng thái')
     }
   }
-  const updatedFaculty = await DoctorRespository.updateDoctor(doctor.id, doctor)
-  if (!updatedFaculty) {
+
+  const updatedDoctor = await DoctorRespository.updateDoctor(doctor.id, {
+    ...doctor,
+    facultyId: doctor.faculty, // Đảm bảo mapping đúng trường faculty
+  })
+
+  if (!updatedDoctor) {
     return badRequestResponse('FAIL TO UPDATE DOCTOR')
   }
-  return successResponse(updatedFaculty)
+  return successResponse(updatedDoctor)
 }
 
 // Xử lý DELETE request - Xóa bác sĩ theo ID

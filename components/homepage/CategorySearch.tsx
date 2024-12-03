@@ -29,11 +29,9 @@ const CategorySearch = () => {
       try {
         setIsLoading(true)
         const response = await fetch('/api/faculty')
-        if (!response.ok) {
-          throw new Error('Failed to fetch')
-        }
+        if (!response.ok) throw new Error('Failed to fetch')
         const data = await response.json()
-        // Đảm bảo data là một mảng
+        
         if (Array.isArray(data)) {
           setFaculties(data)
         } else {
@@ -52,7 +50,11 @@ const CategorySearch = () => {
   }, [])
 
   if (isLoading) {
-    return <div>Loading...</div> // Hoặc component loading của bạn
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    )
   }
 
   return (

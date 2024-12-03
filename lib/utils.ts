@@ -80,13 +80,9 @@ export function decryptKey(passkey: string) {
 
 export const shortenTitle = (title: string) => {
   const titleMap: { [key: string]: string } = {
-    'Giáo sư': 'GS',
-    'Phó Giáo sư': 'PGS',
+    'Giáo sư': 'GS BS',
     'Tiến sĩ': 'TS BS',
     'Thạc sĩ': 'ThS BS',
-    'Bác sĩ Chuyên khoa I': 'BSCK I',
-    'Bác sĩ Chuyên khoa II': 'BSCK II',
-    'Bác sĩ Đa khoa': 'BSĐK',
   }
   return titleMap[title] || title
 }

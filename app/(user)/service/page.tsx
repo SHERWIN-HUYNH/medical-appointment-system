@@ -159,7 +159,7 @@ const ServiceList = () => {
                     justifyContent: 'space-between',
                   }}
                 >
-                  <div className="flex items-center">
+                  <div className="flex items-center w-full">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="100"
@@ -177,8 +177,8 @@ const ServiceList = () => {
                       <path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05" />
                       <circle cx="12" cy="12" r="10" />
                     </svg>
-                    <div className="flex-grow px-4">
-                      <h3 className="text-xl font-semibold text-black ml-2 mt-2">
+                    <div className="flex-grow px-4 w-3/4 ">
+                      <h3 className="text-xl font-semibold text-black ml-2 mt-2  line-clamp-1">
                         {service.name}
                       </h3>
                       <ul className="text-sm text-slate-500 mt-2 ml-2 space-y-1">

@@ -1,11 +1,7 @@
 export const academicTitles = [
-  { id: 'acd01', name: 'Bác sĩ Chuyên khoa I' },
-  { id: 'acd02', name: 'Bác sĩ Chuyên khoa II' },
-  { id: 'acd03', name: 'Bác sĩ Đa khoa' },
-  { id: 'acd04', name: 'Thạc sĩ' },
-  { id: 'acd05', name: 'Tiến sĩ' },
-  { id: 'acd06', name: 'Phó Giáo sư' },
-  { id: 'acd07', name: 'Giáo sư' },
+  { id: 'acd01', name: 'Thạc sĩ' },
+  { id: 'acd02', name: 'Tiến sĩ' },
+  { id: 'acd03', name: 'Giáo sư' },
 ]
 
 export const bills = [

@@ -2,8 +2,25 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 const Hero = () => {
+  const { data: session } = useSession()
+  const router = useRouter()
+
+  const handleBookingClick = (e: React.MouseEvent) => {
+    if (!session) {
+      e.preventDefault()
+      toast.error('Vui lòng đăng nhập để đặt lịch khám')
+      setTimeout(() => {
+        router.push('/login')
+      }, 1500)
+      return
+    }
+  }
+
   return (
     <section className="bg-slate-100 dark:bg-slate-900 p-15">
       <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
@@ -17,6 +34,7 @@ const Hero = () => {
           </p>
           <Link
             href="/choose-faculty"
+            onClick={handleBookingClick}
             className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary focus:ring-1 focus:ring-primary dark:focus:ring-primary-900"
           >
             Đặt ngay

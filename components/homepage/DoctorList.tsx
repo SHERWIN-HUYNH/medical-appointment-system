@@ -6,41 +6,58 @@ import { Navigation } from 'swiper/modules'
 import Link from 'next/link'
 import { useAppointmentContext } from '@/context/AppointmentContext'
 import { Button } from '@/components/ui/button'
+import { useSession } from 'next-auth/react'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { Doctor } from '@/types/interface'
 
+interface Rating {
+  doctorId: string;
+  rating: number;
+}
+
 function DoctorList() {
   const [doctors, setDoctors] = useState<Doctor[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const { setData } = useAppointmentContext()
+  const { data: session } = useSession()
+  const router = useRouter()
 
   useEffect(() => {
     const fetchDoctors = async () => {
+      setIsLoading(true)
       try {
         const response = await fetch('/api/doctor')
-        const data: Doctor[] = await response.json()
-        const activeDoctors = data.filter((doctor) => doctor.isActive)
+        const doctorsData = await response.json()
 
-        // Lấy tất cả các đánh giá một lần
-        const ratingsResponse = await fetch('/api/comment')
-        const ratings = await ratingsResponse.json()
+        const activeDoctors = doctorsData.filter((doctor: Doctor) => doctor.isActive)
 
-        // Tính toán điểm trung bình cho từng bác sĩ
+        const ratingsData: Rating[] = []
+        try {
+          const ratingsResponse = await fetch('/api/comment')
+          if (ratingsResponse.ok) {
+            const data = await ratingsResponse.json()
+            ratingsData.push(...data)
+          }
+        } catch (error) {
+          console.error('Failed to fetch ratings:', error)
+        }
+
         const doctorsWithRatings = activeDoctors.map((doctor: Doctor) => {
-          const doctorRatings = ratings.filter(
-            (rating: { doctorId: string }) => rating.doctorId === doctor.id,
+          const doctorRatings = ratingsData.filter(
+            (rating: Rating) => rating.doctorId === doctor.id
           )
-          let averageRating: number
+          let averageRating = 0
           if (doctorRatings.length > 0) {
             const sum = doctorRatings.reduce(
-              (sum: number, rating: { rating: number }) => sum + rating.rating,
-              0,
+              (acc: number, rating: Rating) => acc + rating.rating,
+              0
             )
             averageRating = sum / doctorRatings.length
-          } else {
-            averageRating = 0
           }
 
           return { ...doctor, averageRating }
@@ -48,25 +65,54 @@ function DoctorList() {
 
         setDoctors(doctorsWithRatings)
       } catch (error) {
-        console.error('Failed to fetch doctors:', error)
+        console.error('Failed to fetch data:', error)
+      } finally {
+        setIsLoading(false)
       }
     }
 
     fetchDoctors()
   }, [])
 
-  const handleDoctorClick = (facultyId: string, doctorId: string) => {
+  const handleDoctorClick = (
+    e: React.MouseEvent,
+    facultyId: string,
+    doctorId: string,
+  ) => {
+    if (!session) {
+      e.preventDefault()
+      toast.error('Vui lòng đăng nhập để đặt lịch khám')
+      setTimeout(() => {
+        router.push('/login')
+      }, 1500)
+      return
+    }
     setData({ facultyId, doctorId })
   }
 
-  return (
-    <section className="w-full bg-[#F8F8F8]">
-      <div className="container mx-auto py-12">
-        <h2 className="font-bold text-4xl mb-12 text-center">
-          <span className="text-primary">Bác sĩ nổi bật</span>
-        </h2>
+  const handleViewMoreClick = (e: React.MouseEvent) => {
+    if (!session) {
+      e.preventDefault()
+      toast.error('Vui lòng đăng nhập để xem danh sách bác sĩ')
+      setTimeout(() => {
+        router.push('/login')
+      }, 1500)
+      return
+    }
+  }
 
-        <div className="doctor-swiper custom-swiper">
+  return (
+    <div className="w-full bg-slate-100 mb-5 items-center flex flex-col gap-2 py-12">
+      <h2 className="font-bold text-4xl mb-12 text-center">
+        <span className="text-primary">Bác sĩ nổi bật</span>
+      </h2>
+
+      {isLoading ? (
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      ) : (
+        <div className="w-[1200px] custom-swiper">
           <Swiper
             modules={[Navigation]}
             navigation={true}
@@ -121,11 +167,9 @@ function DoctorList() {
                           facultyName: doctor.faculty.name,
                         },
                       }}
+                      onClick={(e) => handleDoctorClick(e, doctor.facultyId, doctor.id)}
                     >
-                      <Button
-                        className="mt-4 p-2.5 bg-transparent border border-primary text-primary rounded-full w-full text-center text-sm hover:bg-primary hover:text-white transition-all duration-300"
-                        onClick={() => handleDoctorClick(doctor.facultyId, doctor.id)}
-                      >
+                      <Button className="mt-4 p-2.5 bg-transparent border border-primary text-primary rounded-full w-full text-center text-sm hover:bg-primary hover:text-white transition-all duration-300">
                         Đặt ngay
                       </Button>
                     </Link>
@@ -135,8 +179,14 @@ function DoctorList() {
             ))}
           </Swiper>
         </div>
-      </div>
-    </section>
+      )}
+
+      <Link href="/doctor" onClick={handleViewMoreClick}>
+        <Button className="mt-6 px-8 py-2.5 bg-transparent text-primary border-2 border-primary rounded-full hover:bg-primary hover:text-white transition-all duration-300 font-medium">
+          Xem thêm
+        </Button>
+      </Link>
+    </div>
   )
 }
 

@@ -22,6 +22,7 @@ const ChooseService = () => {
   useEffect(() => {
     const fetchServices = async () => {
       if (!facultyId) {
+        console.log('KHONG CO FACULTYID', facultyId)
         router.push('/choose-faculty')
         return
       }
@@ -43,7 +44,7 @@ const ChooseService = () => {
       }
     }
     fetchServices()
-  }, [facultyId, router])
+  }, [])
 
   const filteredServices = services.filter((service) =>
     String(service.name || '')

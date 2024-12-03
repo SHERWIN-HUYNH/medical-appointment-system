@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import UserLayout from '@/components/Layouts/userLayout'
 import { useAppointmentContext } from '@/context/AppointmentContext'
+import { useRouter } from 'next/navigation'
 
 interface Faculty {
   id: string
@@ -14,8 +15,11 @@ interface Faculty {
 const ChooseFaculty = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [faculties, setFaculties] = useState<Faculty[]>([])
-  const { setData } = useAppointmentContext()
-
+  const { data, setData } = useAppointmentContext()
+  const router = useRouter()
+  // if(data.doctorId && data.facultyId){
+  //   router.push("")
+  // }
   useEffect(() => {
     const fetchFaculties = async () => {
       try {
@@ -118,7 +122,7 @@ const ChooseFaculty = () => {
                   >
                     <div className="font-medium mb-0.5 text-sm">{faculty.name}</div>
                     {faculty.description && (
-                      <div className="text-[11px] mt-1 italic">{faculty.description}</div>
+                      <div className="text-[11px] mt-1 italic line-clamp-2">{faculty.description}</div>
                     )}
                   </Link>
                 ))

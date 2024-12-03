@@ -78,7 +78,7 @@ export class AppointmentRepository {
         orderBy: {
           doctorSchedule: {
             schedule: {
-              date: 'asc',
+              date: 'desc',
             },
           },
         },
