@@ -33,7 +33,6 @@ const SignUp = () => {
     },
   })
   const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
-    console.log(values)
     try {
       setIsLoading(true)
       const res = await fetch('/api/auth/register', {
@@ -47,7 +46,6 @@ const SignUp = () => {
       const responseData = await res.json()
 
       if (!res.ok) {
-        console.log('RESPOND DATA', responseData.error)
         toast.error(responseData.error)
         throw new Error(responseData.error)
       }

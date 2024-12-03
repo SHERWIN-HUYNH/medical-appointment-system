@@ -25,6 +25,7 @@ interface DoctorScheduleProps {
 }
 const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
   const [visibleRange, setVisibleRange] = useState({ start: '', end: '' })
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedDates, setSelectedDates] = useState<Date[]>([]) // Track selected dates
   const [deletedDates, setDeletedDates] = useState<Event[]>([])
   const [isSelectable, setIsSelectable] = useState(true) // Enable/disable date selection
@@ -82,7 +83,6 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
 
     setAllEvents((prevEvents) => {
       const update = [...prevEvents, newEvent]
-      console.log('UPDATE', update)
       return update
     })
   }
@@ -118,7 +118,6 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
       clickInfo.event.remove()
     }
   }
-  console.log('Selected dates:', selectedDates)
   const handleDatesSet = (datesSetInfo: DatesSetArg) => {
     if (datesSetInfo.view.type === 'dayGridMonth') {
       setIsSelectable(false) // Disable selection in month view
@@ -154,7 +153,6 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
           if (!deleteResponse.ok) {
             throw new Error('Failed to delete some timeslots')
           }
-          console.log('Deleted timeslots:', deletedDates)
           setDeletedDates([])
         } catch (error) {
           console.error('Error deleting timeslots:', error)
@@ -185,7 +183,6 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
     const event = eventAddInfo.event
     const start = event.start
     const end = event.end
-    console.log('WORKING ADD ')
     if (start && end) {
       const duration = (end.getTime() - start.getTime()) / (1000 * 60) // Tính thời lượng sự kiện theo phút
       if (duration !== 30) {

@@ -19,7 +19,6 @@ export async function POST(req: NextRequest) {
     req.headers.get('stripe-signature') as string,
     process.env.STRIPE_WEBHOOK_SECRET as string,
   )
-  console.log('STRIPE WEBHOOK', event)
   if (event.type === 'charge.succeeded' || event.type === 'charge.updated') {
     const charge = event.data.object
     const doctorId = charge.metadata.doctorId
@@ -32,7 +31,6 @@ export async function POST(req: NextRequest) {
     const service = await ServiceRepository.getServicesById(serviceId)
     const doctor = await DoctorRespository.getDoctorById(doctorId)
     const profile = await ProfileRespository.getProfileById(profileId)
-    console.log('service', doctorId, scheduleId)
     if (!service || !doctor || !profile) {
       return notFoundResponse('NOT FOUND SERVICE OR DOCTOR')
     }
@@ -43,8 +41,7 @@ export async function POST(req: NextRequest) {
     if (!doctorSchedule) {
       return notFoundResponse('NOT FOUND DOCTOR SCHEDULE')
     }
-    await DoctorScheduleRespository.updateStateSchedule(doctorSchedule.id)
-    console.log('DS webhook', doctorSchedule)
+    
     const appointment = await AppointmentRepository.createAppointment({
       userId: userId,
       doctorScheduleId: doctorSchedule.id,
@@ -53,10 +50,8 @@ export async function POST(req: NextRequest) {
       stripeCustomerId: charge.payment_intent as string,
     })
     if (!appointment) {
-      console.log('fail to create appointment')
       return notFoundResponse('FAIL TO CREATE APPOINTMENT')
     }
-    console.log('APPOINTMENT webhook', appointment)
     const billInfor = {
       price: pricePaidInCents,
       userId: userId,

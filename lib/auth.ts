@@ -6,7 +6,7 @@ import { UserRepository } from '@/repositories/user'
 import { compare } from 'bcrypt'
 
 export const authOptions: NextAuthOptions = {
-  session: { strategy: 'jwt', maxAge: 60 * 60 },
+  session: { strategy: 'jwt', maxAge: 2 * 60 * 60 },
   adapter: PrismaAdapter(prisma),
   pages: {
     signIn: '/login',

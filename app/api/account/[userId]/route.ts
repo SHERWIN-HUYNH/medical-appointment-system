@@ -32,7 +32,6 @@ export async function PUT(req: Request, context: Context) {
     if (user && user.id !== userId) {
       return conflictResponse('Email này đã được sử dụng.')
     }
-    console.log('CORRECT PASSWORD')
     try {
       const update = await UserRepository.updateAccount(userId, {
         name: username,
@@ -40,7 +39,6 @@ export async function PUT(req: Request, context: Context) {
         password: hashedPassword,
         phone,
       })
-      console.log('UPDATE', update)
       return successResponse(update)
     } catch (error) {
       console.log(error)

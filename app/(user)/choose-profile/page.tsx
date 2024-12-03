@@ -86,19 +86,14 @@ const ChooseProfile: React.FC = () => {
 
   const handleProfileClick = (profileId: string) => {
     setSelectedProfile(profileId)
-    console.log('Selected profile:', profileId)
   }
 
   const handleContinue = (profileId: string) => {
     const { serviceId, facultyId, doctorId } = data
     const selectedProfileData = profiles.find((p) => p.id === profileId)
-    console.log('Context data:', data)
     if (!date || !timeSlot) {
       toast.error('Thiếu thông tin đặt khám')
-      console.log('Debug info:', {
-        context: data,
-        queryParams: { date, timeSlot },
-      })
+
       return
     }
 

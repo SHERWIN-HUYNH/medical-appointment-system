@@ -22,7 +22,6 @@ const ChooseService = () => {
   useEffect(() => {
     const fetchServices = async () => {
       if (!facultyId) {
-        console.log('KHONG CO FACULTYID', facultyId)
         router.push('/choose-faculty')
         return
       }
@@ -30,7 +29,6 @@ const ChooseService = () => {
         setIsLoading(true)
         const response = await fetch(`/api/service/faculty/${facultyId}`)
         const serviceData = await response.json()
-        console.log('Response data:', serviceData)
 
         if (Array.isArray(serviceData)) {
           setServices(serviceData)

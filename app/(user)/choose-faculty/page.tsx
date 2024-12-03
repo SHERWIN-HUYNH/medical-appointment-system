@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import UserLayout from '@/components/Layouts/userLayout'
 import { useAppointmentContext } from '@/context/AppointmentContext'
-import { useRouter } from 'next/navigation'
 
 interface Faculty {
   id: string
@@ -17,7 +16,6 @@ const ChooseFaculty = () => {
   const [faculties, setFaculties] = useState<Faculty[]>([])
   const { setData } = useAppointmentContext()
   const router = useRouter()
-
   useEffect(() => {
     const fetchFaculties = async () => {
       try {

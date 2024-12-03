@@ -7,7 +7,6 @@ import { CldImage } from 'next-cloudinary'
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const { data: session } = useSession()
-  console.log('Session JSON:', JSON.stringify(session, null, 2))
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
