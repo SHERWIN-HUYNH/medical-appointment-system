@@ -12,6 +12,7 @@ import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Schedule } from '@prisma/client'
 import { useAppointmentContext } from '@/context/AppointmentContext'
+import { DateSpanApi } from '@fullcalendar/core'
 
 type ChooseScheduleProps = {
   doctorId: string
@@ -29,7 +30,7 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
   const { data, setData } = useAppointmentContext()
   const searchParams = useSearchParams()
   const price = searchParams.get('price')
-
+  const today = new Date().toISOString().split('T')[0]
   const updateAvailableDate = (date: string[]) => {
     setAvailableDates(date)
   }
@@ -73,6 +74,11 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
     return ['valid-date-class']
   }
   const handleDateClick = (info: DateClickArg) => {
+    const selectedDate = info.date
+    const today = new Date()
+
+    // So sánh ngày (chỉ tính ngày, bỏ qua giờ phút giây)
+    const isFutureDate = selectedDate.setHours(0, 0, 0, 0) >= today.setHours(0, 0, 0, 0)
     setSelectedDate(info.dateStr)
     const date = info.dateStr
     const schedules = apiData?.filter((schedule) => schedule.schedule.date === date)
@@ -100,7 +106,7 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
           period: 'afternoon' as const,
         }))
       setEveningTimeslot(afternoonSchedules)
-      setShowTimeSlots(true)
+      setShowTimeSlots(isFutureDate)
     }
   }
 
@@ -155,6 +161,17 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
             selectMirror={true}
             dayCellClassNames={handleDateClassNames}
             dateClick={handleDateClick}
+            selectAllow={(selectInfo: DateSpanApi) => {
+              const selectedDate = new Date(selectInfo.start)
+              const today1 = new Date(today)
+              return selectedDate >= today1
+            }}
+            eventAllow={(span: DateSpanApi) => {
+              const eventDate = new Date(span.start)
+              const today1 = new Date(today)
+
+              return eventDate >= today1
+            }}
           />
         </div>
       ) : (

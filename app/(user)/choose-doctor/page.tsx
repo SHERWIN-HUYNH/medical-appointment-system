@@ -29,7 +29,6 @@ const ChooseDoctor = () => {
 
   const facultyId = data.facultyId
   const facultyName = searchParams.get('facultyName')
-  const price = searchParams.get('price')
   const [searchQuery, setSearchQuery] = useState('')
   const [doctors, setDoctors] = useState<Doctor[]>([])
   const [selectedTitle, setSelectedTitle] = useState('')
@@ -87,6 +86,7 @@ const ChooseDoctor = () => {
   }
 
   const handleDoctorClick = (facultyId: string, doctorId: string) => {
+    console.log('RUNNING SET DATA', facultyId, doctorId)
     setData({ facultyId, doctorId })
   }
 

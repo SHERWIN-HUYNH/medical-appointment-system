@@ -139,8 +139,9 @@ const WorkingSchedulePage = () => {
               </li>
             </ul>
           </div>
+
           <main className="bg-white flex flex-col w-[861px] h-min justify-between overflow-hidden">
-            <h1 className="blue-header w-full">Vui lòng chọn khung giờ làm việc</h1>
+            <h1 className="blue-header w-full">Vui lòng chọn khung giờ khám bệnh</h1>
             <DoctorSchedule doctorId={doctorIdString} />
           </main>
         </section>

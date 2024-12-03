@@ -36,7 +36,7 @@ const Doctor = () => {
   const [selectedTitle, setSelectedTitle] = useState('')
   const [selectedFaculty, setSelectedFaculty] = useState('')
   const [faculties, setFaculties] = useState<Faculty[]>([])
-  const { setData } = useAppointmentContext()
+  const { data, setData } = useAppointmentContext()
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
 
@@ -97,7 +97,9 @@ const Doctor = () => {
   }
 
   const handleDoctorClick = (facultyId: string, doctorId: string) => {
+    console.log('RUNNING SET DATA')
     setData({ facultyId, doctorId })
+    console.log('RUNNING SET DATA', data.facultyId, data.doctorId)
   }
 
   const totalPages = Math.ceil(filteredDoctors.length / itemsPerPage)
