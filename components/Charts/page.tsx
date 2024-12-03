@@ -52,7 +52,7 @@ const Chart: React.FC = () => {
 
   return (
     <>
-      <Breadcrumb pageName={[['Thống kê']]} />
+      <Breadcrumb pageName={[['Thống kê', '/admin/chart']]} />
 
       <div className="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5">
         <div className="col-span-8">
@@ -60,8 +60,8 @@ const Chart: React.FC = () => {
             <ChartOne />
           </div>
         </div>
-        <div className="col-span-4">
-          <div className="h-full bg-white rounded-lg shadow">
+        <div className="col-span-4 bg-white show  border-stroke shadow-default">
+          <div className="h-full  rounded-sm shadow">
             <ChartThree />
           </div>
         </div>

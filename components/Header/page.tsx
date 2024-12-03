@@ -1,17 +1,5 @@
 import React from 'react'
-
-// const Header = () => {
-//   return (
-//     // <header  className="sticky top-0 z-999 flex w-full min-h-32 bg-red-400 drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
-//     //     Header
-//     // </header>
-
-//   )
-// }
-
-// export default Header
 import Link from 'next/link'
-
 import Image from 'next/image'
 import DropdownUser from './DropdownUser'
 
