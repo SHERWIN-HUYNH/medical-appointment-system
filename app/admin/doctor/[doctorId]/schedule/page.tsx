@@ -10,7 +10,6 @@ type ResponseData = {
 const WorkingSchedulePage = () => {
   const { doctorId } = useParams()
   const [doctor, setDoctor] = useState<ResponseData | null>()
-  if (!doctorId) return null
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
