@@ -104,9 +104,9 @@ export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) 
                 </svg>
               </p>
               <p className="mt-1">
-                Bệnh Viện Quận Bình Thạnh<br></br>
+              Bệnh viện Đại học Y Dược TP.HCM<br></br>
                 <span className="text-[#8a8a8a]">
-                  132 Lê Văn Duyệt, Phường 1, Bình Thạnh, Thành phố Hồ Chí Minh
+                215 Đ. Hồng Bàng, Phường 11, Quận 5, Hồ Chí Minh
                 </span>
               </p>
             </li>
