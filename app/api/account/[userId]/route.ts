@@ -17,7 +17,6 @@ export async function PUT(req: Request, context: Context) {
   const { userId } = context.params
   if (!userId) return internalServerErrorResponse('Yêu cầu đăng nhập')
   const body = await req.json()
-  console.log(body)
   const { username, email, oldPassword, newPassword, phone } =
     UpdateAccountValidation.parse(body)
 

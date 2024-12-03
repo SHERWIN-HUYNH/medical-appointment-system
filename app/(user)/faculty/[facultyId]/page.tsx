@@ -10,7 +10,6 @@ import 'swiper/css/navigation'
 import { toast } from 'sonner'
 import { useAppointmentContext } from '@/context/AppointmentContext'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 
 interface Service {
   id: string
@@ -34,12 +33,9 @@ export default function FacultyDetailPage({ params }: { params: { facultyId: str
   const [otherFaculties, setOtherFaculties] = useState<FacultyDetail[]>([])
   const { setData } = useAppointmentContext()
   const { data: session } = useSession()
-  const router = useRouter()
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch faculty details
         const facultyResponse = await fetch(`/api/faculty/${params.facultyId}`)
         const facultyData = await facultyResponse.json()
 
@@ -47,21 +43,16 @@ export default function FacultyDetailPage({ params }: { params: { facultyId: str
           throw new Error(facultyData.error || 'Không thể tải thông tin chuyên khoa')
         }
         setFaculty(facultyData)
-
-        // Fetch faculty services
         const servicesResponse = await fetch(`/api/service/faculty/${params.facultyId}`)
         const servicesData = await servicesResponse.json()
 
         if (servicesResponse.ok) {
           setServices(servicesData)
         }
-
-        // Fetch other faculties
         const otherFacultiesResponse = await fetch('/api/faculty')
         const otherFacultiesData = await otherFacultiesResponse.json()
 
         if (otherFacultiesResponse.ok) {
-          // Filter out current faculty
           const filteredFaculties = otherFacultiesData.filter(
             (f: FacultyDetail) => f.id !== params.facultyId,
           )
@@ -83,9 +74,7 @@ export default function FacultyDetailPage({ params }: { params: { facultyId: str
     if (!session) {
       e.preventDefault()
       toast.error('Vui lòng đăng nhập để đặt lịch khám')
-      setTimeout(() => {
-        router.push('/login')
-      }, 1500)
+      setTimeout(() => {}, 1500)
       return
     }
     setData({ facultyId: params.facultyId })

@@ -27,7 +27,7 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
-      <div className="bg-white rounded-lg p-4 shadow-lg z-10 w-[50%] max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg p-4 shadow-lg z-10 w-[55%] max-h-[100vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-xl text-primary font-bold">Chi tiết hồ sơ</h2>
           <button onClick={onClose} className="text-slate-500 hover:text-slate-700">
@@ -46,8 +46,8 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
             </svg>
           </button>
         </div>
-        <div className="grid grid-cols-2 gap-2">
-          <div className="space-y-2">
+        <div className="grid grid-cols-5 gap-2 ">
+          <div className="space-y-2 col-span-2">
             <ul className="list-none space-y-2">
               <li className="flex items-center gap-2">
                 <CircleUser className="w-5 h-5 text-slate-400" />
@@ -80,7 +80,7 @@ const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
               </li>
             </ul>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 col-span-3">
             <ul className="list-none space-y-2">
               <li className="flex items-center gap-2">
                 <Cable className="w-5 h-5 text-slate-400" />
