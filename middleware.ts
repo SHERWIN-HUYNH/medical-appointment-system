@@ -19,30 +19,33 @@ export async function middleware(req: NextRequest) {
       '/api/comment',
       '/api/service',
     ]
+    console.log("Pathname:", pathname);
+    console.log("Token:", token);
+    console.log("Role:", token?.roleName);
     if (publicPaths.some((path) => pathname.startsWith(path))) {
+      console.log("Public path accessed:", pathname);
       return NextResponse.next()
     }
     if (!token) {
       return NextResponse.redirect(new URL('/login', req.url))
     }
-    // if (pathname.startsWith('/api/') && !token) {
-    //   return NextResponse.json(
-    //     { message: 'Unauthorized: Please log in.' },
-    //     { status: 401 },
-    //   )
-    // }
     const restrictedPaths: Record<string, string[]> = {
-      ADMIN: ['/admin/'],
-      USER: ['/patients', '/appointments', '/doctors'],
+      ADMIN: ['/admin'],
+      USER: ['/patients', '/appointments', '/doctors',
+        'choose-faculty',
+        'choose-service',
+        'choose-doctor',],
     }
 
     if (token) {
-      for (const [role, paths] of Object.entries(restrictedPaths)) {
-        if (token.roleName !== role && paths.some((path) => path.startsWith(pathname))) {
-          return NextResponse.redirect(new URL('/403', req.url))
-        }
+      const matchedPaths = restrictedPaths[token.roleName as string] || [];
+      if (matchedPaths.some((restrictedPath) => pathname.startsWith(restrictedPath))) {
+        console.log("Restricted path accessed:", pathname);
+        return NextResponse.next()
+      } else {
+        return NextResponse.redirect(new URL('/403', req.url));
       }
-    }
+      }
     return NextResponse.next()
   } catch (error) {
     console.error('Error in middleware:', error)
@@ -52,12 +55,13 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    '/admin',
-    '/admin/:path*',
+   '/admin/:path*',
     '/patients/:path*',
-    '/appointments',
     '/appointments/:path*',
     '/doctors/:path*',
-    '/api/:path*',
+    '/choose-faculty/:path*',
+    '/choose-service/:path*',
+    '/choose-doctor/:path*',
+
   ],
 }
