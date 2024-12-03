@@ -2,6 +2,7 @@ import {
   internalServerErrorResponse,
   notFoundResponse,
   successResponse,
+  badRequestResponse,
 } from '@/helpers/response'
 import { CommentRespository } from '@/repositories/comment'
 import { Comment } from '@/types/interface'
@@ -45,6 +46,16 @@ export async function DELETE(req: Request) {
 
 export async function POST(req: Request) {
   const commentData = await req.json()
+  // Kiểm tra xem người dùng đã đánh giá cuộc hẹn này chưa
+  const existingComment = await CommentRespository.checkExistingCommentByAppointment(
+    commentData.doctorId,
+    commentData.userId,
+    commentData.appointmentId,
+  )
+
+  if (existingComment) {
+    return badRequestResponse('Bạn đã đánh giá cuộc hẹn này với bác sĩ rồi')
+  }
 
   const comment = await CommentRespository.createComment(commentData)
   return successResponse(comment)

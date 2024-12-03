@@ -11,7 +11,6 @@ import { BillStatus } from '@prisma/client'
 import { sendMail } from '@/lib/send-email'
 import { createAppointmentEmailContent } from '@/lib/email/successful-appointment'
 import { ScheduleRespository } from '@/repositories/schedule'
-import prisma from '@/lib/prisma'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
 export async function POST(req: NextRequest) {
@@ -42,12 +41,6 @@ export async function POST(req: NextRequest) {
     if (!doctorSchedule) {
       return notFoundResponse('NOT FOUND DOCTOR SCHEDULE')
     }
-    const findAppoint = await prisma.appointment.findFirst({
-      where: {
-        doctorScheduleId: doctorSchedule.id,
-      }
-    })
-    console.log('findAppoint', findAppoint)
     const appointment = await AppointmentRepository.createAppointment({
       userId: userId,
       doctorScheduleId: doctorSchedule.id,

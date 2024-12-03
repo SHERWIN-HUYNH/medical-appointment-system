@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import { PrismaClient } from '@prisma/client'
 import { Comment } from '@/types/interface'
 
@@ -78,23 +79,33 @@ export class CommentRespository {
   }
 
   static async createComment(commentData: Comment) {
-    try {
-      const currentDate = new Date().toISOString().split('T')[0] // Lấy chỉ phần ngày YYYY-MM-DD
+    const currentDate = new Date().toISOString().split('T')[0] // Lấy chỉ phần ngày YYYY-MM-DD
 
-      const comment = await prisma.comment.create({
-        data: {
-          content: commentData.content,
-          rating: commentData.rating,
-          doctorId: commentData.doctorId,
-          userId: commentData.userId,
-          createdAt: new Date(currentDate), // Lưu chỉ ngày không có giờ
-        },
-      })
-      return comment
-    } catch (error) {
-      throw error
-    } finally {
-      await prisma.$disconnect()
-    }
+    const comment = await prisma.comment.create({
+      data: {
+        content: commentData.content,
+        rating: commentData.rating,
+        doctorId: commentData.doctorId,
+        userId: commentData.userId,
+        createdAt: new Date(currentDate), // Lưu chỉ ngày không có giờ
+        appointmentId: commentData.appointmentId,
+      },
+    })
+    return comment
+  }
+
+  static async checkExistingCommentByAppointment(
+    doctorId: string,
+    userId: string,
+    appointmentId: string,
+  ) {
+    const comment = await prisma.comment.findFirst({
+      where: {
+        doctorId: doctorId,
+        userId: userId,
+        appointmentId: appointmentId,
+      },
+    })
+    return comment
   }
 }

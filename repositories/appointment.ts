@@ -49,7 +49,7 @@ export class AppointmentRepository {
       await tx.doctorSchedule.update({
         where: { id: doctorScheduleId },
         data: { isAvailable: false },
-      });
+      })
       return await tx.appointment.create({
         data: {
           userId,
@@ -58,8 +58,8 @@ export class AppointmentRepository {
           profileId,
           stripeCustomerId,
         },
-      });
-    });
+      })
+    })
   }
   static async getAllAppointments() {
     try {
