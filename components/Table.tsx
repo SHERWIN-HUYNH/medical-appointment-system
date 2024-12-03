@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({
     enableSorting: false,
     cell: ({ row }) => {
       const allFilteredRows = table.getFilteredRowModel().rows
-      const rowIndex = allFilteredRows.findIndex(r => r.id === row.id)
+      const rowIndex = allFilteredRows.findIndex((r) => r.id === row.id)
       return rowIndex + 1
     },
   }

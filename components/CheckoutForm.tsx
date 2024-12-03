@@ -42,8 +42,8 @@ export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) 
               <p className="mt-[6px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="22"
-                  height="18"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -57,7 +57,7 @@ export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) 
                   <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
                 </svg>
               </p>
-              <p>{searchParams.profile.name}</p>
+              <p className="mt-1">{searchParams.profile.name}</p>
             </li>
             <li className="card-item">
               <p className="mt-[6px]">
@@ -77,32 +77,7 @@ export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) 
                   <path d="M12 18h.01" />
                 </svg>
               </p>
-              <p>{searchParams.profile.phone}</p>
-            </li>
-            <li className="card-item">
-              <p className="mt-[6px]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-map-pin-house"
-                >
-                  <path d="M15 22a1 1 0 0 1-1-1v-4a1 1 0 0 1 .445-.832l3-2a1 1 0 0 1 1.11 0l3 2A1 1 0 0 1 22 17v4a1 1 0 0 1-1 1z" />
-                  <path d="M18 10a8 8 0 0 0-16 0c0 4.993 5.539 10.193 7.399 11.799a1 1 0 0 0 .601.2" />
-                  <path d="M18 22v-3" />
-                  <circle cx="10" cy="10" r="3" />
-                </svg>
-              </p>
-              <p>
-                11 Nguyễn Đình Chiểu, phường Đa Kao quận 1, Phường 01, Quận Tân Bình,
-                Thành phố Hồ Chí Minh
-              </p>
+              <p className="mt-1">{searchParams.profile.phone}</p>
             </li>
           </ul>
         </div>
@@ -113,8 +88,8 @@ export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) 
               <p className="mt-[6px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="22"
-                  height="18"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -128,7 +103,7 @@ export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) 
                   <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
                 </svg>
               </p>
-              <p>
+              <p className="mt-1">
                 Bệnh Viện Quận Bình Thạnh<br></br>
                 <span className="text-[#8a8a8a]">
                   132 Lê Văn Duyệt, Phường 1, Bình Thạnh, Thành phố Hồ Chí Minh
@@ -205,7 +180,7 @@ export function CheckoutForm({ clientSecret, searchParams }: CheckoutFormProps) 
                   </li>
                   <li className="list-item-payment">
                     <div className="flex items-center gap-x-2">
-                      <p>
+                      <p className='text-iconGray'>
                         <UserRound />
                       </p>
                       <p className="highlight-text">Bác sĩ</p>

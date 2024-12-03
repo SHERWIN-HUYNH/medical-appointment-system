@@ -3,7 +3,7 @@ import {
   successResponse,
   unauthorizedResponse,
 } from '@/helpers/response'
-import {UserRepository } from '@/repositories/user'
+import { UserRepository } from '@/repositories/user'
 
 export async function PUT(req: Request, context: { params: { userId: string } }) {
   const { userId } = context.params

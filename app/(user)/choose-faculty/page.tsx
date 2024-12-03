@@ -122,7 +122,9 @@ const ChooseFaculty = () => {
                   >
                     <div className="font-medium mb-0.5 text-sm">{faculty.name}</div>
                     {faculty.description && (
-                      <div className="text-[11px] mt-1 italic line-clamp-2">{faculty.description}</div>
+                      <div className="text-[11px] mt-1 italic line-clamp-2">
+                        {faculty.description}
+                      </div>
                     )}
                   </Link>
                 ))
