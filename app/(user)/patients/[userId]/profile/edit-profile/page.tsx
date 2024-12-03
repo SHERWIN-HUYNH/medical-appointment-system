@@ -343,9 +343,10 @@ const Edit_Profile = () => {
                 <div className="mt-2">
                   <CldImage
                     src={formData.identificationDocumentUrl}
-                    width="850"
-                    height="500"
+                    width="450"
+                    height="250"
                     crop="auto"
+                    style={{ aspectRatio: '16 / 9' }}
                     alt={'Identification Document'}
                   />
                 </div>
