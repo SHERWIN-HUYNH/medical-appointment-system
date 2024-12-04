@@ -73,11 +73,11 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
     return ['valid-date-class']
   }
   const handleDateClick = (info: DateClickArg) => {
-    // const selectedDate = info.date
-    // const today = new Date()
+    const selectedDate = info.date
+    const today = new Date()
 
-    // // So sánh ngày (chỉ tính ngày, bỏ qua giờ phút giây)
-    // const isFutureDate = selectedDate.setHours(0, 0, 0, 0) > today.setHours(0, 0, 0, 0)
+    // So sánh ngày (chỉ tính ngày, bỏ qua giờ phút giây)
+    const isFutureDate = selectedDate.setHours(0, 0, 0, 0) > today.setHours(0, 0, 0, 0)
     setSelectedDate(info.dateStr)
     const date = info.dateStr
     const schedules = apiData?.filter((schedule) => schedule.schedule.date === date)
@@ -105,7 +105,7 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
           period: 'afternoon' as const,
         }))
       setEveningTimeslot(afternoonSchedules)
-      setShowTimeSlots(true)
+      setShowTimeSlots(isFutureDate)
     }
   }
 
