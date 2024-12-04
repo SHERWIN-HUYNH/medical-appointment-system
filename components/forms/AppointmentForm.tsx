@@ -43,20 +43,10 @@ export const AppointmentForm = ({
 
   const onSubmit = async () => {
     setIsLoading(true)
-
-    let status
-    switch (type) {
-      case 'schedule':
-        status = 'scheduled'
-        break
-      case 'cancel':
-        status = 'cancelled'
-        break
-      default:
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        status = 'pending'
-    }
-    if (type === 'cancel') {
+    console.log('TYPE',type)
+    console.log(form.getValues('cancellationReason'))
+    console.log(isLoading)
+    if (type === 'Hủy') {
       const res = await fetch(`/api/appointments/${session?.user.id}`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -173,15 +163,15 @@ export const AppointmentForm = ({
               label="Lí do hủy hẹn"
               placeholder="Họp đột xuất"
             />
-            <SubmitButton
+            
+          </>
+        )}
+        <SubmitButton
           isLoading={isLoading}
           className={`shad-danger-btn w-full`}
         >
           {title}
         </SubmitButton>
-          </>
-        )}
-        
       </form>
     </Form>
   )

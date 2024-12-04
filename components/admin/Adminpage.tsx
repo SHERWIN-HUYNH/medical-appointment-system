@@ -1,21 +1,38 @@
+'use client'
 import { StatCard } from '@/components/StatCard'
 import { columns } from '@/components/table/columns'
 import { DataTable } from '@/components/table/DataTable'
-import { AppointmentRepository } from '@/repositories/appointment'
 import { AppointmentSchedule } from '@/types/interface'
+import { AppointmentStatus } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
+interface countAppointment{
+  count: number,
+  status:AppointmentStatus
+}
+const AdminPage = () => {
+  const [appointments, setAppointments] = React.useState<AppointmentSchedule[]>()
+  const [countAppointment, setCountAppointment] = React.useState<countAppointment[]>()
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      const res = await fetch('/api/appointments')
+      const data : AppointmentSchedule[]= await res.json()
+      setAppointments(data)
+      const count = await fetch('/api/appointments/count')
+      const countData : countAppointment[]= await count.json()
+      setCountAppointment(countData)
+    }
 
-const AdminPage = async () => {
-  const appointments = await AppointmentRepository.getAllAppointments()
-  const countAppointment = await AppointmentRepository.CountAppointment()
+    fetchAppointments()
+  },[])
   const pendingCount =
-    countAppointment.find((item) => item.status === 'PENDING')?.count || 0
-  const scheduledCount =
-    countAppointment.find((item) => item.status === 'SCHEDULED')?.count || 0
-  const cancelledCount =
-    countAppointment.find((item) => item.status === 'CANCELLED')?.count || 0
+  countAppointment?.find((item) => item.status === 'PENDING')?.count || 0
+const scheduledCount =
+  countAppointment?.find((item) => item.status === 'SCHEDULED')?.count || 0
+const cancelledCount =
+  countAppointment?.find((item) => item.status === 'CANCELLED')?.count || 0
+  console.log('APPOINTMENTS', appointments)
   if (!appointments) return <div>Something went wrong</div>
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14 p-4 md:p-6 2xl:p-10">
