@@ -306,7 +306,7 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
                 <AppointmentForm
                   userId={params.userId}
                   patientId={selectedBillDetail.appointment.profileId}
-                  type="cancel"
+                  type="Hủy"
                   appointment={selectedBillDetail.appointment}
                   stripeCustomerId={selectedBillDetail.appointment.stripeCustomerId}
                   setOpen={setShowCancelModal}
