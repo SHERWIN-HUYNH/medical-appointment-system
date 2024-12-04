@@ -32,9 +32,10 @@ export async function middleware(req: NextRequest) {
     const restrictedPaths: Record<string, string[]> = {
       ADMIN: ['/admin'],
       USER: ['/patients', '/appointments', '/doctors',
-        'choose-faculty',
-        'choose-service',
-        'choose-doctor',],
+        '/choose-faculty',
+        '/choose-service',
+        '/choose-doctor',
+        '/faculty',],
     }
 
     if (token) {
