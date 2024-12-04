@@ -65,6 +65,6 @@ export const config = {
     '/choose-faculty/:path*',
     '/choose-service/:path*',
     '/choose-doctor/:path*',
-
+    '/choose-profile/:path*',
   ],
 }
