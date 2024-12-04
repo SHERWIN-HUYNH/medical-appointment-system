@@ -88,7 +88,7 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
   }
   const handleEventClick = (clickInfo: EventClickArg) => {
     const eventDate = clickInfo.event.startStr
-    if (eventDate < today) {
+    if (eventDate <= today) {
       clickInfo.jsEvent.preventDefault()
       return false
     }
@@ -238,14 +238,13 @@ const DoctorSchedule = ({ doctorId }: DoctorScheduleProps) => {
             allDaySlot={false}
             selectAllow={(selectInfo: DateSpanApi) => {
               const selectedDate = new Date(selectInfo.start)
-              const today1 = new Date(today)
-              return selectedDate >= today1
+              const today1 = new Date()
+              return selectedDate > today1
             }}
             eventAllow={(span: DateSpanApi) => {
               const eventDate = new Date(span.start)
-              const today1 = new Date(today)
-
-              return eventDate >= today1
+              const today1 = new Date()
+              return eventDate > today1
             }}
           />
         </div>
