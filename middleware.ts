@@ -34,7 +34,11 @@ export async function middleware(req: NextRequest) {
       USER: ['/patients', '/appointments', '/doctors',
         '/choose-faculty',
         '/choose-service',
-        '/choose-doctor',],
+        '/choose-doctor',
+        '/choose-schedule',
+        '/choose-profile',
+        '/service',
+      ],
     }
 
     if (token) {
