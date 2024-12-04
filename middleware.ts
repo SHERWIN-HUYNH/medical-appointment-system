@@ -37,7 +37,7 @@ export async function middleware(req: NextRequest) {
         '/choose-profile'
         '/choose-doctor',
          '/service',
-        '/faculty',]
+        '/faculty']
     }
 
     if (token) {
