@@ -34,6 +34,7 @@ export async function middleware(req: NextRequest) {
       USER: ['/patients', '/appointments', '/doctors',
         '/choose-faculty',
         '/choose-service',
+        '/choose-profile'
         '/choose-doctor',],
     }
 
