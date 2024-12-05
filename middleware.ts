@@ -31,12 +31,12 @@ export async function middleware(req: NextRequest) {
     }
     const restrictedPaths: Record<string, string[]> = {
       ADMIN: ['/admin'],
-      USER: ['/patients', '/appointments', '/doctors',
+      USER: ['/patients', '/appointment', '/doctors',
         '/choose-faculty',
         '/choose-service',
         '/choose-profile',
         '/choose-doctor',
-         '/service',
+        '/service',
         '/faculty']
     }
 
@@ -60,7 +60,7 @@ export const config = {
   matcher: [
    '/admin/:path*',
     '/patients/:path*',
-    '/appointments/:path*',
+    '/appointment/:path*',
     '/doctors/:path*',
     '/choose-faculty/:path*',
     '/choose-service/:path*',
