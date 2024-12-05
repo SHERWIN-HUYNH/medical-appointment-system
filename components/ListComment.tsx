@@ -8,7 +8,7 @@ import { Star, Trash2 } from 'lucide-react'
 import ModalDelete from '@/components/ModalDelete'
 
 type Comment = {
-  id: number
+  id: string
   createdAt: string
   userName: string
   doctorName: string
@@ -73,7 +73,7 @@ const ListComment = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: commentToDelete.id }),
+        body: JSON.stringify({ commentValues: commentToDelete }),
       })
 
       if (response.ok) {
