@@ -79,7 +79,7 @@ function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="/dat-kham-chuyen-khoa"
+                    href="/doctor"
                     onClick={handleServiceClick}
                     className="text-slate-700 hover:text-primary cursor-pointer"
                   >

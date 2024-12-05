@@ -153,11 +153,7 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
       toast.error('Bạn chỉ có thể hủy hẹn trước 1 ngày')
     }
 
-    if (appointmentDate > currentDate) {
-      setShowCancelModal(true)
-    } else {
-      toast.error('Bạn chỉ có thể hủy hẹn trước 1 ngày')
-    }
+    
     setSelectedBillDetail(bill)
   }
 
