@@ -13,6 +13,7 @@ import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 
 export const AppointmentForm = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   patientId,
   type = 'create',
   appointment,
@@ -42,26 +43,33 @@ export const AppointmentForm = ({
   })
 
   const onSubmit = async () => {
-    setIsLoading(true)
+    
     console.log('TYPE',type)
     console.log(form.getValues('cancellationReason'))
     console.log(isLoading)
-    if (type === 'Hủy') {
-      const res = await fetch(`/api/appointments/${session?.user.id}`, {
-        method: 'PUT',
-        body: JSON.stringify({
-          paymentIntentId: stripeCustomerId,
-          cancellationReason: form.getValues('cancellationReason'),
-          appointmentId: appointment?.id,
-        }),
-      })
-      if (res.ok) {
-        toast.success('Hủy thành công!')
-      } else {
-        toast.error('Hủy không thành công, vui lòng thử lại!')
+    if(form.getValues('cancellationReason')?.length == 0){
+      toast.error('Bổ sung lí do hủy hẹn')
+    }else{
+      setIsLoading(true)
+      if (type === 'Hủy') {
+        const res = await fetch(`/api/appointments/${session?.user.id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            paymentIntentId: stripeCustomerId,
+            cancellationReason: form.getValues('cancellationReason'),
+            appointmentId: appointment?.id,
+          }),
+        })
+        if (res.ok) {
+          toast.success('Hủy thành công!')
+        } else {
+          toast.error('Hủy không thành công, vui lòng thử lại!')
+        }
       }
+      setIsLoading(false)
     }
-    setIsLoading(false)
+    
+    
   }
 
   let buttonLabel
