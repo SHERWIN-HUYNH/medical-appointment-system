@@ -2,57 +2,101 @@
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb'
 import ChartOne from '@/components/Charts/ChartOne'
 import ChartTwo from '@/components/Charts/ChartTwo'
+import { AppointmentReport, fetchAppointmentData } from '@/helpers/chart'
 import dynamic from 'next/dynamic'
 import React, { useEffect, useState } from 'react'
+import * as XLSX from 'xlsx'
 
-interface AppointmentReport {
-  facultyId: string
-  facultyName: string
-  sumAppointmentsFaculty: number
-  revenue: number
+interface AppointmentData {
+  year: number
+  month: number
+  price: number
+  totalAppointments: number
+  totalAmount: number
 }
-
 const ChartThree = dynamic(() => import('@/components/Charts/ChartThree'), {
   ssr: false,
 })
 
 const Chart: React.FC = () => {
   const [statistics, setStatistics] = useState<AppointmentReport[]>([])
+  const [appointmentsData, setAppointmentsData] = useState<AppointmentData[]>([])
 
   useEffect(() => {
-    const fetchAppointmentData = async () => {
+    const loadData = async () => {
+      const data = await fetchAppointmentData();
+      if (data.length === 0) {
+        console.warn('Không có dữ liệu để hiển thị.');
+      }
+      setStatistics(data);
+    };
+
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    const fetchAppointmentsData = async () => {
       try {
-        const response = await fetch('/api/chart', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-
-        if (!response.ok) {
-          throw new Error('Lỗi khi lấy dữ liệu báo cáo')
-        }
-
-        const responseData = await response.json()
-        const data: AppointmentReport[] = Array.isArray(responseData) ? responseData : []
-
-        if (data.length === 0) {
-          console.warn('Không có dữ liệu để hiển thị.')
-          return
-        }
-
-        setStatistics(data)
+        const response = await fetch(`/api/chart/chart2`)
+        const data = await response.json()
+        setAppointmentsData(data)
       } catch (error) {
         console.error('Error fetching appointment data:', error)
       }
     }
 
-    fetchAppointmentData()
-  }, [])
-
+    fetchAppointmentsData();
+  }, []);
+  
+  const handleExportReport = () => {
+    // Đảm bảo appointmentsData là đối tượng kiểu GroupedData
+    const groupedData = appointmentsData.reduce((acc, curr) => {
+      if (!acc[curr.year]) {
+        acc[curr.year] = [];
+      }
+      acc[curr.year].push(curr);
+      return acc;
+    }, {} as Record<number, AppointmentData[]>);
+    let reportData: any[] = [];
+    Object.keys(groupedData).forEach((year) => {
+      const yearData = groupedData[parseInt(year)];
+      yearData.forEach((data, index) => {
+        if (index === 0) {
+          reportData.push({
+            Năm: data.year,
+            Tháng: '',
+            SoCuocHen: '',
+            DoanhThu: '',
+          });
+        }
+        reportData.push({
+          Năm: '',
+          Tháng: data.month,
+          SoCuocHen: data.totalAppointments,
+          DoanhThu: data.totalAmount.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+          }),
+        });
+      });
+    });
+    const worksheet = XLSX.utils.json_to_sheet(reportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Báo Cáo');
+    XLSX.writeFile(workbook, 'bao_cao.xlsx');
+  };
+  
   return (
     <>
-      <Breadcrumb pageName={[['Thống kê', '/admin/chart']]} />
+      <div className="flex items-center justify-between mb-4">
+        <Breadcrumb pageName={[['Thống kê', '/admin/chart']]} />
+        <button
+          onClick={handleExportReport}
+          className="px-4 py-2 mr-8 bg-primary text-white text-sm font-medium rounded-md"
+        >
+          Xuất Báo Cáo
+        </button>
+      </div>
 
       <div className="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5">
         <div className="col-span-8">
@@ -60,8 +104,8 @@ const Chart: React.FC = () => {
             <ChartOne />
           </div>
         </div>
-        <div className="col-span-4 bg-white show  border-stroke shadow-default">
-          <div className="h-full  rounded-sm shadow">
+        <div className="col-span-4 bg-white show border-stroke shadow-default">
+          <div className="h-full rounded-sm shadow">
             <ChartThree />
           </div>
         </div>

@@ -8,20 +8,6 @@ const Breadcrumb = ({ pageName }: BreadcrumbProps) => {
       <h2 className="text-title-md2 font-semibold text-primary dark:text-white">
         {pageName[pageName.length - 1][0]}
       </h2>
-      <nav>
-        <ol className="flex items-center gap-2">
-          <li>
-            <Link className="font-medium" href="/admin">
-              Dashboard
-            </Link>
-          </li>
-          {pageName.map((item, index) => (
-            <Link href={item[1]} key={index}>
-              <li className="font-medium text-primary">/{item[0]}</li>
-            </Link>
-          ))}
-        </ol>
-      </nav>
     </div>
   )
 }
