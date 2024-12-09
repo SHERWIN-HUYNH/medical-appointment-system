@@ -103,11 +103,18 @@ export const FacultyFormValidation = z.object({
 })
 
 export const DoctorFormValidation = z.object({
-  name: z.string().min(1, 'Tên không được để trống'),
+  name: z
+    .string()
+    .min(1, 'Tên không được để trống')
+    .max(50, 'Tên bác sĩ phải không quá 50 kí tự')
+    .refine((name) => /^[\p{L}\s]+$/u.test(name), 'Tên không được nhập ký tự đặc biệt'),
   image: z.string().min(1, 'Vui lòng chọn ảnh bác sĩ'),
   academicTitle: z.string().min(1, 'Học hàm/học vị không được để trống'),
   faculty: z.string().min(1, 'Chuyên khoa không được để trống'),
-  description: z.string().min(1, 'Mô tả không được để trống'),
+  description: z
+    .string()
+    .min(1, 'Mô tả không được để trống')
+    .max(500, 'Mô tả chỉ được phép tối đa 500 ký tự'),
   isActive: z.boolean(),
   gender: z.boolean(),
 })
