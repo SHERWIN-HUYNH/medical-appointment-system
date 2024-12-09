@@ -56,37 +56,36 @@ const ChartThree: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const data = await fetchAppointmentData();
+        const data = await fetchAppointmentData()
         if (data.length === 0) {
-          console.warn('Không có dữ liệu để hiển thị.');
-          return;
+          console.warn('Không có dữ liệu để hiển thị.')
+          return
         }
-  
-        const sortedData = data.sort((a, b) => b.completionRate - a.completionRate);
-        const topThree = sortedData.slice(0, 3);
-        const topThreeTotal = topThree.reduce((acc, item) => acc + item.completionRate, 0);
-        const othersPercentage = 100 - topThreeTotal;
-  
-        const updatedLabels = [...topThree.map((item) => item.facultyName), 'Khác'];
+
+        const sortedData = data.sort((a, b) => b.completionRate - a.completionRate)
+        const topThree = sortedData.slice(0, 3)
+        const topThreeTotal = topThree.reduce((acc, item) => acc + item.completionRate, 0)
+        const othersPercentage = 100 - topThreeTotal
+
+        const updatedLabels = [...topThree.map((item) => item.facultyName), 'Khác']
         const updatedSeries = [
           ...topThree.map((item) => item.completionRate),
           othersPercentage,
-        ];
-  
-        setLabels(updatedLabels);
-        setSeries(updatedSeries);
+        ]
+
+        setLabels(updatedLabels)
+        setSeries(updatedSeries)
         setOptions((prevOptions) => ({
           ...prevOptions,
           labels: updatedLabels,
-        }));
+        }))
       } catch (error) {
-        console.error('Error fetching appointment data:', error);
+        console.error('Error fetching appointment data:', error)
       }
-    };
-  
-    loadData(); // Ensure this invokes the `loadData` function instead of `fetchAppointmentData` directly.
-  }, []); 
-  
+    }
+
+    loadData() // Ensure this invokes the `loadData` function instead of `fetchAppointmentData` directly.
+  }, [])
 
   return (
     <div className="col-span-12 rounded-sm border border-white bg-white px-5 pb-5 pt-7.5 dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5">

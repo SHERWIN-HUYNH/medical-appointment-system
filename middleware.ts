@@ -19,11 +19,11 @@ export async function middleware(req: NextRequest) {
       '/api/comment',
       '/api/service',
     ]
-    console.log("Pathname:", pathname);
-    console.log("Token:", token);
-    console.log("Role:", token?.roleName);
+    console.log('Pathname:', pathname)
+    console.log('Token:', token)
+    console.log('Role:', token?.roleName)
     if (publicPaths.some((path) => pathname.startsWith(path))) {
-      console.log("Public path accessed:", pathname);
+      console.log('Public path accessed:', pathname)
       return NextResponse.next()
     }
     if (!token) {
@@ -31,24 +31,28 @@ export async function middleware(req: NextRequest) {
     }
     const restrictedPaths: Record<string, string[]> = {
       ADMIN: ['/admin'],
-      USER: ['/patients', '/appointment', '/doctors',
+      USER: [
+        '/patients',
+        '/appointment',
+        '/doctors',
         '/choose-faculty',
         '/choose-service',
         '/choose-profile',
         '/choose-doctor',
         '/service',
-        '/faculty']
+        '/faculty',
+      ],
     }
 
     if (token) {
-      const matchedPaths = restrictedPaths[token.roleName as string] || [];
+      const matchedPaths = restrictedPaths[token.roleName as string] || []
       if (matchedPaths.some((restrictedPath) => pathname.startsWith(restrictedPath))) {
-        console.log("Restricted path accessed:", pathname);
+        console.log('Restricted path accessed:', pathname)
         return NextResponse.next()
       } else {
-        return NextResponse.redirect(new URL('/403', req.url));
+        return NextResponse.redirect(new URL('/403', req.url))
       }
-      }
+    }
     return NextResponse.next()
   } catch (error) {
     console.error('Error in middleware:', error)
@@ -58,7 +62,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-   '/admin/:path*',
+    '/admin/:path*',
     '/patients/:path*',
     '/appointment/:path*',
     '/doctors/:path*',

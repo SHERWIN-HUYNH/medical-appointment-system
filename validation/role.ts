@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import {NAME_REQUIRED } from './messageCode'
+import { NAME_REQUIRED } from './messageCode'
 
 export const AddRoleSchema = z.object({
   name: z.string().min(1, { message: NAME_REQUIRED }),

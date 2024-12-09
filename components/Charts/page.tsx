@@ -24,15 +24,15 @@ const Chart: React.FC = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      const data = await fetchAppointmentData();
+      const data = await fetchAppointmentData()
       if (data.length === 0) {
-        console.warn('Không có dữ liệu để hiển thị.');
+        console.warn('Không có dữ liệu để hiển thị.')
       }
-      setStatistics(data);
-    };
+      setStatistics(data)
+    }
 
-    loadData();
-  }, []);
+    loadData()
+  }, [])
 
   useEffect(() => {
     const fetchAppointmentsData = async () => {
@@ -45,21 +45,24 @@ const Chart: React.FC = () => {
       }
     }
 
-    fetchAppointmentsData();
-  }, []);
-  
+    fetchAppointmentsData()
+  }, [])
+
   const handleExportReport = () => {
     // Đảm bảo appointmentsData là đối tượng kiểu GroupedData
-    const groupedData = appointmentsData.reduce((acc, curr) => {
-      if (!acc[curr.year]) {
-        acc[curr.year] = [];
-      }
-      acc[curr.year].push(curr);
-      return acc;
-    }, {} as Record<number, AppointmentData[]>);
-    let reportData: any[] = [];
+    const groupedData = appointmentsData.reduce(
+      (acc, curr) => {
+        if (!acc[curr.year]) {
+          acc[curr.year] = []
+        }
+        acc[curr.year].push(curr)
+        return acc
+      },
+      {} as Record<number, AppointmentData[]>,
+    )
+    let reportData: any[] = []
     Object.keys(groupedData).forEach((year) => {
-      const yearData = groupedData[parseInt(year)];
+      const yearData = groupedData[parseInt(year)]
       yearData.forEach((data, index) => {
         if (index === 0) {
           reportData.push({
@@ -67,7 +70,7 @@ const Chart: React.FC = () => {
             Tháng: '',
             SoCuocHen: '',
             DoanhThu: '',
-          });
+          })
         }
         reportData.push({
           Năm: '',
@@ -77,15 +80,15 @@ const Chart: React.FC = () => {
             style: 'currency',
             currency: 'VND',
           }),
-        });
-      });
-    });
-    const worksheet = XLSX.utils.json_to_sheet(reportData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Báo Cáo');
-    XLSX.writeFile(workbook, 'bao_cao.xlsx');
-  };
-  
+        })
+      })
+    })
+    const worksheet = XLSX.utils.json_to_sheet(reportData)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Báo Cáo')
+    XLSX.writeFile(workbook, 'bao_cao.xlsx')
+  }
+
   return (
     <>
       <div className="flex items-center justify-between mb-4">
