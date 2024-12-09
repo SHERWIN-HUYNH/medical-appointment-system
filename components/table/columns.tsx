@@ -98,7 +98,8 @@ export const columns: ColumnDef<AppointmentSchedule>[] = [
             title="Schedule Appointment"
             description="Please confirm the following details to schedule."
           />
-          <AppointmentModal
+          {appointment.status =='PENDING' && (
+            <AppointmentModal
             patientId={appointment.profile.id}
             userId={appointment.profile.userId}
             appointment={appointment}
@@ -107,6 +108,7 @@ export const columns: ColumnDef<AppointmentSchedule>[] = [
             stripeCustomerId={appointment.stripeCustomerId}
             description="Are you sure you want to cancel your appointment?"
           />
+          )}
         </div>
       )
     },
