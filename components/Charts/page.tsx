@@ -3,6 +3,7 @@ import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb'
 import ChartOne from '@/components/Charts/ChartOne'
 import ChartTwo from '@/components/Charts/ChartTwo'
 import { AppointmentReport, fetchAppointmentData } from '@/helpers/chart'
+import { s } from '@fullcalendar/core/internal-common'
 import dynamic from 'next/dynamic'
 import React, { useEffect, useState } from 'react'
 import * as XLSX from 'xlsx'
@@ -61,8 +62,10 @@ const Chart: React.FC = () => {
       {} as Record<number, AppointmentData[]>,
     )
     let reportData: any[] = []
-    Object.keys(groupedData).forEach((year) => {
+    const sortedYears = Object.keys(groupedData).sort((a, b) => parseInt(b) - parseInt(a));
+    sortedYears.forEach((year) => {
       const yearData = groupedData[parseInt(year)]
+      yearData.sort((a, b) => a.month - b.month);
       yearData.forEach((data, index) => {
         if (index === 0) {
           reportData.push({
