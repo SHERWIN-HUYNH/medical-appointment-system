@@ -9,7 +9,6 @@ import React, { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { useForm, FormProvider } from 'react-hook-form'
 import { z } from 'zod'
-import { DoctorFormValidation } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -18,6 +17,8 @@ import { uploadFileToCloudinary } from '@/helpers/upload-image'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { DoctorFormValidation } from '@/validation/doctor'
+import { FAILED_ADD_DOCTOR, SUCCESS_ADD_DOCTOR } from '@/validation/messageCode'
 
 const AddDoctorPage = () => {
   const router = useRouter()
@@ -99,13 +100,13 @@ const AddDoctorPage = () => {
         toast.error(message.error)
       }
 
-      toast.success('Bác sĩ đã được thêm thành công')
+      toast.success(SUCCESS_ADD_DOCTOR)
       // Reset form or redirect to doctor list page
       form.reset()
       setImagePreview(null)
     } catch (error) {
       console.log(error)
-      toast.error('Có lỗi xảy ra')
+      toast.error(FAILED_ADD_DOCTOR)
     } finally {
       setLoading(false)
     }

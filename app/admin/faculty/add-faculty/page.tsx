@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
 import DefaultLayout from '@/components/Layouts/defaultLayout'
-import { FacultyFormValidation } from '@/lib/validation'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
@@ -16,6 +15,8 @@ import Image from 'next/image'
 import { Label } from '@/components/ui/label'
 import { uploadFileToCloudinary } from '@/helpers/upload-image'
 import { Input } from '@/components/ui/input'
+import { FacultyFormValidation } from '@/validation/faculty'
+import { FAILED_ADD_FACULTY, SUCCESS_ADD_FACULTY } from '@/validation/messageCode'
 
 const AddFaculty = () => {
   const router = useRouter()
@@ -73,10 +74,10 @@ const AddFaculty = () => {
         return
       }
 
-      toast.success('Thêm chuyên khoa thành công!')
+      toast.success(SUCCESS_ADD_FACULTY)
     } catch (error) {
       console.error(error)
-      toast.error('Không thể thêm chuyên khoa')
+      toast.error(FAILED_ADD_FACULTY)
     } finally {
       setLoading(false)
     }

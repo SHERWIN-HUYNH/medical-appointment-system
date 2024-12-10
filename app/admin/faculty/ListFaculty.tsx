@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { ColumnDef } from '@tanstack/react-table'
 import ModalDelete from '@/components/ModalDelete'
+import { FAILED_DELETE_FACULTY, SUCCESS_DELETE_FACULTY } from '@/validation/messageCode'
 
 type Faculty = {
   id: string
@@ -47,14 +48,14 @@ const ListFaculty = () => {
         setFacultyData((prevData) =>
           prevData.filter((faculty) => faculty.id !== facultyToDelete.id),
         )
-        toast.success(`Chuyên khoa ${facultyToDelete.name} đã xóa thành công!`)
+        toast.success(SUCCESS_DELETE_FACULTY)
       } else {
         const message = await response.json()
         toast.error(message.error)
       }
     } catch (error) {
       console.error('Error deleting faculty:', error)
-      toast.error('Đã xảy ra lỗi khi xóa chuyên khoa!')
+      toast.error(FAILED_DELETE_FACULTY)
     } finally {
       setFacultyToDelete(null)
       setShowModal(false)
@@ -111,7 +112,15 @@ const ListFaculty = () => {
       </div>
 
       <div className="flex-1">
-        <DataTable columns={columns} data={facultyData} searchKey="name" />
+        <DataTable
+          columns={columns}
+          data={facultyData}
+          searchKey="name"
+          paginationProps={{
+            dataLength: facultyData.length,
+            label: "chuyên khoa",
+          }}
+        />
       </div>
 
       {showModal && (

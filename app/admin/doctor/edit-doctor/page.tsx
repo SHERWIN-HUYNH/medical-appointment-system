@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { academicTitles } from '@/lib/data'
-import { DoctorFormValidation } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Faculty } from '@prisma/client'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -18,6 +17,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import ConfirmModal from '@/components/ConfirmModal'
 import { uploadFileToCloudinary } from '@/helpers/upload-image'
 import { CldImage } from 'next-cloudinary'
+import { DoctorFormValidation } from '@/validation/doctor'
+import { DOCTOR_FACULTY_ACTIVE_APPOINTMENT, DOCTOR_STATUS_ACTIVE_APPOINTMENT_EXIST, FAILED_UPDATE_STATUS_DOCTOR, SUCCESS_UPDATE_DOCTOR, SUCCESS_UPDATE_STATUS_DOCTOR } from '@/validation/messageCode'
 
 const EditDoctor = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([])
@@ -150,14 +151,14 @@ const EditDoctor = () => {
       if (response.ok) {
         setIsActive(pendingStatus)
         form.setValue('isActive', pendingStatus)
-        toast.success('Thay đổi trạng thái thành công')
+        toast.success(SUCCESS_UPDATE_STATUS_DOCTOR)
       } else {
         const message = await response.json()
         toast.error(message.error)
       }
     } catch (error) {
       console.log(error)
-      toast.error('Đã có lỗi xảy ra khi thay đổi trạng thái')
+      toast.error(FAILED_UPDATE_STATUS_DOCTOR)
     } finally {
       setShowConfirmModal(false)
       setPendingStatus(null)
@@ -200,19 +201,17 @@ const EditDoctor = () => {
     })
 
     if (response.ok) {
-      toast.success('Cập nhật thông tin bác sĩ thành công')
+      toast.success(SUCCESS_UPDATE_DOCTOR)
       router.push('/admin/doctor')
     } else {
       const message = await response.json()
       toast.error(message.error)
       // Nếu cập nhật thất bại do bác sĩ có lịch hẹn, reset trạng thái
-      if (message.error === 'Bác sĩ này đang có cuộc hẹn không thể chuyển trạng thái') {
+      if (message.error === DOCTOR_STATUS_ACTIVE_APPOINTMENT_EXIST) {
         setIsActive(true)
         form.setValue('isActive', true)
       }
-      if (
-        message.error === 'Bác sĩ này đang có cuộc hẹn không thể thay đổi chuyên khoa'
-      ) {
+      if (message.error === DOCTOR_FACULTY_ACTIVE_APPOINTMENT) {
         form.setValue('faculty', initialFaculty)
       }
     }

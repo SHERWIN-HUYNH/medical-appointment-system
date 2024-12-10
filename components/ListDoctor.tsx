@@ -9,6 +9,7 @@ import { academicTitles } from '@/lib/data'
 import { toast } from 'sonner'
 import { ColumnDef } from '@tanstack/react-table'
 import { CldImage } from 'next-cloudinary'
+import { FAILED_DELETE_DOCTOR, SUCCESS_DELETE_DOCTOR } from '@/validation/messageCode'
 
 type Doctor = {
   id: string
@@ -85,14 +86,14 @@ const ListDoctor = () => {
         setDoctorData((prevData) =>
           prevData.filter((doctor) => doctor.id !== doctorToDelete.id),
         )
-        toast.success(`Bác sĩ ${doctorToDelete.name} đã xóa thành công!`)
+        toast.success(SUCCESS_DELETE_DOCTOR)
       } else {
         const message = await response.json()
         toast.error(message.error)
       }
     } catch (error) {
       console.error('Error deleting doctor:', error)
-      toast.error('Đã xảy ra lỗi khi xóa bác sĩ!')
+      toast.error(FAILED_DELETE_DOCTOR)
     } finally {
       setDoctorToDelete(null)
       setShowModal(false)
@@ -218,6 +219,10 @@ const ListDoctor = () => {
                 label: faculty.name,
                 value: faculty.id,
               })),
+            }}
+            paginationProps={{
+              dataLength: doctorData.length,
+              label: "bác sĩ",
             }}
           />
         )}

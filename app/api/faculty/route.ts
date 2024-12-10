@@ -6,6 +6,7 @@ import {
   conflictResponse,
 } from '@/helpers/response'
 import { FacultyRepository } from '@/repositories/faculty'
+import { FACULTY_EXISTS, FAILED_ADD_FACULTY, FAILED_DELETE_FACULTY, FAILED_UPDATE_FACULTY } from '@/validation/messageCode'
 
 // Xử lý GET request - Lấy một hoặc tất cả chuyên khoa
 export async function GET() {
@@ -31,13 +32,13 @@ export async function POST(req: Request) {
     const exists = await FacultyRepository.checkFacultyExists(faculty.name)
 
     if (exists) {
-      return conflictResponse('Chuyên khoa này đã tồn tại trong hệ thống')
+      return conflictResponse(FACULTY_EXISTS)
     }
 
     const newFaculty = await FacultyRepository.createFaculty(faculty)
 
     if (!newFaculty) {
-      return badRequestResponse('FAIL TO CREATE FACULTY')
+      return badRequestResponse(FAILED_ADD_FACULTY)
     }
 
     return successResponse(newFaculty)
@@ -55,7 +56,7 @@ export async function PUT(req: Request) {
   }
   const updatedFaculty = await FacultyRepository.updateFaculty(faculty, facultyData.id)
   if (!updatedFaculty) {
-    return badRequestResponse('FAIL TO UPDATE FACULTY')
+    return badRequestResponse(FAILED_UPDATE_FACULTY)
   }
   return successResponse(updatedFaculty)
 }
@@ -70,6 +71,6 @@ export async function DELETE(req: Request) {
     if (error instanceof Error) {
       return forbiddenResponse(error.message)
     }
-    return badRequestResponse('Xóa dịch vụ thất bại')
+    return badRequestResponse(FAILED_DELETE_FACULTY)
   }
 }

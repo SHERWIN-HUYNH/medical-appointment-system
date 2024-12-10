@@ -97,7 +97,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       </Button>
 
       <div className="flex items-center gap-2 mx-12">{renderPageNumbers()}</div>
-
+      <div className="text-sm text-slate-500">
+        Trang {currentPage} của {totalPages} trang
+      </div>
       <Button
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
