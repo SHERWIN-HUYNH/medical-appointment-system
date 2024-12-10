@@ -54,4 +54,5 @@ export const SUCCESS_DELETE_SERVICE = 'Xóa dịch vụ thành công'
 export const FAILED_ADD_SERVICE = 'Thêm dịch vụ thất bại'
 export const FAILED_UPDATE_SERVICE = 'Cập nhật dịch vụ thất bại'
 export const FAILED_DELETE_SERVICE = 'Xoa dich vu that bai'
+export const SERVICE_ACTIVE_APPOINTMENT = 'Không thể cập nhật dịch vụ đang có lịch hẹn'
 
