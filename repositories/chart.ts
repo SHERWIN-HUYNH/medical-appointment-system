@@ -1,20 +1,21 @@
 import { PrismaClient, AppointmentStatus } from '@prisma/client'
 
 const prisma = new PrismaClient()
-
 type GroupedData = {
   [key: string]: {
-    year: number
-    month: number
-    totalAppointments: number
-    totalAmount: number
+    year: number;
+    month: number;
+    totalAppointments: number;
+    totalAmount: number;
     appointments: {
-      id: string
-      date: string
-      price: number
-    }[]
-  }
-}
+      id: string;
+      date: string;
+      price: number;
+      serviceName: string;
+      facultyName: string;
+    }[];
+  };
+};
 
 export class ChartRepository {
   static async getAppointmentsSummaryByFaculty() {
@@ -103,34 +104,43 @@ export class ChartRepository {
       const appointments = await prisma.appointment.findMany({
         where: {
           status: 'SCHEDULED',
-          payments: {
-            status: 'COMPLETED',
-          },
+          payments: { status: 'COMPLETED' },
         },
         include: {
-          doctorSchedule: {
-            include: {
-              schedule: {
+          Service: {
+            select: {
+              id: true,
+              name: true,
+              faculty: {
                 select: {
-                  date: true,
+                  id: true,
+                  name: true,
                 },
               },
             },
           },
-          payments: {
+          doctorSchedule: {
             select: {
-              price: true,
+              schedule: {
+                select: { date: true },
+              },
             },
           },
+          payments: {
+            select: { price: true },
+          },
         },
-      })
+      });
 
-      const groupedData = appointments.reduce<GroupedData>((acc, appointment) => {
-        const date = new Date(appointment.doctorSchedule.schedule.date)
-        const year = date.getFullYear()
-        const month = date.getMonth() + 1
+      const groupedData: GroupedData = appointments.reduce<GroupedData>((acc, appointment) => {
+        const scheduleDate = appointment.doctorSchedule?.schedule?.date;
+        if (!scheduleDate) return acc;
 
-        const key = `${year}-${month}`
+        const date = new Date(scheduleDate);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const key = `${year}-${month}`;
+
         if (!acc[key]) {
           acc[key] = {
             year,
@@ -138,27 +148,29 @@ export class ChartRepository {
             totalAmount: 0,
             totalAppointments: 0,
             appointments: [],
-          }
+          };
         }
 
-        acc[key].totalAmount += appointment.payments?.price || 0
-        acc[key].totalAppointments += 1
+        const paymentPrice = appointment.payments?.price || 0;
+
+        acc[key].totalAmount += paymentPrice;
+        acc[key].totalAppointments += 1;
         acc[key].appointments.push({
           id: appointment.id,
-          date: appointment.doctorSchedule.schedule.date,
-          price: appointment.payments?.price || 0,
-        })
+          date: scheduleDate,
+          price: paymentPrice,
+          serviceName: appointment.Service?.name || 'Unknown',
+          facultyName: appointment.Service?.faculty?.name || 'Unknown',
+        });
 
-        return acc
-      }, {})
-
-      const result = Object.values(groupedData)
-
-      return result
+        return acc;
+      }, {} as GroupedData);
+      return Object.values(groupedData);
     } catch (error) {
-      throw error
+      console.error('Error fetching appointments by date:', error);
+      throw error;
     } finally {
-      await prisma.$disconnect()
+      await prisma.$disconnect();
     }
   }
-}
+}  

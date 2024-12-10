@@ -11,9 +11,15 @@ import * as XLSX from 'xlsx'
 interface AppointmentData {
   year: number
   month: number
-  price: number
   totalAppointments: number
   totalAmount: number
+  appointments: {
+    id: string;
+    date: string;
+    price: number;
+    serviceName: string;
+    facultyName: string;
+  }[];
 }
 const ChartThree = dynamic(() => import('@/components/Charts/ChartThree'), {
   ssr: false,
@@ -50,47 +56,133 @@ const Chart: React.FC = () => {
   }, [])
 
   const handleExportReport = () => {
-    // Đảm bảo appointmentsData là đối tượng kiểu GroupedData
     const groupedData = appointmentsData.reduce(
       (acc, curr) => {
-        if (!acc[curr.year]) {
-          acc[curr.year] = []
+        const yearKey = `${curr.year}`;
+  
+        if (!acc[yearKey]) {
+          acc[yearKey] = {
+            year: curr.year,
+            totalAppointments: 0,
+            totalAmount: 0,
+            months: {},
+          };
         }
-        acc[curr.year].push(curr)
-        return acc
+  
+        acc[yearKey].totalAppointments += curr.totalAppointments;
+        acc[yearKey].totalAmount += curr.totalAmount;
+        const monthKey = curr.month;
+  
+        if (!acc[yearKey].months[monthKey]) {
+          acc[yearKey].months[monthKey] = {
+            totalAppointments: 0,
+            totalAmount: 0,
+            faculties: {},
+          };
+        }
+  
+        acc[yearKey].months[monthKey].totalAppointments += curr.totalAppointments;
+        acc[yearKey].months[monthKey].totalAmount += curr.totalAmount;
+  
+        curr.appointments.forEach((appointment) => {
+          const facultyName = appointment.facultyName || "Không xác định";
+          const serviceName = appointment.serviceName || "Không xác định";
+  
+          if (!acc[yearKey].months[monthKey].faculties[facultyName]) {
+            acc[yearKey].months[monthKey].faculties[facultyName] = {};
+          }
+  
+          if (!acc[yearKey].months[monthKey].faculties[facultyName][serviceName]) {
+            acc[yearKey].months[monthKey].faculties[facultyName][serviceName] = {
+              totalAppointments: 0,
+              totalAmount: 0,
+            };
+          }
+  
+          acc[yearKey].months[monthKey].faculties[facultyName][serviceName].totalAppointments += 1;
+          acc[yearKey].months[monthKey].faculties[facultyName][serviceName].totalAmount += appointment.price || 0;
+        });
+  
+        return acc;
       },
-      {} as Record<number, AppointmentData[]>,
-    )
-    let reportData: any[] = []
-    const sortedYears = Object.keys(groupedData).sort((a, b) => parseInt(b) - parseInt(a));
-    sortedYears.forEach((year) => {
-      const yearData = groupedData[parseInt(year)]
-      yearData.sort((a, b) => a.month - b.month);
-      yearData.forEach((data, index) => {
-        if (index === 0) {
-          reportData.push({
-            Năm: data.year,
-            Tháng: '',
-            SoCuocHen: '',
-            DoanhThu: '',
-          })
+      {} as Record<
+        string,
+        {
+          year: number;
+          totalAppointments: number;
+          totalAmount: number;
+          months: Record<
+            number,
+            {
+              totalAppointments: number;
+              totalAmount: number;
+              faculties: Record<
+                string,
+                Record<
+                  string,
+                  {
+                    totalAppointments: number;
+                    totalAmount: number;
+                  }
+                >
+              >;
+            }
+          >;
         }
+      >
+    );
+  
+    let reportData: any[] = [];
+    Object.values(groupedData).forEach((group) => {
+      const { year, months } = group;
+      reportData.push({
+        Nam: year,
+        Thang: "",
+        ChuyenKhoa: "",
+        DichVu: "",
+        SoCuocHen: group.totalAppointments,
+        DoanhThu: group.totalAmount.toLocaleString("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }),
+      });
+  
+      Object.entries(months).forEach(([month, monthData]) => {
         reportData.push({
-          Năm: '',
-          Tháng: data.month,
-          SoCuocHen: data.totalAppointments,
-          DoanhThu: data.totalAmount.toLocaleString('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
+          Nam: "",
+          Thang: month,
+          ChuyenKhoa: "",
+          DichVu: "",
+          SoCuocHen: monthData.totalAppointments,
+          DoanhThu: monthData.totalAmount.toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
           }),
-        })
-      })
-    })
-    const worksheet = XLSX.utils.json_to_sheet(reportData)
-    const workbook = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Báo Cáo')
-    XLSX.writeFile(workbook, 'bao_cao.xlsx')
-  }
+        });
+        Object.entries(monthData.faculties).forEach(([facultyName, services]) => {
+          Object.entries(services).forEach(([serviceName, stats]) => {
+            reportData.push({
+              Nam: "",
+              Thang: "",
+              ChuyenKhoa: facultyName,
+              DichVu: serviceName,
+              SoCuocHen: stats.totalAppointments,
+              DoanhThu: stats.totalAmount.toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }),
+            });
+          });
+        });
+      });
+    });
+  
+    const worksheet = XLSX.utils.json_to_sheet(reportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Báo Cáo");
+    XLSX.writeFile(workbook, "bao_cao.xlsx");
+  };
+  
 
   return (
     <>
