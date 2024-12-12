@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ReactApexChart from 'react-apexcharts'
 import { ApexOptions } from 'apexcharts'
-
-interface AppointmentReport {
-  facultyId: string
-  facultyName: string
-  scheduledAppointments: number
-  completionRate: number
-}
+import { fetchAppointmentData } from '@/helpers/chart'
 
 const ChartThree: React.FC = () => {
   const [series, setSeries] = useState<number[]>([])
@@ -60,22 +54,9 @@ const ChartThree: React.FC = () => {
   })
 
   useEffect(() => {
-    const fetchAppointmentData = async () => {
+    const loadData = async () => {
       try {
-        const response = await fetch('/api/chart', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-
-        if (!response.ok) {
-          throw new Error('Lỗi khi lấy dữ liệu báo cáo')
-        }
-
-        const responseData = await response.json()
-        const data: AppointmentReport[] = Array.isArray(responseData) ? responseData : []
-
+        const data = await fetchAppointmentData()
         if (data.length === 0) {
           console.warn('Không có dữ liệu để hiển thị.')
           return
@@ -85,6 +66,7 @@ const ChartThree: React.FC = () => {
         const topThree = sortedData.slice(0, 3)
         const topThreeTotal = topThree.reduce((acc, item) => acc + item.completionRate, 0)
         const othersPercentage = 100 - topThreeTotal
+
         const updatedLabels = [...topThree.map((item) => item.facultyName), 'Khác']
         const updatedSeries = [
           ...topThree.map((item) => item.completionRate),
@@ -102,7 +84,7 @@ const ChartThree: React.FC = () => {
       }
     }
 
-    fetchAppointmentData()
+    loadData() // Ensure this invokes the `loadData` function instead of `fetchAppointmentData` directly.
   }, [])
 
   return (
@@ -133,7 +115,7 @@ const ChartThree: React.FC = () => {
               ></span>
               <p className="flex w-full justify-start text-xs font-medium text-black dark:text-white">
                 <span>{label}</span>
-                <span className="ml-1">{series[index]}%</span>
+                <span className="ml-1">{series[index].toFixed(2)}%</span>
               </p>
             </div>
           </div>

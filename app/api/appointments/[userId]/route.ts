@@ -10,16 +10,18 @@ import { ProfileRespository } from '@/repositories/profile'
 import { UserRepository } from '@/repositories/user'
 import Stripe from 'stripe'
 import { BillRespository } from '@/repositories/bill'
+import { UNAUTHENTICATED } from '@/validation/messageCode/commonMessageCode'
+import { USER_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/user'
+import { APPOINTMENT_NOT_FOUND, GET_APPOINTMENT_ERROR, INVALID_CANCEL_APPOINTMENT } from '@/validation/messageCode/apiMessageCode/appointment'
+import { PROFILE_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/profile'
 export async function GET(req: Request, { params }: { params: { userId: string } }) {
   try {
-    // First get all profiles for this user
     const profiles = await ProfileRespository.getListProfileByUserId(params.userId)
 
     if (!profiles || profiles.length === 0) {
-      return notFoundResponse('Không tìm thấy hồ sơ bệnh nhân')
+      return notFoundResponse(PROFILE_NOT_FOUND)
     }
 
-    // Get appointments for all profiles
     const profileIds = profiles.map((profile) => profile.id)
     const allAppointments = []
 
@@ -30,7 +32,7 @@ export async function GET(req: Request, { params }: { params: { userId: string }
     }
 
     if (allAppointments.length === 0) {
-      return notFoundResponse('Không tìm thấy lịch khám')
+      return notFoundResponse(APPOINTMENT_NOT_FOUND)
     }
 
     const formattedAppointments = allAppointments.map((appointment) => ({
@@ -50,7 +52,7 @@ export async function GET(req: Request, { params }: { params: { userId: string }
     return successResponse(formattedAppointments)
   } catch (error) {
     console.error('Error in GET /api/appointments/[userId]:', error)
-    return internalServerErrorResponse('Lỗi khi lấy danh sách lịch khám')
+    return internalServerErrorResponse(GET_APPOINTMENT_ERROR)
   }
 }
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
@@ -60,15 +62,15 @@ export async function PUT(req: Request, context: { params: { userId: string } })
     const { paymentIntentId, cancellationReason, appointmentId } = body
     const { userId } = context.params
     if (!userId) {
-      return unauthorizedResponse('UNAUTHENTICATED')
+      return unauthorizedResponse(UNAUTHENTICATED)
     }
     const user = await UserRepository.getUserByUserId(userId)
     if (!user) {
-      return notFoundResponse('Không tìm thấy người dùng')
+      return notFoundResponse(USER_NOT_FOUND)
     }
     const oldAppointment = await AppointmentRepository.getAppoinmentById(appointmentId)
     if (!oldAppointment) {
-      return notFoundResponse('Không tìm thấy lịch khám')
+      return notFoundResponse(APPOINTMENT_NOT_FOUND)
     }
     if (oldAppointment.status === 'PENDING') {
       const refundPaymentIntent = await stripe.refunds.create({
@@ -80,19 +82,19 @@ export async function PUT(req: Request, context: { params: { userId: string } })
         appointmentId,
       )
       if (!cancelAppointment?.payments) {
-        throw new Error('Cancel appointment operation failed; appointment not found.')
+        throw new Error(INVALID_CANCEL_APPOINTMENT)
       }
 
       const cancelBill = await BillRespository.cancelBill(cancelAppointment.payments?.id)
       if (!cancelBill) {
-        throw new Error('Cancel bill operation failed; bill not found.')
+        throw new Error(INVALID_CANCEL_APPOINTMENT)
       }
       return successResponse({ cancelAppointment })
     } else {
-      return badRequestResponse('Lịch khám đã hoàn thành hoặc đã bị hủy')
+      return badRequestResponse(INVALID_CANCEL_APPOINTMENT)
     }
   } catch (error) {
-    console.error('Error occurred:', error)
+    console.error( error)
     return internalServerErrorResponse(`Lỗi khi xử lý: ${error}`)
   }
 }

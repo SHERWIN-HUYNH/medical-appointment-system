@@ -43,13 +43,12 @@ export const AppointmentForm = ({
   })
 
   const onSubmit = async () => {
-    
-    console.log('TYPE',type)
+    console.log('TYPE', type)
     console.log(form.getValues('cancellationReason'))
     console.log(isLoading)
-    if(form.getValues('cancellationReason')?.length == 0){
+    if (form.getValues('cancellationReason')?.length == 0) {
       toast.error('Bổ sung lí do hủy hẹn')
-    }else{
+    } else {
       setIsLoading(true)
       if (type === 'Hủy') {
         const res = await fetch(`/api/appointments/${session?.user.id}`, {
@@ -68,8 +67,6 @@ export const AppointmentForm = ({
       }
       setIsLoading(false)
     }
-    
-    
   }
 
   let buttonLabel
@@ -171,13 +168,9 @@ export const AppointmentForm = ({
               label="Lí do hủy hẹn"
               placeholder="Họp đột xuất"
             />
-            
           </>
         )}
-        <SubmitButton
-          isLoading={isLoading}
-          className={`shad-danger-btn w-full`}
-        >
+        <SubmitButton isLoading={isLoading} className={`shad-danger-btn w-full`}>
           {title}
         </SubmitButton>
       </form>

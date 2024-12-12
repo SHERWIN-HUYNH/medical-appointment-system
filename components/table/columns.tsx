@@ -98,16 +98,16 @@ export const columns: ColumnDef<AppointmentSchedule>[] = [
             title="Schedule Appointment"
             description="Please confirm the following details to schedule."
           />
-          {appointment.status =='PENDING' && (
+          {appointment.status == 'PENDING' && (
             <AppointmentModal
-            patientId={appointment.profile.id}
-            userId={appointment.profile.userId}
-            appointment={appointment}
-            type="Hủy"
-            title="Cancel Appointment"
-            stripeCustomerId={appointment.stripeCustomerId}
-            description="Are you sure you want to cancel your appointment?"
-          />
+              patientId={appointment.profile.id}
+              userId={appointment.profile.userId}
+              appointment={appointment}
+              type="Hủy"
+              title="Cancel Appointment"
+              stripeCustomerId={appointment.stripeCustomerId}
+              description="Are you sure you want to cancel your appointment?"
+            />
           )}
         </div>
       )
