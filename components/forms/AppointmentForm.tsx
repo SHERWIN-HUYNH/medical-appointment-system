@@ -11,6 +11,8 @@ import { Form } from '../ui/form'
 import { AppointmentSchedule } from '@/types/interface'
 import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
+import { INPUT_REQUIRED } from '@/validation/messageCode/authentication'
+import { CANCEL_FAIL, CANCEL_SUCCESS } from '@/validation/messageCode/appointment'
 
 export const AppointmentForm = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -26,6 +28,7 @@ export const AppointmentForm = ({
   stripeCustomerId?: string
   setOpen?: Dispatch<SetStateAction<boolean>>
 }) => {
+  console.log(appointment)
   const [isLoading, setIsLoading] = useState(false)
   const { data: session } = useSession()
   const AppointmentFormValidation = getAppointmentSchema(type)
@@ -47,7 +50,7 @@ export const AppointmentForm = ({
     console.log(form.getValues('cancellationReason'))
     console.log(isLoading)
     if (form.getValues('cancellationReason')?.length == 0) {
-      toast.error('Bổ sung lí do hủy hẹn')
+      toast.error(INPUT_REQUIRED)
     } else {
       setIsLoading(true)
       if (type === 'Hủy') {
@@ -60,9 +63,9 @@ export const AppointmentForm = ({
           }),
         })
         if (res.ok) {
-          toast.success('Hủy thành công!')
+          toast.success(CANCEL_SUCCESS)
         } else {
-          toast.error('Hủy không thành công, vui lòng thử lại!')
+          toast.error(CANCEL_FAIL)
         }
       }
       setIsLoading(false)
@@ -128,14 +131,6 @@ export const AppointmentForm = ({
                 label="Tiền sử bệnh án"
                 placeholder="Không"
                 disabled={true}
-              />
-              <CustomFormField
-                fieldType={FormFieldType.TEXTAREA}
-                control={form.control}
-                name="note"
-                label="Ghi chú"
-                placeholder="Prefer afternoon appointments, if possible"
-                disabled={type === 'schedule'}
               />
             </div>
           </>

@@ -14,12 +14,12 @@ interface AppointmentData {
   totalAppointments: number
   totalAmount: number
   appointments: {
-    id: string;
-    date: string;
-    price: number;
-    serviceName: string;
-    facultyName: string;
-  }[];
+    id: string
+    date: string
+    price: number
+    serviceName: string
+    facultyName: string
+  }[]
 }
 const ChartThree = dynamic(() => import('@/components/Charts/ChartThree'), {
   ssr: false,
@@ -58,131 +58,133 @@ const Chart: React.FC = () => {
   const handleExportReport = () => {
     const groupedData = appointmentsData.reduce(
       (acc, curr) => {
-        const yearKey = `${curr.year}`;
-  
+        const yearKey = `${curr.year}`
+
         if (!acc[yearKey]) {
           acc[yearKey] = {
             year: curr.year,
             totalAppointments: 0,
             totalAmount: 0,
             months: {},
-          };
+          }
         }
-  
-        acc[yearKey].totalAppointments += curr.totalAppointments;
-        acc[yearKey].totalAmount += curr.totalAmount;
-        const monthKey = curr.month;
-  
+
+        acc[yearKey].totalAppointments += curr.totalAppointments
+        acc[yearKey].totalAmount += curr.totalAmount
+        const monthKey = curr.month
+
         if (!acc[yearKey].months[monthKey]) {
           acc[yearKey].months[monthKey] = {
             totalAppointments: 0,
             totalAmount: 0,
             faculties: {},
-          };
-        }
-  
-        acc[yearKey].months[monthKey].totalAppointments += curr.totalAppointments;
-        acc[yearKey].months[monthKey].totalAmount += curr.totalAmount;
-  
-        curr.appointments.forEach((appointment) => {
-          const facultyName = appointment.facultyName || "Không xác định";
-          const serviceName = appointment.serviceName || "Không xác định";
-  
-          if (!acc[yearKey].months[monthKey].faculties[facultyName]) {
-            acc[yearKey].months[monthKey].faculties[facultyName] = {};
           }
-  
+        }
+
+        acc[yearKey].months[monthKey].totalAppointments += curr.totalAppointments
+        acc[yearKey].months[monthKey].totalAmount += curr.totalAmount
+
+        curr.appointments.forEach((appointment) => {
+          const facultyName = appointment.facultyName || 'Không xác định'
+          const serviceName = appointment.serviceName || 'Không xác định'
+
+          if (!acc[yearKey].months[monthKey].faculties[facultyName]) {
+            acc[yearKey].months[monthKey].faculties[facultyName] = {}
+          }
+
           if (!acc[yearKey].months[monthKey].faculties[facultyName][serviceName]) {
             acc[yearKey].months[monthKey].faculties[facultyName][serviceName] = {
               totalAppointments: 0,
               totalAmount: 0,
-            };
+            }
           }
-  
-          acc[yearKey].months[monthKey].faculties[facultyName][serviceName].totalAppointments += 1;
-          acc[yearKey].months[monthKey].faculties[facultyName][serviceName].totalAmount += appointment.price || 0;
-        });
-  
-        return acc;
+
+          acc[yearKey].months[monthKey].faculties[facultyName][
+            serviceName
+          ].totalAppointments += 1
+          acc[yearKey].months[monthKey].faculties[facultyName][serviceName].totalAmount +=
+            appointment.price || 0
+        })
+
+        return acc
       },
       {} as Record<
         string,
         {
-          year: number;
-          totalAppointments: number;
-          totalAmount: number;
+          year: number
+          totalAppointments: number
+          totalAmount: number
           months: Record<
             number,
             {
-              totalAppointments: number;
-              totalAmount: number;
+              totalAppointments: number
+              totalAmount: number
               faculties: Record<
                 string,
                 Record<
                   string,
                   {
-                    totalAppointments: number;
-                    totalAmount: number;
+                    totalAppointments: number
+                    totalAmount: number
                   }
                 >
-              >;
+              >
             }
-          >;
+          >
         }
-      >
-    );
-  
-    let reportData: any[] = [];
+      >,
+    )
+
+    let reportData: any[] = []
     Object.values(groupedData).forEach((group) => {
-      const { year, months } = group;
+      const { year, months } = group
       reportData.push({
         Nam: year,
-        Thang: "",
-        ChuyenKhoa: "",
-        DichVu: "",
+        Thang: '',
+        ChuyenKhoa: '',
+        DichVu: '',
         SoCuocHen: group.totalAppointments,
-        DoanhThu: group.totalAmount.toLocaleString("vi-VN", {
-          style: "currency",
-          currency: "VND",
+        DoanhThu: group.totalAmount.toLocaleString('vi-VN', {
+          style: 'currency',
+          currency: 'VND',
         }),
-      });
-  
+      })
+
       Object.entries(months).forEach(([month, monthData]) => {
         reportData.push({
-          Nam: "",
+          Nam: '',
           Thang: month,
-          ChuyenKhoa: "",
-          DichVu: "",
+          ChuyenKhoa: '',
+          DichVu: '',
           SoCuocHen: monthData.totalAppointments,
-          DoanhThu: monthData.totalAmount.toLocaleString("vi-VN", {
-            style: "currency",
-            currency: "VND",
+          DoanhThu: monthData.totalAmount.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
           }),
-        });
+        })
         Object.entries(monthData.faculties).forEach(([facultyName, services]) => {
           Object.entries(services).forEach(([serviceName, stats]) => {
             reportData.push({
-              Nam: "",
-              Thang: "",
+              Nam: '',
+              Thang: '',
               ChuyenKhoa: facultyName,
               DichVu: serviceName,
               SoCuocHen: stats.totalAppointments,
-              DoanhThu: stats.totalAmount.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
+              DoanhThu: stats.totalAmount.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
               }),
-            });
-          });
-        });
-      });
-    });
-  
-    const worksheet = XLSX.utils.json_to_sheet(reportData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Báo Cáo");
-    XLSX.writeFile(workbook, "bao_cao.xlsx");
-  };
-  
+            })
+          })
+        })
+      })
+    })
+
+    const worksheet = XLSX.utils.json_to_sheet(reportData)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Báo Cáo')
+    XLSX.writeFile(workbook, 'bao_cao.xlsx')
+  }
 
   return (
     <>
