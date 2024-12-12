@@ -16,7 +16,10 @@ import { Label } from '@/components/ui/label'
 import { uploadFileToCloudinary } from '@/helpers/upload-image'
 import { Input } from '@/components/ui/input'
 import { FacultyFormValidation } from '@/validation/faculty'
-import { FAILED_ADD_FACULTY, SUCCESS_ADD_FACULTY } from '@/validation/messageCode'
+import {
+  FAILED_ADD_FACULTY,
+  SUCCESS_ADD_FACULTY,
+} from '@/validation/messageCode/apiMessageCode/faculty'
 
 const AddFaculty = () => {
   const router = useRouter()

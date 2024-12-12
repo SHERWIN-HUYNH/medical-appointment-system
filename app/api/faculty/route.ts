@@ -6,8 +6,12 @@ import {
   conflictResponse,
 } from '@/helpers/response'
 import { FacultyRepository } from '@/repositories/faculty'
-import { FACULTY_EXISTS, FAILED_ADD_FACULTY, FAILED_DELETE_FACULTY, FAILED_UPDATE_FACULTY } from '@/validation/messageCode'
-
+import {
+  FACULTY_EXISTS,
+  FAILED_ADD_FACULTY,
+  FAILED_DELETE_FACULTY,
+  FAILED_UPDATE_FACULTY,
+} from '@/validation/messageCode/apiMessageCode/faculty'
 // Xử lý GET request - Lấy một hoặc tất cả chuyên khoa
 export async function GET() {
   try {

@@ -18,7 +18,10 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { DoctorFormValidation } from '@/validation/doctor'
-import { FAILED_ADD_DOCTOR, SUCCESS_ADD_DOCTOR } from '@/validation/messageCode'
+import {
+  FAILED_ADD_DOCTOR,
+  SUCCESS_ADD_DOCTOR,
+} from '@/validation/messageCode/apiMessageCode/doctor'
 
 const AddDoctorPage = () => {
   const router = useRouter()

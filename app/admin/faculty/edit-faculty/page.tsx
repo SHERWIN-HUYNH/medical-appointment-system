@@ -14,7 +14,10 @@ import { CldImage } from 'next-cloudinary'
 import { uploadFileToCloudinary } from '@/helpers/upload-image'
 import { Input } from '@/components/ui/input'
 import { FacultyFormValidation } from '@/validation/faculty'
-import { FAILED_UPDATE_FACULTY, SUCCESS_UPDATE_FACULTY } from '@/validation/messageCode'
+import {
+  FAILED_UPDATE_FACULTY,
+  SUCCESS_UPDATE_FACULTY,
+} from '@/validation/messageCode/apiMessageCode/faculty'
 
 const EditFaculty = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)

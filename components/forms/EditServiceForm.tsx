@@ -10,7 +10,7 @@ import CustomFormField, { FormFieldType } from '../CustomFormField'
 import { SelectItem } from '../ui/select'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { ServiceFormValidation } from '@/validation/service'
-import { SUCCESS_UPDATE_SERVICE } from '@/validation/messageCode'
+import { SUCCESS_UPDATE_SERVICE } from '@/validation/messageCode/apiMessageCode/service'
 
 type Faculty = {
   id: string

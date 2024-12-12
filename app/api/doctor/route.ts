@@ -5,8 +5,12 @@ import {
   successResponse,
 } from '@/helpers/response'
 import { DoctorRespository } from '@/repositories/doctor'
-import { DOCTOR_FACULTY_ACTIVE_APPOINTMENT, DOCTOR_STATUS_ACTIVE_APPOINTMENT_EXIST, FAILED_DELETE_DOCTOR, FAILED_UPDATE_DOCTOR } from '@/validation/messageCode'
-
+import {
+  DOCTOR_FACULTY_ACTIVE_APPOINTMENT,
+  DOCTOR_STATUS_ACTIVE_APPOINTMENT_EXIST,
+  FAILED_DELETE_DOCTOR,
+  FAILED_UPDATE_STATUS_DOCTOR,
+} from '@/validation/messageCode/apiMessageCode/doctor'
 export async function GET() {
   const doctors = await DoctorRespository.getDoctores()
   return successResponse(doctors)
@@ -55,7 +59,7 @@ export async function PUT(req: Request) {
   })
 
   if (!updatedDoctor) {
-    return badRequestResponse(FAILED_UPDATE_DOCTOR)
+    return badRequestResponse(FAILED_UPDATE_STATUS_DOCTOR)
   }
   return successResponse(updatedDoctor)
 }

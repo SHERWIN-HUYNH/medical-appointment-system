@@ -8,7 +8,10 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { ColumnDef } from '@tanstack/react-table'
 import { formatPrice } from '@/helpers/formatCurrency'
-import { FAILED_DELETE_SERVICE, SUCCESS_DELETE_SERVICE } from '@/validation/messageCode'
+import {
+  FAILED_DELETE_SERVICE,
+  SUCCESS_DELETE_SERVICE,
+} from '@/validation/messageCode/apiMessageCode/service'
 
 type Service = {
   id: string
@@ -181,7 +184,7 @@ const ListService = () => {
             }}
             paginationProps={{
               dataLength: serviceData.length,
-              label: "dịch vụ",
+              label: 'dịch vụ',
             }}
           />
         )}

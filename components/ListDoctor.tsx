@@ -9,7 +9,10 @@ import { academicTitles } from '@/lib/data'
 import { toast } from 'sonner'
 import { ColumnDef } from '@tanstack/react-table'
 import { CldImage } from 'next-cloudinary'
-import { FAILED_DELETE_DOCTOR, SUCCESS_DELETE_DOCTOR } from '@/validation/messageCode'
+import {
+  FAILED_DELETE_DOCTOR,
+  SUCCESS_DELETE_DOCTOR,
+} from '@/validation/messageCode/apiMessageCode/doctor'
 
 type Doctor = {
   id: string
@@ -222,7 +225,7 @@ const ListDoctor = () => {
             }}
             paginationProps={{
               dataLength: doctorData.length,
-              label: "bác sĩ",
+              label: 'bác sĩ',
             }}
           />
         )}

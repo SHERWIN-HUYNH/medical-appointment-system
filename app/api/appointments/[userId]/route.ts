@@ -12,7 +12,11 @@ import Stripe from 'stripe'
 import { BillRespository } from '@/repositories/bill'
 import { UNAUTHENTICATED } from '@/validation/messageCode/commonMessageCode'
 import { USER_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/user'
-import { APPOINTMENT_NOT_FOUND, GET_APPOINTMENT_ERROR, INVALID_CANCEL_APPOINTMENT } from '@/validation/messageCode/apiMessageCode/appointment'
+import {
+  APPOINTMENT_NOT_FOUND,
+  GET_APPOINTMENT_ERROR,
+  INVALID_CANCEL_APPOINTMENT,
+} from '@/validation/messageCode/apiMessageCode/appointment'
 import { PROFILE_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/profile'
 export async function GET(req: Request, { params }: { params: { userId: string } }) {
   try {
@@ -94,7 +98,7 @@ export async function PUT(req: Request, context: { params: { userId: string } })
       return badRequestResponse(INVALID_CANCEL_APPOINTMENT)
     }
   } catch (error) {
-    console.error( error)
+    console.error(error)
     return internalServerErrorResponse(`Lỗi khi xử lý: ${error}`)
   }
 }

@@ -6,7 +6,10 @@ import {
 } from '@/helpers/response'
 import { AppointmentRepository } from '@/repositories/appointment'
 import { ServiceRepository } from '@/repositories/service'
-import { FAILED_UPDATE_SERVICE, SERVICE_ACTIVE_APPOINTMENT } from '@/validation/messageCode'
+import {
+  FAILED_UPDATE_SERVICE,
+  UPDATE_SERVICE_ACTIVE_APPOINTMENT,
+} from '@/validation/messageCode/apiMessageCode/service'
 
 export async function GET(req: Request, { params }: { params: { serviceId: string } }) {
   const { serviceId } = params
@@ -30,7 +33,7 @@ export async function PUT(req: Request, { params }: { params: { serviceId: strin
   const pendingAppointments =
     await AppointmentRepository.getAppointmentByServiceId(serviceId)
   if (pendingAppointments?.length > 0) {
-    return forbiddenResponse(SERVICE_ACTIVE_APPOINTMENT)
+    return forbiddenResponse(UPDATE_SERVICE_ACTIVE_APPOINTMENT)
   }
 
   const updateData = {

@@ -227,6 +227,7 @@ export class DoctorRespository {
   }
 
   static async getDoctorsByFaculty(facultyId: string) {
+    const currentDate = new Date().toISOString()
     const doctors = await prisma.doctor.findMany({
       where: {
         facultyId: facultyId,
@@ -240,6 +241,11 @@ export class DoctorRespository {
           },
           where: {
             isAvailable: true,
+            schedule: {
+              date: {
+                gte: currentDate,
+              },
+            },
           },
         },
       },

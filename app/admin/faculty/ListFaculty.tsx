@@ -8,7 +8,10 @@ import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { ColumnDef } from '@tanstack/react-table'
 import ModalDelete from '@/components/ModalDelete'
-import { FAILED_DELETE_FACULTY, SUCCESS_DELETE_FACULTY } from '@/validation/messageCode'
+import {
+  FAILED_DELETE_FACULTY,
+  SUCCESS_DELETE_FACULTY,
+} from '@/validation/messageCode/apiMessageCode/faculty'
 
 type Faculty = {
   id: string
@@ -118,7 +121,7 @@ const ListFaculty = () => {
           searchKey="name"
           paginationProps={{
             dataLength: facultyData.length,
-            label: "chuyên khoa",
+            label: 'chuyên khoa',
           }}
         />
       </div>

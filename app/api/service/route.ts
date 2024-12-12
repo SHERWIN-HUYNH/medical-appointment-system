@@ -8,7 +8,11 @@ import {
 } from '@/helpers/response'
 import { ServiceRepository } from '@/repositories/service'
 import { Service } from '@/types/interface'
-import { FAILED_ADD_SERVICE, FAILED_DELETE_SERVICE, SERVICE_EXISTS } from '@/validation/messageCode'
+import {
+  FAILED_ADD_SERVICE,
+  FAILED_DELETE_SERVICE,
+  SERVICE_EXISTS,
+} from '@/validation/messageCode/apiMessageCode/service'
 
 export async function GET() {
   const service = await ServiceRepository.getAllServices()

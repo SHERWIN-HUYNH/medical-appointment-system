@@ -18,7 +18,13 @@ import ConfirmModal from '@/components/ConfirmModal'
 import { uploadFileToCloudinary } from '@/helpers/upload-image'
 import { CldImage } from 'next-cloudinary'
 import { DoctorFormValidation } from '@/validation/doctor'
-import { DOCTOR_FACULTY_ACTIVE_APPOINTMENT, DOCTOR_STATUS_ACTIVE_APPOINTMENT_EXIST, FAILED_UPDATE_STATUS_DOCTOR, SUCCESS_UPDATE_DOCTOR, SUCCESS_UPDATE_STATUS_DOCTOR } from '@/validation/messageCode'
+import {
+  DOCTOR_FACULTY_ACTIVE_APPOINTMENT,
+  DOCTOR_STATUS_ACTIVE_APPOINTMENT_EXIST,
+  FAILED_UPDATE_STATUS_DOCTOR,
+  SUCCESS_UPDATE_DOCTOR,
+  SUCCESS_UPDATE_STATUS_DOCTOR,
+} from '@/validation/messageCode/apiMessageCode/doctor'
 
 const EditDoctor = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([])

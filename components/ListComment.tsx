@@ -184,7 +184,7 @@ const ListComment = () => {
           }}
           paginationProps={{
             dataLength: comments.length,
-            label: "đánh giá",
+            label: 'đánh giá',
           }}
         />
       </div>

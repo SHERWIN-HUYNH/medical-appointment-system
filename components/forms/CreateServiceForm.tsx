@@ -10,8 +10,7 @@ import { SelectItem } from '../ui/select'
 import { Button } from '../ui/button'
 import { toast } from 'sonner'
 import { ServiceFormValidation } from '@/validation/service'
-import { SUCCESS_ADD_SERVICE } from '@/validation/messageCode'
-
+import { SUCCESS_ADD_SERVICE } from '@/validation/messageCode/apiMessageCode/service'
 type Faculty = {
   id: string
   name: string
