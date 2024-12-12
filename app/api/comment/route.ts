@@ -33,14 +33,14 @@ export async function DELETE(req: Request) {
       return notFoundResponse('NOT FOUND COMMENT')
     }
     await CommentRespository.deleteComment({ commentData: commentValues })
-    return successResponse('DELETE PROFILE SUCCESSFULLY')
+    return successResponse('DELETE COMMENT SUCCESSFULLY')
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error('Error deleting profile:', error.message)
+      console.error('Error deleting comment:', error.message)
     } else {
-      console.error('Unknown error deleting profile:', JSON.stringify(error))
+      console.error('Unknown error deleting comment:', JSON.stringify(error))
     }
-    return internalServerErrorResponse('FAIL TO DELETE PROFILE')
+    return internalServerErrorResponse('FAIL TO DELETE COMMENT')
   }
 }
 
