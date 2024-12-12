@@ -7,6 +7,10 @@ import {
 import { createAccount } from '@/lib/email/createAccount'
 import { sendMail } from '@/lib/send-email'
 import { UserRepository } from '@/repositories/user'
+import {
+  CREATE_ACCOUNT_SUCCESS,
+  PASSWORD_REQUIRED,
+} from '@/validation/messageCode/authentication'
 import { RegisterUser } from '@/validation/register'
 import { UserRole } from '@prisma/client'
 
@@ -15,9 +19,8 @@ export const POST = async (request: Request) => {
     const body = await request.json()
     const { username: name, email, password, phone } = RegisterUser.parse(body)
     const role = body.role ?? UserRole.USER
-    console.log('VALUE', role, body)
     const user = await UserRepository.getUserByEmail(email)
-    if (!password) return conflictResponse('Password is required')
+    if (!password) return conflictResponse(PASSWORD_REQUIRED)
     if (user) {
       return conflictResponse('User already exists.')
     }
@@ -47,7 +50,7 @@ export const POST = async (request: Request) => {
       }
     }
     return createdResponse({
-      message: 'User created successfully.',
+      message: CREATE_ACCOUNT_SUCCESS,
     })
   } catch (error) {
     if (error instanceof Error) {

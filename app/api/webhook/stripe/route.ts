@@ -3,7 +3,7 @@ import Stripe from 'stripe'
 import { DoctorRespository } from '@/repositories/doctor'
 import { ServiceRepository } from '@/repositories/service'
 import { ProfileRespository } from '@/repositories/profile'
-import { notFoundResponse, successResponse } from '@/helpers/response'
+import { badRequestResponse, notFoundResponse, successResponse } from '@/helpers/response'
 import { DoctorScheduleRespository } from '@/repositories/doctorSchedule'
 import { AppointmentRepository } from '@/repositories/appointment'
 import { BillRespository } from '@/repositories/bill'
@@ -11,6 +11,13 @@ import { BillStatus } from '@prisma/client'
 import { sendMail } from '@/lib/send-email'
 import { createAppointmentEmailContent } from '@/lib/email/successful-appointment'
 import { ScheduleRespository } from '@/repositories/schedule'
+import { SERVICE_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/service'
+import { SCHEDULE_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/schedule'
+import {
+  CONFRIM_BOOKED_APPOINTMENT,
+  CREATE_APPOINMENT_FAIL,
+} from '@/validation/messageCode/apiMessageCode/appointment'
+import { CREATE_BILL_FAIL } from '@/validation/messageCode/apiMessageCode/bill'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
 export async function POST(req: NextRequest) {
@@ -32,14 +39,14 @@ export async function POST(req: NextRequest) {
     const doctor = await DoctorRespository.getDoctorById(doctorId)
     const profile = await ProfileRespository.getProfileById(profileId)
     if (!service || !doctor || !profile) {
-      return notFoundResponse('NOT FOUND SERVICE OR DOCTOR')
+      return notFoundResponse(SERVICE_NOT_FOUND)
     }
     const doctorSchedule = await DoctorScheduleRespository.getDoctorScheduleById(
       scheduleId,
       doctorId,
     )
     if (!doctorSchedule) {
-      return notFoundResponse('NOT FOUND DOCTOR SCHEDULE')
+      return notFoundResponse(SCHEDULE_NOT_FOUND)
     }
     const appointment = await AppointmentRepository.createAppointment({
       userId: userId,
@@ -50,7 +57,7 @@ export async function POST(req: NextRequest) {
     })
     console.log('appointment', appointment)
     if (!appointment) {
-      return notFoundResponse('FAIL TO CREATE APPOINTMENT')
+      return badRequestResponse(CREATE_APPOINMENT_FAIL)
     }
     const billInfor = {
       price: pricePaidInCents,
@@ -60,13 +67,13 @@ export async function POST(req: NextRequest) {
     }
     const bill = await BillRespository.createBill(billInfor)
     if (!bill) {
-      return notFoundResponse('FAIL TO CREATE BILL')
+      return notFoundResponse(CREATE_BILL_FAIL)
     }
     const receiptUrl = charge.receipt_url ?? ''
 
     sendMail({
       sendTo: profile?.email,
-      subject: 'Xác nhận Đặt lịch hẹn thành công',
+      subject: CONFRIM_BOOKED_APPOINTMENT,
       text: '',
       html: createAppointmentEmailContent(
         profile.name,
