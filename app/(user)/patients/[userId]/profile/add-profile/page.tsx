@@ -26,6 +26,8 @@ import {
   handleKeyPress,
   isValidIdentificationNumber,
 } from '@/helpers/data_normalization'
+import { FAILED_CREATE_PROFILE, INCORRECT_IDENTIFICATION, SUCCESS_CREATE_PROFILE } from '@/validation/messageCode/apiMessageCode/profile'
+import { FAILED_UPLOAD_IMAGE } from '@/validation/messageCode/uploadImage'
 
 const Add_Profile = () => {
   const initialFormData = {
@@ -82,7 +84,7 @@ const Add_Profile = () => {
     e.preventDefault()
 
     if (!isValidIdentificationNumber(formData.identificationNumber)) {
-      setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.')
+      setErrorMessage(INCORRECT_IDENTIFICATION)
       return
     }
     let uploadedUrl = formData.identificationDocumentUrl
@@ -90,12 +92,12 @@ const Add_Profile = () => {
       try {
         const result = await uploadFileToCloudinary(selectedFile)
         if (!result) {
-          toast.error('Tải ảnh lên thất bại. Vui lòng thử lại!')
+          toast.error(FAILED_UPLOAD_IMAGE)
           return
         }
         uploadedUrl = result
       } catch (error) {
-        toast.error(error instanceof Error ? error.message : 'Có lỗi xảy ra khi tải ảnh.')
+        toast.error(error instanceof Error ? error.message : FAILED_UPLOAD_IMAGE)
         return
       }
     }
@@ -121,14 +123,13 @@ const Add_Profile = () => {
         }),
       })
       if (response.ok) {
-        toast.success('Thêm hồ sơ khám bệnh thành công')
+        toast.success(SUCCESS_CREATE_PROFILE)
         router.back()
       } else {
-        const errorText = await response.text()
-        toast.error(`Thêm hồ sơ khám bệnh thất bại: ${errorText}`)
+        toast.error(FAILED_CREATE_PROFILE)
       }
     } catch (error) {
-      toast.error('Có lỗi xảy ra khi thêm hồ sơ khám bệnh.')
+      toast.error(FAILED_CREATE_PROFILE)
     }
   }
 

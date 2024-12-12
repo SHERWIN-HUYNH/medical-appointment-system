@@ -23,6 +23,7 @@ import MedicalRecord from '@/components/Patient/MedicalRecord'
 import PaymentHistory from '@/components/Patient/PaymentHistory'
 import ProfileDetailModal from '@/components/Patient/ProfileDetailModal'
 import { useSearchParams } from 'next/navigation'
+import { FAILED_DELETE_PROFILE, FAILED_DELETE_PROFILE_HAS_APPOINTMENT, FAILED_GET_PROFILE, FAILED_GET_PROFILES, NOTICE_DELETE, SUCCESS_DELETE_PROFILE } from '@/validation/messageCode/apiMessageCode/profile'
 
 const Profile = () => {
   const searchParams = useSearchParams()
@@ -46,12 +47,12 @@ const Profile = () => {
           },
         })
         if (!response.ok) {
-          throw new Error('Lỗi khi lấy dữ liệu hồ sơ')
+          throw new Error(FAILED_GET_PROFILES)
         }
         const profiles = await response.json()
         setProfiles(profiles)
       } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu hồ sơ:', error)
+        console.error(FAILED_GET_PROFILES, error)
       }
     }
     const fetchBills = async () => {
@@ -63,7 +64,7 @@ const Profile = () => {
           },
         })
         if (!response.ok) {
-          throw new Error('Lỗi khi lấy dữ liệu hồ sơ')
+          throw new Error(FAILED_GET_PROFILE)
         }
         const bills = await response.json()
         setBills(bills)
@@ -91,15 +92,15 @@ const Profile = () => {
         }),
       })
       if (!response.ok) {
-        toast.error('Lỗi khi xóa hồ sơ, hồ sơ này đang có lịch hẹn.Vui lòng thử lại sau!')
+        toast.error(FAILED_DELETE_PROFILE_HAS_APPOINTMENT)
       } else {
         setProfiles((prevProfiles) =>
           prevProfiles.filter((profile) => profile.id !== profileToDelete),
         )
-        toast.success('Xóa hồ sơ thành công')
+        toast.success(SUCCESS_DELETE_PROFILE)
       }
     } catch {
-      toast.error('Lỗi khi xóa hồ sơ')
+      toast.error(FAILED_DELETE_PROFILE)
     } finally {
       setIsModalOpen(false)
       setProfileToDelete(null)
@@ -280,7 +281,7 @@ const Profile = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleDeleteProfile}
-        message="Bạn có chắc chắn muốn xóa hồ sơ này không?"
+        message={NOTICE_DELETE}
       />
       {selectedProfile && (
         <ProfileDetailModal
