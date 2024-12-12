@@ -68,7 +68,7 @@ const EditFaculty = () => {
       const file = e.target.files[0]
 
       // Kiểm tra định dạng file
-      const validImageTypes = ['image/jpeg', 'image/png']
+      const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg']
       if (!validImageTypes.includes(file.type)) {
         toast.error(INVALID_IMAGE_FACULTY)
         return
