@@ -25,6 +25,8 @@ import {
   handleKeyPress,
   isValidIdentificationNumber,
 } from '@/helpers/data_normalization'
+import { FAILED_UPDATE_PROFILE, INCORRECT_IDENTIFICATION, SUCCESS_UPDATE_PROFILE } from '@/validation/messageCode/apiMessageCode/profile'
+import { FAILED_UPLOAD_IMAGE } from '@/validation/messageCode/uploadImage'
 
 const Edit_Profile = () => {
   const { data: session } = useSession()
@@ -86,7 +88,7 @@ const Edit_Profile = () => {
     e.preventDefault()
 
     if (!isValidIdentificationNumber(formData.identificationNumber)) {
-      setErrorMessage('Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.')
+      setErrorMessage(INCORRECT_IDENTIFICATION)
       return
     }
 
@@ -95,12 +97,12 @@ const Edit_Profile = () => {
       try {
         const result = await uploadFileToCloudinary(selectedFile)
         if (!result) {
-          toast.error('Tải ảnh lên thất bại. Vui lòng thử lại!')
+          toast.error(FAILED_UPLOAD_IMAGE)
           return
         }
         uploadedUrl = result
       } catch (error) {
-        toast.error(error instanceof Error ? error.message : 'Có lỗi xảy ra khi tải ảnh.')
+        toast.error(error instanceof Error ? error.message : FAILED_UPLOAD_IMAGE)
         return
       }
     }
@@ -129,14 +131,13 @@ const Edit_Profile = () => {
       })
 
       if (response.ok) {
-        toast.success('Sửa hồ sơ khám bệnh thành công')
+        toast.success(SUCCESS_UPDATE_PROFILE)
         router.back()
       } else {
-        toast.error('Sửa hồ sơ khám bệnh thất bại. Vui lòng thử lại!')
+        toast.error(FAILED_UPDATE_PROFILE)
       }
     } catch (error) {
-      console.error('Error updating profile:', error)
-      toast.error('Đã xảy ra lỗi khi cập nhật hồ sơ.')
+      toast.error(FAILED_UPDATE_PROFILE)
     }
   }
 

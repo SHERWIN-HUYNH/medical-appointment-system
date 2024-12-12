@@ -65,12 +65,12 @@ export function DataTable<TData, TValue>({
     id: 'stt',
     header: 'STT',
     enableSorting: false,
-    cell: ({ row }) => {
-      const allFilteredRows = table.getFilteredRowModel().rows
-      const rowIndex = allFilteredRows.findIndex((r) => r.id === row.id)
-      return rowIndex + 1
+    cell: ({ row, table }) => {
+      const sortedRowIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id)
+      return sortedRowIndex + 1 
     },
-  }
+  };
+  
 
   const allColumns = showSTT ? [sttColumn, ...columns] : columns
 

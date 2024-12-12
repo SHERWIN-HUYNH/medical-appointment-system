@@ -1,3 +1,5 @@
+import { FAILED_UPLOAD_IMAGE } from "@/validation/messageCode/uploadImage"
+
 export const uploadFileToCloudinary = async (file: File): Promise<string | null> => {
   const uploadFormData = new FormData()
   uploadFormData.append('file', file)
@@ -15,10 +17,10 @@ export const uploadFileToCloudinary = async (file: File): Promise<string | null>
       return data.public_id
     } else {
       console.error('Cloudinary upload failed:', data)
-      throw new Error('Tải ảnh lên thất bại. Vui lòng thử lại!')
+      throw new Error(FAILED_UPLOAD_IMAGE)
     }
   } catch (error) {
     console.error('Upload error:', error)
-    throw new Error('Có lỗi xảy ra khi tải ảnh.')
+    throw new Error(FAILED_UPLOAD_IMAGE)
   }
 }

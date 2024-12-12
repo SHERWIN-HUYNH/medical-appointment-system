@@ -6,6 +6,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import { Star, Trash2 } from 'lucide-react'
 import ModalDelete from '@/components/ModalDelete'
+import { FAILED_DELETE_COMMENT, FAILED_GET_COMMENT, SUCCESS_DELETE_COMMENT } from '@/validation/messageCode/apiMessageCode/comment'
 
 type Comment = {
   id: string
@@ -39,9 +40,10 @@ const ListComment = () => {
           },
         })
         if (!response.ok) {
-          throw new Error('Lỗi khi lấy danh sách đánh giá')
+          throw new Error(FAILED_GET_COMMENT)
         }
         const comments = await response.json()
+        comments.sort((a: Comment, b: Comment) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
         setCommentData(comments)
       } catch (error) {
         console.error('Error fetching comments:', error)
@@ -80,13 +82,13 @@ const ListComment = () => {
         setCommentData((prevData) =>
           prevData.filter((comment) => comment.id !== commentToDelete.id),
         )
-        toast.success('Xóa đánh giá thành công!')
+        toast.success(SUCCESS_DELETE_COMMENT)
       } else {
         const message = await response.json()
         toast.error(message.error)
       }
     } catch (error) {
-      toast.error('Đã xảy ra lỗi khi xóa đánh giá!')
+      toast.error(FAILED_DELETE_COMMENT)
     } finally {
       setCommentToDelete(null)
       setShowModal(false)
@@ -106,6 +108,7 @@ const ListComment = () => {
   }
 
   const columns: ColumnDef<Comment>[] = [
+    
     {
       accessorKey: 'createdAt',
       header: 'Ngày đăng',
@@ -114,7 +117,7 @@ const ListComment = () => {
       sortingFn: (rowA, rowB) => {
         const dateA = new Date(rowA.original.createdAt)
         const dateB = new Date(rowB.original.createdAt)
-        return dateA.getTime() - dateB.getTime()
+        return dateB.getTime() - dateA.getTime()
       },
     },
     {
@@ -178,7 +181,7 @@ const ListComment = () => {
           filterOptions={ratingFilterOptions}
           initialState={{
             pagination: {
-              pageSize: 7,
+              pageSize: 5,
             },
           }}
         />

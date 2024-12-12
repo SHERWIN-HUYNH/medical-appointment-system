@@ -7,12 +7,13 @@ import {
   successResponse,
   unauthorizedResponse,
 } from '@/helpers/response'
+import { FAILED_CREATE_PROFILE, FAILED_GET_PROFILES, FAILED_UPDATE_PROFILE, PROFILE_NOT_FOUND, SUCCESS_CREATE_PROFILE, SUCCESS_DELETE_PROFILE, SUCCESS_UPDATE_PROFILE, UNAUTHENTICATED } from '@/validation/messageCode/apiMessageCode/profile'
 
 export async function POST(req: Request, context: { params: { userId: string } }) {
   const { profile }: { profile: Profile } = await req.json()
   const { userId } = context.params
   if (!userId) {
-    return unauthorizedResponse('UNAUTHENTICATED')
+    return unauthorizedResponse(UNAUTHENTICATED)
   }
   const newProfile = await ProfileRespository.createProfile({
     profileData: profile,
@@ -20,9 +21,9 @@ export async function POST(req: Request, context: { params: { userId: string } }
   })
 
   if (newProfile) {
-    return successResponse('CREATE PROFILE SUCCESSFULLY')
+    return successResponse(SUCCESS_CREATE_PROFILE)
   } else {
-    return badRequestResponse('FAIL TO CREATE PROFILE')
+    return badRequestResponse(FAILED_CREATE_PROFILE)
   }
 }
 
@@ -30,11 +31,11 @@ export async function PUT(req: Request, context: { params: { userId: string } })
   const { profile }: { profile: Profile } = await req.json()
   const { userId } = context.params
   if (!userId) {
-    return unauthorizedResponse('UNAUTHENTICATED')
+    return unauthorizedResponse(UNAUTHENTICATED)
   }
   const checkprofile = await ProfileRespository.getListProfileByUserId(profile.id)
   if (!checkprofile) {
-    return notFoundResponse('NOT FOUND PROFILE')
+    return notFoundResponse(PROFILE_NOT_FOUND)
   }
   const updateProfile = await ProfileRespository.updateProfile({
     profileData: profile,
@@ -42,21 +43,21 @@ export async function PUT(req: Request, context: { params: { userId: string } })
   })
 
   if (updateProfile) {
-    return successResponse('UPDATE PROFILE SUCCESSFULLY')
+    return successResponse(SUCCESS_UPDATE_PROFILE)
   } else {
-    return badRequestResponse('FAIL TO UPDATE PROFILE')
+    return badRequestResponse(FAILED_UPDATE_PROFILE)
   }
 }
 
 export async function GET(request: Request, context: { params: { userId: string } }) {
   const { userId } = context.params
   if (!userId) {
-    return unauthorizedResponse('UNAUTHENTICATED')
+    return unauthorizedResponse(UNAUTHENTICATED)
   }
   try {
     const profiles = await ProfileRespository.getListProfileByUserId(userId)
     if (!profiles || profiles.length === 0) {
-      return notFoundResponse('NOT FOUND PROFILE')
+      return notFoundResponse(PROFILE_NOT_FOUND)
     }
     return successResponse(profiles)
   } catch (error: unknown) {
@@ -65,7 +66,7 @@ export async function GET(request: Request, context: { params: { userId: string 
     } else {
       console.error('Error fetching profiles:', error)
     }
-    return internalServerErrorResponse('FAIL TO GET LIST PROFILE')
+    return internalServerErrorResponse(FAILED_GET_PROFILES)
   }
 }
 
@@ -75,10 +76,10 @@ export async function DELETE(req: Request) {
   try {
     const checkProfile = await ProfileRespository.getProfileById(profileValues.id)
     if (!checkProfile) {
-      return notFoundResponse('NOT FOUND PROFILE')
+      return notFoundResponse(PROFILE_NOT_FOUND)
     }
     await ProfileRespository.deleteProfile({ profileData: profileValues })
-    return successResponse('DELETE PROFILE SUCCESSFULLY')
+    return successResponse(SUCCESS_DELETE_PROFILE)
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error('Error deleting profile:', error.message)

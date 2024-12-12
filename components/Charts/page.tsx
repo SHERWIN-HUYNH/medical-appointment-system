@@ -1,12 +1,11 @@
-'use client'
+import React, { useEffect, useState } from 'react'
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb'
 import ChartOne from '@/components/Charts/ChartOne'
 import ChartTwo from '@/components/Charts/ChartTwo'
 import { AppointmentReport, fetchAppointmentData } from '@/helpers/chart'
-import { s } from '@fullcalendar/core/internal-common'
 import dynamic from 'next/dynamic'
-import React, { useEffect, useState } from 'react'
 import * as XLSX from 'xlsx'
+import { REPORT_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/chart'
 
 interface AppointmentData {
   year: number
@@ -14,13 +13,14 @@ interface AppointmentData {
   totalAppointments: number
   totalAmount: number
   appointments: {
-    id: string
-    date: string
-    price: number
-    serviceName: string
-    facultyName: string
-  }[]
+    id: string;
+    date: string;
+    price: number;
+    serviceName: string;
+    facultyName: string;
+  }[];  
 }
+
 const ChartThree = dynamic(() => import('@/components/Charts/ChartThree'), {
   ssr: false,
 })
@@ -28,12 +28,14 @@ const ChartThree = dynamic(() => import('@/components/Charts/ChartThree'), {
 const Chart: React.FC = () => {
   const [statistics, setStatistics] = useState<AppointmentReport[]>([])
   const [appointmentsData, setAppointmentsData] = useState<AppointmentData[]>([])
+  const [selectedYear, setSelectedYear] = useState<number | 'all'>(new Date().getFullYear())
+  const [selectedMonth, setSelectedMonth] = useState<number | 'all'>(new Date().getMonth() + 1)
 
   useEffect(() => {
     const loadData = async () => {
       const data = await fetchAppointmentData()
       if (data.length === 0) {
-        console.warn('Không có dữ liệu để hiển thị.')
+        console.warn(REPORT_NOT_FOUND)
       }
       setStatistics(data)
     }
@@ -56,7 +58,13 @@ const Chart: React.FC = () => {
   }, [])
 
   const handleExportReport = () => {
-    const groupedData = appointmentsData.reduce(
+    const filteredData = appointmentsData.filter(
+      (data) =>
+        (selectedYear === 'all' || data.year === selectedYear) &&
+        (selectedMonth === 'all' || data.month === selectedMonth)
+    )
+
+    const groupedData = filteredData.reduce(
       (acc, curr) => {
         const yearKey = `${curr.year}`
 
@@ -132,10 +140,10 @@ const Chart: React.FC = () => {
             }
           >
         }
-      >,
-    )
+      >
+    );
 
-    let reportData: any[] = []
+    let reportData: any[] = [];
     Object.values(groupedData).forEach((group) => {
       const { year, months } = group
       reportData.push({
@@ -148,7 +156,7 @@ const Chart: React.FC = () => {
           style: 'currency',
           currency: 'VND',
         }),
-      })
+      });
 
       Object.entries(months).forEach(([month, monthData]) => {
         reportData.push({
@@ -174,28 +182,54 @@ const Chart: React.FC = () => {
                 style: 'currency',
                 currency: 'VND',
               }),
-            })
-          })
-        })
-      })
-    })
+            });
+          });
+        });
+      });
+    });
 
-    const worksheet = XLSX.utils.json_to_sheet(reportData)
-    const workbook = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Báo Cáo')
-    XLSX.writeFile(workbook, 'bao_cao.xlsx')
-  }
+    const worksheet = XLSX.utils.json_to_sheet(reportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Báo Cáo");
+    XLSX.writeFile(workbook, "bao_cao.xlsx");
+  };
 
   return (
     <>
       <div className="flex items-center justify-between mb-4">
         <Breadcrumb pageName={[['Thống kê', '/admin/chart']]} />
-        <button
-          onClick={handleExportReport}
-          className="px-4 py-2 mr-8 bg-primary text-white text-sm font-medium rounded-md"
-        >
-          Xuất Báo Cáo
-        </button>
+        <div className="flex space-x-4">
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+            className="px-3 py-2 border border-gray-300 rounded-md"
+          >
+            <option value="all">Tất cả</option>
+            {[2020, 2021, 2022, 2023, 2024].map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+            className="px-3 py-2 border border-gray-300 rounded-md"
+          >
+            <option value="all">Tất cả</option>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
+              <option key={month} value={month}>
+                {month < 10 ? `0${month}` : month}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={handleExportReport}
+            className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-md"
+          >
+            Xuất Báo Cáo
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5">
@@ -221,41 +255,54 @@ const Chart: React.FC = () => {
                 <tr>
                   <th
                     scope="col"
-                    className="w-2/5 px-3 py-3 text-left text-xs font-medium text-primary uppercase tracking-wider"
+                    className="w-12 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 sm:pl-6"
                   >
-                    Chuyên Khoa
+                    STT
                   </th>
                   <th
                     scope="col"
-                    className="w-1/5 px-2 py-3 text-left text-xs font-medium text-primary uppercase tracking-wider"
+                    className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900"
+                  >
+                    Năm
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900"
+                  >
+                    Tháng
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900"
                   >
                     Số Cuộc Hẹn
                   </th>
                   <th
                     scope="col"
-                    className="w-2/5 px-2 py-3 text-left text-xs font-medium text-primary uppercase tracking-wider"
+                    className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900"
                   >
                     Doanh Thu
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-slate-200">
-                {statistics.map((stat, index) => (
-                  <tr key={index}>
-                    <td className="px-2 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
-                      {stat.facultyName}
-                    </td>
-                    <td className="px-2 py-4 whitespace-nowrap text-sm text-slate-500">
-                      {stat.sumAppointmentsFaculty}
-                    </td>
-                    <td className="px-2 py-4 whitespace-nowrap text-sm text-slate-500">
-                      {stat.revenue.toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND',
-                      })}
-                    </td>
-                  </tr>
-                ))}
+              <tbody className="divide-y divide-slate-200 bg-white">
+                {appointmentsData
+                  .filter(
+                    (data) =>
+                      (selectedYear === 'all' || data.year === selectedYear) &&
+                      (selectedMonth === 'all' || data.month === selectedMonth)
+                  )
+                  .map((item, index) => (
+                    <tr key={index}>
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-slate-900 sm:pl-6">
+                        {index + 1}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.year}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.month}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.totalAppointments}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.totalAmount}</td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

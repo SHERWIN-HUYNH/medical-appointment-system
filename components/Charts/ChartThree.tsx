@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import ReactApexChart from 'react-apexcharts'
 import { ApexOptions } from 'apexcharts'
 import { fetchAppointmentData } from '@/helpers/chart'
+import { REPORT_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/chart'
 
 const ChartThree: React.FC = () => {
   const [series, setSeries] = useState<number[]>([])
@@ -58,7 +59,7 @@ const ChartThree: React.FC = () => {
       try {
         const data = await fetchAppointmentData()
         if (data.length === 0) {
-          console.warn('Không có dữ liệu để hiển thị.')
+          console.warn(REPORT_NOT_FOUND)
           return
         }
 
@@ -84,7 +85,7 @@ const ChartThree: React.FC = () => {
       }
     }
 
-    loadData() // Ensure this invokes the `loadData` function instead of `fetchAppointmentData` directly.
+    loadData() 
   }, [])
 
   return (

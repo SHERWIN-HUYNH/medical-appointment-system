@@ -6,12 +6,13 @@ import {
 } from '@/helpers/response'
 import { CommentRespository } from '@/repositories/comment'
 import { Comment } from '@/types/interface'
+import { COMMENT_NOT_FOUND, FAILED_DELETE_COMMENT, FAILED_DELETE_COMMENT_AGAIN, FAILED_GET_COMMENT, SUCCESS_DELETE_COMMENT } from '@/validation/messageCode/apiMessageCode/comment'
 
 export async function GET() {
   try {
     const comments = await CommentRespository.getListComments()
     if (!comments || comments.length === 0) {
-      return notFoundResponse('NOT FOUND COMMENT')
+      return notFoundResponse(COMMENT_NOT_FOUND)
     }
     return successResponse(comments)
   } catch (error: unknown) {
@@ -20,7 +21,7 @@ export async function GET() {
     } else {
       console.error('Unknown error fetching comments:', JSON.stringify(error))
     }
-    return internalServerErrorResponse('FAIL TO GET LIST COMMENT')
+    return internalServerErrorResponse(FAILED_GET_COMMENT)
   }
 }
 
@@ -30,23 +31,22 @@ export async function DELETE(req: Request) {
   try {
     const checkComment = await CommentRespository.getCommentById(commentValues.id)
     if (!checkComment) {
-      return notFoundResponse('NOT FOUND COMMENT')
+      return notFoundResponse(COMMENT_NOT_FOUND)
     }
     await CommentRespository.deleteComment({ commentData: commentValues })
-    return successResponse('DELETE COMMENT SUCCESSFULLY')
+    return successResponse(SUCCESS_DELETE_COMMENT)
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error('Error deleting comment:', error.message)
     } else {
       console.error('Unknown error deleting comment:', JSON.stringify(error))
     }
-    return internalServerErrorResponse('FAIL TO DELETE COMMENT')
+    return internalServerErrorResponse(FAILED_DELETE_COMMENT)
   }
 }
 
 export async function POST(req: Request) {
   const commentData = await req.json()
-  // Kiểm tra xem người dùng đã đánh giá cuộc hẹn này chưa
   const existingComment = await CommentRespository.checkExistingCommentByAppointment(
     commentData.doctorId,
     commentData.userId,
@@ -54,9 +54,8 @@ export async function POST(req: Request) {
   )
 
   if (existingComment) {
-    return badRequestResponse('Bạn đã đánh giá cuộc hẹn này với bác sĩ rồi')
+    return badRequestResponse(FAILED_DELETE_COMMENT_AGAIN)
   }
-
   const comment = await CommentRespository.createComment(commentData)
   return successResponse(comment)
 }
