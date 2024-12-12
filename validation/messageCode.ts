@@ -6,3 +6,6 @@ export const PASSWORD_LENGTH = 'Mật khẩu phải chứa 6 kí tự'
 export const INCORRECT_PASSWORD = 'Mật khẩu không trùng khớp'
 export const MIN_LENGTH_PHONE = 'Số điện thoại phải có ít nhất 10 chữ số'
 export const MAX_lENGTH_PHONE = 'Số điện thoại không quá 11 chữ số'
+export const AVATA_REQUIRED = 'Vui lòng chọn ảnh đại diện'
+//ROLE
+export const NAME_REQUIRED = 'Vui lòng nhập tên!'

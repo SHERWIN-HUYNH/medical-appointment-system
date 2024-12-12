@@ -7,9 +7,9 @@ import { AppointmentStatus } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
-interface countAppointment{
-  count: number,
-  status:AppointmentStatus
+interface countAppointment {
+  count: number
+  status: AppointmentStatus
 }
 const AdminPage = () => {
   const [appointments, setAppointments] = React.useState<AppointmentSchedule[]>()
@@ -17,21 +17,21 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       const res = await fetch('/api/appointments')
-      const data : AppointmentSchedule[]= await res.json()
+      const data: AppointmentSchedule[] = await res.json()
       setAppointments(data)
       const count = await fetch('/api/appointments/count')
-      const countData : countAppointment[]= await count.json()
+      const countData: countAppointment[] = await count.json()
       setCountAppointment(countData)
     }
 
     fetchAppointments()
-  },[])
+  }, [])
   const pendingCount =
-  countAppointment?.find((item) => item.status === 'PENDING')?.count || 0
-const scheduledCount =
-  countAppointment?.find((item) => item.status === 'SCHEDULED')?.count || 0
-const cancelledCount =
-  countAppointment?.find((item) => item.status === 'CANCELLED')?.count || 0
+    countAppointment?.find((item) => item.status === 'PENDING')?.count || 0
+  const scheduledCount =
+    countAppointment?.find((item) => item.status === 'SCHEDULED')?.count || 0
+  const cancelledCount =
+    countAppointment?.find((item) => item.status === 'CANCELLED')?.count || 0
   console.log('APPOINTMENTS', appointments)
   if (!appointments) return <div>Something went wrong</div>
   return (

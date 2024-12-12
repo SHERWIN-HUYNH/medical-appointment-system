@@ -1,13 +1,18 @@
 import { z } from 'zod'
+import {
+  AVATA_REQUIRED,
+  INVALID_EMAIL,
+  MAX_lENGTH_PHONE,
+  MIN_LENGTH_PHONE,
+  NAME_LENGTH,
+  PASSWORD_LENGTH,
+} from './messageCode'
 
 export const UpdateAccountValidation = z.object({
-  username: z.string().min(2, 'Tên phải ít nhất 6 kí tự'),
-  email: z.string().email('Email không hợp lệ'),
-  oldPassword: z.string().min(6, 'Mật khẩu phải chứa 6 kí tự'),
-  phone: z
-    .string()
-    .min(10, 'Số điện thoại phải có ít nhất 10 chữ số')
-    .max(15, 'Số điện thoại không quá 15 chữ số'),
+  username: z.string().min(2, NAME_LENGTH),
+  email: z.string().email(INVALID_EMAIL),
+  oldPassword: z.string().min(6, PASSWORD_LENGTH),
+  phone: z.string().min(10, MIN_LENGTH_PHONE).max(11, MAX_lENGTH_PHONE),
   newPassword: z.string().min(6, {}),
-  image: z.string().min(1, 'Vui lòng chọn ảnh đại diện'),
+  image: z.string().min(1, AVATA_REQUIRED),
 })
