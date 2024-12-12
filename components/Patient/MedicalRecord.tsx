@@ -178,7 +178,7 @@ const Medicalbill: React.FC<Props> = ({ appointments }) => {
               </Button>
             ))}
           </div>
-          <div className="mt-5">
+          <div className="mt-5 custom-scrollbar max-h-[400px] overflow-y-auto">
             {selectedAppointment.length > 0 ? (
               selectedAppointment.map((bill) => (
                 <div

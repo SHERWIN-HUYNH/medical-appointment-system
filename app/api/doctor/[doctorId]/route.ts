@@ -1,5 +1,6 @@
 import { badRequestResponse, notFoundResponse, successResponse } from '@/helpers/response'
 import { DoctorRespository } from '@/repositories/doctor'
+import { DOCTOR_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/doctor'
 
 interface Context {
   params: {
@@ -15,7 +16,7 @@ export async function GET(req: Request, context: Context) {
   }
   const doctor = await DoctorRespository.getDoctorById(doctorId) // Fetch by ID
   if (!doctor) {
-    return notFoundResponse('DOCTOR NOT FOUND')
+    return notFoundResponse(DOCTOR_NOT_FOUND)
   }
   return successResponse(doctor)
 }

@@ -4,13 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { createService } from '@/lib/validation'
 import { Form } from '../ui/form'
 import CustomFormField, { FormFieldType } from '../CustomFormField'
 import { SelectItem } from '../ui/select'
 import { Button } from '../ui/button'
 import { toast } from 'sonner'
-
+import { ServiceFormValidation } from '@/validation/service'
+import { SUCCESS_ADD_SERVICE } from '@/validation/messageCode/apiMessageCode/service'
 type Faculty = {
   id: string
   name: string
@@ -29,8 +29,8 @@ const CreateServiceForm = () => {
 
     fetchFacultyData()
   })
-  const form = useForm<z.infer<typeof createService>>({
-    resolver: zodResolver(createService),
+  const form = useForm<z.infer<typeof ServiceFormValidation>>({
+    resolver: zodResolver(ServiceFormValidation),
     defaultValues: {
       name: '',
       price: '',
@@ -39,7 +39,7 @@ const CreateServiceForm = () => {
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof createService>) => {
+  const onSubmit = async (values: z.infer<typeof ServiceFormValidation>) => {
     const serviceData = {
       ...values,
       price: Number(values.price.replace(/\D/g, '')),
@@ -54,7 +54,7 @@ const CreateServiceForm = () => {
     })
 
     if (response.ok) {
-      toast.success('Thêm dịch vụ thành công!')
+      toast.success(SUCCESS_ADD_SERVICE)
       form.reset({
         name: '',
         price: '',

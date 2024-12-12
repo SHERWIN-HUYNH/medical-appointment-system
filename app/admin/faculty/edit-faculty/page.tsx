@@ -3,7 +3,6 @@ import CustomFormField, { FormFieldType } from '@/components/CustomFormField'
 import DefaultLayout from '@/components/Layouts/defaultLayout'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
-import { FacultyFormValidation } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useEffect, useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
@@ -14,6 +13,12 @@ import { Label } from '@/components/ui/label'
 import { CldImage } from 'next-cloudinary'
 import { uploadFileToCloudinary } from '@/helpers/upload-image'
 import { Input } from '@/components/ui/input'
+import { FacultyFormValidation } from '@/validation/faculty'
+import {
+  FAILED_UPDATE_FACULTY,
+  SUCCESS_UPDATE_FACULTY,
+} from '@/validation/messageCode/apiMessageCode/faculty'
+import { INVALID_IMAGE_FACULTY } from '@/validation/messageCode/faculty'
 
 const EditFaculty = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -61,6 +66,14 @@ const EditFaculty = () => {
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
+
+      // Kiểm tra định dạng file
+      const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg']
+      if (!validImageTypes.includes(file.type)) {
+        toast.error(INVALID_IMAGE_FACULTY)
+        return
+      }
+
       setSelectedFile(file)
       const previewUrl = URL.createObjectURL(file)
 
@@ -99,7 +112,7 @@ const EditFaculty = () => {
       })
 
       if (response.ok) {
-        toast.success('Faculty updated successfully!')
+        toast.success(SUCCESS_UPDATE_FACULTY)
         router.push('/admin/faculty')
       } else {
         const message = await response.json()
@@ -107,7 +120,7 @@ const EditFaculty = () => {
       }
     } catch (error) {
       console.error(error)
-      toast.error('Failed to update faculty.')
+      toast.error(FAILED_UPDATE_FACULTY)
     }
   }
 

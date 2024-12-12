@@ -8,6 +8,10 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { ColumnDef } from '@tanstack/react-table'
 import { formatPrice } from '@/helpers/formatCurrency'
+import {
+  FAILED_DELETE_SERVICE,
+  SUCCESS_DELETE_SERVICE,
+} from '@/validation/messageCode/apiMessageCode/service'
 
 type Service = {
   id: string
@@ -76,14 +80,14 @@ const ListService = () => {
         setServiceData((prevData) =>
           prevData.filter((service) => service.id !== serviceToDelete.id),
         )
-        toast.success(`Dịch vụ ${serviceToDelete.name} đã xóa thành công!`)
+        toast.success(SUCCESS_DELETE_SERVICE)
       } else {
         const message = await response.json()
         toast.error(message.error)
       }
     } catch (error) {
       console.error('Error deleting service:', error)
-      toast.error('Đã xảy ra lỗi khi xóa dịch vụ!')
+      toast.error(FAILED_DELETE_SERVICE)
     } finally {
       setServiceToDelete(null)
       setShowModal(false)
@@ -177,6 +181,10 @@ const ListService = () => {
                 label: faculty.name,
                 value: faculty.id,
               })),
+            }}
+            paginationProps={{
+              dataLength: serviceData.length,
+              label: 'dịch vụ',
             }}
           />
         )}

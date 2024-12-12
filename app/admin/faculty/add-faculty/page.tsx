@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
 import DefaultLayout from '@/components/Layouts/defaultLayout'
-import { FacultyFormValidation } from '@/lib/validation'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
@@ -16,6 +15,12 @@ import Image from 'next/image'
 import { Label } from '@/components/ui/label'
 import { uploadFileToCloudinary } from '@/helpers/upload-image'
 import { Input } from '@/components/ui/input'
+import { FacultyFormValidation } from '@/validation/faculty'
+import {
+  FAILED_ADD_FACULTY,
+  SUCCESS_ADD_FACULTY,
+} from '@/validation/messageCode/apiMessageCode/faculty'
+import { INVALID_IMAGE_FACULTY } from '@/validation/messageCode/faculty'
 
 const AddFaculty = () => {
   const router = useRouter()
@@ -35,6 +40,14 @@ const AddFaculty = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
+
+      // Kiểm tra định dạng file
+      const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg']
+      if (!validImageTypes.includes(file.type)) {
+        toast.error(INVALID_IMAGE_FACULTY)
+        return
+      }
+
       setSelectedFile(file)
       const previewUrl = URL.createObjectURL(file)
 
@@ -73,10 +86,10 @@ const AddFaculty = () => {
         return
       }
 
-      toast.success('Thêm chuyên khoa thành công!')
+      toast.success(SUCCESS_ADD_FACULTY)
     } catch (error) {
       console.error(error)
-      toast.error('Không thể thêm chuyên khoa')
+      toast.error(FAILED_ADD_FACULTY)
     } finally {
       setLoading(false)
     }

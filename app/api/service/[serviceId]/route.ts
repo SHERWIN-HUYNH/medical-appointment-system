@@ -6,6 +6,10 @@ import {
 } from '@/helpers/response'
 import { AppointmentRepository } from '@/repositories/appointment'
 import { ServiceRepository } from '@/repositories/service'
+import {
+  FAILED_UPDATE_SERVICE,
+  UPDATE_SERVICE_ACTIVE_APPOINTMENT,
+} from '@/validation/messageCode/apiMessageCode/service'
 
 export async function GET(req: Request, { params }: { params: { serviceId: string } }) {
   const { serviceId } = params
@@ -29,7 +33,7 @@ export async function PUT(req: Request, { params }: { params: { serviceId: strin
   const pendingAppointments =
     await AppointmentRepository.getAppointmentByServiceId(serviceId)
   if (pendingAppointments?.length > 0) {
-    return forbiddenResponse('Không thể cập nhật dịch vụ đang có lịch hẹn')
+    return forbiddenResponse(UPDATE_SERVICE_ACTIVE_APPOINTMENT)
   }
 
   const updateData = {
@@ -42,7 +46,7 @@ export async function PUT(req: Request, { params }: { params: { serviceId: strin
 
   const updatedService = await ServiceRepository.updateService(updateData)
   if (!updatedService) {
-    return badRequestResponse('Không thể cập nhật dịch vụ')
+    return badRequestResponse(FAILED_UPDATE_SERVICE)
   }
 
   return successResponse(updatedService)

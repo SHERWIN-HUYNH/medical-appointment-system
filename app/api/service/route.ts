@@ -8,6 +8,11 @@ import {
 } from '@/helpers/response'
 import { ServiceRepository } from '@/repositories/service'
 import { Service } from '@/types/interface'
+import {
+  FAILED_ADD_SERVICE,
+  FAILED_DELETE_SERVICE,
+  SERVICE_EXISTS,
+} from '@/validation/messageCode/apiMessageCode/service'
 
 export async function GET() {
   const service = await ServiceRepository.getAllServices()
@@ -29,13 +34,13 @@ export async function POST(req: Request) {
     )
 
     if (exists) {
-      return conflictResponse('Dịch vụ này đã tồn tại trong hệ thống')
+      return conflictResponse(SERVICE_EXISTS)
     }
     const newService = await ServiceRepository.createService(service)
     return successResponse(newService)
   } catch (error) {
     console.log(error)
-    return badRequestResponse('Thêm dịch vụ thất bại')
+    return badRequestResponse(FAILED_ADD_SERVICE)
   }
 }
 
@@ -48,6 +53,6 @@ export async function DELETE(req: Request) {
     if (error instanceof Error) {
       return forbiddenResponse(error.message)
     }
-    return badRequestResponse('Xóa dịch vụ thất bại')
+    return badRequestResponse(FAILED_DELETE_SERVICE)
   }
 }

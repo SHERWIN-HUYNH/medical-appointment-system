@@ -5,7 +5,13 @@ import {
   successResponse,
 } from '@/helpers/response'
 import { DoctorRespository } from '@/repositories/doctor'
-
+import {
+  DOCTOR_FACULTY_ACTIVE_APPOINTMENT,
+  DOCTOR_NOT_FOUND,
+  DOCTOR_STATUS_ACTIVE_APPOINTMENT_EXIST,
+  FAILED_DELETE_DOCTOR,
+  FAILED_UPDATE_STATUS_DOCTOR,
+} from '@/validation/messageCode/apiMessageCode/doctor'
 export async function GET() {
   const doctors = await DoctorRespository.getDoctores()
   return successResponse(doctors)
@@ -29,16 +35,14 @@ export async function PUT(req: Request) {
   const { doctor } = await req.json()
   const doctorData = await DoctorRespository.getDoctorById(doctor.id)
   if (!doctorData) {
-    return notFoundResponse('DOCTOR NOT FOUND')
+    return notFoundResponse(DOCTOR_NOT_FOUND)
   }
 
   // Kiểm tra nếu đang thay đổi chuyên khoa
   if (doctorData.facultyId !== doctor.faculty) {
     const hasAppointments = await DoctorRespository.hasAppointments(doctor.id)
     if (hasAppointments) {
-      return forbiddenResponse(
-        'Bác sĩ này đang có cuộc hẹn không thể thay đổi chuyên khoa',
-      )
+      return forbiddenResponse(DOCTOR_FACULTY_ACTIVE_APPOINTMENT)
     }
   }
 
@@ -46,7 +50,7 @@ export async function PUT(req: Request) {
   if (doctorData.isActive && !doctor.isActive) {
     const hasAppointments = await DoctorRespository.hasAppointments(doctor.id)
     if (hasAppointments) {
-      return forbiddenResponse('Bác sĩ này đang có cuộc hẹn không thể chuyển trạng thái')
+      return forbiddenResponse(DOCTOR_STATUS_ACTIVE_APPOINTMENT_EXIST)
     }
   }
 
@@ -56,7 +60,7 @@ export async function PUT(req: Request) {
   })
 
   if (!updatedDoctor) {
-    return badRequestResponse('FAIL TO UPDATE DOCTOR')
+    return badRequestResponse(FAILED_UPDATE_STATUS_DOCTOR)
   }
   return successResponse(updatedDoctor)
 }
@@ -71,6 +75,6 @@ export async function DELETE(req: Request) {
     if (error instanceof Error) {
       return forbiddenResponse(error.message)
     }
-    return badRequestResponse('Xóa bác sĩ thất bại')
+    return badRequestResponse(FAILED_DELETE_DOCTOR)
   }
 }

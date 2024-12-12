@@ -48,6 +48,10 @@ interface DataTableProps<TData, TValue> {
       pageSize?: number
     }
   }
+  paginationProps?: {
+    dataLength: number
+    label: string
+  }
 }
 
 export function DataTable<TData, TValue>({
@@ -57,6 +61,7 @@ export function DataTable<TData, TValue>({
   filterOptions,
   showSTT = true,
   initialState,
+  paginationProps,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -121,6 +126,11 @@ export function DataTable<TData, TValue>({
               />
             </div>
           </div>
+          {paginationProps && (
+            <div className="p-4 text-md text-slate-700">
+              Hiện có {paginationProps.dataLength} dữ liệu {paginationProps.label}.
+            </div>
+          )}
 
           {filterOptions && (
             <div className="flex items-center gap-2">
@@ -149,7 +159,6 @@ export function DataTable<TData, TValue>({
             </div>
           )}
         </div>
-
         <div className="flex-1 overflow-auto rounded-xl border border-slate-200 shadow-lg mb-16">
           <Table>
             <TableHeader>

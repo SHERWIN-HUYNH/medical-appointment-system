@@ -1,5 +1,4 @@
 'use client'
-import { createService } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useEffect, useState, useCallback } from 'react'
 import { toast } from 'sonner'
@@ -10,6 +9,8 @@ import { Form } from '../ui/form'
 import CustomFormField, { FormFieldType } from '../CustomFormField'
 import { SelectItem } from '../ui/select'
 import { useSearchParams, useRouter } from 'next/navigation'
+import { ServiceFormValidation } from '@/validation/service'
+import { SUCCESS_UPDATE_SERVICE } from '@/validation/messageCode/apiMessageCode/service'
 
 type Faculty = {
   id: string
@@ -23,8 +24,8 @@ const EditServiceForm = () => {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
 
-  const form = useForm<z.infer<typeof createService>>({
-    resolver: zodResolver(createService),
+  const form = useForm<z.infer<typeof ServiceFormValidation>>({
+    resolver: zodResolver(ServiceFormValidation),
     defaultValues: {
       name: '',
       price: '',
@@ -64,7 +65,7 @@ const EditServiceForm = () => {
     }
   }, [id, fetchServiceData])
 
-  const onSubmit = async (values: z.infer<typeof createService>) => {
+  const onSubmit = async (values: z.infer<typeof ServiceFormValidation>) => {
     try {
       setLoading(true)
       const response = await fetch(`/api/service/${id}`, {
@@ -74,7 +75,7 @@ const EditServiceForm = () => {
       })
 
       if (response.ok) {
-        toast.success('Service updated successfully!')
+        toast.success(SUCCESS_UPDATE_SERVICE)
         router.push('/admin/service')
       } else {
         const message = await response.json()
