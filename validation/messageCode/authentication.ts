@@ -1,4 +1,4 @@
-// LOGIN
+// LOGIN & REGISTER
 export const INPUT_REQUIRED = 'Trường này là bắt buộc'
 export const NAME_LENGTH = 'Tên phải ít nhất 6 kí tự'
 export const INVALID_EMAIL = 'Email không hợp lệ'

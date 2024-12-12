@@ -1,0 +1,1 @@
+export const PROFILE_NOT_FOUND = 'Không tìm thấy hồ sơ bệnh nhân'

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { INCORRECT_PASSWORD, INPUT_REQUIRED, INVALID_EMAIL, NAME_LENGTH, PASSWORD_LENGTH, MIN_LENGTH_PHONE, MAX_lENGTH_PHONE } from './messageCode'
+import { INCORRECT_PASSWORD, INPUT_REQUIRED, INVALID_EMAIL, NAME_LENGTH, PASSWORD_LENGTH, MIN_LENGTH_PHONE, MAX_lENGTH_PHONE } from './messageCode/authentication'
 
 export const RegisterSchema = z
   .object({
