@@ -56,3 +56,8 @@ export const FAILED_UPDATE_SERVICE = 'Cập nhật dịch vụ thất bại'
 export const FAILED_DELETE_SERVICE = 'Xoa dich vu that bai'
 export const SERVICE_ACTIVE_APPOINTMENT = 'Không thể cập nhật dịch vụ đang có lịch hẹn'
 
+//FAILE FETCH
+export const FAILED_FETCH_DOCTOR = 'Lấy danh sách bác sĩ thất bại'
+export const FAILED_FETCH_FACULTY = 'Lấy danh sách chuyên khoa thất bại'
+export const FAILED_FETCH_SERVICE = 'Lấy danh sách dịch vụ thất bại'
+
