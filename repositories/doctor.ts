@@ -1,5 +1,6 @@
 import { AppointmentStatus, Doctor, PrismaClient, Schedule } from '@prisma/client'
 import { getDayOfWeek } from '@/lib/utils'
+import { DOCTOR_APPOINTMENT_EXIST, DOCTOR_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/doctor'
 
 const prisma = new PrismaClient()
 
@@ -66,7 +67,7 @@ export class DoctorRespository {
     })
 
     if (!doctor) {
-      throw new Error('Doctor not found.')
+      throw new Error(DOCTOR_NOT_FOUND)
     }
 
     await prisma.$disconnect()
@@ -151,7 +152,7 @@ export class DoctorRespository {
 
     const hasActiveAppointments = await this.hasAppointments(doctorId)
     if (hasActiveAppointments) {
-      throw new Error('Bác sĩ đang có lịch hẹn không thể xóa')
+      throw new Error(DOCTOR_APPOINTMENT_EXIST)
     }
 
     const deletedDoctor = await prisma.doctor.update({

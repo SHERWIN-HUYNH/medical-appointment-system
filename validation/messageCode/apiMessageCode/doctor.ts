@@ -12,3 +12,6 @@ export const DOCTOR_STATUS_ACTIVE_APPOINTMENT_EXIST =
   'Bác sĩ này đang có lịch hẹn không thể chuyển trạng thái'
 export const DOCTOR_FACULTY_ACTIVE_APPOINTMENT =
   'Bác sĩ này đang có lịch hẹn không thể thay đổi chuyên khoa'
+export const DOCTOR_APPOINTMENT_EXIST = 'Bác sĩ đang có lịch hẹn không thể xóa'
+export const DOCTOR_NOT_FOUND = 'Không tìm thấy bác sĩ'
+

@@ -18,6 +18,7 @@ import {
   INVALID_CANCEL_APPOINTMENT,
 } from '@/validation/messageCode/apiMessageCode/appointment'
 import { PROFILE_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/profile'
+import { CANCEL_FAIL, CANCEL_SUCCESS } from '@/validation/messageCode/appointment'
 export async function GET(req: Request, { params }: { params: { userId: string } }) {
   try {
     const profiles = await ProfileRespository.getListProfileByUserId(params.userId)
@@ -93,12 +94,12 @@ export async function PUT(req: Request, context: { params: { userId: string } })
       if (!cancelBill) {
         throw new Error(INVALID_CANCEL_APPOINTMENT)
       }
-      return successResponse({ cancelAppointment })
+      return successResponse(CANCEL_SUCCESS)
     } else {
       return badRequestResponse(INVALID_CANCEL_APPOINTMENT)
     }
   } catch (error) {
     console.error(error)
-    return internalServerErrorResponse(`Lỗi khi xử lý: ${error}`)
+    return internalServerErrorResponse(`Lỗi khi xử lý: ${error} ${CANCEL_FAIL}`)
   }
 }

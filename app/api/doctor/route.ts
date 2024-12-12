@@ -7,6 +7,7 @@ import {
 import { DoctorRespository } from '@/repositories/doctor'
 import {
   DOCTOR_FACULTY_ACTIVE_APPOINTMENT,
+  DOCTOR_NOT_FOUND,
   DOCTOR_STATUS_ACTIVE_APPOINTMENT_EXIST,
   FAILED_DELETE_DOCTOR,
   FAILED_UPDATE_STATUS_DOCTOR,
@@ -34,7 +35,7 @@ export async function PUT(req: Request) {
   const { doctor } = await req.json()
   const doctorData = await DoctorRespository.getDoctorById(doctor.id)
   if (!doctorData) {
-    return notFoundResponse('DOCTOR NOT FOUND')
+    return notFoundResponse(DOCTOR_NOT_FOUND)
   }
 
   // Kiểm tra nếu đang thay đổi chuyên khoa

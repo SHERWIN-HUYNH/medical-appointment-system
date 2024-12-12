@@ -135,6 +135,7 @@ export const ScheduleAppointmentSchema = z.object({
   reason: z.string().optional(),
   note: z.string().optional(),
   cancellationReason: z.string().optional(),
+  service: z.string().optional(),
 })
 
 export const CancelAppointmentSchema = z.object({
