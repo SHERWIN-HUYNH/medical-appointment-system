@@ -7,7 +7,7 @@ import {
   MIN_LENGTH_PHONE,
   NAME_LENGTH,
   PASSWORD_LENGTH,
-} from './messageCode'
+} from './messageCode/authentication'
 
 export const LoginSchema = z
   .object({

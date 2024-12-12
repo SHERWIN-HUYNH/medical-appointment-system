@@ -73,7 +73,6 @@ model Doctor {
   facultyId     String @db.Uuid
   comments      Comment[]
   doctorSchedule DoctorSchedule[]
-
 }
 
 model Comment {

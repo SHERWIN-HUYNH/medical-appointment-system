@@ -7,7 +7,7 @@ import {
   PASSWORD_LENGTH,
   MIN_LENGTH_PHONE,
   MAX_lENGTH_PHONE,
-} from './messageCode'
+} from './messageCode/authentication'
 
 export const RegisterSchema = z
   .object({
