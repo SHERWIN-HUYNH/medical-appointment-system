@@ -10,5 +10,3 @@ export const FAILED_UPDATE_SERVICE = 'Cập nhật dịch vụ thất bại'
 export const FAILED_DELETE_SERVICE = 'Xoa dich vu that bai'
 export const UPDATE_SERVICE_ACTIVE_APPOINTMENT =
   'Không thể cập nhật dịch vụ đang có lịch hẹn'
-
-

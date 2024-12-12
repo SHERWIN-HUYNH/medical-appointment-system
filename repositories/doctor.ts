@@ -1,6 +1,9 @@
 import { AppointmentStatus, Doctor, PrismaClient, Schedule } from '@prisma/client'
 import { getDayOfWeek } from '@/lib/utils'
-import { DOCTOR_APPOINTMENT_EXIST, DOCTOR_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/doctor'
+import {
+  DOCTOR_APPOINTMENT_EXIST,
+  DOCTOR_NOT_FOUND,
+} from '@/validation/messageCode/apiMessageCode/doctor'
 
 const prisma = new PrismaClient()
 

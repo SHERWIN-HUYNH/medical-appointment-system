@@ -18,6 +18,7 @@ import {
   FAILED_UPDATE_FACULTY,
   SUCCESS_UPDATE_FACULTY,
 } from '@/validation/messageCode/apiMessageCode/faculty'
+import { INVALID_IMAGE_FACULTY } from '@/validation/messageCode/faculty'
 
 const EditFaculty = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -65,6 +66,14 @@ const EditFaculty = () => {
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
+
+      // Kiểm tra định dạng file
+      const validImageTypes = ['image/jpeg', 'image/png']
+      if (!validImageTypes.includes(file.type)) {
+        toast.error(INVALID_IMAGE_FACULTY)
+        return
+      }
+
       setSelectedFile(file)
       const previewUrl = URL.createObjectURL(file)
 

@@ -22,6 +22,7 @@ import {
   FAILED_ADD_DOCTOR,
   SUCCESS_ADD_DOCTOR,
 } from '@/validation/messageCode/apiMessageCode/doctor'
+import { INVALID_IMAGE_DOCTOR } from '@/validation/messageCode/doctor'
 
 const AddDoctorPage = () => {
   const router = useRouter()
@@ -118,6 +119,14 @@ const AddDoctorPage = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
+
+      // Kiểm tra định dạng file
+      const validImageTypes = ['image/jpeg', 'image/png']
+      if (!validImageTypes.includes(file.type)) {
+        toast.error(INVALID_IMAGE_DOCTOR)
+        return
+      }
+
       setSelectedFile(file)
       const previewUrl = URL.createObjectURL(file)
 
@@ -241,7 +250,7 @@ const AddDoctorPage = () => {
                     </Label>
                     <Input
                       type="file"
-                      accept="image/*"
+                      accept="image/jpeg, image/png"
                       className="w-full rounded-md border border-stroke p-2 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:px-2.5 file:py-1 file:text-sm focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
                       onChange={handleImageChange}
                       customProp={''}

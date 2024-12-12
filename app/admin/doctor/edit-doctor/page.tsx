@@ -25,6 +25,7 @@ import {
   SUCCESS_UPDATE_DOCTOR,
   SUCCESS_UPDATE_STATUS_DOCTOR,
 } from '@/validation/messageCode/apiMessageCode/doctor'
+import { INVALID_IMAGE_DOCTOR } from '@/validation/messageCode/doctor'
 
 const EditDoctor = () => {
   const [facultyData, setFacultyData] = useState<Faculty[]>([])
@@ -109,6 +110,14 @@ const EditDoctor = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
+
+      // Kiểm tra định dạng file
+      const validImageTypes = ['image/jpeg', 'image/png']
+      if (!validImageTypes.includes(file.type)) {
+        toast.error(INVALID_IMAGE_DOCTOR)
+        return
+      }
+
       setSelectedFile(file)
       const previewUrl = URL.createObjectURL(file)
 
