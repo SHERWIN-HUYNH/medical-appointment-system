@@ -259,12 +259,7 @@ const Chart: React.FC = () => {
                   >
                     STT
                   </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900"
-                  >
-                    Năm
-                  </th>
+                
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900"
@@ -297,7 +292,6 @@ const Chart: React.FC = () => {
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-slate-900 sm:pl-6">
                         {index + 1}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.year}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.month}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.totalAppointments}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.totalAmount}</td>

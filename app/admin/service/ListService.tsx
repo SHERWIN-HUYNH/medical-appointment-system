@@ -10,6 +10,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { formatPrice } from '@/helpers/formatCurrency'
 import {
   FAILED_DELETE_SERVICE,
+  FAILED_GET_SERVICE,
   SUCCESS_DELETE_SERVICE,
 } from '@/validation/messageCode/apiMessageCode/service'
 
@@ -50,7 +51,7 @@ const ListService = () => {
         }
       } catch (error) {
         console.error('Error fetching data:', error)
-        toast.error('Đã xảy ra lỗi khi tải dữ liệu!')
+        toast.error(FAILED_GET_SERVICE)
       } finally {
         setIsLoading(false)
       }

@@ -10,6 +10,9 @@ import Image from 'next/image'
 import { Input } from '@/components/ui/input'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { FAILED_GET_SERVICE } from '@/validation/messageCode/apiMessageCode/service'
+import { FAILED_GET_FACULTY } from '@/validation/messageCode/apiMessageCode/faculty'
+import { LOGIN_REQUIRED } from '@/validation/messageCode/authentication'
 
 interface Service {
   id: string
@@ -44,10 +47,10 @@ const ServiceList = () => {
           setServices(data)
           setFilteredServices(data)
         } else {
-          toast.error('Lỗi khi tải dữ liệu dịch vụ')
+          toast.error(FAILED_GET_SERVICE)
         }
       } catch (error) {
-        toast.error('Lỗi khi kết nối với máy chủ')
+        toast.error(FAILED_GET_SERVICE)
       }
     }
     const fetchFaculties = async () => {
@@ -56,7 +59,7 @@ const ServiceList = () => {
         const data = await response.json()
         setFaculties(data)
       } catch (error) {
-        toast.error('Lỗi khi tải dữ liệu chuyên khoa')
+        toast.error(FAILED_GET_FACULTY)
       }
     }
 
@@ -95,7 +98,7 @@ const ServiceList = () => {
   const handleBookingClick = (e: React.MouseEvent) => {
     if (!session) {
       e.preventDefault()
-      toast.error('Vui lòng đăng nhập để đặt lịch khám')
+      toast.error(LOGIN_REQUIRED)
       setTimeout(() => {}, 1500)
       return
     }
