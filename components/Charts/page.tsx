@@ -249,57 +249,53 @@ const Chart: React.FC = () => {
         </div>
 
         <div className="col-span-5">
-          <div className="overflow-x-auto bg-white rounded-lg shadow">
-            <table className="min-w-full divide-y divide-slate-200">
-              <thead className="bg-slate-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="w-12 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 sm:pl-6"
-                  >
-                    STT
-                  </th>
-                
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900"
-                  >
-                    Tháng
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900"
-                  >
-                    Số Cuộc Hẹn
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900"
-                  >
-                    Doanh Thu
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 bg-white">
-                {appointmentsData
-                  .filter(
-                    (data) =>
-                      (selectedYear === 'all' || data.year === selectedYear) &&
-                      (selectedMonth === 'all' || data.month === selectedMonth)
-                  )
-                  .map((item, index) => (
-                    <tr key={index}>
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-slate-900 sm:pl-6">
-                        {index + 1}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.month}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.totalAppointments}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.totalAmount}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
+        <div className="overflow-x-auto bg-white rounded-lg shadow">
+  <table className="min-w-full divide-y divide-slate-200">
+    <thead className="bg-slate-50">
+      <tr>
+        <th
+          scope="col"
+          className="w-12 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 sm:pl-6"
+        >
+          STT
+        </th>
+        <th
+          scope="col"
+          className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900"
+        >
+          Chuyên khoa
+        </th>
+        <th
+          scope="col"
+          className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900"
+        >
+          Số Cuộc Hẹn
+        </th>
+        <th
+          scope="col"
+          className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900"
+        >
+          Doanh Thu
+        </th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-slate-200 bg-white">
+  {statistics
+    .map((item, index) => (
+      <tr key={index}>
+        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-slate-900 sm:pl-6">
+          {index + 1}
+        </td>
+        <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.facultyName || 'Không xác định'}</td>
+        <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.sumAppointmentsFaculty || 0}</td>
+        <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.revenue?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) || 0}</td>
+      </tr>
+    ))}
+</tbody>
+
+  </table>
+</div>
+
         </div>
       </div>
     </>
