@@ -26,7 +26,11 @@ import {
   handleKeyPress,
   isValidIdentificationNumber,
 } from '@/helpers/data_normalization'
-import { FAILED_CREATE_PROFILE, INCORRECT_IDENTIFICATION, SUCCESS_CREATE_PROFILE } from '@/validation/messageCode/apiMessageCode/profile'
+import {
+  FAILED_CREATE_PROFILE,
+  INCORRECT_IDENTIFICATION,
+  SUCCESS_CREATE_PROFILE,
+} from '@/validation/messageCode/apiMessageCode/profile'
 import { FAILED_UPLOAD_IMAGE } from '@/validation/messageCode/uploadImage'
 
 const Add_Profile = () => {
