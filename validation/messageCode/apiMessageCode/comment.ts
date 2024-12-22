@@ -1,4 +1,3 @@
-
 export const COMMENT_NOT_FOUND = 'Không tìm thấy đánh giá'
 export const FAILED_GET_COMMENT = 'Lỗi khi lấy thông tin đánh giá'
 export const FAILED_DELETE_COMMENT = 'Lỗi khi xóa đánh giá'

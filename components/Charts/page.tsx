@@ -13,12 +13,12 @@ interface AppointmentData {
   totalAppointments: number
   totalAmount: number
   appointments: {
-    id: string;
-    date: string;
-    price: number;
-    serviceName: string;
-    facultyName: string;
-  }[];  
+    id: string
+    date: string
+    price: number
+    serviceName: string
+    facultyName: string
+  }[]
 }
 
 const ChartThree = dynamic(() => import('@/components/Charts/ChartThree'), {
@@ -28,8 +28,12 @@ const ChartThree = dynamic(() => import('@/components/Charts/ChartThree'), {
 const Chart: React.FC = () => {
   const [statistics, setStatistics] = useState<AppointmentReport[]>([])
   const [appointmentsData, setAppointmentsData] = useState<AppointmentData[]>([])
-  const [selectedYear, setSelectedYear] = useState<number | 'all'>(new Date().getFullYear())
-  const [selectedMonth, setSelectedMonth] = useState<number | 'all'>(new Date().getMonth() + 1)
+  const [selectedYear, setSelectedYear] = useState<number | 'all'>(
+    new Date().getFullYear(),
+  )
+  const [selectedMonth, setSelectedMonth] = useState<number | 'all'>(
+    new Date().getMonth() + 1,
+  )
 
   useEffect(() => {
     const loadData = async () => {
@@ -61,7 +65,7 @@ const Chart: React.FC = () => {
     const filteredData = appointmentsData.filter(
       (data) =>
         (selectedYear === 'all' || data.year === selectedYear) &&
-        (selectedMonth === 'all' || data.month === selectedMonth)
+        (selectedMonth === 'all' || data.month === selectedMonth),
     )
 
     const groupedData = filteredData.reduce(
@@ -140,10 +144,10 @@ const Chart: React.FC = () => {
             }
           >
         }
-      >
-    );
+      >,
+    )
 
-    let reportData: any[] = [];
+    let reportData: any[] = []
     Object.values(groupedData).forEach((group) => {
       const { year, months } = group
       reportData.push({
@@ -156,7 +160,7 @@ const Chart: React.FC = () => {
           style: 'currency',
           currency: 'VND',
         }),
-      });
+      })
 
       Object.entries(months).forEach(([month, monthData]) => {
         reportData.push({
@@ -182,17 +186,17 @@ const Chart: React.FC = () => {
                 style: 'currency',
                 currency: 'VND',
               }),
-            });
-          });
-        });
-      });
-    });
+            })
+          })
+        })
+      })
+    })
 
-    const worksheet = XLSX.utils.json_to_sheet(reportData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Báo Cáo");
-    XLSX.writeFile(workbook, "bao_cao.xlsx");
-  };
+    const worksheet = XLSX.utils.json_to_sheet(reportData)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Báo Cáo')
+    XLSX.writeFile(workbook, 'bao_cao.xlsx')
+  }
 
   return (
     <>
@@ -201,7 +205,9 @@ const Chart: React.FC = () => {
         <div className="flex space-x-4">
           <select
             value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+            onChange={(e) =>
+              setSelectedYear(e.target.value === 'all' ? 'all' : Number(e.target.value))
+            }
             className="px-3 py-2 border border-gray-300 rounded-md"
           >
             <option value="all">Tất cả</option>
@@ -213,7 +219,9 @@ const Chart: React.FC = () => {
           </select>
           <select
             value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+            onChange={(e) =>
+              setSelectedMonth(e.target.value === 'all' ? 'all' : Number(e.target.value))
+            }
             className="px-3 py-2 border border-gray-300 rounded-md"
           >
             <option value="all">Tất cả</option>
@@ -290,17 +298,25 @@ const Chart: React.FC = () => {
                   .filter(
                     (data) =>
                       (selectedYear === 'all' || data.year === selectedYear) &&
-                      (selectedMonth === 'all' || data.month === selectedMonth)
+                      (selectedMonth === 'all' || data.month === selectedMonth),
                   )
                   .map((item, index) => (
                     <tr key={index}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-slate-900 sm:pl-6">
                         {index + 1}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.year}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.month}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.totalAppointments}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">{item.totalAmount}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">
+                        {item.year}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">
+                        {item.month}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">
+                        {item.totalAppointments}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">
+                        {item.totalAmount}
+                      </td>
                     </tr>
                   ))}
               </tbody>

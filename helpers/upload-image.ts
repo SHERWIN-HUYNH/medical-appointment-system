@@ -1,4 +1,4 @@
-import { FAILED_UPLOAD_IMAGE } from "@/validation/messageCode/uploadImage"
+import { FAILED_UPLOAD_IMAGE } from '@/validation/messageCode/uploadImage'
 
 export const uploadFileToCloudinary = async (file: File): Promise<string | null> => {
   const uploadFormData = new FormData()

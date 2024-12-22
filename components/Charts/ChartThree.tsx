@@ -85,7 +85,7 @@ const ChartThree: React.FC = () => {
       }
     }
 
-    loadData() 
+    loadData()
   }, [])
 
   return (

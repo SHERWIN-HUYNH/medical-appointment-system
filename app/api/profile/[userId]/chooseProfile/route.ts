@@ -5,7 +5,10 @@ import {
   unauthorizedResponse,
 } from '@/helpers/response'
 import { ProfileRespository } from '@/repositories/profile'
-import { FAILED_GET_PROFILES, PROFILE_NOT_FOUND } from '@/validation/messageCode/apiMessageCode/profile'
+import {
+  FAILED_GET_PROFILES,
+  PROFILE_NOT_FOUND,
+} from '@/validation/messageCode/apiMessageCode/profile'
 import { UNAUTHENTICATED } from '@/validation/messageCode/commonMessageCode'
 
 export async function GET(request: Request, context: { params: { userId: string } }) {

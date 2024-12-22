@@ -23,7 +23,14 @@ import MedicalRecord from '@/components/Patient/MedicalRecord'
 import PaymentHistory from '@/components/Patient/PaymentHistory'
 import ProfileDetailModal from '@/components/Patient/ProfileDetailModal'
 import { useSearchParams } from 'next/navigation'
-import { FAILED_DELETE_PROFILE, FAILED_DELETE_PROFILE_HAS_APPOINTMENT, FAILED_GET_PROFILE, FAILED_GET_PROFILES, NOTICE_DELETE, SUCCESS_DELETE_PROFILE } from '@/validation/messageCode/apiMessageCode/profile'
+import {
+  FAILED_DELETE_PROFILE,
+  FAILED_DELETE_PROFILE_HAS_APPOINTMENT,
+  FAILED_GET_PROFILE,
+  FAILED_GET_PROFILES,
+  NOTICE_DELETE,
+  SUCCESS_DELETE_PROFILE,
+} from '@/validation/messageCode/apiMessageCode/profile'
 
 const Profile = () => {
   const searchParams = useSearchParams()
