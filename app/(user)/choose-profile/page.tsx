@@ -21,7 +21,12 @@ import { toast } from 'sonner'
 import Modal from '@/components/Modal'
 import Link from 'next/link'
 import { useAppointmentContext } from '@/context/AppointmentContext'
-import { FAILED_DELETE_PROFILE, FAILED_GET_PROFILE, NOTICE_DELETE, SUCCESS_DELETE_PROFILE } from '@/validation/messageCode/apiMessageCode/profile'
+import {
+  FAILED_DELETE_PROFILE,
+  FAILED_GET_PROFILE,
+  NOTICE_DELETE,
+  SUCCESS_DELETE_PROFILE,
+} from '@/validation/messageCode/apiMessageCode/profile'
 import { LACK_APPOINTMENT_INFO } from '@/validation/messageCode/apiMessageCode/appointment'
 
 interface Profile {
@@ -227,7 +232,7 @@ const ChooseProfile: React.FC = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleDeleteProfile}
-        message = {NOTICE_DELETE}
+        message={NOTICE_DELETE}
       />
     </UserLayout>
   )

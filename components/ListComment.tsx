@@ -7,7 +7,11 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import { Star, Trash2 } from 'lucide-react'
 import ModalDelete from '@/components/ModalDelete'
-import { FAILED_DELETE_COMMENT, FAILED_GET_COMMENT, SUCCESS_DELETE_COMMENT } from '@/validation/messageCode/apiMessageCode/comment'
+import {
+  FAILED_DELETE_COMMENT,
+  FAILED_GET_COMMENT,
+  SUCCESS_DELETE_COMMENT,
+} from '@/validation/messageCode/apiMessageCode/comment'
 
 type Comment = {
   id: string
@@ -44,7 +48,10 @@ const ListComment = () => {
           throw new Error(FAILED_GET_COMMENT)
         }
         const comments = await response.json()
-        comments.sort((a: Comment, b: Comment) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        comments.sort(
+          (a: Comment, b: Comment) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        )
         setCommentData(comments)
       } catch (error) {
         console.error('Error fetching comments:', error)
@@ -109,7 +116,6 @@ const ListComment = () => {
   }
 
   const columns: ColumnDef<Comment>[] = [
-    
     {
       accessorKey: 'createdAt',
       header: 'Ngày đăng',
