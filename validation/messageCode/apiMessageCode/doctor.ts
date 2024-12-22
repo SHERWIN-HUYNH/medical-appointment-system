@@ -2,6 +2,7 @@ export const FAILED_ADD_DOCTOR = 'Thêm bác sĩ thất bại'
 export const FAILED_UPDATE_DOCTOR = 'Cập nhật thông tin bác sĩ thất bại'
 export const FAILED_UPDATE_STATUS_DOCTOR = 'Cập nhật trạng thái bác sĩ thất bại'
 export const FAILED_DELETE_DOCTOR = 'Xóa bác sĩ thất bại'
+export const FAILED_GET_DOCTOR = 'Lỗi khi lấy dữ liệu bác sĩ'
 
 export const SUCCESS_ADD_DOCTOR = 'Thêm bác sĩ mới thành công'
 export const SUCCESS_UPDATE_DOCTOR = 'Cập nhật thông tin bác sĩ thành công'

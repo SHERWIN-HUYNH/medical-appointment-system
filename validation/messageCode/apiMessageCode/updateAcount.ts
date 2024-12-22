@@ -1,0 +1,1 @@
+export const AVATA_REQUIRED = 'Vui lòng chọn ảnh đại diện'
