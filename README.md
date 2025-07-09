@@ -30,18 +30,6 @@ Select your preferred doctor and available time slot.
 
 Fill in any required details and confirm.
 
-3. Test Credentials
-Use these accounts to try out both roles without creating new users:
-
-Role	Email	Password
-Admin	admin@test.com	Admin@123
-User	patient@test.com	Patient@123
-4. Scheduling Notes
-All schedules and appointments are time-sensitive. Slots in the past will automatically expire.
-
-If you see no available slots, double-check that the admin has created future schedules.
-
-To avoid “no slots available” errors, keep your system clock accurate and work with dates at least one hour ahead.
 ## Admin account 
 ![image](https://github.com/user-attachments/assets/247d8dcf-c378-47f1-bf2b-ff9ab0268520)
 
