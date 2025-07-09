@@ -83,4 +83,7 @@ To avoid “no slots available” errors, keep your system clock accurate and wo
 
 ## User interfaces for admin 
 ![image](https://github.com/user-attachments/assets/3ef3fc56-2222-4c4b-8754-59865d86a872)
+## Dashboard 
+![image](https://github.com/user-attachments/assets/d82f5b86-a87c-4b78-95ba-633d0ec91f70)
+
 
