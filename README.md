@@ -2,7 +2,8 @@
 [Uploading TTCS (1).docx…]()
 
 ## How to Use This Website
-1. Admin: Create Doctor Schedules
+Because my project works with schedules 
+1. Admin: Create Doctor Schedules, meaning that when time passes, doctor schedules and patient appoinment will be out of date. To make an appointment, please follow the instructions below
 Log in with an admin account to open up appointment slots for patients.
 
 Access the Admin Dashboard.
