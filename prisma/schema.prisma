@@ -50,6 +50,7 @@ model Faculty {
   doctors Doctor[]
   services Service[]
 }
+
 model Service{
   id String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name String 
@@ -60,6 +61,7 @@ model Service{
   faculty Faculty @relation(fields: [facultyId], references: [id],onDelete: Cascade)
   appointment Appointment[]
 }
+
 model Doctor {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String

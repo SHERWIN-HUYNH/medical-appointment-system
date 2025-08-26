@@ -92,6 +92,7 @@ export class ChartRepository {
       }))
 
       return chart
+    // eslint-disable-next-line no-useless-catch
     } catch (error) {
       throw error
     } finally {

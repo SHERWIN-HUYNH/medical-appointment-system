@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import {
+
   AVATAR_REQUIRED,
   INVALID_EMAIL,
   MAX_lENGTH_PHONE,
@@ -7,6 +8,7 @@ import {
   NAME_LENGTH,
   PASSWORD_LENGTH,
 } from './messageCode/authentication'
+
 export const UpdateAccountValidation = z.object({
   username: z.string().min(2, NAME_LENGTH),
   email: z.string().email(INVALID_EMAIL),

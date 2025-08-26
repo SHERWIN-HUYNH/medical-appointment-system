@@ -24,6 +24,7 @@ import {
 import React from 'react'
 import { Input } from '../ui/input'
 import { MoveLeft, MoveRight } from 'lucide-react'
+import { NOT_FOUND } from '@/validation/messageCode/commonMessageCode'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -137,7 +138,8 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                {NOT_FOUND}
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Totam non inventore perferendis, tenetur ab eos nihil recusandae in suscipit unde!
               </TableCell>
             </TableRow>
           )}

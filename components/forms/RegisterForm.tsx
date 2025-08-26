@@ -95,7 +95,7 @@ export const RegisterForm = () => {
           iconAlt="email"
         />
         <CustomFormField
-          fieldType={FormFieldType.INPUT}
+          fieldType={FormFieldType.PHONE_INPUT}
           control={form.control}
           name="phone"
           label="Số điện thoại"

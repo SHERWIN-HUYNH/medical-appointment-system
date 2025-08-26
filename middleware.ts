@@ -19,11 +19,7 @@ export async function middleware(req: NextRequest) {
       '/api/comment',
       '/api/service',
     ]
-    console.log('Pathname:', pathname)
-    console.log('Token:', token)
-    console.log('Role:', token?.roleName)
     if (publicPaths.some((path) => pathname.startsWith(path))) {
-      console.log('Public path accessed:', pathname)
       return NextResponse.next()
     }
     if (!token) {
