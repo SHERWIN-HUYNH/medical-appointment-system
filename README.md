@@ -84,6 +84,7 @@ You should follow this path: login -> choose doctor -> choose faculty -> choose 
 
 To be short, I'll just show the UI of payment 
 
+<img width="940" height="413" alt="image" src="https://github.com/user-attachments/assets/5a092f7e-36d1-4c01-ac40-c120d45777ae" />
 
 
 
