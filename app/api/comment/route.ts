@@ -6,7 +6,13 @@ import {
 } from '@/helpers/response'
 import { CommentRespository } from '@/repositories/comment'
 import { Comment } from '@/types/interface'
-import { COMMENT_NOT_FOUND, FAILED_DELETE_COMMENT, FAILED_DELETE_COMMENT_AGAIN, FAILED_GET_COMMENT, SUCCESS_DELETE_COMMENT } from '@/validation/messageCode/apiMessageCode/comment'
+import {
+  COMMENT_NOT_FOUND,
+  FAILED_DELETE_COMMENT,
+  FAILED_DELETE_COMMENT_AGAIN,
+  FAILED_GET_COMMENT,
+  SUCCESS_DELETE_COMMENT,
+} from '@/validation/messageCode/apiMessageCode/comment'
 
 export async function GET() {
   try {

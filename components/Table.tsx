@@ -71,11 +71,12 @@ export function DataTable<TData, TValue>({
     header: 'STT',
     enableSorting: false,
     cell: ({ row, table }) => {
-      const sortedRowIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id)
-      return sortedRowIndex + 1 
+      const sortedRowIndex = table
+        .getSortedRowModel()
+        .rows.findIndex((r) => r.id === row.id)
+      return sortedRowIndex + 1
     },
-  };
-  
+  }
 
   const allColumns = showSTT ? [sttColumn, ...columns] : columns
 

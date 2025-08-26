@@ -12,6 +12,8 @@ import { useAppointmentContext } from '@/context/AppointmentContext'
 import Link from 'next/link'
 import { Star } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import { FAILED_GET_DOCTOR } from '@/validation/messageCode/apiMessageCode/doctor'
+import { LOGIN_REQUIRED } from '@/validation/messageCode/authentication'
 
 interface Doctor {
   id: string
@@ -52,9 +54,8 @@ const Doctor = () => {
           setDoctors(data)
           setFilteredDoctors(data)
         }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error :unknown) {
-        toast.error('Lỗi khi kết nối với máy chủ')
+      } catch (error) {
+        toast.error(FAILED_GET_DOCTOR)
       }
     }
 
@@ -104,7 +105,7 @@ const Doctor = () => {
   ) => {
     if (!session) {
       e.preventDefault()
-      toast.error('Vui lòng đăng nhập để đặt lịch khám')
+      toast.error(LOGIN_REQUIRED)
       setTimeout(() => {}, 1500)
       return
     }
