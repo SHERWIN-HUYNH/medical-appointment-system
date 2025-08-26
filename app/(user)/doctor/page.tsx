@@ -52,7 +52,8 @@ const Doctor = () => {
           setDoctors(data)
           setFilteredDoctors(data)
         }
-      } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error :unknown) {
         toast.error('Lỗi khi kết nối với máy chủ')
       }
     }

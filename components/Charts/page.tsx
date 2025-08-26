@@ -37,6 +37,7 @@ const Chart: React.FC = () => {
       if (data.length === 0) {
         console.warn(REPORT_NOT_FOUND)
       }
+      console.log('data chart', data)
       setStatistics(data)
     }
 

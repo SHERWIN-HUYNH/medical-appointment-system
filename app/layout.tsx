@@ -1,11 +1,9 @@
 'use client'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from 'sonner'
 import Providers from '@/providers/Providers'
-import React, { useEffect, useState } from 'react'
-import Loader from '@/components/common/Loader'
+import React from 'react'
 import { AppointmentProvider } from '@/context/AppointmentContext'
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,13 +12,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const [loading, setLoading] = useState<boolean>(true)
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 1000)
-  }, [])
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <head>
+        <title>Health Care</title>
         <link
           rel="icon"
           type="image/png"
@@ -37,17 +32,10 @@ export default function RootLayout({
         <link rel="manifest" href="/favicon/site.webmanifest" />
       </head>
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
           <Providers>
-            <AppointmentProvider>{loading ? <Loader /> : children}</AppointmentProvider>
+            <AppointmentProvider>{children}</AppointmentProvider>
             <Toaster richColors position="top-right" closeButton duration={5000} />
           </Providers>
-        </ThemeProvider>
       </body>
     </html>
   )

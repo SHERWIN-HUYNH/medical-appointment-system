@@ -18,7 +18,7 @@ const AdminPage = () => {
     const fetchAppointments = async () => {
       const res = await fetch('/api/appointments')
       const data: AppointmentSchedule[] = await res.json()
-      setAppointments(data)
+       setAppointments(data)
       const count = await fetch('/api/appointments/count')
       const countData: countAppointment[] = await count.json()
       setCountAppointment(countData)

@@ -56,13 +56,14 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
       updateAvailableDate(dateFromApi)
     }
     loadEvents()
+    console.log('dateFromApi', dateFromApi)
   }, [])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateClassNames = (renderProps: any): string[] => {
     const dateStr = renderProps.date
     const year = dateStr.getFullYear()
-    const month = String(dateStr.getMonth() + 1).padStart(2, '0') // Months are 0-based
+    const month = String(dateStr.getMonth() + 1).padStart(2, '0') 
     const day = String(dateStr.getDate()).padStart(2, '0')
     const formattedDate = `${year}-${month}-${day}`
 
@@ -72,7 +73,7 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
 
     return ['valid-date-class']
   }
-  const handleDateClick = (info: DateClickArg) => {
+ const handleDateClick = (info: DateClickArg) => {
     const selectedDate = info.date
     const today = new Date()
 
@@ -130,6 +131,8 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
         `price=${price}`,
     )
   }
+
+  console.log('TIME SLOT',morningTimeslot, eveningTimeslot)
   return (
     <div>
       {!showTimeSlots ? (
@@ -160,16 +163,16 @@ const ChooseSchedule = ({ doctorId, setSelectedDate }: ChooseScheduleProps) => {
             selectMirror={true}
             dayCellClassNames={handleDateClassNames}
             dateClick={handleDateClick}
-            // selectAllow={(selectInfo: DateSpanApi) => {
-            //   const selectedDate = new Date(selectInfo.start)
-            //   const today1 = new Date(today)
-            //   return selectedDate >= today1
-            // }}
-            // eventAllow={(span: DateSpanApi) => {
-            //   const eventDate = new Date(span.start)
-            //   const today1 = new Date(today)
-            //   return eventDate >= today1
-            // }}
+            selectAllow={(selectInfo: DateSpanApi) => {
+              const selectedDate = new Date(selectInfo.start)
+              const today1 = new Date(today)
+              return selectedDate >= today1
+            }}
+            eventAllow={(span: DateSpanApi) => {
+              const eventDate = new Date(span.start)
+              const today1 = new Date(today)
+              return eventDate >= today1
+            }}
           />
         </div>
       ) : (

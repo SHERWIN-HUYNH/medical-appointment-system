@@ -128,13 +128,13 @@ const ChartOne: React.FC = () => {
       const response = await fetch(`/api/chart/chart2`)
       const data: Array<{ year: number; month: number; totalAmount: number }> =
         await response.json()
-
+      console.log('formattedData', data)
       const formattedData: AppointmentData[] = data.map((item) => ({
         year: item.year,
         month: item.month,
         price: item.totalAmount,
       }))
-
+      console.log('formattedData', formattedData)
       setAppointmentsData(formattedData)
     } catch (error) {
       console.error('Error fetching appointment data:', error)

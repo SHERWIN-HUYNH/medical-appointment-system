@@ -57,6 +57,7 @@ export class DoctorRespository {
 
   static async getDoctorById(doctorId: string) {
     if (!doctorId) {
+      console.log('ERROR WITH DOCTOR ID', doctorId)
       throw new Error('Doctor ID is missing.')
     }
 

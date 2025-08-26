@@ -169,7 +169,6 @@ export class AppointmentRepository {
         },
       })
       if (doctorSchedule) {
-        console.log('DOCTORSHCEDUE', doctorSchedule)
         const appointment = await prisma.appointment.findFirst({
           where: {
             doctorScheduleId: doctorSchedule.id,
