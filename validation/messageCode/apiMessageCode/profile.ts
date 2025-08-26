@@ -8,6 +8,8 @@ export const SUCCESS_DELETE_PROFILE = 'Xóa hồ sơ bệnh nhân thành công'
 export const FAILED_CREATE_PROFILE = 'Tạo hồ sơ bệnh nhân thất bại'
 export const FAILED_UPDATE_PROFILE = 'Cập nhật hồ sơ bệnh nhân thất bại'
 export const FAILED_DELETE_PROFILE = 'Xóa hồ sơ bệnh nhân thất bại'
-export const FAILED_DELETE_PROFILE_HAS_APPOINTMENT = 'Lỗi khi xóa hồ sơ, hồ sơ này đang có lịch hẹn.Vui lòng thử lại sau!'
-export const INCORRECT_IDENTIFICATION = 'Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.'
+export const FAILED_DELETE_PROFILE_HAS_APPOINTMENT =
+  'Lỗi khi xóa hồ sơ, hồ sơ này đang có lịch hẹn.Vui lòng thử lại sau!'
+export const INCORRECT_IDENTIFICATION =
+  'Số giấy định danh không hợp lệ. Vui lòng kiểm tra lại.'
 export const NOTICE_DELETE = 'Bạn có chắc chắn muốn xóa hồ sơ này không?'

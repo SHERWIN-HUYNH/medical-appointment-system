@@ -110,10 +110,9 @@ const FacultyPage = () => {
             ))
           )}
         </div>
-
         {/* Pagination */}
         <div className="flex justify-center mt-4 mb-4">
-          {!loading && !error && facultyData.length > itemsPerPage && (
+          {!loading && (
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
