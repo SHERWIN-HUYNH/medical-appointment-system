@@ -148,7 +148,7 @@ const Chart: React.FC = () => {
       >,
     )
 
-    let reportData: any[] = []
+    const reportData: unknown[]= [];
     Object.values(groupedData).forEach((group) => {
       const { year, months } = group
       reportData.push({

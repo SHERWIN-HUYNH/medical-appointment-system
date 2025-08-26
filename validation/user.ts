@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { INVALID_EMAIL } from './messageCode'
+import { INVALID_EMAIL } from './messageCode/authentication'
 
 export const UpdateUserWithRolesSchema = z.object({
   email: z.string().email({
